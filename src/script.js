@@ -1,8 +1,8 @@
 var canvas = document.getElementById("canvas1");
-var cxt = canvas.getContext("2d");
+var context = canvas.getContext("2d");
 
-// canvas.width = 240;
-// canvas.height = 160;
+canvas.width = 200;
+canvas.height = 200;
 
 function drawSquare(x, y, side) {
     context.beginPath();

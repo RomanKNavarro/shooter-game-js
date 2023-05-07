@@ -1,12 +1,16 @@
 body {
     margin-top: 0;
     margin-left: 0;
-  }
+}
   
-  #canvas1 {
-    width: "200px";
+canvas {
+    /* width: "200px";
     height: "200px";
-    background: white;
-    border: 1px solid gray;
-  }
+    background: black;
+    outline: black 3px solid;
+    border:2px solid black !important; */
+    display: block;
+    width: 50% !important;
+    height: 100% !important;
+}
   
