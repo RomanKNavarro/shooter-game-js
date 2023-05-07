@@ -1,0 +1,12 @@
+body {
+    margin-top: 0;
+    margin-left: 0;
+  }
+  
+  #canvas1 {
+    width: "200px";
+    height: "200px";
+    background: white;
+    border: 1px solid gray;
+  }
+  
