@@ -1,3 +1,6 @@
+var canvas = document.getElementById("canvas1");
+var cxt = canvas.getContext("2d");
+
 export default class Floor {
     constructor() {
         this.y = canvas.height - (canvas.height * (1/4));
