@@ -1,4 +1,4 @@
-class Flora {
+export default class Floor {
     constructor() {
         this.y = canvas.height - (canvas.height * (1/4));
         this.x = 0;
