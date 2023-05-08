@@ -1,5 +1,6 @@
 // MODULES:
 import Floor from "./floor.js";  
+import Shooter from "./shooter.js";
 
 // YOOO MAKE SURE YOUR CANVAS HAS THIS ID:
 var canvas = document.getElementById("canvas1");
@@ -25,6 +26,11 @@ drawSquare(30, 30, 100);
 //         cxt.fillRect(this.x, this.y, this.width, this.height);
 //     }
 // }
-  
+
 const flora = new Floor();
 flora.draw();
+
+const shooter = new Shooter();
+shooter.draw();
+
+export {flora, shooter};
