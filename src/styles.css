@@ -3,7 +3,10 @@ body {
     margin-left: 0;
 }
   
-#container {
+body {
+    padding: 0;
     margin: auto;
+    display: block;
+    width: 800px;
 }
   
