@@ -1,18 +1,16 @@
+import Projectile from "./projectile.js";
+
 var canvas = document.getElementById("canvas1");
-var cxt = canvas.getContext("2d");
-
-import {flora} from "./script.js";  
-
+var cxt = canvas.getContext("2d"); 
 
 export default class Shooter {
-    constructor() {
-      this.width = 200;
-      this.height = 200;
-      this.x = flora.x;
-      this.y = flora.y + 140;
-    //   this.x = 100;
-    //   this.y = 100;
+    constructor(x, y) {
+      this.width = 50;
+      this.height = 50;
+      this.x = x;
+      this.y = y;
 
+      this.shooting = false;
       this.projectiles = [];
       this.timer = 0;
     }
@@ -20,25 +18,21 @@ export default class Shooter {
     draw() {
         console.log(this.x);
         cxt.beginPath();
-        //cxt.rect(this.x, this.y, this.width, this.height); // rect(x, y, width, height)
         cxt.fillStyle = "yellow";
         cxt.fillRect(this.x, this.y, this.width, this.height);
         // cxt.stroke();
     }
   
-    // update() {
-    //   if (frame % sheepFrame === 0) {
-    //     if (this.frameX < this.maxFrame) this.frameX++;
-    //     else this.frameX = this.minFrame;
-    //   } // run animation
-  
-    //   if (this.shooting) {
-    //     this.timer++;
-    //     if (this.timer % 10 === 0 && score < winningScore) {
-    //       projectiles.push(new Projectile(this.x + this.width - 20, this.y + 55));
-    //     }
-    //   } else {
-    //     this.timer = 0;
-    //   }
-    // }
-  }
+
+    update() {
+      if (this.shooting) {
+        // while shooting is true, increment timer. If divisible by 10, push projectile
+        this.timer++;           
+        if (this.timer % 10 === 0) {
+          projectiles.push(new Projectile(this.x + this.width - 20, this.y + 55));
+        }
+      } else {
+        this.timer = 0;
+      }
+    }
+}
