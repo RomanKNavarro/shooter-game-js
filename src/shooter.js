@@ -10,29 +10,32 @@ export default class Shooter {
       this.x = x;
       this.y = y;
 
-      this.shooting = false;
+      this.name = "Warren";
+
       this.projectiles = [];
+      this.shooting = false;
       this.timer = 0;
     }
   
     draw() {
-        console.log(this.x);
         cxt.beginPath();
         cxt.fillStyle = "yellow";
         cxt.fillRect(this.x, this.y, this.width, this.height);
-        // cxt.stroke();
     }
   
-
+    // this.shooting set to true successful, but still will not shoot
     update() {
-      if (this.shooting) {
-        // while shooting is true, increment timer. If divisible by 10, push projectile
-        this.timer++;           
-        if (this.timer % 10 === 0) {
-          projectiles.push(new Projectile(this.x + this.width - 20, this.y + 55));
+        console.log("erbody round me shooters");
+        if (this.shooting) {
+            // while shooting is true, increment timer. If divisible by 10, push projectile. Genius.
+            this.timer++;           
+            if (this.timer % 10 === 0) {
+                this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 55));
+                console.log(this.projectiles.length);
+            }
+        } 
+        else {
+            this.timer = 0;
         }
-      } else {
-        this.timer = 0;
-      }
     }
 }

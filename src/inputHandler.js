@@ -1,21 +1,21 @@
 // keyboard keys
-class InputHandler {
+export default class InputHandler {
     constructor(entity) {
       document.addEventListener("keydown", (event) => {
-        switch (event.keyCode) {
-          case 65:
+        switch (event.key) {
+          case 's':
+            //this.shooting
             entity.shooting = true;
+            console.log(entity.shooting, entity.name);
+            console.log(entity.timer);
+            break;
         }
       });
   
       document.addEventListener("keyup", (event) => {
-        switch (event.keyCode) {
-          case 65:
+        switch (event.key) {
+          case 's':
             entity.shooting = false;
-            break;
-  
-          case 27:
-            togglePause();
             break;
         }
       });

@@ -4,8 +4,9 @@ export default class Projectile {
       this.x = x;
       this.y = y;
       this.size = 5;
-      this.speed = 5;
+      this.speed = 6;
     }
+    
     update() {
       this.x += this.speed;
     }
