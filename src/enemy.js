@@ -1,14 +1,16 @@
-class Character {
-    constructor() {
+var canvas = document.getElementById("canvas1");
+var cxt = canvas.getContext("2d"); 
+
+export default class Enemy {
+    constructor(x, y) {
   
-      this.width = 200;
-      this.height = 110;
+      this.width = 100;
+      this.height = 100;
 
       this.speed = 5;
-      this.scoreAtDeath = this.character[3];
   
-      this.x = canvas.width + this.distanceX;
-      this.y = floor.y - this.height;
+      this.x = x;
+      this.y = y;
   
       this.moving = true;
     }
@@ -21,5 +23,9 @@ class Character {
   
     update() {
       this.x -= this.speed;
+
+      if(this.x + this.width < 0){
+        this.x = canvas.width;
+    }
     }
 }
