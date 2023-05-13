@@ -15,6 +15,9 @@ export default class Shooter {
       this.projectiles = [];
       this.shooting = false;
       this.timer = 0;
+
+      this.directions = {"up": false, "diagnal": false, "down": false, "straight": false};
+      this.currDirection = this.directions["straight"];
     }
   
     draw() {
@@ -22,14 +25,13 @@ export default class Shooter {
         cxt.fillStyle = "yellow";
         cxt.fillRect(this.x, this.y, this.width, this.height);
     }
-  
-    // this.shooting set to true successful, but still will not shoot
+
     update() {
         if (this.shooting) {
             // while shooting is true, increment timer. If divisible by 10, push projectile. Genius.
             this.timer++;           
             if (this.timer % 10 === 0  || this.timer == 1) {
-                this.projectiles.push(new Projectile(this.x + this.width - 20, this.y));
+                this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 20));
                 console.log(this.projectiles.length);
             }
         } 

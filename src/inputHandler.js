@@ -6,6 +6,8 @@ export default class InputHandler {
           case 's':
             //this.shooting
             entity.shooting = true;
+            entity.directions["straight"] = true;
+
             console.log(entity.shooting, entity.name);
             console.log(entity.timer);
             break;

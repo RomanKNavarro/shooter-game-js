@@ -8,10 +8,16 @@ export default class Projectile {
       this.y = y;
       this.size = 5;
       this.speed = 6;
+      this.delete = false;
     }
     
     update() {
-      this.x += this.speed;
+      if (!this.delete) {
+        this.x += this.speed;
+      }
+      if (this.x > canvas.width - 100) {
+        this.delete;
+      }
     }
   
     draw() {

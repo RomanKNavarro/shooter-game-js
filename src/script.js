@@ -4,19 +4,21 @@ import Shooter from "./shooter.js";
 import InputHandler from "./inputHandler.js";
 import Enemy from "./enemy.js";
 
+// TODO: DELETE bullets once they reach end of screen. Log array of bullets. --DONE
+// TODO: reset bullet.x after hitting enemy.    --DONE
+
 // canvas stuff
 var canvas = document.getElementById("canvas1");
 var cxt = canvas.getContext("2d");
 
 // objects
 const flora = new Floor();
-const enemy = new Enemy(canvas.width, flora.y - 50);
 const shooter = new Shooter(100, flora.y - 50);
 new InputHandler(shooter);
 
 // variables
 let frame = 0;
-let randomFrames = [50, 100, 150];
+let randomFrames = [50, 80, 150];
 let enemyQueue = [];
 
 // functions:
@@ -31,8 +33,28 @@ function handleProjectile() {
     let projectiles = shooter.projectiles;
 
     for (let i = 0; i < projectiles.length; i++) {
-        projectiles[i].update();
-        projectiles[i].draw();
+        let current = projectiles[i];
+
+        if (current.x < canvas.width - 100) {
+            current.update();
+            current.draw();
+        }
+        //else if (i > 0) projectiles.splice(1, 1);
+        // remove ALL the items in projectiles array except the first one. Nice. 
+        // array NEVER surpasses 8 items. Even better. 
+
+        for (let j = 0; j < enemyQueue.length; j++) {
+            if (enemyQueue[j] && projectiles[i] && collision(projectiles[i], enemyQueue[j])) {
+                projectiles.splice(i, 1);
+                i--;
+                enemyQueue.splice(j, 1);
+                j--;
+            }
+        }
+        if (projectiles[i] && projectiles[i].x > canvas.width - 100) {
+            projectiles.splice(i, 1);
+            i--;
+        }
     }
 }
 
@@ -41,22 +63,36 @@ function handleEnemy() {
         let current = enemyQueue[i];
 
         // enemy gets deleted when killed. Otherwise, draw and update them.
-        if (!current.delete) {
+        // if (!current.delete) {
+        //     current.update();
+        //     current.draw();
+        // }
+
+        if (current.x > 0) {
             current.update();
             current.draw();
+        // remove enemy from queue if it supasses 0:
+        } else {
+            enemyQueue.splice(i, 1);
         }
-    }
 
+        // if (!current.delete) {
+        //     current.update();
+        //     current.draw();
+        // }
+    }
+}
+
+function pushEnemy() {
+    // so, if frame == 50 and I get randomFrames[0] (50), enemy gets pushed to queue.
     if (frame % randomFrames[Math.floor(Math.random() * randomFrames.length)] === 0) {
-        enemyQueue.push(new Enemy());
+        enemyQueue.push(new Enemy(canvas.width, flora.y - 50));
     }
 }
 
 function collision(bullet, orc) {
-    if (
-        bullet.x + bullet.size > orc.x &&
-        orc.x > sheep1.x + sheep1.width
-    ) {
+    if (bullet.x + bullet.size > orc.x) {
+        //orc.delete = true;
         return true;
     }
 }
@@ -68,6 +104,7 @@ function animate() {
     handleShooter();
     handleProjectile();
     handleEnemy();
+    pushEnemy();
     frame++;
 
     //setTimeout(animate ,15); <<< Game runs much slower with this in conjunction with animate() VVV

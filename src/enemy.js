@@ -16,16 +16,14 @@ export default class Enemy {
     }
 
     draw() {
+      if (!this.delete) {
         cxt.beginPath();
         cxt.fillStyle = "pink";
         cxt.fillRect(this.x, this.y, this.width, this.height);
       }
+    }
   
     update() {
       this.x -= this.speed;
-
-      if(this.x + this.width < 0){
-        this.x = canvas.width;
-    }
     }
 }
