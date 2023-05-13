@@ -4,8 +4,7 @@ var cxt = canvas.getContext("2d");
 export default class Enemy {
     constructor(x, y) {
   
-      this.width = 100;
-      this.height = 100;
+      this.width = this.height = 50;
 
       this.speed = 5;
   
@@ -13,6 +12,7 @@ export default class Enemy {
       this.y = y;
   
       this.moving = true;
+      this.delete = false;
     }
 
     draw() {

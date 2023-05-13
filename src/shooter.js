@@ -25,12 +25,11 @@ export default class Shooter {
   
     // this.shooting set to true successful, but still will not shoot
     update() {
-        console.log("erbody round me shooters");
         if (this.shooting) {
             // while shooting is true, increment timer. If divisible by 10, push projectile. Genius.
             this.timer++;           
-            if (this.timer % 10 === 0) {
-                this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 55));
+            if (this.timer % 10 === 0  || this.timer == 1) {
+                this.projectiles.push(new Projectile(this.x + this.width - 20, this.y));
                 console.log(this.projectiles.length);
             }
         } 
