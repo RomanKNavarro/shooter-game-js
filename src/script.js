@@ -6,6 +6,7 @@ import Enemy from "./enemy.js";
 
 // TODO: DELETE bullets once they reach end of screen. Log array of bullets. --DONE
 // TODO: reset bullet.x after hitting enemy.    --DONE
+// TODO: GET bullets to travel up when "w" is pressed.
 
 // canvas stuff
 var canvas = document.getElementById("canvas1");
@@ -62,12 +63,6 @@ function handleEnemy() {
     for (let i = 0; i < enemyQueue.length; i++) {
         let current = enemyQueue[i];
 
-        // enemy gets deleted when killed. Otherwise, draw and update them.
-        // if (!current.delete) {
-        //     current.update();
-        //     current.draw();
-        // }
-
         if (current.x > 0) {
             current.update();
             current.draw();
@@ -75,11 +70,6 @@ function handleEnemy() {
         } else {
             enemyQueue.splice(i, 1);
         }
-
-        // if (!current.delete) {
-        //     current.update();
-        //     current.draw();
-        // }
     }
 }
 
@@ -106,6 +96,8 @@ function animate() {
     handleEnemy();
     pushEnemy();
     frame++;
+
+    console.log(shooter.projectiles);
 
     //setTimeout(animate ,15); <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);

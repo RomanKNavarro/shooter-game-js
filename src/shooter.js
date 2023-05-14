@@ -16,8 +16,7 @@ export default class Shooter {
       this.shooting = false;
       this.timer = 0;
 
-      this.directions = {"up": false, "diagnal": false, "down": false, "straight": false};
-      this.currDirection = this.directions["straight"];
+      this.angle = "straight";
     }
   
     draw() {
@@ -31,8 +30,7 @@ export default class Shooter {
             // while shooting is true, increment timer. If divisible by 10, push projectile. Genius.
             this.timer++;           
             if (this.timer % 10 === 0  || this.timer == 1) {
-                this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 20));
-                console.log(this.projectiles.length);
+                this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 20, this.angle));
             }
         } 
         else {

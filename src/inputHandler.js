@@ -3,13 +3,14 @@ export default class InputHandler {
     constructor(entity) {
       document.addEventListener("keydown", (event) => {
         switch (event.key) {
+          // this is just for SHOOTING, not look direction
           case 's':
             //this.shooting
             entity.shooting = true;
-            entity.directions["straight"] = true;
+            break;
 
-            console.log(entity.shooting, entity.name);
-            console.log(entity.timer);
+          case 'w':
+            entity.angle = "up";          
             break;
         }
       });
@@ -19,6 +20,11 @@ export default class InputHandler {
           case 's':
             entity.shooting = false;
             break;
+
+          case 'w':
+            entity.angle = "straight";
+            break;
+
         }
       });
     }
