@@ -18,14 +18,22 @@ export default class Projectile {
     
     update() {
       if (!this.delete) {
-        this.x += this.speed;
+        
 
         //   HERE IS THE CULPRIT MAKING MY GAME SLOW. It fixed on its own LOOOOL:
         switch (this.direction) {
+          case "straight":
+            this.x += this.speed;
+            break
+
           case "up":
-            //this.x += this.speed;
+            this.x += 0;
             this.y -= this.speed;
             break;
+          
+          case "diagnal":
+            this.x += this.speed;
+            this.y -= this.speed;
         }
 
 
