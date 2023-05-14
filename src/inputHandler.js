@@ -24,7 +24,6 @@ export default class InputHandler {
           case 'w':
             entity.angle = "straight";
             break;
-
         }
       });
     }

@@ -18,7 +18,7 @@ export default class Shooter {
 
       this.angle = "straight";
     }
-  
+    
     draw() {
         cxt.beginPath();
         cxt.fillStyle = "yellow";

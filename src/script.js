@@ -7,6 +7,7 @@ import Enemy from "./enemy.js";
 // TODO: DELETE bullets once they reach end of screen. Log array of bullets. --DONE
 // TODO: reset bullet.x after hitting enemy.    --DONE
 // TODO: GET bullets to travel up when "w" is pressed.
+// TODO: get game running fast again. Problem not in inputHandler.
 
 // canvas stuff
 var canvas = document.getElementById("canvas1");
@@ -97,11 +98,11 @@ function animate() {
     pushEnemy();
     frame++;
 
-    console.log(shooter.projectiles);
+    //console.log(shooter.projectiles);
 
-    //setTimeout(animate ,15); <<< Game runs much slower with this in conjunction with animate() VVV
+    //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
 }
   
-//animate();
+// animate();
 window.requestAnimationFrame(animate);

@@ -4,6 +4,7 @@ var cxt = canvas.getContext("2d");
 // BULLETS
 export default class Projectile {
     constructor(x, y, direction) {
+      // constructor(x, y) {
       this.x = x;
       this.y = y;
       this.size = 5;
@@ -19,11 +20,15 @@ export default class Projectile {
       if (!this.delete) {
         this.x += this.speed;
 
+        //   HERE IS THE CULPRIT MAKING MY GAME SLOW. It fixed on its own LOOOOL:
         switch (this.direction) {
           case "up":
+            //this.x += this.speed;
             this.y -= this.speed;
             break;
         }
+
+
 
         
       }
