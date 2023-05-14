@@ -7,7 +7,7 @@ import Enemy from "./enemy.js";
 // TODO: DELETE bullets once they reach end of screen. Log array of bullets. --DONE
 // TODO: reset bullet.x after hitting enemy.    --DONE
 // TODO: GET bullets to travel up when "w" is pressed.
-// TODO: get game running fast again. Problem not in inputHandler.
+// TODO: get game running fast again. Problem not in inputHandler. --DONE  
 
 // canvas stuff
 var canvas = document.getElementById("canvas1");
@@ -82,7 +82,7 @@ function pushEnemy() {
 }
 
 function collision(bullet, orc) {
-    if (bullet.x + bullet.size > orc.x) {
+    if (bullet.x + bullet.size > orc.x && bullet.y + bullet.size >= orc.y) {
         //orc.delete = true;
         return true;
     }

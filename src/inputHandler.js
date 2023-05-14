@@ -2,6 +2,8 @@
 export default class InputHandler {
     constructor(entity) {
       document.addEventListener("keydown", (event) => {
+        // TODO: try using if statements instead.
+
         switch (event.key) {
           // this is just for SHOOTING, not look direction
           case 's':
