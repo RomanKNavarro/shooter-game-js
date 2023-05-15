@@ -11,7 +11,6 @@ export default class InputHandler {
       document.addEventListener("keydown", (event) => {
         // TODO: try using if statements instead.
 
-        console.log(keys);
         // what this do? sets respective keys value to true.
         keys[event.key] = true;
         //console.log(entity.angle);

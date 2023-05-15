@@ -13,12 +13,14 @@ export default class Enemy {
   
       this.moving = true;
       this.delete = false;
+
+      this.color = "pink"
     }
 
     draw() {
       if (!this.delete) {
         cxt.beginPath();
-        cxt.fillStyle = "pink";
+        cxt.fillStyle = this.color;
         cxt.fillRect(this.x, this.y, this.width, this.height);
       }
     }

@@ -3,11 +3,13 @@ import Floor from "./floor.js";
 import Shooter from "./shooter.js";
 import InputHandler from "./inputHandler.js";
 import Enemy from "./enemy.js";
+import AirEnemy from "./enemy.js";
 
 // TODO: DELETE bullets once they reach end of screen. Log array of bullets. --DONE
 // TODO: reset bullet.x after hitting enemy.    --DONE
 // TODO: GET bullets to travel up when "w" is pressed.
 // TODO: get game running fast again. Problem not in inputHandler. --DONE  
+// TODO: all enemy classes in the same file.
 
 // canvas stuff
 var canvas = document.getElementById("canvas1");
@@ -21,7 +23,11 @@ new InputHandler(shooter);
 // variables
 let frame = 0;
 let randomFrames = [50, 80, 150];
+
+// level 1: 8/10 chance to spawn ground enemy. 20% chance to spawn air enemy.
+let theOdds = 8;
 let enemyQueue = [];
+let airEnemyQueue = [];
 
 // functions:
 flora.draw();
@@ -41,9 +47,6 @@ function handleProjectile() {
             current.update();
             current.draw();
         }
-        //else if (i > 0) projectiles.splice(1, 1);
-        // remove ALL the items in projectiles array except the first one. Nice. 
-        // array NEVER surpasses 8 items. Even better. 
 
         for (let j = 0; j < enemyQueue.length; j++) {
             if (enemyQueue[j] && projectiles[i] && collision(projectiles[i], enemyQueue[j])) {
@@ -67,7 +70,7 @@ function handleEnemy() {
         if (current.x > 0) {
             current.update();
             current.draw();
-        // remove enemy from queue if it supasses 0:
+        // remove enemy from queue if it supasses coord 0:
         } else {
             enemyQueue.splice(i, 1);
         }
@@ -76,14 +79,22 @@ function handleEnemy() {
 
 function pushEnemy() {
     // so, if frame == 50 and I get randomFrames[0] (50), enemy gets pushed to queue.
+
     if (frame % randomFrames[Math.floor(Math.random() * randomFrames.length)] === 0) {
-        enemyQueue.push(new Enemy(canvas.width, flora.y - 50));
+        let chance = Math.floor(Math.random() * 10)
+        //console.log(theOdds);
+        console.log(chance);
+        if (chance < theOdds) {
+            enemyQueue.push(new Enemy(canvas.width, flora.y - 50));
+        }
+        else {
+            enemyQueue.push(new AirEnemy(canvas.width, flora.y - 150));
+        }
     }
 }
 
 function collision(bullet, orc) {
     if (bullet.x + bullet.size > orc.x && bullet.y + bullet.size >= orc.y) {
-        //orc.delete = true;
         return true;
     }
 }
@@ -97,8 +108,6 @@ function animate() {
     handleEnemy();
     pushEnemy();
     frame++;
-
-    //console.log(shooter.projectiles);
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
