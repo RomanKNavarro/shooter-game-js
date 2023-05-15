@@ -5,15 +5,15 @@ import InputHandler from "./inputHandler.js";
 import Enemy from "./enemy.js";
 import AirEnemy from "./enemy.js";
 
+// canvas stuff
+var canvas = document.getElementById("canvas1");
+var cxt = canvas.getContext("2d");
+
 // TODO: DELETE bullets once they reach end of screen. Log array of bullets. --DONE
 // TODO: reset bullet.x after hitting enemy.    --DONE
 // TODO: GET bullets to travel up when "w" is pressed.
 // TODO: get game running fast again. Problem not in inputHandler. --DONE  
 // TODO: all enemy classes in the same file.
-
-// canvas stuff
-var canvas = document.getElementById("canvas1");
-var cxt = canvas.getContext("2d");
 
 // objects
 const flora = new Floor();
@@ -93,8 +93,10 @@ function pushEnemy() {
     }
 }
 
+// collission successful.
 function collision(bullet, orc) {
-    if (bullet.x + bullet.size > orc.x && bullet.y + bullet.size >= orc.y) {
+    if (bullet.x + bullet.size > orc.x && bullet.y + bullet.size >= orc.y 
+        && bullet.y + bullet.size <= orc.y + orc.height) {
         return true;
     }
 }
