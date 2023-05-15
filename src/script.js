@@ -14,6 +14,7 @@ var cxt = canvas.getContext("2d");
 // TODO: GET bullets to travel up when "w" is pressed.
 // TODO: get game running fast again. Problem not in inputHandler. --DONE  
 // TODO: all enemy classes in the same file.
+// TODO: add mouse hover stuff in game.js. Mouse input goes in inputHandler. MouseCollision needs to be global
 
 // objects
 const flora = new Floor();
@@ -92,6 +93,7 @@ function pushEnemy() {
         }
     }
 }
+
 
 // collission successful.
 function collision(bullet, orc) {

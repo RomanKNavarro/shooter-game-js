@@ -4,7 +4,7 @@
 // yet, pressing w+d does make it diagnal.    --DONE. Simply had to move if statement to bottom of cases.
 
 export default class InputHandler {
-    constructor(entity) {
+    constructor(entity, game) {
       let keys = {"space": false, "d": false, "w": false};
 
       
@@ -44,6 +44,14 @@ export default class InputHandler {
             entity.angle = "straight";
             break;
         }
+      });
+
+      // MOUSE INPUT: 
+      canvas.addEventListener("mousedown", function () {
+        game.mouse.clicked = true;
+      });
+      canvas.addEventListener("mouseup", function () {
+        game.mouse.clicked = false;
       });
     }
   }

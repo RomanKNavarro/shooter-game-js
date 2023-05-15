@@ -1,7 +1,7 @@
 var canvas = document.getElementById("canvas1");
 var cxt = canvas.getContext("2d");
 
-export default class Game {
+export default class Button {
     constructor(x, y, width, text) {
         this.x = x;
         this.y = y;
@@ -31,5 +31,11 @@ export default class Game {
         context.font = '40pt Kremlin Pro Web';
         context.fillStyle = '#000000';
         context.fillText('Start', 345, 415);
+    }
+
+    update() {
+        if (this.hover) {
+
+        }
     }
 }
