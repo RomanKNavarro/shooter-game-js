@@ -4,6 +4,7 @@ import Shooter from "./shooter.js";
 import InputHandler from "./inputHandler.js";
 import Enemy from "./enemy.js";
 import AirEnemy from "./enemy.js";
+import Button from "./button.js";
 
 // canvas stuff
 var canvas = document.getElementById("canvas1");
@@ -15,6 +16,9 @@ var cxt = canvas.getContext("2d");
 // TODO: get game running fast again. Problem not in inputHandler. --DONE  
 // TODO: all enemy classes in the same file.
 // TODO: add mouse hover stuff in game.js. Mouse input goes in inputHandler. MouseCollision needs to be global
+// TODO: figure out why color picker won't show up when hovering over.
+// TODO: add game states.
+// TODO: get button clicking to work & mouse position read.
 
 // objects
 const flora = new Floor();
@@ -28,10 +32,24 @@ let randomFrames = [50, 80, 150];
 // level 1: 8/10 chance to spawn ground enemy. 20% chance to spawn air enemy.
 let theOdds = 8;
 let enemyQueue = [];
-let airEnemyQueue = [];
+
+// let state = "MENU";
+let state = "MENU";
 
 // functions:
 flora.draw();
+
+
+function handleState() {
+    if (state == "MENU") {
+        let startButton = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Initiate Massacre");
+        startButton.draw();
+
+        if (startButton.clicked) {
+            state = "RUNNING";
+        }
+    }
+}
 
 function handleShooter() {
     shooter.draw();
@@ -109,9 +127,18 @@ function animate() {
     flora.draw();
     handleShooter();
     handleProjectile();
-    handleEnemy();
-    pushEnemy();
+    handleState();
+
+    // handleEnemy();
+    // pushEnemy();
+
+    if (state != "MENU") {
+        handleEnemy();
+        pushEnemy();
+    }
+
     frame++;
+
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);

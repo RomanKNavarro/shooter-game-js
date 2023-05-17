@@ -1,12 +1,21 @@
 // keyboard keys
+var canvas = document.getElementById("canvas1");
+var cxt = canvas.getContext("2d");
 
 // TODO: while shooting straight, pressing d+w makes bullets shoot up instead of diagnal,
 // yet, pressing w+d does make it diagnal.    --DONE. Simply had to move if statement to bottom of cases.
 
 export default class InputHandler {
-    constructor(entity, game) {
+    constructor(entity) {
       let keys = {"space": false, "d": false, "w": false};
 
+      const mouse = {
+        x: 10,
+        y: 10,
+        width: 0.1,
+        height: 0.1,
+        clicked: false
+      };
       
       document.addEventListener("keydown", (event) => {
         // TODO: try using if statements instead.
@@ -48,10 +57,21 @@ export default class InputHandler {
 
       // MOUSE INPUT: 
       canvas.addEventListener("mousedown", function () {
-        game.mouse.clicked = true;
+        mouse.clicked = true;
       });
       canvas.addEventListener("mouseup", function () {
-        game.mouse.clicked = false;
+        mouse.clicked = false;
+      });
+      
+      // here is what actually reads the mouse's location:
+      let canvasPosition = canvas.getBoundingClientRect();
+      canvas.addEventListener("mousemove", function (e) {
+        mouse.x = e.x - canvasPosition.left;
+        mouse.y = e.y - canvasPosition.top;
+      });
+      canvas.addEventListener("mouseleave", function () {
+        mouse.x = undefined;
+        mouse.y = undefined;
       });
     }
   }

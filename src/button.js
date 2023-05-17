@@ -23,19 +23,22 @@ export default class Button {
 
         // button outline:
         cxt.lineWidth = 2;
-        cxt.strokeStyle = '#000000'; 
+        cxt.strokeStyle = 'black'; 
         cxt.stroke();
         cxt.closePath();
 
         // button text:
-        context.font = '40pt Kremlin Pro Web';
-        context.fillStyle = '#000000';
-        context.fillText('Start', 345, 415);
+        cxt.font = "12px serif";
+        cxt.fillStyle = "black";
+        // HOW TO CENTER TEXT IN BUTTON:
+        cxt.textAlign = "center";
+        cxt.textBaseline = "middle";
+        cxt.fillText(this.text, this.x + (this.width / 2), this.y + (this.height / 2));
     }
 
-    update() {
-        if (this.hover) {
+    // update() {
+    //     if (this.hover) {
 
-        }
-    }
+    //     }
+    // }
 }

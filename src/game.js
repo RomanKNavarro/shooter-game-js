@@ -1,12 +1,13 @@
 import Button from "./button.js";
 
 var canvas = document.getElementById("canvas1");
+// context
 var cxt = canvas.getContext("2d");
 
 // ALL BUTTON INSTANCES TO BE USED HERE:
 export default class Game {
     constructor() {
-        this.menu = true;
+        this.menu = false;
         this.gameOver = false;
         this.running = false; 
 
@@ -22,12 +23,18 @@ export default class Game {
         this.startButton = new Button(canvas.width / 2, canvas.height / 2, 100, "Initiate Massacre");
     }
 
-
     init() {
         if (this.menu) {
-            this.startButton.draw();
+            let startButt = this.startButton;
+            startButt.draw();
 
-            if (this.mouseCollision(this.startButton))
+            // why should mousecollision be in here again and not in button.js?
+            if (mouseCollision(startButt, this.mouse)) {
+                
+                if (startButt.clicked) {
+
+                }
+            }
         }
     }
 
