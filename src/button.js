@@ -8,8 +8,7 @@ export default class Button {
         this.width = width;
         this.height = 30;
         this.text = text;
-
-        this.hover = false;
+        this.stroke = "black";
         this.clicked = false; 
     }
 
@@ -23,22 +22,18 @@ export default class Button {
 
         // button outline:
         cxt.lineWidth = 2;
-        cxt.strokeStyle = 'black'; 
+        cxt.strokeStyle = this.stroke;
         cxt.stroke();
-        cxt.closePath();
+        //cxt.closePath();
 
         // button text:
         cxt.font = "12px serif";
+
         cxt.fillStyle = "black";
+        
         // HOW TO CENTER TEXT IN BUTTON:
         cxt.textAlign = "center";
         cxt.textBaseline = "middle";
         cxt.fillText(this.text, this.x + (this.width / 2), this.y + (this.height / 2));
     }
-
-    // update() {
-    //     if (this.hover) {
-
-    //     }
-    // }
 }

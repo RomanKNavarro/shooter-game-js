@@ -1,3 +1,5 @@
+'use strict';
+
 // MODULES:
 import Floor from "./floor.js";  
 import Shooter from "./shooter.js";
@@ -17,13 +19,16 @@ var cxt = canvas.getContext("2d");
 // TODO: all enemy classes in the same file.
 // TODO: add mouse hover stuff in game.js. Mouse input goes in inputHandler. MouseCollision needs to be global
 // TODO: figure out why color picker won't show up when hovering over.
-// TODO: add game states.
-// TODO: get button clicking to work & mouse position read.
+// TODO: add game states.   --DONE 
+// TODO: get button clicking to work & mouse position read. --DONE
 
 // objects
 const flora = new Floor();
 const shooter = new Shooter(100, flora.y - 50);
+const startButton = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Press to Play");
+
 new InputHandler(shooter);
+// const input = new InputHandler(shooter);
 
 // variables
 let frame = 0;
@@ -33,21 +38,38 @@ let randomFrames = [50, 80, 150];
 let theOdds = 8;
 let enemyQueue = [];
 
-// let state = "MENU";
 let state = "MENU";
 
 // functions:
 flora.draw();
 
+// shooter.mouse is readable here.
 
+// startButton.stroke property successfully set, but color won't change.
 function handleState() {
     if (state == "MENU") {
-        let startButton = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Initiate Massacre");
+        
         startButton.draw();
 
-        if (startButton.clicked) {
-            state = "RUNNING";
+        if (mouseCollision(shooter.mouse, startButton)) {
+            startButton.stroke = "red";
+            
+            // startButton.stroke = "red";
+
+            if (shooter.mouse.clicked) {
+                // console.log("clicked!");
+                state = "RUNNING";
+            }
         }
+        else {
+            startButton.stroke = "black";
+        }
+
+        console.log(startButton.stroke);
+    }
+    else {
+        handleEnemy();
+        pushEnemy();
     }
 }
 
@@ -121,6 +143,18 @@ function collision(bullet, orc) {
     }
 }
 
+// used to determine if the mouse is inside a given button. (mouse, button)
+function mouseCollision(first, second) {
+    if (
+      first.x >= second.x &&
+      first.x <= second.x + second.width &&
+      first.y >= second.y &&
+      first.y <= second.y + second.height
+    ) {
+      return true;
+    }
+  }
+
 // FUNCTION TO GET ALL OUR OBJECTS UP AND RUNNING
 function animate() {
     cxt.clearRect(0, 0, canvas.width, canvas.height);
@@ -128,14 +162,6 @@ function animate() {
     handleShooter();
     handleProjectile();
     handleState();
-
-    // handleEnemy();
-    // pushEnemy();
-
-    if (state != "MENU") {
-        handleEnemy();
-        pushEnemy();
-    }
 
     frame++;
 

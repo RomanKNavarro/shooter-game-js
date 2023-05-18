@@ -17,6 +17,15 @@ export default class Shooter {
       this.timer = 0;
 
       this.angle = "straight";
+
+      // mouse stuff in here lol, used in script.js
+      this.mouse = {
+        x: 10,
+        y: 10,
+        width: 0.1,
+        height: 0.1,
+        clicked: false
+      };
     }
     
     draw() {

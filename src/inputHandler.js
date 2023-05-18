@@ -6,72 +6,63 @@ var cxt = canvas.getContext("2d");
 // yet, pressing w+d does make it diagnal.    --DONE. Simply had to move if statement to bottom of cases.
 
 export default class InputHandler {
-    constructor(entity) {
-      let keys = {"space": false, "d": false, "w": false};
+  constructor(entity) {
+    // why doesn't this work as "this.keys"?
+    let keys = {"space": false, "d": false, "w": false};
+    
+    document.addEventListener("keydown", (event) => {
+      // TODO: try using if statements instead.
 
-      const mouse = {
-        x: 10,
-        y: 10,
-        width: 0.1,
-        height: 0.1,
-        clicked: false
-      };
+      // what this do? sets respective keys value to true. "key" is a built-in property of "event" lol
+      keys[event.key] = true;
       
-      document.addEventListener("keydown", (event) => {
-        // TODO: try using if statements instead.
+      switch (event.key) {
+        // this is just for SHOOTING, not look direction
+        case ' ':
+          //this.shooting
+          entity.shooting = true;
+          break;
 
-        // what this do? sets respective keys value to true.
-        keys[event.key] = true;
-        //console.log(entity.angle);
-        
-        switch (event.key) {
-          // this is just for SHOOTING, not look direction
-          case ' ':
-            //this.shooting
-            entity.shooting = true;
-            break;
+        case 'w':
+          entity.angle = "up";          
+          break;
+      }
 
-          case 'w':
-            entity.angle = "up";          
-            break;
-        }
+      if (keys["d"] && keys["w"]) entity.angle = "diagnal";
+    });
 
-        // if (keys["w"] && keys["d"] || keys["d"] && keys["w"]) entity.angle = "diagnal";
-       if (keys["d"] && keys["w"]) entity.angle = "diagnal";
-      });
-  
-      document.addEventListener("keyup", (event) => {
+    document.addEventListener("keyup", (event) => {
 
-        keys[event.key] = false;
+      keys[event.key] = false;
 
-        switch (event.key) {
-          case ' ':
-            entity.shooting = false;
-            break;
+      switch (event.key) {
+        case ' ':
+          entity.shooting = false;
+          break;
 
-          case 'w':
-            entity.angle = "straight";
-            break;
-        }
-      });
+        case 'w':
+          entity.angle = "straight";
+          break;
+      }
+    });
 
-      // MOUSE INPUT: 
-      canvas.addEventListener("mousedown", function () {
-        mouse.clicked = true;
-      });
-      canvas.addEventListener("mouseup", function () {
-        mouse.clicked = false;
-      });
-      
-      // here is what actually reads the mouse's location:
-      let canvasPosition = canvas.getBoundingClientRect();
-      canvas.addEventListener("mousemove", function (e) {
-        mouse.x = e.x - canvasPosition.left;
-        mouse.y = e.y - canvasPosition.top;
-      });
-      canvas.addEventListener("mouseleave", function () {
-        mouse.x = undefined;
-        mouse.y = undefined;
-      });
-    }
+    // MOUSE INPUT: 
+    document.addEventListener("mousedown", function () {
+      entity.mouse.clicked = true;
+    });
+    document.addEventListener("mouseup", function () {
+      entity.mouse.clicked = false;
+    });
+    
+    // here is what actually reads the mouse's location:
+    let canvasPosition = canvas.getBoundingClientRect();
+    canvas.addEventListener("mousemove", function (e) {
+      entity.mouse.x = e.x - canvasPosition.left;
+      entity.mouse.y = e.y - canvasPosition.top;
+    });
+    canvas.addEventListener("mouseleave", function () {
+      entity.mouse.x = undefined;
+      entity.mouse.y = undefined;
+    });
   }
+}

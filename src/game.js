@@ -7,7 +7,7 @@ var cxt = canvas.getContext("2d");
 // ALL BUTTON INSTANCES TO BE USED HERE:
 export default class Game {
     constructor() {
-        this.menu = false;
+        this.menu = true;
         this.gameOver = false;
         this.running = false; 
 
@@ -20,7 +20,7 @@ export default class Game {
         };
 
         // signature: (x, y, width, text)
-        this.startButton = new Button(canvas.width / 2, canvas.height / 2, 100, "Initiate Massacre");
+        this.startButton = new Button(canvas.width / 2, canvas.height / 2, 100, "Press Space to Play");
     }
 
     init() {
