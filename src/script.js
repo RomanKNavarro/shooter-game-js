@@ -21,8 +21,9 @@ var cxt = canvas.getContext("2d");
 // TODO: figure out why color picker won't show up when hovering over.
 // TODO: add game states.   --DONE 
 // TODO: get button clicking to work & mouse position read. --DONE
-// TODO: limit enemies, implement win screen.
+// TODO: limit enemies, implement win screen.   --DONE
 // TODO: make win text fade in and out.
+// TODO: stop last enemies from disapearing. 
 
 // objects
 const flora = new Floor();
@@ -127,17 +128,19 @@ function pushEnemy() {
         let chance = Math.floor(Math.random() * 10)
 
         if (enemyCount > 0) {
-            if (chance < theOdds) {
+            if (chance < theOdds) {         
                 enemyQueue.push(new Enemy(canvas.width, flora.y - 50));
+                enemyCount--;
             }
             else {
                 enemyQueue.push(new AirEnemy(canvas.width, flora.y - 150));
+                enemyCount--;
             }
-            enemyCount--;
         }
-        else state = "WIN";
+        else {
+            state = "WIN";
+        }
         console.log(enemyCount); 
-
     }
 }
 
