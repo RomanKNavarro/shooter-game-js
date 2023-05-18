@@ -17,13 +17,14 @@ var cxt = canvas.getContext("2d");
 // TODO: GET bullets to travel up when "w" is pressed.
 // TODO: get game running fast again. Problem not in inputHandler. --DONE  
 // TODO: all enemy classes in the same file.
-// TODO: add mouse hover stuff in game.js. Mouse input goes in inputHandler. MouseCollision needs to be global
+// TODO: add mouse hover stuff in game.js. Mouse input goes in inputHandler. MouseCollision needs to be global --DONE
 // TODO: figure out why color picker won't show up when hovering over.
 // TODO: add game states.   --DONE 
 // TODO: get button clicking to work & mouse position read. --DONE
 // TODO: limit enemies, implement win screen.   --DONE
 // TODO: make win text fade in and out.
-// TODO: stop last enemies from disapearing. 
+// TODO: stop last enemies from disapearing. --DONE
+// TODO: initiate next round on win.
 
 // objects
 const flora = new Floor();
@@ -35,12 +36,13 @@ new InputHandler(shooter);
 
 // variables
 let frame = 0;
-let randomFrames = [50, 80, 150];
+let randomFrames = [50, 110, 150];
 
 // level 1: 8/10 chance to spawn ground enemy. 20% chance to spawn air enemy.
 let theOdds = 8;
 let enemyQueue = [];
 let enemyCount = 5;
+let currentRound = 1;
 
 // states: MENU, RUNNING, WIN, LOSE, OVER
 let state = "MENU";
@@ -74,6 +76,7 @@ function handleState() {
         const winText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Round Complete", false);
         winText.draw();
     }
+    console.log(currentRound);
 }
 
 function handleShooter() {
@@ -117,6 +120,7 @@ function handleEnemy() {
         // remove enemy from queue if it supasses coord 0:
         } else {
             enemyQueue.splice(i, 1);
+            //enemyCount--;
         }
     }
 }
@@ -129,19 +133,26 @@ function pushEnemy() {
 
         if (enemyCount > 0) {
             if (chance < theOdds) {         
-                enemyQueue.push(new Enemy(canvas.width, flora.y - 50));
-                enemyCount--;
+                enemyQueue.push(new Enemy(canvas.width, flora.y - 50));               
             }
             else {
                 enemyQueue.push(new AirEnemy(canvas.width, flora.y - 150));
-                enemyCount--;
             }
+            enemyCount--;
         }
-        else {
+        else if (enemyQueue.length == 0) {
             state = "WIN";
+            cremate();
         }
-        console.log(enemyCount); 
+        console.log(enemyCount, currentRound, theOdds);
     }
+}
+
+// increment stuff to make next round slightly harder:
+function cremate() {
+    currentRound++;
+    enemyCount *= currentRound;
+    if (theOdds > 5) theOdds--;
 }
 
 
