@@ -77,8 +77,15 @@ function handleState() {
         const winText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Round Complete", false);
         //winText.alpha = 0.5;
         winText.draw();
-        // winText.delete();
+        // winText.show = false;
+
+        setTimeout(() => {
+            winText.show = false;
+            winText.draw();
+            console.log(winText.show);
+        }, 3000);
     }
+    
 }
 
 function handleShooter() {
@@ -181,6 +188,10 @@ function mouseCollision(first, second) {
 // FUNCTION TO GET ALL OUR OBJECTS UP AND RUNNING
 function animate() {
     cxt.clearRect(0, 0, canvas.width, canvas.height);
+
+    cxt.fillStyle = "blue";
+    cxt.fillRect(0, 0, canvas.width, canvas.height);
+
     flora.draw();
     handleShooter();
     handleProjectile();

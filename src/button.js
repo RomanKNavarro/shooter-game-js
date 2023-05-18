@@ -12,6 +12,9 @@ export default class Button {
         this.clicked = false; 
 
         this.clickable = clickable;
+        this.show = true;
+
+        this.alpha = 1;
 
     }
 
@@ -42,15 +45,12 @@ export default class Button {
             cxt.fillText(this.text, this.x + (this.width / 2), this.y + (this.height / 2));
         }
         
-        else {
-            // this.fadeIn(1);
-
-            setTimeout(this.fadeIn(1), 10000);
-
+        else if (this.show) {
+            this.fadeIn();
         }
     }
 
-    fadeIn(alpha) {
+    fadeIn() {
         // var alpha = 1.0,
         // interval = setInterval(function () {
         //     canvas.width = canvas.width; // Clears the canvas
@@ -67,13 +67,14 @@ export default class Button {
         // }, 50);
 
         // cxt.fillStyle = "black";
-        cxt.fillStyle = "rgba(0, 0, 0, " + alpha + ")";
-        cxt.font = "40px Tourney";
+        cxt.fillStyle = "rgba(0, 0, 0, " + this.alpha + ")";
+        cxt.font = "30px Tourney";
         cxt.fillText(this.text, this.x + (this.width / 2), this.y + (this.height / 2));
     }
 
     delete() {
         this.alpha = 0.3;
         this.fadeIn();
+        cxt.clearRect(this.x, this.y, this.width, this.height);
     }
 }
