@@ -21,11 +21,13 @@ var cxt = canvas.getContext("2d");
 // TODO: figure out why color picker won't show up when hovering over.
 // TODO: add game states.   --DONE 
 // TODO: get button clicking to work & mouse position read. --DONE
+// TODO: limit enemies, implement win screen.
+// TODO: make win text fade in and out.
 
 // objects
 const flora = new Floor();
 const shooter = new Shooter(100, flora.y - 50);
-const startButton = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Press to Play");
+const startButton = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Press to Play", true);
 
 new InputHandler(shooter);
 // const input = new InputHandler(shooter);
@@ -37,18 +39,17 @@ let randomFrames = [50, 80, 150];
 // level 1: 8/10 chance to spawn ground enemy. 20% chance to spawn air enemy.
 let theOdds = 8;
 let enemyQueue = [];
+let enemyCount = 5;
 
+// states: MENU, RUNNING, WIN, LOSE, OVER
 let state = "MENU";
 
 // functions:
 flora.draw();
 
-// shooter.mouse is readable here.
-
 // startButton.stroke property successfully set, but color won't change.
 function handleState() {
-    if (state == "MENU") {
-        
+    if (state == "MENU") {  
         startButton.draw();
 
         if (mouseCollision(shooter.mouse, startButton)) {
@@ -57,19 +58,20 @@ function handleState() {
             // startButton.stroke = "red";
 
             if (shooter.mouse.clicked) {
-                // console.log("clicked!");
                 state = "RUNNING";
             }
         }
         else {
             startButton.stroke = "black";
         }
-
-        console.log(startButton.stroke);
     }
-    else {
+    else if (state == "RUNNING") {
         handleEnemy();
         pushEnemy();
+    }
+    else if (state == "WIN") {
+        const winText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Round Complete", false);
+        winText.draw();
     }
 }
 
@@ -123,14 +125,19 @@ function pushEnemy() {
 
     if (frame % randomFrames[Math.floor(Math.random() * randomFrames.length)] === 0) {
         let chance = Math.floor(Math.random() * 10)
-        //console.log(theOdds);
-        console.log(chance);
-        if (chance < theOdds) {
-            enemyQueue.push(new Enemy(canvas.width, flora.y - 50));
+
+        if (enemyCount > 0) {
+            if (chance < theOdds) {
+                enemyQueue.push(new Enemy(canvas.width, flora.y - 50));
+            }
+            else {
+                enemyQueue.push(new AirEnemy(canvas.width, flora.y - 150));
+            }
+            enemyCount--;
         }
-        else {
-            enemyQueue.push(new AirEnemy(canvas.width, flora.y - 150));
-        }
+        else state = "WIN";
+        console.log(enemyCount); 
+
     }
 }
 
