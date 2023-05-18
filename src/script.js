@@ -73,10 +73,12 @@ function handleState() {
         pushEnemy();
     }
     else if (state == "WIN") {
+
         const winText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Round Complete", false);
+        //winText.alpha = 0.5;
         winText.draw();
+        // winText.delete();
     }
-    console.log(currentRound);
 }
 
 function handleShooter() {

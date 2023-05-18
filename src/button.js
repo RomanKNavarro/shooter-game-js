@@ -34,6 +34,7 @@ export default class Button {
             cxt.font = "12px serif";
     
             cxt.fillStyle = "black";
+            //cxt.fillStyle = "rgba(255, 255, 255, " + this.alpha + ")";
     
             // HOW TO CENTER TEXT IN BUTTON:
             cxt.textAlign = "center";
@@ -42,11 +43,14 @@ export default class Button {
         }
         
         else {
-            this.fadeIn();
+            // this.fadeIn(1);
+
+            setTimeout(this.fadeIn(1), 10000);
+
         }
     }
 
-    fadeIn() {
+    fadeIn(alpha) {
         // var alpha = 1.0,
         // interval = setInterval(function () {
         //     canvas.width = canvas.width; // Clears the canvas
@@ -62,8 +66,14 @@ export default class Button {
         //     }
         // }, 50);
 
-        cxt.fillStyle = "black";
+        // cxt.fillStyle = "black";
+        cxt.fillStyle = "rgba(0, 0, 0, " + alpha + ")";
         cxt.font = "40px Tourney";
         cxt.fillText(this.text, this.x + (this.width / 2), this.y + (this.height / 2));
+    }
+
+    delete() {
+        this.alpha = 0.3;
+        this.fadeIn();
     }
 }
