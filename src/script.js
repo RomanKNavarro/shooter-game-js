@@ -43,9 +43,10 @@ let theOdds = 8;
 let enemyQueue = [];
 let enemyCount = 5;
 let currentRound = 1;
+let showNextRound = false;
 
 // states: MENU, RUNNING, WIN, LOSE, OVER
-let state = "MENU";
+let state = "WIN";
 
 // functions:
 flora.draw();
@@ -73,19 +74,20 @@ function handleState() {
         pushEnemy();
     }
     else if (state == "WIN") {
+        cremate();
 
         const winText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Round Complete", false);
-        //winText.alpha = 0.5;
-        winText.draw();
-        // winText.show = false;
+        const nextText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Next round incoming...", false);
 
-        setTimeout(() => {
-            winText.show = false;
+        if (!showNextRound) {
             winText.draw();
-            console.log(winText.show);
-        }, 3000);
+            setTimeout(() => {
+                showNextRound = true;
+                console.log(showNextRound);
+            }, 3000);
+        }
+        else nextText.draw();
     }
-    
 }
 
 function handleShooter() {
@@ -151,7 +153,6 @@ function pushEnemy() {
         }
         else if (enemyQueue.length == 0) {
             state = "WIN";
-            cremate();
         }
         console.log(enemyCount, currentRound, theOdds);
     }
@@ -189,7 +190,7 @@ function mouseCollision(first, second) {
 function animate() {
     cxt.clearRect(0, 0, canvas.width, canvas.height);
 
-    cxt.fillStyle = "blue";
+    cxt.fillStyle = "white";
     cxt.fillRect(0, 0, canvas.width, canvas.height);
 
     flora.draw();
