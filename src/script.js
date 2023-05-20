@@ -44,7 +44,7 @@ let randomFrames = [50, 110, 150];
 // level 1: 8/10 chance to spawn ground enemy. 20% chance to spawn air enemy.
 let theOdds = 8;
 let enemyQueue = [];
-let enemyCount = 5;
+const enemyCount = 5;
 let currentRound = 1;
 let showNextRound = false;
 
@@ -56,6 +56,11 @@ flora.draw();
 
 // startButton.stroke property successfully set, but color won't change.
 function handleState() {
+    if (enemyCount == 0) {
+        //currentRound += 1;
+        //enemyCount *= currentRound + 2;
+    }
+
     if (state == "MENU") {  
         startButton.draw();
 
@@ -78,6 +83,7 @@ function handleState() {
         pushEnemy();
     }
     else if (state == "WIN") { 
+        // cremate();
         if (!showNextRound) {
             winText.draw();
             setTimeout(() => {
@@ -88,10 +94,7 @@ function handleState() {
             nextText.draw();
             setTimeout(() => {
                 // cremate();
-                //enemyCount = 10;
                 state = "RUNNING";
-                enemyCount *= currentRound;
-                currentRound += 1;
             }, 1000);
         }
     }
@@ -99,8 +102,8 @@ function handleState() {
 
 // increment stuff to make next round slightly harder:
 function cremate() {
-    enemyCount *= currentRound;
     currentRound += 1;
+    enemyCount *= currentRound;
     if (theOdds > 5) theOdds--;
     showNextRound = true;
 }
