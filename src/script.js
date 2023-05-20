@@ -27,9 +27,11 @@ var cxt = canvas.getContext("2d");
 // TODO: initiate next round on win.    --DONE
 // TODO: get enemyCount to increase every round. STOP IT FROM GOING BRRRRR
 
+// REVELATION: WINNINGSCORE ONLY GOES UP IF ENEMIES ARE MANUALLY KILLED
+
 // NEW SCORE STUFF:
 let score = 0;
-let winningScore = 50;
+let winningScore = 30;
 
 // objects
 const flora = new Floor();
@@ -39,6 +41,9 @@ const shooter = new Shooter(100, flora.y - 50);
 const startButton = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Press to Play", true);
 const winText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Round Complete", false);
 const nextText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Next round incoming...", false);
+
+// why won't score update? b/c It is an obj created with whatever text was given at 
+// the start.
 const scoreText = new Button(canvas.width / 2, 0, 100, score, false);
 
 new InputHandler(shooter);
@@ -52,7 +57,7 @@ let randomFrames = [50, 110, 150];
 const rounds = Array.from(Array(10).keys());
 let theOdds = 8;
 let enemyQueue = [];
-let enemyCount = 5;
+let enemyCount = 3;
 let currentRound = 1;
 let showNextRound = false;
 
@@ -99,6 +104,9 @@ function handleState() {
                 // cremate();
                 state = "RUNNING";
                 //cremate();
+                if (score >= winningScore) {
+                    cremate();
+                }
             }, 1000);
         }
     }
@@ -113,8 +121,9 @@ function handleStats() {
 // increment stuff to make next round slightly harder:
 function cremate() {
     currentRound++;
-    winningScore *= 1.5;
-    enemyCount *= currentRound;
+    winningScore += 
+    //enemyCount *= currentRound;
+    enemyCount = 10;
     // if (theOdds > 5) theOdds--;
     // showNextRound = true;
 }
@@ -138,6 +147,7 @@ function handleProjectile() {
         for (let j = 0; j < enemyQueue.length; j++) {
             if (enemyQueue[j] && projectiles[i] && collision(projectiles[i], enemyQueue[j])) {
                 score += 10;
+                scoreText.text = score;
 
                 projectiles.splice(i, 1);
                 i--;
@@ -162,6 +172,7 @@ function handleEnemy() {
         // remove enemy from queue if it supasses coord 0:
         } else {
             enemyQueue.splice(i, 1);
+            score += 10;
             //enemyCount--;
         }
     }
@@ -219,9 +230,13 @@ function animate() {
     handleShooter();
     handleProjectile();
     handleState();
-    handleStats();
+    // handleStats();
     // console.log(currentRound);
     // console.log(enemyCount);
+    console.log(`enemyCount: ${enemyCount}
+score: ${score}
+winningScore: ${winningScore}
+currentRound: ${currentRound}`);
 
     frame++;
 
