@@ -25,6 +25,11 @@ var cxt = canvas.getContext("2d");
 // TODO: make win text fade in and out.
 // TODO: stop last enemies from disapearing. --DONE
 // TODO: initiate next round on win.    --DONE
+// TODO: get enemyCount to increase every round. STOP IT FROM GOING BRRRRR
+
+// NEW SCORE STUFF:
+let score = 0;
+let winningScore = 50;
 
 // objects
 const flora = new Floor();
@@ -33,6 +38,7 @@ const startButton = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Pr
 
 const winText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Round Complete", false);
 const nextText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Next round incoming...", false);
+const scoreText = new Button(canvas.width - 200, canvas.height, score, false);
 
 new InputHandler(shooter);
 // const input = new InputHandler(shooter);
@@ -42,9 +48,10 @@ let frame = 0;
 let randomFrames = [50, 110, 150];
 
 // level 1: 8/10 chance to spawn ground enemy. 20% chance to spawn air enemy.
+const rounds = Array.from(Array(10).keys());
 let theOdds = 8;
 let enemyQueue = [];
-const enemyCount = 5;
+let enemyCount = 5;
 let currentRound = 1;
 let showNextRound = false;
 
@@ -53,14 +60,10 @@ let state = "MENU";
 
 // functions:
 flora.draw();
+scoreText.draw();
 
 // startButton.stroke property successfully set, but color won't change.
 function handleState() {
-    if (enemyCount == 0) {
-        //currentRound += 1;
-        //enemyCount *= currentRound + 2;
-    }
-
     if (state == "MENU") {  
         startButton.draw();
 
@@ -95,17 +98,25 @@ function handleState() {
             setTimeout(() => {
                 // cremate();
                 state = "RUNNING";
+                //cremate();
             }, 1000);
         }
     }
 }
 
+function handleStats() {
+    if (score >= winningScore) {
+        cremate();
+    }
+}
+
 // increment stuff to make next round slightly harder:
 function cremate() {
-    currentRound += 1;
+    currentRound++;
+    winningScore *= 1.5;
     enemyCount *= currentRound;
-    if (theOdds > 5) theOdds--;
-    showNextRound = true;
+    // if (theOdds > 5) theOdds--;
+    // showNextRound = true;
 }
 
 function handleShooter() {
@@ -126,6 +137,8 @@ function handleProjectile() {
 
         for (let j = 0; j < enemyQueue.length; j++) {
             if (enemyQueue[j] && projectiles[i] && collision(projectiles[i], enemyQueue[j])) {
+                score += 10;
+
                 projectiles.splice(i, 1);
                 i--;
                 enemyQueue.splice(j, 1);
@@ -172,7 +185,6 @@ function pushEnemy() {
         else if (enemyQueue.length == 0) {
             state = "WIN";
         }
-        console.log(enemyCount, currentRound);
     }
 }
 
@@ -207,6 +219,9 @@ function animate() {
     handleShooter();
     handleProjectile();
     handleState();
+    handleStats();
+    console.log(currentRound);
+    console.log(enemyCount);
 
     frame++;
 
