@@ -34,11 +34,12 @@ let winningScore = 50;
 // objects
 const flora = new Floor();
 const shooter = new Shooter(100, flora.y - 50);
-const startButton = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Press to Play", true);
 
+// SIGNATURE: x, y, width, text, clickable.
+const startButton = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Press to Play", true);
 const winText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Round Complete", false);
 const nextText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Next round incoming...", false);
-const scoreText = new Button(canvas.width - 200, canvas.height, score, false);
+const scoreText = new Button(canvas.width / 2, 0, 100, score, false);
 
 new InputHandler(shooter);
 // const input = new InputHandler(shooter);
@@ -60,17 +61,15 @@ let state = "MENU";
 
 // functions:
 flora.draw();
-scoreText.draw();
 
 // startButton.stroke property successfully set, but color won't change.
 function handleState() {
     if (state == "MENU") {  
         startButton.draw();
+        // scoreText.draw();
 
         if (mouseCollision(shooter.mouse, startButton)) {
             startButton.stroke = "red";
-            
-            // startButton.stroke = "red";
 
             if (shooter.mouse.clicked) {
                 state = "RUNNING";
@@ -81,6 +80,7 @@ function handleState() {
         }
     }
     else if (state == "RUNNING") {
+        scoreText.draw();
         showNextRound = false;
         handleEnemy();
         pushEnemy();
@@ -220,8 +220,8 @@ function animate() {
     handleProjectile();
     handleState();
     handleStats();
-    console.log(currentRound);
-    console.log(enemyCount);
+    // console.log(currentRound);
+    // console.log(enemyCount);
 
     frame++;
 
