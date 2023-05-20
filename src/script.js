@@ -24,12 +24,15 @@ var cxt = canvas.getContext("2d");
 // TODO: limit enemies, implement win screen.   --DONE
 // TODO: make win text fade in and out.
 // TODO: stop last enemies from disapearing. --DONE
-// TODO: initiate next round on win.
+// TODO: initiate next round on win.    --DONE
 
 // objects
 const flora = new Floor();
 const shooter = new Shooter(100, flora.y - 50);
 const startButton = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Press to Play", true);
+
+const winText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Round Complete", false);
+const nextText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Next round incoming...", false);
 
 new InputHandler(shooter);
 // const input = new InputHandler(shooter);
@@ -46,7 +49,7 @@ let currentRound = 1;
 let showNextRound = false;
 
 // states: MENU, RUNNING, WIN, LOSE, OVER
-let state = "WIN";
+let state = "MENU";
 
 // functions:
 flora.draw();
@@ -70,24 +73,36 @@ function handleState() {
         }
     }
     else if (state == "RUNNING") {
+        showNextRound = false;
         handleEnemy();
         pushEnemy();
     }
-    else if (state == "WIN") {
-        cremate();
-
-        const winText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Round Complete", false);
-        const nextText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Next round incoming...", false);
-
+    else if (state == "WIN") { 
         if (!showNextRound) {
             winText.draw();
             setTimeout(() => {
                 showNextRound = true;
-                console.log(showNextRound);
-            }, 3000);
+            }, 1000);
         }
-        else nextText.draw();
+        else {
+            nextText.draw();
+            setTimeout(() => {
+                // cremate();
+                //enemyCount = 10;
+                state = "RUNNING";
+                enemyCount *= currentRound;
+                currentRound += 1;
+            }, 1000);
+        }
     }
+}
+
+// increment stuff to make next round slightly harder:
+function cremate() {
+    enemyCount *= currentRound;
+    currentRound += 1;
+    if (theOdds > 5) theOdds--;
+    showNextRound = true;
 }
 
 function handleShooter() {
@@ -154,17 +169,9 @@ function pushEnemy() {
         else if (enemyQueue.length == 0) {
             state = "WIN";
         }
-        console.log(enemyCount, currentRound, theOdds);
+        console.log(enemyCount, currentRound);
     }
 }
-
-// increment stuff to make next round slightly harder:
-function cremate() {
-    currentRound++;
-    enemyCount *= currentRound;
-    if (theOdds > 5) theOdds--;
-}
-
 
 // collission successful.
 function collision(bullet, orc) {

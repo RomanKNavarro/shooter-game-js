@@ -51,24 +51,12 @@ export default class Button {
     }
 
     fadeIn() {
-        // var alpha = 1.0,
-        // interval = setInterval(function () {
-        //     canvas.width = canvas.width; // Clears the canvas
-        //     cxt.fillStyle = "black";
-        //     cxt.font = "40px Tourney";
-        //     cxt.fillText(this.text, this.x + (this.width / 2), this.y + (this.height / 2));
-        //     //cxt.fillText(text, 50, 50);
-
-        //     alpha = alpha - 0.05; // decrease opacity (fade out)
-        //     if (alpha < 0) {
-        //         canvas.width = canvas.width;
-        //         clearInterval(interval);
-        //     }
-        // }, 50);
-
-        // cxt.fillStyle = "black";
         cxt.fillStyle = "rgba(0, 0, 0, " + this.alpha + ")";
         cxt.font = "30px Tourney";
+        cxt.fillText(this.text, this.x + (this.width / 2), this.y + (this.height / 2));
+
+        cxt.textAlign = "center";
+        cxt.textBaseline = "middle";
         cxt.fillText(this.text, this.x + (this.width / 2), this.y + (this.height / 2));
     }
 
