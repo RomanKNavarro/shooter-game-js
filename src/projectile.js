@@ -13,14 +13,10 @@ export default class Projectile {
 
       this.direction = direction;
 
-
     }
     
     update() {
       if (!this.delete) {
-        
-
-        //   HERE IS THE CULPRIT MAKING MY GAME SLOW. It fixed on its own LOOOOL:
         switch (this.direction) {
           case "straight":
             this.x += this.speed;
@@ -35,10 +31,6 @@ export default class Projectile {
             this.x += this.speed;
             this.y -= this.speed;
         }
-
-
-
-        
       }
       if (this.x > canvas.width - 100) {
         this.delete;

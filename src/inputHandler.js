@@ -19,9 +19,9 @@ export default class InputHandler {
       switch (event.key) {
         // this is just for SHOOTING, not look direction
         case ' ':
-          //this.shooting
-          entity.shooting = true;
-          break;
+            entity.shooting = true;
+            console.log(entity.projectiles);
+            break;
 
         case 'w':
           entity.angle = "up";          
@@ -36,6 +36,7 @@ export default class InputHandler {
       keys[event.key] = false;
 
       switch (event.key) {
+        // SPACE BAR:
         case ' ':
           entity.shooting = false;
           break;

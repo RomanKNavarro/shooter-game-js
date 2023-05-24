@@ -5,21 +5,24 @@ var cxt = canvas.getContext("2d");
 
 export default class Shooter {
     constructor(x, y) {
-      this.width = 50;
-      this.height = 50;
-      this.x = x;
-      this.y = y;
+        this.width = 50;
+        this.height = 50;
+        this.x = x;
+        this.y = y;
 
-      this.name = "Warren";
+        this.name = "Warren";
 
-      this.projectiles = [];
-      this.shooting = false;
-      this.timer = 0;
+        this.projectiles = [];
+        this.shooting = false;
+        this.timer = 0;
 
-      this.angle = "straight";
+        this.angle = "straight";
+
+        // pistol and ar for now
+        this.weapon = "pistol";
 
       // mouse stuff in here lol, used in script.js
-      this.mouse = {
+    this.mouse = {
         x: 10,
         y: 10,
         width: 0.1,
@@ -35,13 +38,27 @@ export default class Shooter {
     }
 
     update() {
-        if (this.shooting) {
-            // while shooting is true, increment timer. If divisible by 10, push projectile. Genius.
-            this.timer++;           
-            if (this.timer % 10 === 0  || this.timer == 1) {
-                this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 20, this.angle));
-            }
-        } 
+        // while space bar is pressed, push bullets
+        // if (this.weapon = "ar" && this.shooting) {
+        //     // while shooting is true, increment timer. If divisible by 10, push projectile. Genius.
+        //     this.timer++;           
+        //     if (this.timer % 10 === 0  || this.timer == 1) {
+        //         this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 20, this.angle));               
+        //     }
+        // } 
+
+        // add bullet when not shooting
+        // or: add bullet when shooting, but only one
+        if (this.weapon = "pistol") {
+            this.timer++;
+            if (this.shooting && this.projectiles.length < 2) {
+                if (this.timer % 10 === 0  || this.timer == 1) {
+                    this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 20, this.angle));
+                    
+                }
+            } else this.projectiles.splice(0, 1);
+        }
+
         else {
             this.timer = 0;
         }

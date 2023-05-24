@@ -25,7 +25,8 @@ var cxt = canvas.getContext("2d");
 // TODO: make win text fade in and out.
 // TODO: stop last enemies from disapearing. --DONE
 // TODO: initiate next round on win.    --DONE
-// TODO: get enemyCount to increase every round. STOP IT FROM GOING BRRRRR
+// TODO: get enemyCount to increase every round. STOP IT FROM GOING BRRRRR  --DONE
+// TODO: when using pistol, keep "shooting" at true. Simply add another bullet when space is released. 
 
 // REVELATION: WINNINGSCORE ONLY GOES UP IF ENEMIES ARE MANUALLY KILLED
 
@@ -109,9 +110,7 @@ function handleState() {
         else {
             nextText.draw();
             setTimeout(() => {
-                // cremate();
                 state = "RUNNING";
-                // cremate();
                 if (score >= winningScore) {
                     cremate();
                 }
@@ -152,6 +151,7 @@ function handleProjectile() {
         }
 
         for (let j = 0; j < enemyQueue.length; j++) {
+            // remove bullet and enemy if they conact eachother:
             if (enemyQueue[j] && projectiles[i] && collision(projectiles[i], enemyQueue[j])) {
                 score += 10;
                 scoreText.text = score;
@@ -162,6 +162,7 @@ function handleProjectile() {
                 j--;
             }
         }
+        // remove bullets if they exceed canvas width:
         if (projectiles[i] && projectiles[i].x > canvas.width - 100) {
             projectiles.splice(i, 1);
             i--;
@@ -238,14 +239,12 @@ function animate() {
     handleShooter();
     handleProjectile();
     handleState();
-    // handleStats();
-    // console.log(currentRound);
-    // console.log(enemyCount);
-    console.log(`enemyCount: ${enemyCount}
-score: ${score}
-winningScore: ${winningScore}
-currentRound: ${currentRound}
-current Round count: ${roundCounts}`);
+
+    //     console.log(`enemyCount: ${enemyCount}
+    // score: ${score}
+    // winningScore: ${winningScore}
+    // currentRound: ${currentRound}
+    // current Round count: ${roundCounts}`);
 
     frame++;
 
