@@ -55,6 +55,12 @@ let randomFrames = [50, 110, 150];
 
 // level 1: 8/10 chance to spawn ground enemy. 20% chance to spawn air enemy.
 const rounds = Array.from(Array(10).keys());
+
+let roundCounts = [0, 10];
+for (let i = 0; i <= 9; i++) {
+    roundCounts.push(Math.floor(roundCounts[roundCounts.length -1] * 1.5));
+}
+
 let theOdds = 8;
 let enemyQueue = [];
 let enemyCount = 3;
@@ -92,6 +98,8 @@ function handleState() {
     }
     else if (state == "WIN") { 
         // cremate();
+
+        // logic for displaying end-round text:
         if (!showNextRound) {
             winText.draw();
             setTimeout(() => {
@@ -103,7 +111,7 @@ function handleState() {
             setTimeout(() => {
                 // cremate();
                 state = "RUNNING";
-                //cremate();
+                // cremate();
                 if (score >= winningScore) {
                     cremate();
                 }
@@ -121,11 +129,10 @@ function handleStats() {
 // increment stuff to make next round slightly harder:
 function cremate() {
     currentRound++;
-    winningScore += 
     //enemyCount *= currentRound;
-    enemyCount = 10;
-    // if (theOdds > 5) theOdds--;
-    // showNextRound = true;
+    roundCounts.splice(0, 1);
+    enemyCount = roundCounts[0];
+    winningScore += enemyCount * 10;
 }
 
 function handleShooter() {
@@ -173,7 +180,6 @@ function handleEnemy() {
         } else {
             enemyQueue.splice(i, 1);
             score += 10;
-            //enemyCount--;
         }
     }
 }
@@ -186,12 +192,14 @@ function pushEnemy() {
 
         if (enemyCount > 0) {
             if (chance < theOdds) {         
-                enemyQueue.push(new Enemy(canvas.width, flora.y - 50));               
+                enemyQueue.push(new Enemy(canvas.width, flora.y - 50));  
+                enemyCount--;             
             }
             else {
                 enemyQueue.push(new AirEnemy(canvas.width, flora.y - 150));
+                enemyCount--;
             }
-            enemyCount--;
+            
         }
         else if (enemyQueue.length == 0) {
             state = "WIN";
@@ -236,7 +244,8 @@ function animate() {
     console.log(`enemyCount: ${enemyCount}
 score: ${score}
 winningScore: ${winningScore}
-currentRound: ${currentRound}`);
+currentRound: ${currentRound}
+current Round count: ${roundCounts}`);
 
     frame++;
 
