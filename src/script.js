@@ -30,6 +30,8 @@ var cxt = canvas.getContext("2d");
 // TODO: get enemyCount to increase every round. STOP IT FROM GOING BRRRRR  --DONE
 // TODO: when using pistol, keep "shooting" at true. Simply add another bullet when space is released. --DONE (resolved)
 // TODO: make enemies drop pickups.
+// TODO: draw assigned enemy number on their body. --DONE
+// TODO: fix this stupid shooting glitch    --DONE
 
 
 // REVELATION: WINNINGSCORE ONLY GOES UP IF ENEMIES ARE MANUALLY KILLED
@@ -145,6 +147,8 @@ function cremate() {
 function handleShooter() {
     shooter.draw();
     shooter.update();
+
+    if (shooter.weapon == "ar") shooter.fireRate = 10;
 }
 
 function handleProjectile() {
@@ -193,15 +197,15 @@ function handleEnemy() {
                 const snack = new Pickup(current.x - 20, current.y - 20);
                 snack.draw();
                 snack.update();
+            }
         }
 
         if (current.x > 0) {
             current.update();
             current.draw();
         }
-
         // remove enemy from queue if it supasses coord 0:
-        } else {
+         else {
             enemyQueue.splice(i, 1);
             score += 10;
         }

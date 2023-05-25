@@ -41,16 +41,10 @@ export default class Shooter {
     update() {
         // while space bar is pressed, push bullets
 
-        // code doesn't work. fireRate not set.
-        if (this.weapon = "ar") {
-            // while shooting is true, increment timer. If divisible by 10, push projectile. Genius.
-            this.fireRate = 10;
-        }
-        else if (this.weapon = "pistol") this.fireRate = 50;
-        
+        // code doesn't work. fireRate not set.    
         if (this.shooting) {
             this.timer++; 
-            if (this.timer % 10 === 0  || this.timer == 1) {
+            if (this.timer % this.fireRate === 0  || this.timer == 1) {
                 this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 20, this.angle));               
             }
         }
