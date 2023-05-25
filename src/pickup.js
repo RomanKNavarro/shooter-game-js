@@ -1,3 +1,6 @@
+var canvas = document.getElementById("canvas1");
+var cxt = canvas.getContext("2d"); 
+
 export default class Pickup {
     constructor(x, y) {
         this.x = x;
@@ -8,14 +11,15 @@ export default class Pickup {
     }
 
     update() {
-        this.y -= 15;
+        // this.y -= 15;
+        this.x -= 10;
     }
 
     draw() {
         if (!this.delete) {
-            cxt.fillStyle = "purple";
             cxt.beginPath();
-            cxt.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            cxt.fillStyle = "purple";
+            cxt.fillRect(this.x, this.y, this.size, this.size);
             cxt.fill();
         };
     }

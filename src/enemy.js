@@ -18,7 +18,7 @@ export default class Enemy {
     
       // 2/10 chance enemy will drop a pickup:
       // this.pickupOdds = Math.floor(Math.random() * 10)
-      this.pickUpSpawnChance = 9;
+      this.pickUpOdds = 2;
       this.pickup = false;
 
     }
@@ -32,11 +32,5 @@ export default class Enemy {
   
     update() {
       this.x -= this.speed;
-      
-      if (this.pickUpSpawnChance <= Math.floor(Math.random() * 10)) {
-        this.pickup = true;
-      }
-
-      console.log(this.pickup);
     }
 }

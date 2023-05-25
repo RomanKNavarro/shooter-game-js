@@ -20,7 +20,6 @@ export default class InputHandler {
         // this is just for SHOOTING, not look direction
         case ' ':
             entity.shooting = true;
-            console.log(entity.projectiles);
             break;
 
         case 'w':

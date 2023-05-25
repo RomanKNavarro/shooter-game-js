@@ -73,6 +73,9 @@ let enemyCount = 3;
 let currentRound = 1;
 let showNextRound = false;
 
+// PICKUPS
+let pickupOdds = 5;
+
 // states: MENU, RUNNING, WIN, LOSE, OVER
 let state = "MENU";
 
@@ -181,9 +184,21 @@ function handleEnemy() {
     for (let i = 0; i < enemyQueue.length; i++) {
         let current = enemyQueue[i];
 
+        if (!current.delete) {
+            let chance = Math.floor(Math.random() * 10);
+
+            // current.pickUpSpawnChance set to 9. So, 9/10 chance enemy will drop:
+            if (chance < current.pickUpOdds) {
+                // current.pickup = true;
+                const snack = new Pickup(current.x - 20, current.y - 20);
+                snack.draw();
+                snack.update();
+        }
+
         if (current.x > 0) {
             current.update();
             current.draw();
+        }
 
         // remove enemy from queue if it supasses coord 0:
         } else {
@@ -193,11 +208,12 @@ function handleEnemy() {
     }
 }
 
+// MAYBE TRY IMPLEMENTING PICKUP STUFF HERE
 function pushEnemy() {
     // so, if frame == 50 and I get randomFrames[0] (50), enemy gets pushed to queue.
 
     if (frame % randomFrames[Math.floor(Math.random() * randomFrames.length)] === 0) {
-        let chance = Math.floor(Math.random() * 10)
+        let chance = Math.floor(Math.random() * 10);
 
         if (enemyCount > 0) {
             if (chance < theOdds) {         
