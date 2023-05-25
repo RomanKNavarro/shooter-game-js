@@ -20,6 +20,7 @@ export default class Shooter {
 
         // pistol and ar for now
         this.weapon = "pistol";
+        this.fireRate = 0;
 
       // mouse stuff in here lol, used in script.js
     this.mouse = {
@@ -39,28 +40,33 @@ export default class Shooter {
 
     update() {
         // while space bar is pressed, push bullets
-        // if (this.weapon = "ar" && this.shooting) {
-        //     // while shooting is true, increment timer. If divisible by 10, push projectile. Genius.
-        //     this.timer++;           
-        //     if (this.timer % 10 === 0  || this.timer == 1) {
-        //         this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 20, this.angle));               
-        //     }
-        // } 
 
-        // add bullet when not shooting
-        // or: add bullet when shooting, but only one
-        if (this.weapon = "pistol") {
-            this.timer++;
-            if (this.shooting && this.projectiles.length < 2) {
-                if (this.timer % 10 === 0  || this.timer == 1) {
-                    this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 20, this.angle));
-                    
-                }
-            } else this.projectiles.splice(0, 1);
+        if (this.weapon = "ar") {
+            // while shooting is true, increment timer. If divisible by 10, push projectile. Genius.
+            this.fireRate = 10;
         }
-
+        else if (this.weapon = "pistol") this.fireRate = 30;
+        
+        if (this.shooting) {
+            this.timer++; 
+            if (this.timer % this.fireRate === 0  || this.timer == 1) {
+                this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 20, this.angle));               
+            }
+        }
         else {
             this.timer = 0;
         }
+
+        // add bullet when not shooting
+        // or: add bullet when shooting, but only one
+
+        // if (this.weapon = "pistol") {
+        //     this.timer++;
+        //     if (this.shooting && this.projectiles.length < 2) {
+        //         if (this.timer % 50 === 0  || this.timer == 1) {
+        //             this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 20, this.angle));
+        //         }
+        //     } 
+        // }
     }
 }
