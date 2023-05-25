@@ -7,11 +7,13 @@ import InputHandler from "./inputHandler.js";
 import Enemy from "./enemy.js";
 import AirEnemy from "./enemy.js";
 import Button from "./button.js";
+import Pickup from "./pickup.js";
 
 // canvas stuff
 var canvas = document.getElementById("canvas1");
 var cxt = canvas.getContext("2d");
 
+// PORT: http://127.0.0.1:5500/
 // TODO: DELETE bullets once they reach end of screen. Log array of bullets. --DONE
 // TODO: reset bullet.x after hitting enemy.    --DONE
 // TODO: GET bullets to travel up when "w" is pressed.
@@ -26,7 +28,9 @@ var cxt = canvas.getContext("2d");
 // TODO: stop last enemies from disapearing. --DONE
 // TODO: initiate next round on win.    --DONE
 // TODO: get enemyCount to increase every round. STOP IT FROM GOING BRRRRR  --DONE
-// TODO: when using pistol, keep "shooting" at true. Simply add another bullet when space is released. 
+// TODO: when using pistol, keep "shooting" at true. Simply add another bullet when space is released. --DONE (resolved)
+// TODO: make enemies drop pickups.
+
 
 // REVELATION: WINNINGSCORE ONLY GOES UP IF ENEMIES ARE MANUALLY KILLED
 
@@ -62,6 +66,7 @@ for (let i = 0; i <= 9; i++) {
     roundCounts.push(Math.floor(roundCounts[roundCounts.length -1] * 1.5));
 }
 
+// 8/10 chance enemy will be ground.
 let theOdds = 8;
 let enemyQueue = [];
 let enemyCount = 3;
@@ -158,6 +163,8 @@ function handleProjectile() {
 
                 projectiles.splice(i, 1);
                 i--;
+
+                // here is how the enemies get deleted:
                 enemyQueue.splice(j, 1);
                 j--;
             }
@@ -177,6 +184,7 @@ function handleEnemy() {
         if (current.x > 0) {
             current.update();
             current.draw();
+
         // remove enemy from queue if it supasses coord 0:
         } else {
             enemyQueue.splice(i, 1);

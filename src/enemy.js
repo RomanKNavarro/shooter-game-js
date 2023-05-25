@@ -12,20 +12,31 @@ export default class Enemy {
       this.y = y;
   
       this.moving = true;
-      this.delete = false;
 
       this.color = "pink"
+      this.delete = false;
+    
+      // 2/10 chance enemy will drop a pickup:
+      // this.pickupOdds = Math.floor(Math.random() * 10)
+      this.pickUpSpawnChance = 9;
+      this.pickup = false;
+
     }
 
     draw() {
-      if (!this.delete) {
-        cxt.beginPath();
-        cxt.fillStyle = this.color;
-        cxt.fillRect(this.x, this.y, this.width, this.height);
-      }
+      cxt.beginPath();
+      cxt.fillStyle = this.color;
+      cxt.fillRect(this.x, this.y, this.width, this.height);
+      
     }
   
     update() {
       this.x -= this.speed;
+      
+      if (this.pickUpSpawnChance <= Math.floor(Math.random() * 10)) {
+        this.pickup = true;
+      }
+
+      console.log(this.pickup);
     }
 }
