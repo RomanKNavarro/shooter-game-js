@@ -12,7 +12,7 @@ export default class Pickup {
 
     update() {
         // this.y -= 15;
-        this.x -= 10;
+        this.y += 10;
     }
 
     draw() {

@@ -30,6 +30,10 @@ export default class Projectile {
           case "diagnal":
             this.x += this.speed;
             this.y -= this.speed;
+          
+          case "down": 
+            this.x += this.speed;
+            this.y = this.y + 30;
         }
       }
       if (this.x > canvas.width - 100) {

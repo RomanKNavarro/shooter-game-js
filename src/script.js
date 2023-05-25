@@ -75,8 +75,8 @@ let enemyCount = 3;
 let currentRound = 1;
 let showNextRound = false;
 
-// PICKUPS
-let pickupOdds = 5;
+// DROPPED PICKUPS:
+let snackQueue = [];
 
 // states: MENU, RUNNING, WIN, LOSE, OVER
 let state = "MENU";
@@ -162,7 +162,9 @@ function handleProjectile() {
             current.draw();
         }
 
+        // enemy kill handling:
         for (let j = 0; j < enemyQueue.length; j++) {
+            let currentEnemy = enemyQueue[j];
             // remove bullet and enemy if they conact eachother:
             if (enemyQueue[j] && projectiles[i] && collision(projectiles[i], enemyQueue[j])) {
                 score += 10;
@@ -171,9 +173,18 @@ function handleProjectile() {
                 projectiles.splice(i, 1);
                 i--;
 
+                if (currentEnemy.pickup) {
+                    snackQueue.push(new Pickup(currentEnemy.x - 20, currentEnemy.y - 20));
+                }
+                
+
+                // console.log(enemyQueue);
+
                 // here is how the enemies get deleted:
                 enemyQueue.splice(j, 1);
                 j--;
+
+                console.log(snackQueue);
             }
         }
         // remove bullets if they exceed canvas width:
@@ -184,21 +195,29 @@ function handleProjectile() {
     }
 }
 
+function handleSnack() {
+    for (let i = 0; i < snackQueue.length; i++) {
+        let snack = snackQueue[i];
+        snack.draw();
+
+        if (snack.y + snack.size <= flora.y - snack.size) {
+            snack.update();
+        }
+    }
+}
+
 function handleEnemy() {
     for (let i = 0; i < enemyQueue.length; i++) {
         let current = enemyQueue[i];
 
-        if (!current.delete) {
-            let chance = Math.floor(Math.random() * 10);
-
-            // current.pickUpSpawnChance set to 9. So, 9/10 chance enemy will drop:
-            if (chance < current.pickUpOdds) {
-                // current.pickup = true;
-                const snack = new Pickup(current.x - 20, current.y - 20);
-                snack.draw();
-                snack.update();
-            }
-        }
+        // snack only remains onscreen while enemy is not deleted. FIX
+        // if (!current.delete) {
+        //     if (current.pickup) {
+        //         const snack = new Pickup(current.x - 20, current.y - 20);
+        //         snack.draw();
+        //         snack.update();
+        //     }
+        // }
 
         if (current.x > 0) {
             current.update();
@@ -239,7 +258,7 @@ function pushEnemy() {
 // collission successful.
 function collision(bullet, orc) {
     if (bullet.x + bullet.size > orc.x && bullet.y + bullet.size >= orc.y 
-        && bullet.y + bullet.size <= orc.y + orc.height) {
+        && bullet.y + bullet.size <= orc.y + orc.height && orc.x > shooter.x) {
         return true;
     }
 }
@@ -266,6 +285,7 @@ function animate() {
     flora.draw();
     handleShooter();
     handleProjectile();
+    handleSnack()
     handleState();
 
     //     console.log(`enemyCount: ${enemyCount}
@@ -273,6 +293,7 @@ function animate() {
     // winningScore: ${winningScore}
     // currentRound: ${currentRound}
     // current Round count: ${roundCounts}`);
+    
 
     frame++;
 

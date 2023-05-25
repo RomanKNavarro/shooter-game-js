@@ -8,7 +8,7 @@ var cxt = canvas.getContext("2d");
 export default class InputHandler {
   constructor(entity) {
     // why doesn't this work as "this.keys"?
-    let keys = {"space": false, "d": false, "w": false};
+    let keys = {"space": false, "d": false, "w": false, "s": false};
     
     document.addEventListener("keydown", (event) => {
       // TODO: try using if statements instead.
@@ -24,6 +24,10 @@ export default class InputHandler {
 
         case 'w':
           entity.angle = "up";          
+          break;
+
+        case 's':
+          entity.angle = "down";
           break;
       }
 
@@ -41,6 +45,7 @@ export default class InputHandler {
           break;
 
         case 'w':
+        case 's':
           entity.angle = "straight";
           break;
       }
