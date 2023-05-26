@@ -181,7 +181,7 @@ function handleProjectile() {
                 enemyQueue.splice(j, 1);
                 j--;
 
-                //console.log(snackQueue);
+                console.log(snackQueue);
             }
         }
 
@@ -211,6 +211,7 @@ function handleProjectile() {
 function handleSnack() {
     for (let i = 0; i < snackQueue.length; i++) {
         let snack = snackQueue[i];
+        snack.draw();
 
         // drop until it touches the floor
         if (snack.y + snack.size <= flora.y - snack.size) {
