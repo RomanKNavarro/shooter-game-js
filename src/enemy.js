@@ -19,7 +19,7 @@ export default class Enemy {
       // 2/10 chance enemy will drop a pickup:
 
       this.number = Math.floor(Math.random() * 10)
-      this.pickupOdds = 1.1;
+      this.pickupOdds = 5;
       this.pickup = false;
 
     }

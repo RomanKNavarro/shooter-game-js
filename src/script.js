@@ -185,21 +185,19 @@ function handleProjectile() {
             }
         }
 
-        for (let l = 0; l < enemyQueue.length; l++) {
-            let currentSnack = snackQueue[l];
-            if (snackQueue[l] && projectiles[i] && collision(projectiles[i], snackQueue[l])) {
-                projectiles.splice(i, 1);
-                i--;
+        // for (let l = 0; l < snackQueue.length; l++) {
+        //     let currentSnack = snackQueue[l];
+        //     if (snackQueue[l] && projectiles[i] && collision(projectiles[i], snackQueue[l])) {
+        //         projectiles.splice(i, 1);
+        //         i--;
 
-                shooter.weapon = "ar";
-                console.log(shooter.weapon);
+        //         shooter.weapon = "ar";
+        //         console.log(shooter.weapon);
 
-                snackQueue.splice(l, 1);
-                l--;
-            }
-
-
-        }
+        //         snackQueue.splice(l, 1);
+        //         l--;
+        //     }
+        // }
 
         // remove bullets if they exceed canvas width:
         if (projectiles[i] && projectiles[i].x > canvas.width - 100) {
