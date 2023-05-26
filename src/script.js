@@ -129,12 +129,6 @@ function handleState() {
     }
 }
 
-function handleStats() {
-    if (score >= winningScore) {
-        cremate();
-    }
-}
-
 // increment stuff to make next round slightly harder:
 function cremate() {
     currentRound++;
@@ -148,7 +142,10 @@ function handleShooter() {
     shooter.draw();
     shooter.update();
 
-    if (shooter.weapon == "ar") shooter.fireRate = 10;
+    if (shooter.weapon == "ar") {
+        shooter.fireRate = 10;
+        shooter.specialAmmo = 30;
+    }
 }
 
 function handleProjectile() {
@@ -161,6 +158,8 @@ function handleProjectile() {
             current.update();
             current.draw();
         }
+
+        
 
         // enemy kill handling:
         for (let j = 0; j < enemyQueue.length; j++) {
@@ -224,15 +223,6 @@ function handleEnemy() {
     for (let i = 0; i < enemyQueue.length; i++) {
         let current = enemyQueue[i];
 
-        // snack only remains onscreen while enemy is not deleted. FIX
-        // if (!current.delete) {
-        //     if (current.pickup) {
-        //         const snack = new Pickup(current.x - 20, current.y - 20);
-        //         snack.draw();
-        //         snack.update();
-        //     }
-        // }
-
         if (current.x > 0) {
             current.update();
             current.draw();
@@ -245,7 +235,6 @@ function handleEnemy() {
     }
 }
 
-// MAYBE TRY IMPLEMENTING PICKUP STUFF HERE
 function pushEnemy() {
     // so, if frame == 50 and I get randomFrames[0] (50), enemy gets pushed to queue.
 
@@ -308,6 +297,7 @@ function animate() {
     // currentRound: ${currentRound}
     // current Round count: ${roundCounts}`);
     
+    console.log(shooter.projectiles);
 
     frame++;
 

@@ -12,6 +12,8 @@ export default class Shooter {
 
         this.name = "Warren";
 
+        /* HOW PROJECTILES WORK: whenever user shoots, new projectile added to array. As he not shoots,
+        it automatically decrements until it is empty :) */
         this.projectiles = [];
         this.shooting = false;
         this.timer = 0;
@@ -21,6 +23,7 @@ export default class Shooter {
         // pistol and ar for now
         this.weapon = "pistol";
         this.fireRate = 0;
+        this.specialAmmo = 0;
 
       // mouse stuff in here lol, used in script.js
     this.mouse = {
