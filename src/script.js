@@ -29,12 +29,9 @@ var cxt = canvas.getContext("2d");
 // TODO: initiate next round on win.    --DONE
 // TODO: get enemyCount to increase every round. STOP IT FROM GOING BRRRRR  --DONE
 // TODO: when using pistol, keep "shooting" at true. Simply add another bullet when space is released. --DONE (resolved)
-// TODO: make enemies drop pickups.
+// TODO: make enemies drop pickups.     --DONE
 // TODO: draw assigned enemy number on their body. --DONE
-// TODO: fix this stupid shooting glitch    --DONE
-
-
-// REVELATION: WINNINGSCORE ONLY GOES UP IF ENEMIES ARE MANUALLY KILLED
+// TODO: fix this stupid shooting glitch    --DONE    
 
 // NEW SCORE STUFF:
 let score = 0;
@@ -48,6 +45,7 @@ const shooter = new Shooter(100, flora.y - 50);
 const startButton = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Press to Play", true);
 const winText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Round Complete", false);
 const nextText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Next round incoming...", false);
+const overText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "YOU LOST", false);
 
 // why won't score update? b/c It is an obj created with whatever text was given at 
 // the start.
@@ -108,8 +106,6 @@ function handleState() {
         pushEnemy();
     }
     else if (state == "WIN") { 
-        // cremate();
-
         // logic for displaying end-round text:
         if (!showNextRound) {
             winText.draw();
@@ -127,6 +123,9 @@ function handleState() {
             }, 1000);
         }
     }
+    else if (state == "GAME OVER") {
+        // TODO
+    }
 }
 
 // increment stuff to make next round slightly harder:
@@ -141,13 +140,9 @@ function cremate() {
 function handleShooter() {
     shooter.draw();
     shooter.update();
-
-    if (shooter.weapon == "ar") {
-        shooter.fireRate = 10;
-        shooter.specialAmmo = 30;
-    }
 }
 
+// gets all the projectiles in the array and automatically shoots them.
 function handleProjectile() {
     let projectiles = shooter.projectiles;
 
@@ -159,12 +154,11 @@ function handleProjectile() {
             current.draw();
         }
 
-        
-
         // enemy kill handling:
         for (let j = 0; j < enemyQueue.length; j++) {
             let currentEnemy = enemyQueue[j];
-            // remove bullet and enemy if they conact eachother:
+            /* remove bullet and enemy if they conact eachother. Also make enemy 
+            drop pickup if applicable: */ 
             if (enemyQueue[j] && projectiles[i] && collision(projectiles[i], enemyQueue[j])) {
                 score += 10;
                 scoreText.text = score;
@@ -180,19 +174,21 @@ function handleProjectile() {
                 enemyQueue.splice(j, 1);
                 j--;
 
-                console.log(snackQueue);
+                //console.log(snackQueue);
             }
         }
 
         for (let l = 0; l < snackQueue.length; l++) {
-            let currentSnack = snackQueue[l];
             if (snackQueue[l] && projectiles[i] && collision(projectiles[i], snackQueue[l])) {
+
                 projectiles.splice(i, 1);
                 i--;
 
+                // ASSAULT RIFLE HERE:
                 shooter.weapon = "ar";
-                console.log(shooter.weapon);
-
+                shooter.fireRate = 10;
+                shooter.specialAmmo = 10;
+                
                 snackQueue.splice(l, 1);
                 l--;
             }
@@ -297,7 +293,7 @@ function animate() {
     // currentRound: ${currentRound}
     // current Round count: ${roundCounts}`);
     
-    console.log(shooter.projectiles);
+    //console.log(shooter.projectiles);
 
     frame++;
 
