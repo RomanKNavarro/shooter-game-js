@@ -15,7 +15,7 @@ export default class Projectile {
 
       // place bullet's y low when shooting down:
       if (this.direction == "down") {
-        this.y = this.y + 20;
+        this.y = this.y + 25;
       }
 
     }

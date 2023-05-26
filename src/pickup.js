@@ -3,6 +3,8 @@ var cxt = canvas.getContext("2d");
 
 export default class Pickup {
     constructor(x, y) {
+        this.width = this.height = 10;
+
         this.x = x;
         this.y = y;
         this.delete = false;
@@ -22,7 +24,7 @@ export default class Pickup {
         if (!this.delete) {
             cxt.beginPath();
             cxt.fillStyle = "purple";
-            cxt.fillRect(this.x, this.y, this.size, this.size);
+            cxt.fillRect(this.x, this.y, this.width, this.height);
             cxt.fill();
         };
     }
