@@ -176,17 +176,31 @@ function handleProjectile() {
                 if (currentEnemy.pickup) {
                     snackQueue.push(new Pickup(currentEnemy.x - 20, currentEnemy.y - 20));
                 }
-                
-
-                // console.log(enemyQueue);
 
                 // here is how the enemies get deleted:
                 enemyQueue.splice(j, 1);
                 j--;
 
-                console.log(snackQueue);
+                //console.log(snackQueue);
             }
         }
+
+        for (let l = 0; l < enemyQueue.length; l++) {
+            let currentSnack = snackQueue[l];
+            if (snackQueue[l] && projectiles[i] && collision(projectiles[i], snackQueue[l])) {
+                projectiles.splice(i, 1);
+                i--;
+
+                shooter.weapon = "ar";
+                console.log(shooter.weapon);
+
+                snackQueue.splice(l, 1);
+                l--;
+            }
+
+
+        }
+
         // remove bullets if they exceed canvas width:
         if (projectiles[i] && projectiles[i].x > canvas.width - 100) {
             projectiles.splice(i, 1);
@@ -195,11 +209,12 @@ function handleProjectile() {
     }
 }
 
+// SNACK HANDLING
 function handleSnack() {
     for (let i = 0; i < snackQueue.length; i++) {
         let snack = snackQueue[i];
-        snack.draw();
 
+        // drop until it touches the floor
         if (snack.y + snack.size <= flora.y - snack.size) {
             snack.update();
         }

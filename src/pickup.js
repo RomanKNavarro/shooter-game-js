@@ -6,13 +6,16 @@ export default class Pickup {
         this.x = x;
         this.y = y;
         this.delete = false;
-
         this.size = 10;
+
+        this.types = ["ar"];
+        this.type = this.types[Math.floor(Math.random() * this.types.length)];
     }
 
     update() {
         // this.y -= 15;
         this.y += 10;
+        console.log(this.type);
     }
 
     draw() {

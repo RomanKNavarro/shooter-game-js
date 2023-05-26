@@ -13,6 +13,11 @@ export default class Projectile {
 
       this.direction = direction;
 
+      // place bullet's y low when shooting down:
+      if (this.direction == "down") {
+        this.y = this.y + 20;
+      }
+
     }
     
     update() {
@@ -31,9 +36,10 @@ export default class Projectile {
             this.x += this.speed;
             this.y -= this.speed;
           
-          case "down": 
+          case "down":
             this.x += this.speed;
-            this.y = this.y + 30;
+            break;
+          //   this.y = this.y + 30;
         }
       }
       if (this.x > canvas.width - 100) {
