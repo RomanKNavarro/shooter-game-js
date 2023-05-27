@@ -32,6 +32,8 @@ var cxt = canvas.getContext("2d");
 // TODO: make enemies drop pickups.     --DONE
 // TODO: draw assigned enemy number on their body. --DONE
 // TODO: fix this stupid shooting glitch    --DONE    
+// TODO: increase enemy speed per round     --DONE
+// TODO: make character not able to shoot during menu state
 
 // NEW SCORE STUFF:
 let score = 0;
@@ -41,7 +43,7 @@ let winningScore = 30;
 const flora = new Floor();
 const shooter = new Shooter(100, flora.y - 50);
 
-// SIGNATURE: x, y, width, text, clickable.
+// BUTTONS AND TEXT. (x, y, width, text, clickable)
 const startButton = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Press to Play", true);
 const winText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Round Complete", false);
 const nextText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Next round incoming...", false);
@@ -61,6 +63,7 @@ let randomFrames = [50, 110, 150];
 // level 1: 8/10 chance to spawn ground enemy. 20% chance to spawn air enemy.
 const rounds = Array.from(Array(10).keys());
 
+// ten rounds total. Each one has 1.5 times more enemies than the last.
 let roundCounts = [0, 10];
 for (let i = 0; i <= 9; i++) {
     roundCounts.push(Math.floor(roundCounts[roundCounts.length -1] * 1.5));
@@ -72,6 +75,8 @@ let enemyQueue = [];
 let enemyCount = 3;
 let currentRound = 1;
 let showNextRound = false;
+
+let currentSpeed = 5;
 
 // DROPPED PICKUPS:
 let snackQueue = [];
@@ -131,7 +136,7 @@ function handleState() {
 // increment stuff to make next round slightly harder:
 function cremate() {
     currentRound++;
-    //enemyCount *= currentRound;
+    currentSpeed++;
     roundCounts.splice(0, 1);
     enemyCount = roundCounts[0];
     winningScore += enemyCount * 10;
@@ -149,7 +154,7 @@ function handleProjectile() {
     for (let i = 0; i < projectiles.length; i++) {
         let current = projectiles[i];
 
-        if (current.x < canvas.width - 100) {
+        if (current.x < canvas.width - 100 && state != "MENU") {
             current.update();
             current.draw();
         }
@@ -239,11 +244,11 @@ function pushEnemy() {
 
         if (enemyCount > 0) {
             if (chance < theOdds) {         
-                enemyQueue.push(new Enemy(canvas.width, flora.y - 50));  
+                enemyQueue.push(new Enemy(canvas.width, flora.y - 50, currentSpeed));  
                 enemyCount--;             
             }
             else {
-                enemyQueue.push(new AirEnemy(canvas.width, flora.y - 150));
+                enemyQueue.push(new AirEnemy(canvas.width, flora.y - 150, currentSpeed));
                 enemyCount--;
             }
             
@@ -287,11 +292,11 @@ function animate() {
     handleSnack()
     handleState();
 
-    //     console.log(`enemyCount: ${enemyCount}
-    // score: ${score}
-    // winningScore: ${winningScore}
-    // currentRound: ${currentRound}
-    // current Round count: ${roundCounts}`);
+    console.log(`enemyCount: ${enemyCount}
+    score: ${score}
+    winningScore: ${winningScore}
+    currentRound: ${currentRound}
+    currentSpeed: ${currentSpeed}`);
     
     //console.log(shooter.projectiles);
 

@@ -2,11 +2,12 @@ var canvas = document.getElementById("canvas1");
 var cxt = canvas.getContext("2d"); 
 
 export default class Enemy {
-    constructor(x, y) {
+    constructor(x, y, speed) {
   
       this.width = this.height = 50;
 
-      this.speed = 5;
+      // speed is initially 5:
+      this.speed = speed;
   
       this.x = x;
       this.y = y;
@@ -19,7 +20,7 @@ export default class Enemy {
       // 2/10 chance enemy will drop a pickup:
 
       this.number = Math.floor(Math.random() * 10)
-      this.pickupOdds = 5;
+      this.pickupOdds = 1.5;
       this.pickup = false;
 
     }

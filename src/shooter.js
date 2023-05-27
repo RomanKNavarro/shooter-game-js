@@ -25,6 +25,8 @@ export default class Shooter {
         this.fireRate = 0;
         this.specialAmmo = 0;
 
+        this.disabled = true;
+
       // mouse stuff in here lol, used in script.js
         this.mouse = {
             x: 10,
@@ -45,9 +47,9 @@ export default class Shooter {
         // code doesn't work. fireRate not set.    
         if (this.shooting) {
 
-            console.log(`this.weapon: ${this.weapon}
-            this.specialAmmo: ${this.specialAmmo}
-            this.fireRate: ${this.fireRate}`);
+            // console.log(`this.weapon: ${this.weapon}
+            // this.specialAmmo: ${this.specialAmmo}
+            // this.fireRate: ${this.fireRate}`);
 
             //console.log(this.specialAmmo);
             this.timer++; 
