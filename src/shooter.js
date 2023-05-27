@@ -34,7 +34,7 @@ export default class Shooter {
             width: 0.1,
             height: 0.1,
             clicked: false
-            };
+        };
     }
     
     draw() {
@@ -45,7 +45,7 @@ export default class Shooter {
 
     update() {
         // code doesn't work. fireRate not set.    
-        if (this.shooting) {
+        if (this.shooting && !this.disabled) {
 
             // console.log(`this.weapon: ${this.weapon}
             // this.specialAmmo: ${this.specialAmmo}

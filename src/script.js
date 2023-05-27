@@ -33,7 +33,10 @@ var cxt = canvas.getContext("2d");
 // TODO: draw assigned enemy number on their body. --DONE
 // TODO: fix this stupid shooting glitch    --DONE    
 // TODO: increase enemy speed per round     --DONE
-// TODO: make character not able to shoot during menu state
+// TODO: make character not able to shoot during menu state     --DONE
+// TODO: get more enemies on-screen in later rounds (most of the time it's only 2-4)    --DONE
+
+// ENEMIES ARE SPAWNED AT THE SAME X. why do they take long to spawn?
 
 // NEW SCORE STUFF:
 let score = 0;
@@ -58,7 +61,8 @@ new InputHandler(shooter);
 
 // variables
 let frame = 0;
-let randomFrames = [50, 110, 150];
+// let randomFrames = [50, 80, 110, 150];
+let randomFrames = [10, 30, 50, 80, 110,];
 
 // level 1: 8/10 chance to spawn ground enemy. 20% chance to spawn air enemy.
 const rounds = Array.from(Array(10).keys());
@@ -76,7 +80,7 @@ let enemyCount = 3;
 let currentRound = 1;
 let showNextRound = false;
 
-let currentSpeed = 5;
+let currentSpeed = 2;
 
 // DROPPED PICKUPS:
 let snackQueue = [];
@@ -105,12 +109,14 @@ function handleState() {
         }
     }
     else if (state == "RUNNING") {
+        shooter.disabled = false;
         scoreText.draw();
         showNextRound = false;
         handleEnemy();
         pushEnemy();
     }
     else if (state == "WIN") { 
+        shooter.disabled;
         // logic for displaying end-round text:
         if (!showNextRound) {
             winText.draw();
@@ -147,6 +153,11 @@ function handleShooter() {
     shooter.update();
 }
 
+// function remove(array, obj) {
+//     array.splice(obj, 1);
+//     obj--;
+// }
+
 // gets all the projectiles in the array and automatically shoots them.
 function handleProjectile() {
     let projectiles = shooter.projectiles;
@@ -154,9 +165,14 @@ function handleProjectile() {
     for (let i = 0; i < projectiles.length; i++) {
         let current = projectiles[i];
 
-        if (current.x < canvas.width - 100 && state != "MENU") {
+        if (current.x < canvas.width - 100) {
             current.update();
             current.draw();
+        }
+        else {
+            projectiles.splice(i, 1);
+            i--;
+            //remove(projectiles, i);
         }
 
         // enemy kill handling:
@@ -170,6 +186,7 @@ function handleProjectile() {
 
                 projectiles.splice(i, 1);
                 i--;
+                //remove(projectiles, i);
 
                 if (currentEnemy.pickup) {
                     snackQueue.push(new Pickup(currentEnemy.x - 20, currentEnemy.y - 20));
@@ -178,6 +195,7 @@ function handleProjectile() {
                 // here is how the enemies get deleted:
                 enemyQueue.splice(j, 1);
                 j--;
+                //remove(enemyQueue, j);
 
                 //console.log(snackQueue);
             }
@@ -188,6 +206,7 @@ function handleProjectile() {
 
                 projectiles.splice(i, 1);
                 i--;
+                // remove(i);
 
                 // ASSAULT RIFLE HERE:
                 shooter.weapon = "ar";
@@ -196,6 +215,7 @@ function handleProjectile() {
                 
                 snackQueue.splice(l, 1);
                 l--;
+                //remove(snackQueue, l);
             }
         }
 
@@ -239,6 +259,7 @@ function handleEnemy() {
 function pushEnemy() {
     // so, if frame == 50 and I get randomFrames[0] (50), enemy gets pushed to queue.
 
+    // RANDOMFRAMES determines distances between enemies
     if (frame % randomFrames[Math.floor(Math.random() * randomFrames.length)] === 0) {
         let chance = Math.floor(Math.random() * 10);
 
@@ -296,7 +317,8 @@ function animate() {
     score: ${score}
     winningScore: ${winningScore}
     currentRound: ${currentRound}
-    currentSpeed: ${currentSpeed}`);
+    currentSpeed: ${currentSpeed}
+    enemyQueue: ${enemyQueue}`);
     
     //console.log(shooter.projectiles);
 
