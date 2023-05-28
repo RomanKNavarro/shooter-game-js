@@ -290,9 +290,12 @@ function collision(bullet, orc) {
         bullet.y + bullet.size <= orc.y + orc.height 
         // collision only occurs in enemy is in front of player
         && orc.x > shooter.x 
+        // BACKWARDS SHOOTING:
         || (bullet.x <= orc.x + orc.width && 
             bullet.x >= orc.x &&
-            (bullet.y > orc.y && bullet.y < orc.y + orc.width))
+            bullet.y > orc.y && 
+            bullet.y < orc.y + orc.width &&
+            (bullet.y < orc.y + orc.height))
     ) {
         return true;
     }
