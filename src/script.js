@@ -34,7 +34,8 @@ var cxt = canvas.getContext("2d");
 // TODO: fix this stupid shooting glitch    --DONE    
 // TODO: increase enemy speed per round     --DONE
 // TODO: make character not able to shoot during menu state     --DONE
-// TODO: get more enemies on-screen in later rounds (most of the time it's only 2-4)    --DONE
+// TODO: get more enemies on-screen in later rounds (most of the time it's only 2-4)    --DONE 
+// TODO: backwards shooting capability 
 
 // ENEMIES ARE SPAWNED AT THE SAME X. why do they take long to spawn?
 
@@ -44,7 +45,8 @@ let winningScore = 30;
 
 // objects
 const flora = new Floor();
-const shooter = new Shooter(100, flora.y - 50);
+// const shooter = new Shooter(100, flora.y - 50);
+const shooter = new Shooter(300, flora.y - 50);
 
 // BUTTONS AND TEXT. (x, y, width, text, clickable)
 const startButton = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Press to Play", true);
@@ -142,7 +144,7 @@ function handleState() {
 // increment stuff to make next round slightly harder:
 function cremate() {
     currentRound++;
-    currentSpeed++;
+    currentSpeed += 0.5;
     roundCounts.splice(0, 1);
     enemyCount = roundCounts[0];
     winningScore += enemyCount * 10;
@@ -153,16 +155,12 @@ function handleShooter() {
     shooter.update();
 }
 
-// function remove(array, obj) {
-//     array.splice(obj, 1);
-//     obj--;
-// }
-
 // gets all the projectiles in the array and automatically shoots them.
 function handleProjectile() {
     let projectiles = shooter.projectiles;
 
     for (let i = 0; i < projectiles.length; i++) {
+        // console.log(projectiles[i].direction)
         let current = projectiles[i];
 
         if (current.x < canvas.width - 100) {
@@ -180,6 +178,7 @@ function handleProjectile() {
             let currentEnemy = enemyQueue[j];
             /* remove bullet and enemy if they conact eachother. Also make enemy 
             drop pickup if applicable: */ 
+            //console.log(collision(projectiles[i], enemyQueue[j]));
             if (enemyQueue[j] && projectiles[i] && collision(projectiles[i], enemyQueue[j])) {
                 score += 10;
                 scoreText.text = score;
@@ -244,7 +243,7 @@ function handleEnemy() {
     for (let i = 0; i < enemyQueue.length; i++) {
         let current = enemyQueue[i];
 
-        if (current.x > 0) {
+        if (current.x + current.width > 0) {
             current.update();
             current.draw();
         }
@@ -282,11 +281,31 @@ function pushEnemy() {
 
 // collission successful.
 function collision(bullet, orc) {
-    if (bullet.x + bullet.size > orc.x && bullet.y + bullet.size >= orc.y 
-        && bullet.y + bullet.size <= orc.y + orc.height && orc.x > shooter.x) {
+    if (
+        // straight ahead
+        bullet.x + bullet.size > orc.x && 
+        // forgot
+        bullet.y + bullet.size >= orc.y && 
+        // shoot at flying enemies
+        bullet.y + bullet.size <= orc.y + orc.height 
+        // collision only occurs in enemy is in front of player
+        && orc.x > shooter.x 
+        || (bullet.x <= orc.x + orc.width && 
+            bullet.x >= orc.x &&
+            (bullet.y > orc.y && bullet.y < orc.y + orc.width))
+    ) {
         return true;
     }
+    //else return false;
 }
+
+// function rearCollision(bullet, orc) {
+//     if (
+        
+//     ) {
+//         return;
+//     }
+// }
 
 // used to determine if the mouse is inside a given button. (mouse, button)
 function mouseCollision(first, second) {
@@ -313,12 +332,12 @@ function animate() {
     handleSnack()
     handleState();
 
-    console.log(`enemyCount: ${enemyCount}
-    score: ${score}
-    winningScore: ${winningScore}
-    currentRound: ${currentRound}
-    currentSpeed: ${currentSpeed}
-    enemyQueue: ${enemyQueue}`);
+    // console.log(`enemyCount: ${enemyCount}
+    // score: ${score}
+    // winningScore: ${winningScore}
+    // currentRound: ${currentRound}
+    // currentSpeed: ${currentSpeed}
+    // enemyQueue: ${enemyQueue}`);
     
     //console.log(shooter.projectiles);
 
