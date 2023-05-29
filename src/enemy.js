@@ -5,7 +5,8 @@ export default class Enemy {
     // constructor(x, y, speed) {
       constructor(x, speed) {
   
-      this.width = this.height = 50;
+      this.width = 50;
+      this.height = 50;
 
       // speed is initially 5:
       this.speed = speed;
@@ -35,7 +36,7 @@ export default class Enemy {
       this.typeNum = Math.random() * 10;
 
       this.groundOdds = 8;
-      this.airOdds = 2;
+      this.airOdds = 5;
       this.crawlOdds = 1.5;
 
       this.type = "ground";
@@ -57,7 +58,11 @@ export default class Enemy {
       if (this.pickupNum <= this.pickupOdds) {
         this.pickup = true   
       }
-      if (this.typeNum <= this.crawlOdds) this.type = "crawl";
+      if (this.typeNum <= this.crawlOdds) {
+        this.type = "crawl";
+        this.width = 25;
+        this.height = 25;
+      }
       else if (this.typeNum <= this.airOdds) this.type = "air";
 
       cxt.fillText(this.type, this.x + (this.width / 2), this.y + (this.height / 2));
