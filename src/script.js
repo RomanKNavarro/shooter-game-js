@@ -1,4 +1,4 @@
-'use strict';
+// 'use strict';
 
 // MODULES:
 import Floor from "./floor.js";  
@@ -35,7 +35,8 @@ var cxt = canvas.getContext("2d");
 // TODO: increase enemy speed per round     --DONE
 // TODO: make character not able to shoot during menu state     --DONE
 // TODO: get more enemies on-screen in later rounds (most of the time it's only 2-4)    --DONE 
-// TODO: backwards shooting capability 
+// TODO: backwards shooting capability  --DONE
+// TODO: crawling enemies
 
 // ENEMIES ARE SPAWNED AT THE SAME X. why do they take long to spawn?
 

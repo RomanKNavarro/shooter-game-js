@@ -41,6 +41,7 @@ export default class Projectile {
           //   this.y = this.y + 30;
 
           case "back":
+          case "down-back":
             this.x -= this.speed;
             break;
           

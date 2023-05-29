@@ -56,6 +56,11 @@ export default class InputHandler {
         case 'a':
           entity.angle = "straight";
           break;
+        
+        
+        // case 'a':
+        //   entity.angle = "back";
+        //   break;
       }
     });
 
