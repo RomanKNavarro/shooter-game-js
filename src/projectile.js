@@ -7,6 +7,7 @@ export default class Projectile {
       // constructor(x, y) {
       this.x = x;
       this.y = y;
+
       this.size = 5;
       this.speed = 6;
       this.delete = false;

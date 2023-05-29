@@ -37,7 +37,7 @@ var cxt = canvas.getContext("2d");
 // TODO: get more enemies on-screen in later rounds (most of the time it's only 2-4)    --DONE 
 // TODO: backwards shooting capability  --DONE
 // TODO: crawling enemies
-// TODO: add ALL enemy types in one class.
+// TODO: add ALL enemy types in one class.  --DONE
 // TOO: fix diagnal-back shooting glitch
 
 // ENEMIES ARE SPAWNED AT THE SAME X. why do they take long to spawn?
@@ -250,6 +250,13 @@ function handleEnemy() {
     for (let i = 0; i < enemyQueue.length; i++) {
         let current = enemyQueue[i];
 
+        // DETERMINE ENEMY Y AXIS BASED ON THEIR TYPE
+        if (current.type == "ground" || current.type == "crawl") {
+            current.y = flora.y - 50;
+        } else {
+            current.y = flora.y - 150;
+        }
+
         if (current.x + current.width > 0) {
             current.update();
             current.draw();
@@ -281,7 +288,7 @@ function pushEnemy() {
         // }
 
         if (enemyCount > 0) {      
-            enemyQueue.push(new AirEnemy(canvas.width, flora.y - 150, currentSpeed));
+            enemyQueue.push(new Enemy(canvas.width, currentSpeed));
             enemyCount--;     
         }
 

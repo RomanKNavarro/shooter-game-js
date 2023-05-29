@@ -2,15 +2,18 @@ var canvas = document.getElementById("canvas1");
 var cxt = canvas.getContext("2d"); 
 
 export default class Enemy {
-    constructor(x, y, speed) {
+    // constructor(x, y, speed) {
+      constructor(x, speed) {
   
       this.width = this.height = 50;
 
       // speed is initially 5:
       this.speed = speed;
-  
+      // this.x = x;
+      // this.y = y;
+
       this.x = x;
-      this.y = y;
+      this.y;
   
       this.moving = true;
 
@@ -28,7 +31,13 @@ export default class Enemy {
 
       //this.type = _.sample(["ground", "crawl", "air"]);
 
-      this.typeNum = Math.floor(Math.random() * 10);
+      // this.typeNum = Math.floor(Math.random() * 10);
+      this.typeNum = Math.random() * 10;
+
+      this.groundOdds = 8;
+      this.airOdds = 2;
+      this.crawlOdds = 1.5;
+
       this.type = "ground";
 
 
@@ -48,6 +57,8 @@ export default class Enemy {
       if (this.pickupNum <= this.pickupOdds) {
         this.pickup = true   
       }
+      if (this.typeNum <= this.crawlOdds) this.type = "crawl";
+      else if (this.typeNum <= this.airOdds) this.type = "air";
 
       cxt.fillText(this.type, this.x + (this.width / 2), this.y + (this.height / 2));
 
