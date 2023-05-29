@@ -37,6 +37,7 @@ var cxt = canvas.getContext("2d");
 // TODO: get more enemies on-screen in later rounds (most of the time it's only 2-4)    --DONE 
 // TODO: backwards shooting capability  --DONE
 // TODO: crawling enemies
+// TODO: add ALL enemy types in one class.
 
 // ENEMIES ARE SPAWNED AT THE SAME X. why do they take long to spawn?
 

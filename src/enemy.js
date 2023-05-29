@@ -24,10 +24,9 @@ export default class Enemy {
       this.pickupOdds = 0.5;
       this.pickup = false;
 
-      this.types = ["stand", "crawl"];
-      // this.type = this.types[Math.floor(Math.random() * this.types.length)];
+      // this.types = ["stand", "crawl"];
 
-      this.type = _.sample(this.types);
+      this.type = _.sample(["stand", "crawl"]);
     }
 
     draw() {
@@ -45,7 +44,7 @@ export default class Enemy {
         this.pickup = true   
       }
 
-      cxt.fillText(this.force, this.x + (this.width / 2), this.y + (this.height / 2));
+      cxt.fillText(this.type, this.x + (this.width / 2), this.y + (this.height / 2));
 
     }
   
