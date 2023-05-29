@@ -38,6 +38,7 @@ var cxt = canvas.getContext("2d");
 // TODO: backwards shooting capability  --DONE
 // TODO: crawling enemies
 // TODO: add ALL enemy types in one class.
+// TOO: fix diagnal-back shooting glitch
 
 // ENEMIES ARE SPAWNED AT THE SAME X. why do they take long to spawn?
 
@@ -79,7 +80,11 @@ for (let i = 0; i <= 9; i++) {
 
 // 8/10 chance enemy will be ground.
 let theOdds = 8;
-let enemyQueue = [];
+
+let enemyQueue2 = [];
+let airEnemyQueue = [];
+let enemyQueue = enemyQueue2.concat(airEnemyQueue);
+
 let enemyCount = 3;
 let currentRound = 1;
 let showNextRound = false;
@@ -264,17 +269,22 @@ function pushEnemy() {
     if (frame % randomFrames[Math.floor(Math.random() * randomFrames.length)] === 0) {
         let chance = Math.floor(Math.random() * 10);
 
-        if (enemyCount > 0) {
-            if (chance < theOdds) {         
-                enemyQueue.push(new Enemy(canvas.width, flora.y - 50, currentSpeed));  
-                enemyCount--;             
-            }
-            else {
-                enemyQueue.push(new AirEnemy(canvas.width, flora.y - 150, currentSpeed));
-                enemyCount--;
-            }
-            
+        // if (enemyCount > 0) {
+        //     if (chance < theOdds) {         
+        //         enemyQueue.push(new Enemy(canvas.width, flora.y - 50, currentSpeed));  
+        //         enemyCount--;             
+        //     }
+        //     else {
+        //         enemyQueue.push(new AirEnemy(canvas.width, flora.y - 150, currentSpeed));
+        //         enemyCount--;
+        //     }
+        // }
+
+        if (enemyCount > 0) {      
+            enemyQueue.push(new AirEnemy(canvas.width, flora.y - 150, currentSpeed));
+            enemyCount--;     
         }
+
         else if (enemyQueue.length == 0) {
             state = "WIN";
         }

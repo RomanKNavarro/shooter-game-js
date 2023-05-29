@@ -20,13 +20,18 @@ export default class Enemy {
     
       // 2/10 chance enemy will drop a pickup:
 
-      this.number = Math.floor(Math.random() * 10)
+      this.pickupNum = Math.floor(Math.random() * 10);
       this.pickupOdds = 0.5;
       this.pickup = false;
 
       // this.types = ["stand", "crawl"];
 
-      this.type = _.sample(["stand", "crawl"]);
+      //this.type = _.sample(["ground", "crawl", "air"]);
+
+      this.typeNum = Math.floor(Math.random() * 10);
+      this.type = "ground";
+
+
     }
 
     draw() {
@@ -40,7 +45,7 @@ export default class Enemy {
       cxt.textAlign = "center";
       cxt.textBaseline = "middle";
 
-      if (this.number <= this.pickupOdds) {
+      if (this.pickupNum <= this.pickupOdds) {
         this.pickup = true   
       }
 
