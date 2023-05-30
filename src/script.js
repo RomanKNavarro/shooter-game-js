@@ -42,6 +42,7 @@ var cxt = canvas.getContext("2d");
 // TODO: shooting pickups from behind   --DONE  
 // TODO: make ground enemies die after two shots if shot at bottom  --DONE
 // TODO: FLAMETHROWER
+// TODO: pick up weapon only if "specialAmmo" is 0
 
 
 // ENEMIES ARE SPAWNED AT THE SAME X. why do they take long to spawn?
@@ -257,16 +258,19 @@ function handleProjectile() {
                 // remove(i);
 
                 // SPECIAL WEAPONS HERE:
-                if (snack.type == "ar") {
-                    shooter.weapon = "ar";
-                    shooter.fireRate = 10;
-                    shooter.specialAmmo = 10;
-                } else {
-                    shooter.weapon = "flammen";
-                    shooter.fireRate = 5;
-                    shooter.specialAmmo = 50;
+                // AR STACKING ALLOWED. NO PICKUPS IF WEAPON IS FLAMMEN
+                if (shooter.weapon != "flammen") {
+                    if (snack.type == "ar") {
+                        shooter.weapon = "ar";
+                        shooter.fireRate = 10;
+                        shooter.specialAmmo = 10;
+                    } else {
+                        shooter.weapon = "flammen";
+                        shooter.fireRate = 2;
+                        shooter.specialAmmo = 100;  
+                    }
                 }
-                
+
                 snackQueue.splice(l, 1);
                 l--;
                 //remove(snackQueue, l);
@@ -274,9 +278,20 @@ function handleProjectile() {
         }
 
         // remove bullets if they exceed canvas width:
-        if (projectiles[i] && projectiles[i].x > canvas.width - 100) {
-            projectiles.splice(i, 1);
-            i--;
+        // OVERHAUL THIS COMPLETELY:
+        // if ((projectiles[i] && projectiles[i].x > canvas.width - 100) ||
+        // (shooter.weapon == "flammen" && projectiles[i] && projectiles[i].x > canvas.width - 10)) {
+        //     projectiles.splice(i, 1);
+        //     i--;
+        // }
+
+        if (projectiles[i]) {
+            if ((projectiles[i].x > canvas.width - 100 || projectiles[i].x < 0 || projectiles[i].y < 0)
+            || (shooter.weapon == "flammen" && (projectiles[i].x > canvas.width - 400 
+            || projectiles[i].x < 0 || projectiles[i].y < 0))) {
+                projectiles.splice(i, 1);
+                i--;
+            }
         }
     }
 }

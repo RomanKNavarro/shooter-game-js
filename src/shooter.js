@@ -11,6 +11,7 @@ export default class Shooter {
         this.y = y;
 
         this.name = "Warren";
+        this.disabled = true;
 
         /* HOW PROJECTILES WORK: whenever user shoots, new projectile added to array. As he not shoots,
         it automatically decrements until it is empty :) */
@@ -24,8 +25,6 @@ export default class Shooter {
         this.weapon = "pistol";
         this.fireRate = 0;
         this.specialAmmo = 0;
-
-        this.disabled = true;
 
       // mouse stuff in here lol, used in script.js
         this.mouse = {
@@ -46,7 +45,7 @@ export default class Shooter {
         cxt.fillStyle = "black";
         cxt.textAlign = "center";
         cxt.textBaseline = "middle";
-        cxt.fillText(this.weapon, this.x + (this.width / 2), this.y + (this.height / 2));
+        cxt.fillText(this.specialAmmo, this.x + (this.width / 2), this.y + (this.height / 2));
     }
 
     update() {
