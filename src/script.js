@@ -44,7 +44,7 @@ var cxt = canvas.getContext("2d");
 // TODO: FLAMETHROWER   --DONE
 // TODO: pick up weapon only if "specialAmmo" is 0  --DONE (resolved)
 // TODO: special atrocity round
-// TODO: get lodash working again.
+// TODO: get lodash working again.  --DONE
 
 
 // ENEMIES ARE SPAWNED AT THE SAME X. why do they take long to spawn?
@@ -77,8 +77,6 @@ const endText2 = new Button(canvas.width / 2.5, canvas.height / 1.7, 100, "Thank
 const endText3 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Made with ❤️ by", false);
 const endText4 = new Button(canvas.width / 2.5, canvas.height / 1.9, 100, "KAVEMANKORPS", false);
 
-
-
 // variables
 let frame = 0;
 // let randomFrames = [50, 80, 110, 150];
@@ -98,9 +96,10 @@ let enemyQueue = [];
 let enemyCount = 3;
 let showNextRound = false;
 let showNextText = false;
+let showSpecialText = false;
 
 
-let specialRoundNum = _.sample(_.range(1, 5));
+let specialRoundNum = _.sample(_.range(1, 3));
 let specialRound = false;
 
 let currentSpeed = 2;
@@ -157,7 +156,6 @@ function handleState() {
         if (currentRound == specialRoundNum) {
             state = "SPECIAL";
         }
-
         if (!showNextRound) {
             winText.draw();
             setTimeout(() => {
@@ -176,17 +174,20 @@ function handleState() {
     }
     else if (state == "SPECIAL") {
         shooter.disabled = true;
+        specialRound = true;
+
         if (!showNextText) {
             specialText.draw();
             setTimeout(() => {
                 showNextText = true;
-            }, 4000);
-        } else {
+            }, 3000);
+        } else { 
             specialText2.draw();
-            specialRound = true;
+            setTimeout(() => {
+                state = "RUNNING";
+            }, 1000);
         }
     }
-
     else if (state == "END") {
         shooter.disabled = true;
 
@@ -335,8 +336,7 @@ function handleEnemy() {
     for (let i = 0; i < enemyQueue.length; i++) {
         let current = enemyQueue[i];
 
-        if (current.type != "ground")  current.health = 1;
-
+        if (current.type != "ground") current.health = 1;
 
         // DETERMINE ENEMY Y AXIS BASED ON THEIR TYPE
         if (current.type == "ground" || current.type == "crawl") {
@@ -364,9 +364,13 @@ function pushEnemy() {
     if (frame % randomFrames[Math.floor(Math.random() * randomFrames.length)] === 0) {
         let chance = Math.floor(Math.random() * 10);
 
-        if (enemyCount > 0) {     
-            enemyQueue.push(new Enemy(canvas.width, currentSpeed));
-            enemyCount--;     
+        if (enemyCount > 0) {   
+            if (!specialRound) {
+                enemyQueue.push(new Enemy(canvas.width, currentSpeed));
+                enemyCount--;  
+            }  else {
+                enemyQueue.push(new Enemy(0 - 50, -currentSpeed));
+            }
         }
 
         else if (enemyQueue.length == 0) {
