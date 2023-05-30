@@ -98,8 +98,8 @@ let showNextRound = false;
 let showNextText = false;
 let showSpecialText = false;
 
-
-let specialRoundNum = _.sample(_.range(1, 3));
+// let specialRoundNum = _.sample(_.range(1, 3));
+let specialRoundNum = 1;
 let specialRound = false;
 
 let currentSpeed = 2;
@@ -176,15 +176,18 @@ function handleState() {
         shooter.disabled = true;
         specialRound = true;
 
-        if (!showNextText) {
+        if (!showSpecialText) {
             specialText.draw();
             setTimeout(() => {
-                showNextText = true;
+                showSpecialText = true;
             }, 3000);
         } else { 
             specialText2.draw();
             setTimeout(() => {
                 state = "RUNNING";
+                if (score >= winningScore) {
+                    cremate();
+                }
             }, 1000);
         }
     }
@@ -345,7 +348,19 @@ function handleEnemy() {
             current.y = flora.y - 150;
         }
 
-        if (current.x + current.width > 0) {
+
+        // THIS CRAP NEEDS SERIOUS TWEAKING:
+        if (specialRound) {
+            if (current.x + current.width < canvas.width - 200) {
+                current.update();
+                current.draw();
+            }
+            else {
+                enemyQueue.splice(i, 1);
+                score += 10;
+            }
+        }
+        else if (current.x + current.width > 0) {
             current.update();
             current.draw();
         }
@@ -369,7 +384,11 @@ function pushEnemy() {
                 enemyQueue.push(new Enemy(canvas.width, currentSpeed));
                 enemyCount--;  
             }  else {
-                enemyQueue.push(new Enemy(0 - 50, -currentSpeed));
+                if (enemyCount > 0) {
+                    enemyQueue.push(new Enemy(0, -currentSpeed));
+                    enemyCount--; 
+                }
+                else specialRound = false;
             }
         }
 
@@ -436,7 +455,7 @@ function animate() {
     // currentSpeed: ${currentSpeed}
     // enemyQueue: ${enemyQueue}`);
     
-    //console.log(shooter.projectiles);
+    console.log(specialRound);
 
     frame++;
 
