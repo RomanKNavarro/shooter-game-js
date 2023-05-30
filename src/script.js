@@ -59,8 +59,13 @@ const shooter = new Shooter(600, flora.y - 50);
 const startButton = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Press to Play", true);
 const winText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Round Complete", false);
 const nextText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Next round incoming...", false);
-const overText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "YOU LOST", false);
+const failText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "YOU LOST", false);
+
 const endText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "You win", false);
+const endText2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Made with ❤️ by", false);
+const endText3 = new Button(canvas.width / 2.5, canvas.height / 1.9, 100, "KAVEMANKORPS", false);
+
+const endText4 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Thanks for playing!!!", false);
 
 // why won't score update? b/c It is an obj created with whatever text was given at 
 // the start.
@@ -91,6 +96,7 @@ let enemyQueue = [];
 
 let enemyCount = 3;
 let showNextRound = false;
+let showNextText = false;
 
 let currentSpeed = 2;
 
@@ -99,6 +105,8 @@ let snackQueue = [];
 
 // states: MENU, RUNNING, WIN, LOSE, OVER
 let state = "MENU";
+
+let textStream = [endText, endText2, endText3];
 
 // functions:
 flora.draw();
@@ -110,7 +118,7 @@ function handleStatus() {
 }
 
 // startButton.stroke property successfully set, but color won't change.
-function handleState() {
+async function handleState() {
     if (state == "MENU") {  
         startButton.draw();
         // scoreText.draw();
@@ -129,13 +137,17 @@ function handleState() {
     else if (state == "RUNNING") {
         shooter.disabled = false;
 
+        // reset after each round
         showNextRound = false;
         handleEnemy();
         pushEnemy();
     }
     else if (state == "WIN") { 
-        shooter.disabled;
         // logic for displaying end-round text:
+        if (currentRound == 1) {
+            state = "END";
+        }
+
         if (!showNextRound) {
             winText.draw();
             setTimeout(() => {
@@ -152,9 +164,18 @@ function handleState() {
             }, 1000);
         }
     }
-    else if (state == "GAME OVER") {
-        shooter.disabled;
-        endText.draw();
+    else if (state == "END") {
+        shooter.disabled = true;
+
+        if (!showNextText) {
+            endText.draw();
+            setTimeout(() => {
+                showNextText = true;
+            }, 3000);
+        } else {
+            endText2.draw();
+            endText3.draw();
+        }
     }
 }
 
