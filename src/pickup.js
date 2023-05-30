@@ -9,6 +9,13 @@ export default class Pickup {
         this.y = y;
         this.delete = false;
 
+
+        this.typeNum = Math.random() * 10;
+        this.flammenOdds = 2.5;
+
+        // this.type = _.sample(["ar"]);
+        this.type = "ar";
+
         // this.types = ["ar"];
         // this.type = this.types[Math.floor(Math.random() * this.types.length)];
     }
@@ -24,7 +31,18 @@ export default class Pickup {
             cxt.beginPath();
             cxt.fillStyle = "purple";
             cxt.fillRect(this.x, this.y, this.width, this.height);
-            cxt.fill();
+            // cxt.fill();
+
+            cxt.font = "20px serif";
+            cxt.fillStyle = "black";
+            cxt.textAlign = "center";
+            cxt.textBaseline = "middle";
+
+            if (this.typeNum <= this.flammenOdds) this.type = "flammen";
+      
+            cxt.fillText(this.type, this.x + (this.width / 2), this.y + (this.height / 2));
         };
+
+        
     }
 }

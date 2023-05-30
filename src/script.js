@@ -41,6 +41,7 @@ var cxt = canvas.getContext("2d");
 // TODO: victory state --DONE
 // TODO: shooting pickups from behind   --DONE  
 // TODO: make ground enemies die after two shots if shot at bottom  --DONE
+// TODO: FLAMETHROWER
 
 
 // ENEMIES ARE SPAWNED AT THE SAME X. why do they take long to spawn?
@@ -243,31 +244,28 @@ function handleProjectile() {
                 
                 }
 
-                // score += 10;
-                // scoreText.text = score;
-
-                // projectiles.splice(i, 1);
-                // i--;
-                //remove(projectiles, i);
-
-
-                //remove(enemyQueue, j);
-
                 //console.log(snackQueue);
             }
         }
 
         for (let l = 0; l < snackQueue.length; l++) {
-            if (snackQueue[l] && projectiles[i] && collision(projectiles[i], snackQueue[l])) {
+            let snack = snackQueue[l];
+            if (snack && projectiles[i] && collision(projectiles[i], snack)) {
 
                 projectiles.splice(i, 1);
                 i--;
                 // remove(i);
 
-                // ASSAULT RIFLE HERE:
-                shooter.weapon = "ar";
-                shooter.fireRate = 10;
-                shooter.specialAmmo = 10;
+                // SPECIAL WEAPONS HERE:
+                if (snack.type == "ar") {
+                    shooter.weapon = "ar";
+                    shooter.fireRate = 10;
+                    shooter.specialAmmo = 10;
+                } else {
+                    shooter.weapon = "flammen";
+                    shooter.fireRate = 5;
+                    shooter.specialAmmo = 50;
+                }
                 
                 snackQueue.splice(l, 1);
                 l--;
@@ -282,6 +280,8 @@ function handleProjectile() {
         }
     }
 }
+
+// let weapons = {"ar": {"rate": 10, "ammo": 10}, "flammen": {"rate": 0, "ammo": 15}};
 
 // SNACK HANDLING
 function handleSnack() {

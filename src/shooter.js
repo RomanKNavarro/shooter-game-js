@@ -20,7 +20,7 @@ export default class Shooter {
 
         this.angle = "straight";
 
-        // pistol and ar for now
+        // pistol, ar, and flamethrower
         this.weapon = "pistol";
         this.fireRate = 0;
         this.specialAmmo = 0;
@@ -41,6 +41,12 @@ export default class Shooter {
         cxt.beginPath();
         cxt.fillStyle = "yellow";
         cxt.fillRect(this.x, this.y, this.width, this.height);
+
+        cxt.font = "20px serif";
+        cxt.fillStyle = "black";
+        cxt.textAlign = "center";
+        cxt.textBaseline = "middle";
+        cxt.fillText(this.weapon, this.x + (this.width / 2), this.y + (this.height / 2));
     }
 
     update() {
@@ -56,6 +62,7 @@ export default class Shooter {
             if (this.timer % this.fireRate === 0  || this.timer == 1) {
                 this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle));  
             
+                // what's this again?
                 if (this.specialAmmo > 0) {
                     this.specialAmmo--;
                 }
