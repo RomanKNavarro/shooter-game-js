@@ -39,6 +39,7 @@ export default class Enemy {
       this.crawlOdds = 1.5;
 
       this.type = "ground";
+      this.health = 2;
     }
 
     draw() {
@@ -62,7 +63,7 @@ export default class Enemy {
       }
       else if (this.typeNum <= this.airOdds) this.type = "air";
 
-      cxt.fillText(this.type, this.x + (this.width / 2), this.y + (this.height / 2));
+      cxt.fillText(this.health, this.x + (this.width / 2), this.y + (this.height / 2));
 
     }
   

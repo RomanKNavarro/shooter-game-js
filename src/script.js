@@ -38,8 +38,9 @@ var cxt = canvas.getContext("2d");
 // TODO: crawling enemies   --DONE
 // TODO: add ALL enemy types in one class.  --DONE
 // TOO: fix diagnal-back shooting glitch
-// TODO: victory state 
+// TODO: victory state --DONE
 // TODO: shooting pickups from behind   --DONE  
+// TODO: make ground enemies die after two shots if shot at bottom  --DONE
 
 
 // ENEMIES ARE SPAWNED AT THE SAME X. why do they take long to spawn?
@@ -52,8 +53,8 @@ let currentRound = 1;
 
 // objects
 const flora = new Floor();
-// const shooter = new Shooter(100, flora.y - 50);
-const shooter = new Shooter(600, flora.y - 50);
+const shooter = new Shooter(100, flora.y - 50);
+// const shooter = new Shooter(600, flora.y - 50);
 
 // BUTTONS AND TEXT. (x, y, width, text, clickable)
 const startButton = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Press to Play", true);
@@ -62,10 +63,10 @@ const nextText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Next 
 const failText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "YOU LOST", false);
 
 const endText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "You win", false);
-const endText2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Made with ❤️ by", false);
-const endText3 = new Button(canvas.width / 2.5, canvas.height / 1.9, 100, "KAVEMANKORPS", false);
+const endText2 = new Button(canvas.width / 2.5, canvas.height / 1.7, 100, "Thanks for playing!!!", false);
 
-const endText4 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Thanks for playing!!!", false);
+const endText3 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Made with ❤️ by", false);
+const endText4 = new Button(canvas.width / 2.5, canvas.height / 1.9, 100, "KAVEMANKORPS", false);
 
 // why won't score update? b/c It is an obj created with whatever text was given at 
 // the start.
@@ -118,7 +119,7 @@ function handleStatus() {
 }
 
 // startButton.stroke property successfully set, but color won't change.
-async function handleState() {
+function handleState() {
     if (state == "MENU") {  
         startButton.draw();
         // scoreText.draw();
@@ -144,7 +145,7 @@ async function handleState() {
     }
     else if (state == "WIN") { 
         // logic for displaying end-round text:
-        if (currentRound == 1) {
+        if (currentRound == 10) {
             state = "END";
         }
 
@@ -168,13 +169,15 @@ async function handleState() {
         shooter.disabled = true;
 
         if (!showNextText) {
+            // YOU WIN 
             endText.draw();
+            endText2.draw();
             setTimeout(() => {
                 showNextText = true;
-            }, 3000);
+            }, 4000);
         } else {
-            endText2.draw();
             endText3.draw();
+            endText4.draw();
         }
     }
 }
@@ -217,20 +220,37 @@ function handleProjectile() {
             /* remove bullet and enemy if they conact eachother. Also make enemy 
             drop pickup if applicable: */ 
             if (enemyQueue[j] && projectiles[i] && collision(projectiles[i], enemyQueue[j])) {
-                score += 10;
-                scoreText.text = score;
 
                 projectiles.splice(i, 1);
                 i--;
-                //remove(projectiles, i);
 
-                if (currentEnemy.pickup) {
-                    snackQueue.push(new Pickup(currentEnemy.x, currentEnemy.y - 100));
+                if (shooter.angle == "down" || shooter.angle == "down-back") {
+                    currentEnemy.health -= 1;
+                } else currentEnemy.health -= 2;
+                
+
+                if (currentEnemy.health <= 0) {
+                    score += 10;
+                    scoreText.text = score;
+
+                    if (currentEnemy.pickup) {
+                        snackQueue.push(new Pickup(currentEnemy.x, currentEnemy.y - 100));
+                    }
+    
+                    // here is how the enemies get deleted:
+                    enemyQueue.splice(j, 1);
+                    j--;
+                
                 }
 
-                // here is how the enemies get deleted:
-                enemyQueue.splice(j, 1);
-                j--;
+                // score += 10;
+                // scoreText.text = score;
+
+                // projectiles.splice(i, 1);
+                // i--;
+                //remove(projectiles, i);
+
+
                 //remove(enemyQueue, j);
 
                 //console.log(snackQueue);
@@ -280,20 +300,15 @@ function handleEnemy() {
     for (let i = 0; i < enemyQueue.length; i++) {
         let current = enemyQueue[i];
 
+        if (current.type != "ground")  current.health = 1;
+
+
         // DETERMINE ENEMY Y AXIS BASED ON THEIR TYPE
         if (current.type == "ground" || current.type == "crawl") {
             current.y = flora.y - current.height;
         } else {
             current.y = flora.y - 150;
         }
-
-        // switch (current.type) {
-        //     case "ground":
-        //         current.y = flora.y - current;
-        //         break;
-        //     case "crawl":
-        //         current.y = flora.y
-        // }
 
         if (current.x + current.width > 0) {
             current.update();
