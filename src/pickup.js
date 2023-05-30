@@ -3,12 +3,11 @@ var cxt = canvas.getContext("2d");
 
 export default class Pickup {
     constructor(x, y) {
-        this.width = this.height = 10;
+        this.width = this.height = 20;
 
         this.x = x;
         this.y = y;
         this.delete = false;
-        this.size = 10;
 
         // this.types = ["ar"];
         // this.type = this.types[Math.floor(Math.random() * this.types.length)];

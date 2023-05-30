@@ -21,11 +21,10 @@ export default class Enemy {
       this.color = "pink"
       this.delete = false;
       this.force = "ground";
-    
-      // 2/10 chance enemy will drop a pickup:
 
       this.pickupNum = Math.floor(Math.random() * 10);
-      this.pickupOdds = 0.5;
+      // this.pickupOdds = 0.5;
+      this.pickupOdds = 8;
       this.pickup = false;
 
       // this.types = ["stand", "crawl"];
@@ -40,8 +39,6 @@ export default class Enemy {
       this.crawlOdds = 1.5;
 
       this.type = "ground";
-
-
     }
 
     draw() {
@@ -60,8 +57,8 @@ export default class Enemy {
       }
       if (this.typeNum <= this.crawlOdds) {
         this.type = "crawl";
-        this.width = 25;
-        this.height = 25;
+        this.width = 30;
+        this.height = 30;
       }
       else if (this.typeNum <= this.airOdds) this.type = "air";
 

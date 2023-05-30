@@ -39,6 +39,7 @@ var cxt = canvas.getContext("2d");
 // TODO: add ALL enemy types in one class.  --DONE
 // TOO: fix diagnal-back shooting glitch
 // TODO: victory state 
+// TODO: shooting pickups from behind   --DONE  
 
 
 // ENEMIES ARE SPAWNED AT THE SAME X. why do they take long to spawn?
@@ -52,7 +53,7 @@ let currentRound = 1;
 // objects
 const flora = new Floor();
 // const shooter = new Shooter(100, flora.y - 50);
-const shooter = new Shooter(300, flora.y - 50);
+const shooter = new Shooter(600, flora.y - 50);
 
 // BUTTONS AND TEXT. (x, y, width, text, clickable)
 const startButton = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Press to Play", true);
@@ -203,7 +204,7 @@ function handleProjectile() {
                 //remove(projectiles, i);
 
                 if (currentEnemy.pickup) {
-                    snackQueue.push(new Pickup(currentEnemy.x - 20, currentEnemy.y - 20));
+                    snackQueue.push(new Pickup(currentEnemy.x, currentEnemy.y - 100));
                 }
 
                 // here is how the enemies get deleted:
@@ -248,7 +249,7 @@ function handleSnack() {
         snack.draw();
 
         // drop until it touches the floor
-        if (snack.y + snack.size <= flora.y - snack.size) {
+        if (snack.y + snack.height < flora.y - 5) {
             snack.update();
         }
     }
@@ -326,14 +327,6 @@ function collision(bullet, orc) {
     //else return false;
 }
 
-// function rearCollision(bullet, orc) {
-//     if (
-        
-//     ) {
-//         return;
-//     }
-// }
-
 // used to determine if the mouse is inside a given button. (mouse, button)
 function mouseCollision(first, second) {
     if (
@@ -358,7 +351,8 @@ function animate() {
     handleProjectile();
     handleSnack()
     handleState();
-    handleStatus();
+
+    if (state != "MENU") handleStatus();
 
     // console.log(`enemyCount: ${enemyCount}
     // score: ${score}
