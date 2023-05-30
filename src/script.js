@@ -41,8 +41,10 @@ var cxt = canvas.getContext("2d");
 // TODO: victory state --DONE
 // TODO: shooting pickups from behind   --DONE  
 // TODO: make ground enemies die after two shots if shot at bottom  --DONE
-// TODO: FLAMETHROWER
-// TODO: pick up weapon only if "specialAmmo" is 0
+// TODO: FLAMETHROWER   --DONE
+// TODO: pick up weapon only if "specialAmmo" is 0  --DONE (resolved)
+// TODO: special atrocity round
+// TODO: get lodash working again.
 
 
 // ENEMIES ARE SPAWNED AT THE SAME X. why do they take long to spawn?
@@ -50,33 +52,32 @@ var cxt = canvas.getContext("2d");
 // NEW SCORE STUFF:
 let score = 0;
 let winningScore = 30;
-
 let currentRound = 1;
 
 // objects
 const flora = new Floor();
 const shooter = new Shooter(100, flora.y - 50);
 // const shooter = new Shooter(600, flora.y - 50);
+new InputHandler(shooter);
 
 // BUTTONS AND TEXT. (x, y, width, text, clickable)
 const startButton = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Press to Play", true);
 const winText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Round Complete", false);
 const nextText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Next round incoming...", false);
-const failText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "YOU LOST", false);
+const failText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "FAILURE", false);
 
-const endText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "You win", false);
-const endText2 = new Button(canvas.width / 2.5, canvas.height / 1.7, 100, "Thanks for playing!!!", false);
-
-const endText3 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Made with ❤️ by", false);
-const endText4 = new Button(canvas.width / 2.5, canvas.height / 1.9, 100, "KAVEMANKORPS", false);
-
-// why won't score update? b/c It is an obj created with whatever text was given at 
-// the start.
 const scoreText = new Button(canvas.width / 2, 0, 100, score, false);
 const roundText = new Button(canvas.width / 3, 0, 100, currentRound, false);
 
-new InputHandler(shooter);
-// const input = new InputHandler(shooter);
+const specialText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "SPECIAL ROUND", false);
+const specialText2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "MASSACRE THE CIVILIANS", false);
+
+const endText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "You win", false);
+const endText2 = new Button(canvas.width / 2.5, canvas.height / 1.7, 100, "Thanks for playing!!!", false);
+const endText3 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Made with ❤️ by", false);
+const endText4 = new Button(canvas.width / 2.5, canvas.height / 1.9, 100, "KAVEMANKORPS", false);
+
+
 
 // variables
 let frame = 0;
@@ -86,20 +87,21 @@ let randomFrames = [10, 30, 50, 80, 110,];
 // level 1: 8/10 chance to spawn ground enemy. 20% chance to spawn air enemy.
 const rounds = Array.from(Array(10).keys());
 
+// determine num. of enemies per round
 // ten rounds total. Each one has 1.5 times more enemies than the last.
 let roundCounts = [0, 10];
 for (let i = 0; i <= 9; i++) {
     roundCounts.push(Math.floor(roundCounts[roundCounts.length -1] * 1.5));
 }
 
-// 8/10 chance enemy will be ground.
-let theOdds = 8;
-
 let enemyQueue = [];
-
 let enemyCount = 3;
 let showNextRound = false;
 let showNextText = false;
+
+
+let specialRoundNum = _.sample(_.range(1, 5));
+let specialRound = false;
 
 let currentSpeed = 2;
 
@@ -121,6 +123,7 @@ function handleStatus() {
 }
 
 // startButton.stroke property successfully set, but color won't change.
+// TODO: use switch case to handle states
 function handleState() {
     if (state == "MENU") {  
         startButton.draw();
@@ -151,6 +154,10 @@ function handleState() {
             state = "END";
         }
 
+        if (currentRound == specialRoundNum) {
+            state = "SPECIAL";
+        }
+
         if (!showNextRound) {
             winText.draw();
             setTimeout(() => {
@@ -167,6 +174,19 @@ function handleState() {
             }, 1000);
         }
     }
+    else if (state == "SPECIAL") {
+        shooter.disabled = true;
+        if (!showNextText) {
+            specialText.draw();
+            setTimeout(() => {
+                showNextText = true;
+            }, 4000);
+        } else {
+            specialText2.draw();
+            specialRound = true;
+        }
+    }
+
     else if (state == "END") {
         shooter.disabled = true;
 
@@ -344,7 +364,7 @@ function pushEnemy() {
     if (frame % randomFrames[Math.floor(Math.random() * randomFrames.length)] === 0) {
         let chance = Math.floor(Math.random() * 10);
 
-        if (enemyCount > 0) {      
+        if (enemyCount > 0) {     
             enemyQueue.push(new Enemy(canvas.width, currentSpeed));
             enemyCount--;     
         }

@@ -29,7 +29,7 @@ export default class Enemy {
 
       // this.types = ["stand", "crawl"];
 
-      //this.type = _.sample(["ground", "crawl", "air"]);
+      // this.type = _.sample(["ground", "crawl", "air"]);
 
       // this.typeNum = Math.floor(Math.random() * 10);
       this.typeNum = Math.random() * 10;
@@ -38,6 +38,7 @@ export default class Enemy {
       this.airOdds = 5;
       this.crawlOdds = 1.5;
 
+      // ground, crawl, air, civie
       this.type = "ground";
       this.health = 2;
     }
