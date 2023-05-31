@@ -7,6 +7,7 @@ import InputHandler from "./inputHandler.js";
 import Enemy from "./enemy.js";
 import Button from "./button.js";
 import Pickup from "./pickup.js";
+import TextWall from ".textWall.js";
 
 // canvas stuff
 var canvas = document.getElementById("canvas1");
@@ -53,7 +54,8 @@ var cxt = canvas.getContext("2d");
 
 // determine num. of enemies per round
 // ten rounds total. Each one has 1.5 times more enemies than the last.
-let roundCounts = [0, 10];
+// let roundCounts = [0, 10];
+let roundCounts = [3, 10];
 for (let i = 0; i <= 9; i++) {
     roundCounts.push(Math.floor(roundCounts[roundCounts.length -1] * 1.5));
 }
@@ -63,8 +65,11 @@ let score = 0;
 let winningScore = 30;
 let currentRound = 1;
 
+// enemyCount determines num of enemies to add to array. It decrements as they spawn
+let enemyCount = roundCounts[0];
+
 // might need further tweaking:
-let enemiesLeft = roundCounts[1];
+let enemiesLeft = roundCounts[0];
 
 // objects
 const flora = new Floor();
@@ -73,7 +78,7 @@ const shooter = new Shooter(100, flora.y - 50);
 new InputHandler(shooter);
 
 // BUTTONS AND TEXT. (x, y, width, text, clickable)
-const startButton = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Press to Play", true);
+const startButton = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Initiate Bloodbath", true);
 const winText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Round Complete", false);
 const nextText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Next round incoming...", false);
 const failText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "FAILURE", false);
@@ -81,7 +86,6 @@ const failText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "FAILU
 const enemyText = new Button(canvas.width / 2.45, 0, 100, enemiesLeft, false);
 const roundText = new Button(canvas.width / 3, 0, 100, currentRound, false);
 const scoreText = new Button(canvas.width / 2, 0, 100, score, false);
-
 
 const specialText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "SPECIAL ROUND", false);
 const specialText2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "MASSACRE THE CIVILIANS", false);
@@ -91,6 +95,8 @@ const endText2 = new Button(canvas.width / 2.5, canvas.height / 1.7, 100, "Thank
 const endText3 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Made with ❤️ by", false);
 const endText4 = new Button(canvas.width / 2.5, canvas.height / 1.9, 100, "KAVEMANKORPS", false);
 
+const bossText = new 
+
 // variables
 let frame = 0;
 // let randomFrames = [50, 80, 110, 150];
@@ -99,8 +105,6 @@ let randomFrames = [10, 30, 50, 80, 110,];
 // level 1: 8/10 chance to spawn ground enemy. 20% chance to spawn air enemy.
 const rounds = Array.from(Array(10).keys());
 
-// enemyCount determines num of enemies to add to array. It decrements as they spawn
-let enemyCount = 3;
 let enemyQueue = [];
 let showNextRound = false;
 let showNextText = false;
@@ -118,19 +122,19 @@ let snackQueue = [];
 // states: MENU, RUNNING, WIN, LOSE, OVER
 let state = "MENU";
 
-let textStream = [endText, endText2, endText3];
-
 // functions:
 flora.draw();
 
 function handleStatus() {
     roundText.text = currentRound;
+    //enemyText.text = enemyCount;
     enemyText.text = enemiesLeft;
     enemyText.draw();
     roundText.draw();
     scoreText.draw();
 }
 
+// states: MENU, RUNNING, WIN, SPECIAL, BOSS, END, LOSE.
 // startButton.stroke property successfully set, but color won't change.
 // TODO: use switch case to handle states
 function handleState() {
@@ -191,7 +195,7 @@ function handleState() {
             specialText.draw();
             setTimeout(() => {
                 showSpecialText = true;
-            }, 3000);
+            }, 1000);
         } else { 
             specialText2.draw();
             setTimeout(() => {
@@ -201,6 +205,9 @@ function handleState() {
                 }
             }, 1000);
         }
+    }
+    else if (state == "FINAL") {
+
     }
     else if (state == "END") {
         shooter.disabled = true;
@@ -224,8 +231,9 @@ function cremate() {
     currentRound++;
     currentSpeed += 0.5;
     roundCounts.splice(0, 1);
-    enemyCount = roundCounts[0];
+    enemyCount = enemiesLeft = roundCounts[0];
     winningScore += enemyCount * 10;
+    //enemiesLeft = roundCounts[0];
 }
 
 function handleShooter() {
@@ -487,7 +495,7 @@ function animate() {
     // currentSpeed: ${currentSpeed}
     // enemyQueue: ${enemyQueue}`);
     
-    console.log(shooter.weapon);
+    // console.log(roundCounts[0]);
 
     frame++;
 

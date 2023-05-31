@@ -9,7 +9,6 @@ export default class Pickup {
         this.y = y;
         this.delete = false;
 
-
         this.typeNum = Math.random() * 10;
         this.flammenOdds = 2.5;
 
