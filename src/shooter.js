@@ -22,6 +22,7 @@ export default class Shooter {
         this.angle = "straight";
 
         // pistol, ar, and flamethrower
+        // this.weapon = "pistol";
         this.weapon = "pistol";
         this.fireRate = 0;
         this.specialAmmo = 0;

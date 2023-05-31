@@ -45,14 +45,26 @@ var cxt = canvas.getContext("2d");
 // TODO: pick up weapon only if "specialAmmo" is 0  --DONE (resolved)
 // TODO: special atrocity round
 // TODO: get lodash working again.  --DONE
-
+// TODO: fix flammen top hit collision. --DONE  
+// TODO: drop current weapon with q     --DONE
+// TODO: add second "special" round
 
 // ENEMIES ARE SPAWNED AT THE SAME X. why do they take long to spawn?
+
+// determine num. of enemies per round
+// ten rounds total. Each one has 1.5 times more enemies than the last.
+let roundCounts = [0, 10];
+for (let i = 0; i <= 9; i++) {
+    roundCounts.push(Math.floor(roundCounts[roundCounts.length -1] * 1.5));
+}
 
 // NEW SCORE STUFF:
 let score = 0;
 let winningScore = 30;
 let currentRound = 1;
+
+// might need further tweaking:
+let enemiesLeft = roundCounts[1];
 
 // objects
 const flora = new Floor();
@@ -66,8 +78,10 @@ const winText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Round 
 const nextText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Next round incoming...", false);
 const failText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "FAILURE", false);
 
-const scoreText = new Button(canvas.width / 2, 0, 100, score, false);
+const enemyText = new Button(canvas.width / 2.45, 0, 100, enemiesLeft, false);
 const roundText = new Button(canvas.width / 3, 0, 100, currentRound, false);
+const scoreText = new Button(canvas.width / 2, 0, 100, score, false);
+
 
 const specialText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "SPECIAL ROUND", false);
 const specialText2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "MASSACRE THE CIVILIANS", false);
@@ -85,15 +99,9 @@ let randomFrames = [10, 30, 50, 80, 110,];
 // level 1: 8/10 chance to spawn ground enemy. 20% chance to spawn air enemy.
 const rounds = Array.from(Array(10).keys());
 
-// determine num. of enemies per round
-// ten rounds total. Each one has 1.5 times more enemies than the last.
-let roundCounts = [0, 10];
-for (let i = 0; i <= 9; i++) {
-    roundCounts.push(Math.floor(roundCounts[roundCounts.length -1] * 1.5));
-}
-
-let enemyQueue = [];
+// enemyCount determines num of enemies to add to array. It decrements as they spawn
 let enemyCount = 3;
+let enemyQueue = [];
 let showNextRound = false;
 let showNextText = false;
 let showSpecialText = false;
@@ -117,6 +125,8 @@ flora.draw();
 
 function handleStatus() {
     roundText.text = currentRound;
+    enemyText.text = enemiesLeft;
+    enemyText.draw();
     roundText.draw();
     scoreText.draw();
 }
@@ -174,7 +184,7 @@ function handleState() {
         }
     }
     else if (state == "SPECIAL") {
-        shooter.disabled = true;
+        //shooter.disabled = true;
         specialRound = true;
 
         if (!showSpecialText) {
@@ -267,6 +277,8 @@ function handleProjectile() {
                     // here is how the enemies get deleted:
                     enemyQueue.splice(j, 1);
                     j--;
+
+                    enemiesLeft--;
                 
                 }
 
@@ -399,18 +411,37 @@ function pushEnemy() {
     }
 }
 
+// // collission successful.
+// function collision(bullet, orc) {
+//     if (
+//         // straight ahead
+//         bullet.x + bullet.size > orc.x && 
+//         // forgot
+//         bullet.y + bullet.size >= orc.y && 
+//         // shoot at flying enemies
+//         bullet.y + bullet.size <= orc.y + orc.height &&
+//         bullet.y < orc.y + orc.height
+//         // collision only occurs in enemy is in front of player
+//         && orc.x > shooter.x 
+//         // BACKWARDS SHOOTING:
+//         || (bullet.x <= orc.x + orc.width && 
+//             bullet.x >= orc.x &&
+//             bullet.y > orc.y && 
+//             bullet.y < orc.y + orc.width &&
+//             (bullet.y < orc.y + orc.height))
+//     ) {
+//         return true;
+//     }
+//     //else return false;
+// }
+
 // collission successful.
 function collision(bullet, orc) {
     if (
-        // straight ahead
-        bullet.x + bullet.size > orc.x && 
-        // forgot
-        bullet.y + bullet.size >= orc.y && 
-        // shoot at flying enemies
-        bullet.y + bullet.size <= orc.y + orc.height 
-        // collision only occurs in enemy is in front of player
-        && orc.x > shooter.x 
         // BACKWARDS SHOOTING:
+        //  for forward ground and air (ensure bullet is inbetween x and width)
+        (bullet.x + bullet.size >= orc.x && bullet.x <= orc.x + orc.width &&
+        bullet.y + bullet.size >= orc.y && bullet.y <= orc.y + orc.height)
         || (bullet.x <= orc.x + orc.width && 
             bullet.x >= orc.x &&
             bullet.y > orc.y && 
@@ -456,7 +487,7 @@ function animate() {
     // currentSpeed: ${currentSpeed}
     // enemyQueue: ${enemyQueue}`);
     
-    // console.log(specialRound);
+    console.log(shooter.weapon);
 
     frame++;
 

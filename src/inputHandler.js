@@ -33,6 +33,12 @@ export default class InputHandler {
         case 'a':
           entity.angle = "back";
           break;
+
+        case 'q':
+          entity.weapon = "pistol";
+          entity.fireRate = 0;
+          entity.specialAmmo = 0;
+          break;
       }
 
       if (keys["d"] && keys["w"]) entity.angle = "diagnal";
@@ -57,10 +63,7 @@ export default class InputHandler {
           entity.angle = "straight";
           break;
         
-        
-        // case 'a':
-        //   entity.angle = "back";
-        //   break;
+        // i need nothing for case q
       }
     });
 
