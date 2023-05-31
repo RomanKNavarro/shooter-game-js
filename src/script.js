@@ -148,6 +148,7 @@ function handleState() {
         pushEnemy();
     }
     else if (state == "WIN") { 
+        specialRound = false;
         // logic for displaying end-round text:
         if (currentRound == 10) {
             state = "END";
@@ -455,7 +456,7 @@ function animate() {
     // currentSpeed: ${currentSpeed}
     // enemyQueue: ${enemyQueue}`);
     
-    console.log(specialRound);
+    // console.log(specialRound);
 
     frame++;
 
