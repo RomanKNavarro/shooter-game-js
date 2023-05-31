@@ -13,9 +13,7 @@ export default class Button {
 
         this.clickable = clickable;
         this.show = true;
-
         this.alpha = 1;
-
     }
 
     draw() {

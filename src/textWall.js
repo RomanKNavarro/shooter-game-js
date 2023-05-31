@@ -14,20 +14,12 @@ export default class TextWall {
     }
 
     draw() {
-        cxt.fillStyle = "white";
+        cxt.fillStyle = "black";
         cxt.fillRect(0, 0, canvas.width, canvas.height);
 
-        cxt.fillStyle = "black";
+        cxt.fillStyle = "white";
         for (let i = 0; i < this.lines.length; i++) {
             cxt.fillText(this.lines[i], canvas.width / 2, canvas.height / 5 + (i * this.lineheight));
         };
-
-        const yesButton = new Button(canvas.width - 250 - 100, canvas.height / 1.2, 100, "Give up", true);
-        const noButton = new Button(250, canvas.height / 1.2, 100, '"Defend"', true);
-
-        yesButton.draw();
-        noButton.draw();
-
-
     }
 }

@@ -44,7 +44,6 @@ export default class InputHandler {
       if (keys["d"] && keys["w"]) entity.angle = "diagnal";
       else if (keys["a"] && keys["s"]) entity.angle = "down-back";
       else if (keys["a"] && keys["w"]) entity.angle = "diagnal-back";
-
     });
 
     document.addEventListener("keyup", (event) => {

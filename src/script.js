@@ -103,6 +103,9 @@ This is it! Destroy the coalition and the city is yours. Will you give up now an
 in for war crimes, or will you defend the city to your last dying breath lest your efforts so far\n
 be in vain?`);
 
+const yesButton = new Button(250, canvas.height / 1.2, 100, '"Defend"', true);
+const noButton = new Button(canvas.width - 250 - 100, canvas.height / 1.2, 100, "Give up", true);
+
 //const bossText = new TextWall("heellooo");
 
 // variables
@@ -128,8 +131,8 @@ let currentSpeed = 2;
 let snackQueue = [];
 
 // states: MENU, RUNNING, WIN, LOSE, BOSS, OVER
-// let state = "MENU";
-let state = "BOSS";
+let state = "MENU";
+//let state = "BOSS";
 
 // functions:
 flora.draw();
@@ -147,22 +150,17 @@ function handleStatus() {
 // startButton.stroke property successfully set, but color won't change.
 // TODO: use switch case to handle states
 function handleState() {
-    // if (state == "MENU") {  
-    //     startButton.draw();
-    //     // scoreText.draw();
-
-    //     if (mouseCollision(shooter.mouse, startButton)) {
-    //         startButton.stroke = "red";
-
-    //         if (shooter.mouse.clicked) {
-    //             state = "RUNNING";
-    //         }
-    //     }
-    //     else {
-    //         startButton.stroke = "black";
-    //     }
-    if (state == "BOSS") {
+    if (state == "MENU") {  
+        startButton.draw();
+        mouseCollision(shooter.mouse, startButton, "RUNNING");
+    }
+    else if (state == "BOSS") {
         bossText.draw();
+        yesButton.draw();
+        noButton.draw();
+
+        mouseCollision(shooter.mouse, yesButton, "RUNNING");
+        mouseCollision(shooter.mouse, noButton, "MENU");
     }
     else if (state == "RUNNING") {
         shooter.disabled = false;
@@ -473,16 +471,21 @@ function collision(bullet, orc) {
 }
 
 // used to determine if the mouse is inside a given button. (mouse, button)
-function mouseCollision(first, second) {
+function mouseCollision(first, second, nextState) {
     if (
       first.x >= second.x &&
       first.x <= second.x + second.width &&
       first.y >= second.y &&
       first.y <= second.y + second.height
     ) {
-      return true;
+        second.stroke = "red";
+        if (first.clicked) {
+            state = nextState;
+        }
+    } else {
+        second.stroke = "black";
     }
-  }
+}
 
 // FUNCTION TO GET ALL OUR OBJECTS UP AND RUNNING
 function animate() {
