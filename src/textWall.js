@@ -1,24 +1,33 @@
 var canvas = document.getElementById("canvas1");
 var cxt = canvas.getContext("2d"); 
 
+import Button from "./button.js";
+
 export default class TextWall {
     constructor(text) {
+        // this.x = 30;
+        // this.y = 30;
+
         this.text = text;
+        this.lineheight = 15;
+        this.lines = this.text.split('\n');
     }
 
     draw() {
         cxt.fillStyle = "white";
         cxt.fillRect(0, 0, canvas.width, canvas.height);
 
-        // let array = this.text.
         cxt.fillStyle = "black";
-        //cxt.fillStyle = "rgba(255, 255, 255, " + this.alpha + ")";
+        for (let i = 0; i < this.lines.length; i++) {
+            cxt.fillText(this.lines[i], canvas.width / 2, canvas.height / 5 + (i * this.lineheight));
+        };
 
-        // HOW TO CENTER TEXT IN BUTTON:
-        cxt.textAlign = "center";
-        cxt.textBaseline = "middle";
-        cxt.fillText(this.text, canvas.width / 2, canvas.height / 2);
+        const yesButton = new Button(canvas.width - 250 - 100, canvas.height / 1.2, 100, "Give up", true);
+        const noButton = new Button(250, canvas.height / 1.2, 100, '"Defend"', true);
 
-        // cxt.fillText(this.text, this.x + (this.width / 2), this.y + (this.height / 2));
+        yesButton.draw();
+        noButton.draw();
+
+
     }
 }

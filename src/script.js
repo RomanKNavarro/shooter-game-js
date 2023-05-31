@@ -95,11 +95,13 @@ const endText2 = new Button(canvas.width / 2.5, canvas.height / 1.7, 100, "Thank
 const endText3 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Made with ❤️ by", false);
 const endText4 = new Button(canvas.width / 2.5, canvas.height / 1.9, 100, "KAVEMANKORPS", false);
 
-const bossText = new TextWall(`satellite imagery has exposed your horriffic atrocities in the city to the rest 
-of the world, prompting international outcry and the formation of a Sheep-led coalition against YOU!
-
-This is it! Destroy the coalition and the city is yours. Will you give up now and turn yourself in for war crimes,
-or will you defend the city to your last dying breath lest your efforts so far be in vain?`);
+const bossText = new TextWall(
+`Satellite imagery has exposed your horriffic atrocities in the city to the rest of the world,\n
+prompting international outcry and the formation of a Sheep-led coalition against YOU!\n
+\n
+This is it! Destroy the coalition and the city is yours. Will you give up now and turn yourself\n
+in for war crimes, or will you defend the city to your last dying breath lest your efforts so far\n
+be in vain?`);
 
 //const bossText = new TextWall("heellooo");
 
