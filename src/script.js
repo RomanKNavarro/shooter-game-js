@@ -7,7 +7,7 @@ import InputHandler from "./inputHandler.js";
 import Enemy from "./enemy.js";
 import Button from "./button.js";
 import Pickup from "./pickup.js";
-import TextWall from ".textWall.js";
+import TextWall from "./textWall.js";
 
 // canvas stuff
 var canvas = document.getElementById("canvas1");
@@ -95,7 +95,13 @@ const endText2 = new Button(canvas.width / 2.5, canvas.height / 1.7, 100, "Thank
 const endText3 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Made with ❤️ by", false);
 const endText4 = new Button(canvas.width / 2.5, canvas.height / 1.9, 100, "KAVEMANKORPS", false);
 
-const bossText = new 
+const bossText = new TextWall(`satellite imagery has exposed your horriffic atrocities in the city to the rest 
+of the world, prompting international outcry and the formation of a Sheep-led coalition against YOU!
+
+This is it! Destroy the coalition and the city is yours. Will you give up now and turn yourself in for war crimes,
+or will you defend the city to your last dying breath lest your efforts so far be in vain?`);
+
+//const bossText = new TextWall("heellooo");
 
 // variables
 let frame = 0;
@@ -119,8 +125,9 @@ let currentSpeed = 2;
 // DROPPED PICKUPS:
 let snackQueue = [];
 
-// states: MENU, RUNNING, WIN, LOSE, OVER
-let state = "MENU";
+// states: MENU, RUNNING, WIN, LOSE, BOSS, OVER
+// let state = "MENU";
+let state = "BOSS";
 
 // functions:
 flora.draw();
@@ -138,20 +145,22 @@ function handleStatus() {
 // startButton.stroke property successfully set, but color won't change.
 // TODO: use switch case to handle states
 function handleState() {
-    if (state == "MENU") {  
-        startButton.draw();
-        // scoreText.draw();
+    // if (state == "MENU") {  
+    //     startButton.draw();
+    //     // scoreText.draw();
 
-        if (mouseCollision(shooter.mouse, startButton)) {
-            startButton.stroke = "red";
+    //     if (mouseCollision(shooter.mouse, startButton)) {
+    //         startButton.stroke = "red";
 
-            if (shooter.mouse.clicked) {
-                state = "RUNNING";
-            }
-        }
-        else {
-            startButton.stroke = "black";
-        }
+    //         if (shooter.mouse.clicked) {
+    //             state = "RUNNING";
+    //         }
+    //     }
+    //     else {
+    //         startButton.stroke = "black";
+    //     }
+    if (state == "BOSS") {
+        bossText.draw();
     }
     else if (state == "RUNNING") {
         shooter.disabled = false;
