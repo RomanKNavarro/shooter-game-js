@@ -49,6 +49,7 @@ var cxt = canvas.getContext("2d");
 // TODO: fix flammen top hit collision. --DONE  
 // TODO: drop current weapon with q     --DONE
 // TODO: add second "special" round
+// TODO: make flammen hurt crawlies too
 
 // ENEMIES ARE SPAWNED AT THE SAME X. why do they take long to spawn?
 
@@ -154,15 +155,8 @@ function handleState() {
         startButton.draw();
         mouseCollision(shooter.mouse, startButton, "RUNNING");
     }
-    else if (state == "BOSS") {
-        bossText.draw();
-        yesButton.draw();
-        noButton.draw();
-
-        mouseCollision(shooter.mouse, yesButton, "RUNNING");
-        mouseCollision(shooter.mouse, noButton, "MENU");
-    }
     else if (state == "RUNNING") {
+        state = "RUNNING";
         shooter.disabled = false;
 
         // reset after each round
@@ -172,14 +166,14 @@ function handleState() {
     }
     else if (state == "WIN") { 
         specialRound = false;
-        // logic for displaying end-round text:
-        if (currentRound == 10) {
-            state = "END";
+
+        // special round cases:
+        let specRounds = {1: "SPECIAL", 2: "BOSS", 10: "END"};
+
+        if (Object.keys(specRounds).includes(currentRound.toString())) {
+            state = specRounds[currentRound];
         }
 
-        if (currentRound == specialRoundNum) {
-            state = "SPECIAL";
-        }
         if (!showNextRound) {
             winText.draw();
             setTimeout(() => {
@@ -215,8 +209,13 @@ function handleState() {
             }, 1000);
         }
     }
-    else if (state == "FINAL") {
+    else if (state == "BOSS") {
+        bossText.draw();
+        yesButton.draw();
+        noButton.draw();
 
+        mouseCollision(shooter.mouse, yesButton, "RUNNING");
+        mouseCollision(shooter.mouse, noButton, "MENU");
     }
     else if (state == "END") {
         shooter.disabled = true;
@@ -258,6 +257,9 @@ function handleProjectile() {
         // console.log(projectiles[i].direction)
         let current = projectiles[i];
 
+        // increase size of flammen "bullets"
+        if (shooter.weapon == "flammen") current.size = 15;
+
         if (current.x < canvas.width - 100) {
             current.update();
             current.draw();
@@ -296,10 +298,7 @@ function handleProjectile() {
                     j--;
 
                     enemiesLeft--;
-                
                 }
-
-                //console.log(snackQueue);
             }
         }
 
@@ -332,13 +331,14 @@ function handleProjectile() {
         }
 
         // remove bullets if they exceed canvas width:
-        // OVERHAUL THIS COMPLETELY:
+        // OVERHAUL THIS COMPLETELY: --DONE
         // if ((projectiles[i] && projectiles[i].x > canvas.width - 100) ||
         // (shooter.weapon == "flammen" && projectiles[i] && projectiles[i].x > canvas.width - 10)) {
         //     projectiles.splice(i, 1);
         //     i--;
         // }
 
+        // projectiles despawn logic:
         if (projectiles[i]) {
             if ((projectiles[i].x > canvas.width - 100 || projectiles[i].x < 0 || projectiles[i].y < 0)
             || (shooter.weapon == "flammen" && (projectiles[i].x > canvas.width - 400 
@@ -427,30 +427,6 @@ function pushEnemy() {
         }
     }
 }
-
-// // collission successful.
-// function collision(bullet, orc) {
-//     if (
-//         // straight ahead
-//         bullet.x + bullet.size > orc.x && 
-//         // forgot
-//         bullet.y + bullet.size >= orc.y && 
-//         // shoot at flying enemies
-//         bullet.y + bullet.size <= orc.y + orc.height &&
-//         bullet.y < orc.y + orc.height
-//         // collision only occurs in enemy is in front of player
-//         && orc.x > shooter.x 
-//         // BACKWARDS SHOOTING:
-//         || (bullet.x <= orc.x + orc.width && 
-//             bullet.x >= orc.x &&
-//             bullet.y > orc.y && 
-//             bullet.y < orc.y + orc.width &&
-//             (bullet.y < orc.y + orc.height))
-//     ) {
-//         return true;
-//     }
-//     //else return false;
-// }
 
 // collission successful.
 function collision(bullet, orc) {
