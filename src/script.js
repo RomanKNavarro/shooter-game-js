@@ -44,12 +44,12 @@ var cxt = canvas.getContext("2d");
 // TODO: make ground enemies die after two shots if shot at bottom  --DONE
 // TODO: FLAMETHROWER   --DONE
 // TODO: pick up weapon only if "specialAmmo" is 0  --DONE (resolved)
-// TODO: special atrocity round
+// TODO: special atrocity round     --DONE
 // TODO: get lodash working again.  --DONE
 // TODO: fix flammen top hit collision. --DONE  
 // TODO: drop current weapon with q     --DONE
 // TODO: add second "special" round
-// TODO: make flammen hurt crawlies too
+// TODO: make flammen hurt crawlies too --DONE
 
 // ENEMIES ARE SPAWNED AT THE SAME X. why do they take long to spawn?
 
@@ -106,6 +106,17 @@ This is it! Destroy the coalition and the city is yours. Will you give up now an
 in for war crimes, or will you defend the city to your last dying breath lest your efforts so far\n
 be in vain?`);
 
+const startText = new TextWall(
+    `You are Leutenant Colonel Warren Kilgore, the last remaining invader in Swinemanland, the very land of your 
+    people's eternal arch-nemesis. The armestice between the Sheep and the Swinemen had been signed 
+    days before due to immesurable losses and very little territorial gains from both sides, 
+    but you refuse to return to the boring old civilian life at whatever cost. Even though all of your men have deserted\n 
+    you, you refuse
+    to give up the the strategic city of Vonn, the crown jewel of Swineman "civilization". It is now your undisputed\n
+    domain, your very own kingdom, and everyone in it mere flesh-logs. They are your servants, ready to serve\n
+    your every depraved fantasy during any hour of the day. Conquering the city of Vonn took countless months of gruesome 
+    house-to-house fighting and thousands of Sheep lives. Are you going to let it all slip now?`);
+
 const yesButton = new Button(250, canvas.height / 1.2, 100, '"Defend"', true);
 const noButton = new Button(canvas.width - 250 - 100, canvas.height / 1.2, 100, "Give up", true);
 
@@ -133,7 +144,6 @@ let snackQueue = [];
 
 // states: MENU, RUNNING, WIN, LOSE, BOSS, OVER
 let state = "MENU";
-//let state = "BOSS";
 
 // functions:
 flora.draw();
@@ -151,126 +161,99 @@ function handleStatus() {
 // startButton.stroke property successfully set, but color won't change.
 // TODO: use switch case to handle states
 function handleState() {
-    if (state == "MENU") {  
-        bossText.draw();
-        startButton.draw();
-        // mouseCollision(shooter.mouse, startButton, "RUNNING");
+    switch(state) {
+        case "MENU": 
+            bossText.draw();
+            startButton.draw();
+    
+            mouseCollision(shooter.mouse, startButton, "RUNNING");
+            break;
 
-        if (mouseCollision(shooter.mouse, startButton)) {
-            startButton.stroke = "red";
-
-            if (shooter.mouse.clicked) {
-                state = "RUNNING";
-            }
-        }
-        else {
-            startButton.stroke = "black";
-        }
-    }
-    // glitch: running -> win -> boss (endless)
-    else if (state == "BOSS") {
-        bossText.draw();
-        // yesButton.draw();
-        // noButton.draw();
-        startButton2.draw();
-
-        if (mouseCollision(shooter.mouse, startButton2)) {
-            startButton2.stroke = "red";
-
+        // glitch: running -> win -> boss (endless)
+        case "BOSS":
+            bossText.draw();
+            yesButton.draw();
+            noButton.draw();
+    
             if (score >= winningScore) {
                 cremate();
             }
-
-            if (shooter.mouse.clicked) {
-                state = "RUNNING";
+    
+            mouseCollision(shooter.mouse, yesButton, "RUNNING");
+            mouseCollision(shooter.mouse, noButton, "MENU");
+            break;
+    
+        case "RUNNING":
+            // state = "RUNNING";
+            shooter.disabled = false;
+    
+            // reset after each round
+            showNextRound = false;
+            handleEnemy();
+            pushEnemy();
+            break;
+        
+        case "WIN": 
+            specialRound = false;
+    
+            // special round cases:
+            let specRounds = {1: "SPECIAL", 3: "BOSS", 10: "END"};
+            if (Object.keys(specRounds).includes(currentRound.toString())) {
+                state = specRounds[currentRound];
             }
-        }
-        else {
-            noButton.stroke = "black";
-        }
+    
+            if (!showNextRound) {
+                winText.draw();
+                setTimeout(() => {
+                    showNextRound = true;
+                }, 1000);
+            }
+            else {
+                nextText.draw();
+                setTimeout(() => {
+                    state = "RUNNING";
+                    if (score >= winningScore) {
+                        cremate();
+                    }
+                }, 1000);
+            }
+            break;
 
-        //mouseCollision(shooter.mouse, yesButton, "RUNNING");
+        case "SPECIAL":
+            //shooter.disabled = true;
+            specialRound = true;
+    
+            if (!showSpecialText) {
+                specialText.draw();
+                setTimeout(() => {
+                    showSpecialText = true;
+                }, 1000);
+            } else { 
+                specialText2.draw();
+                setTimeout(() => {
+                    state = "RUNNING";
+                    if (score >= winningScore) {
+                        cremate();
+                    }
+                }, 1000);
+            }
+            break;
 
-        //mouseCollision(shooter.mouse, noButton, "MENU");
-    }
-    else if (state == "RUNNING") {
-        // state = "RUNNING";
-        shooter.disabled = false;
-
-        // reset after each round
-        showNextRound = false;
-        handleEnemy();
-        pushEnemy();
-    }
-    else if (state == "WIN") { 
-        specialRound = false;
-
-        // special round cases:
-        // let specRounds = {1: "SPECIAL", 3: "BOSS", 10: "END"};
-
-        // if (Object.keys(specRounds).includes(currentRound.toString())) {
-        //     state = specRounds[currentRound];
-        if (currentRound == 10) {
-            state = "END";
-        }
-
-        // if (currentRound == specialRoundNum) {
-        //     state = "SPECIAL";
-        // }
-
-        if (currentRound == 2) {
-            state = "BOSS";
-        }
-
-        if (!showNextRound) {
-            winText.draw();
-            setTimeout(() => {
-                showNextRound = true;
-            }, 1000);
-        }
-        else {
-            nextText.draw();
-            setTimeout(() => {
-                state = "RUNNING";
-                if (score >= winningScore) {
-                    cremate();
-                }
-            }, 1000);
-        }
-    }
-    else if (state == "SPECIAL") {
-        //shooter.disabled = true;
-        specialRound = true;
-
-        if (!showSpecialText) {
-            specialText.draw();
-            setTimeout(() => {
-                showSpecialText = true;
-            }, 1000);
-        } else { 
-            specialText2.draw();
-            setTimeout(() => {
-                state = "RUNNING";
-                if (score >= winningScore) {
-                    cremate();
-                }
-            }, 1000);
-        }
-    }
-    else if (state == "END") {
-        shooter.disabled = true;
-
-        if (!showNextText) {
-            // YOU WIN 
-            endText.draw();
-            endText2.draw();
-            setTimeout(() => {
-                showNextText = true;
-            }, 4000);
-        } else {
-            endText3.draw();
-            endText4.draw();
-        }
+        case "END":
+            shooter.disabled = true;
+    
+            if (!showNextText) {
+                // YOU WIN 
+                endText.draw();
+                endText2.draw();
+                setTimeout(() => {
+                    showNextText = true;
+                }, 4000);
+            } else {
+                endText3.draw();
+                endText4.draw();
+            }
+            break;
     }
 }
 
@@ -487,33 +470,21 @@ function collision(bullet, orc) {
 }
 
 // used to determine if the mouse is inside a given button. (mouse, button)
-// function mouseCollision(first, second, nextState) {
-//     if (
-//       first.x >= second.x &&
-//       first.x <= second.x + second.width &&
-//       first.y >= second.y &&
-//       first.y <= second.y + second.height
-//     ) {
-//         second.stroke = "red";
-//         if (first.clicked) {
-//             state = nextState;
-//         }
-//     } else {
-//         second.stroke = "black";
-//     }
-// }
-
-// used to determine if the mouse is inside a given button. (mouse, button)
-function mouseCollision(first, second) {
+function mouseCollision(first, second, nextState) {
     if (
       first.x >= second.x &&
       first.x <= second.x + second.width &&
       first.y >= second.y &&
       first.y <= second.y + second.height
     ) {
-      return true;
+        second.stroke = "red";
+        if (first.clicked) {
+            state = nextState;
+        }
+    } else {
+        second.stroke = "black";
     }
-  }
+}
 
 // FUNCTION TO GET ALL OUR OBJECTS UP AND RUNNING
 function animate() {
@@ -538,7 +509,7 @@ function animate() {
     // enemyQueue: ${enemyQueue}`);
     
     // console.log(roundCounts[0]);
-    console.log(state);
+    // console.log(winningScore);
 
     frame++;
 
