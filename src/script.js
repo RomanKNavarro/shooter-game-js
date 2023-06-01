@@ -80,6 +80,8 @@ new InputHandler(shooter);
 
 // BUTTONS AND TEXT. (x, y, width, text, clickable)
 const startButton = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Initiate Bloodbath", true);
+const startButton2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "test lolol", true);
+
 const winText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Round Complete", false);
 const nextText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Next round incoming...", false);
 const failText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "FAILURE", false);
@@ -106,8 +108,6 @@ be in vain?`);
 
 const yesButton = new Button(250, canvas.height / 1.2, 100, '"Defend"', true);
 const noButton = new Button(canvas.width - 250 - 100, canvas.height / 1.2, 100, "Give up", true);
-
-//const bossText = new TextWall("heellooo");
 
 // variables
 let frame = 0;
@@ -152,11 +152,49 @@ function handleStatus() {
 // TODO: use switch case to handle states
 function handleState() {
     if (state == "MENU") {  
+        bossText.draw();
         startButton.draw();
-        mouseCollision(shooter.mouse, startButton, "RUNNING");
+        // mouseCollision(shooter.mouse, startButton, "RUNNING");
+
+        if (mouseCollision(shooter.mouse, startButton)) {
+            startButton.stroke = "red";
+
+            if (shooter.mouse.clicked) {
+                state = "RUNNING";
+            }
+        }
+        else {
+            startButton.stroke = "black";
+        }
+    }
+    // glitch: running -> win -> boss (endless)
+    else if (state == "BOSS") {
+        bossText.draw();
+        // yesButton.draw();
+        // noButton.draw();
+        startButton2.draw();
+
+        if (mouseCollision(shooter.mouse, startButton2)) {
+            startButton2.stroke = "red";
+
+            if (score >= winningScore) {
+                cremate();
+            }
+
+            if (shooter.mouse.clicked) {
+                state = "RUNNING";
+            }
+        }
+        else {
+            noButton.stroke = "black";
+        }
+
+        //mouseCollision(shooter.mouse, yesButton, "RUNNING");
+
+        //mouseCollision(shooter.mouse, noButton, "MENU");
     }
     else if (state == "RUNNING") {
-        state = "RUNNING";
+        // state = "RUNNING";
         shooter.disabled = false;
 
         // reset after each round
@@ -168,10 +206,20 @@ function handleState() {
         specialRound = false;
 
         // special round cases:
-        let specRounds = {1: "SPECIAL", 2: "BOSS", 10: "END"};
+        // let specRounds = {1: "SPECIAL", 3: "BOSS", 10: "END"};
 
-        if (Object.keys(specRounds).includes(currentRound.toString())) {
-            state = specRounds[currentRound];
+        // if (Object.keys(specRounds).includes(currentRound.toString())) {
+        //     state = specRounds[currentRound];
+        if (currentRound == 10) {
+            state = "END";
+        }
+
+        // if (currentRound == specialRoundNum) {
+        //     state = "SPECIAL";
+        // }
+
+        if (currentRound == 2) {
+            state = "BOSS";
         }
 
         if (!showNextRound) {
@@ -208,14 +256,6 @@ function handleState() {
                 }
             }, 1000);
         }
-    }
-    else if (state == "BOSS") {
-        bossText.draw();
-        yesButton.draw();
-        noButton.draw();
-
-        mouseCollision(shooter.mouse, yesButton, "RUNNING");
-        mouseCollision(shooter.mouse, noButton, "MENU");
     }
     else if (state == "END") {
         shooter.disabled = true;
@@ -447,21 +487,33 @@ function collision(bullet, orc) {
 }
 
 // used to determine if the mouse is inside a given button. (mouse, button)
-function mouseCollision(first, second, nextState) {
+// function mouseCollision(first, second, nextState) {
+//     if (
+//       first.x >= second.x &&
+//       first.x <= second.x + second.width &&
+//       first.y >= second.y &&
+//       first.y <= second.y + second.height
+//     ) {
+//         second.stroke = "red";
+//         if (first.clicked) {
+//             state = nextState;
+//         }
+//     } else {
+//         second.stroke = "black";
+//     }
+// }
+
+// used to determine if the mouse is inside a given button. (mouse, button)
+function mouseCollision(first, second) {
     if (
       first.x >= second.x &&
       first.x <= second.x + second.width &&
       first.y >= second.y &&
       first.y <= second.y + second.height
     ) {
-        second.stroke = "red";
-        if (first.clicked) {
-            state = nextState;
-        }
-    } else {
-        second.stroke = "black";
+      return true;
     }
-}
+  }
 
 // FUNCTION TO GET ALL OUR OBJECTS UP AND RUNNING
 function animate() {
@@ -486,6 +538,7 @@ function animate() {
     // enemyQueue: ${enemyQueue}`);
     
     // console.log(roundCounts[0]);
+    console.log(state);
 
     frame++;
 
