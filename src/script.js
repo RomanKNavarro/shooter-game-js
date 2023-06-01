@@ -50,8 +50,9 @@ var cxt = canvas.getContext("2d");
 // TODO: drop current weapon with q     --DONE
 // TODO: add second "special" round
 // TODO: make flammen hurt crawlies too --DONE
-// TODO: FIX THIS STUPID MENU GLITCH
+// TODO: FIX THIS STUPID MENU GLITCH    --DONE
 // TODO: get stats and player weapon to reset on game over
+// TODO: get sick font
 
 // determine num. of enemies per round
 // ten rounds total. Each one has 1.5 times more enemies than the last.
@@ -104,19 +105,18 @@ prompting international outcry and the formation of a Sheep-led coalition agains
 \n
 This is it! Destroy the coalition and the city is yours. Will you give up now and turn yourself\n
 in for war crimes, or will you defend the city to your last dying breath lest your efforts so far\n
-be in vain?`);
+be in vain?`, canvas.height / 5);
 
 const startText = new TextWall(
-    `You are Leutenant Colonel Warren Kilgore, the last remaining invader in Swinemanland, 
-    the very land of your people's eternal arch-nemesis. The armestice between the Sheep and
-    the Swinemen had been signed days before, but you refuse to return to the boring old civilian 
-    life at whatever cost. Even though all of your men have deserted you, you refuse to give up 
-    the the strategic city of Vonn, the crown jewel of Swineman "civilization". It is now your 
-    undisputed domain, your very own kingdom, and everyone in it mere flesh-logs. They are your 
-    servants, ready to serve your every depraved fantasy at any given moment. The city of Vonn took 
-    countless months of gruesome house-to-house fighting and thousands of Sheep lives to completely 
-    conquer. Are you going to let it all slip now?`
-);
+    `You are Leutenant Warren Kilgore, the last remaining invader in Swinemanland, the very land of\n 
+    your people's eternal arch-nemesis. The armestice between the Sheep and the Swinemen had been signed days\n
+    before, but you refuse to return to the boring old civilian life at whatever cost. Even though all of your\n 
+    men have deserted you, you refuse to give up the the strategic city of Vonn, the crown jewel of Swineman\n 
+    "civilization".\n 
+    It is now your undisputed domain, your very own kingdom, and everyone in it mere flesh-logs.\n 
+    They are your servants, ready to serve your every depraved fantasy at any given moment. The city of Vonn\n 
+    took countless months of gruesome house-to-house fighting and thousands of Sheep lives to completely conquer.\n 
+    Are you going to let it all slip now?`, canvas.height / 10);
 
 const yesButton = new Button(250, canvas.height / 1.2, 100, '"Defend"', true);
 const noButton = new Button(canvas.width - 250 - 100, canvas.height / 1.2, 100, "Give up", true);
@@ -137,6 +137,7 @@ let showSpecialText = false;
 // let specialRoundNum = _.sample(_.range(1, 3));
 let specialRoundNum = 1;
 let specialRound = false;
+let showMenu = false;
 
 let currentSpeed = 2;
 
@@ -164,14 +165,20 @@ function handleStatus() {
 // TODO: use switch case to handle states
 function handleState() {
     switch(state) {
+        // GLITCH SOMEWHERE IN INTRO:
         case "INTRO":
             startText.draw();
+
             setTimeout(() => {
-                state = "MENU"
-            }, 1000);
+                showMenu = true;
+                if (score >= winningScore) {
+                    cremate();
+                }
+            }, 25000);
+            if (showMenu) state = "MENU";
             break;
 
-        // glitch: menu -> running -> menu
+        // glitch: MENU -> RUNNING -> MENU
         case "MENU": 
             // bossText.draw();
             startButton.draw();
