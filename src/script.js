@@ -53,6 +53,11 @@ var cxt = canvas.getContext("2d");
 // TODO: FIX THIS STUPID MENU GLITCH    --DONE
 // TODO: get stats and player weapon to reset on game over
 // TODO: get sick font
+// TODO: brief delay before spawning round 1 enemies.   --DONE
+// TODO: frontal player/enemy collision game over.
+/* TODO: Make enemies shoot at player once they reach a certain distance. 3 enemies can shoot at you 
+         at any given time. The rest pass by. 
+*/
 
 // determine num. of enemies per round
 // ten rounds total. Each one has 1.5 times more enemies than the last.
@@ -108,16 +113,17 @@ in for war crimes, or will you defend the city to your last dying breath lest yo
 be in vain?`, canvas.height / 5);
 
 const startText = new TextWall(
-    `You are Leutenant Warren Kilgore, the last remaining invader in Swinemanland, the very land of\n 
-    your people's eternal arch-nemesis. The armestice between the Sheep and the Swinemen had been signed days\n
-    before, but you refuse to return to the boring old civilian life at whatever cost. Even though all of your\n 
-    men have deserted you, you refuse to give up the the strategic city of Vonn, the crown jewel of Swineman\n 
+    `You are Lieutenant Warren Kilgore, the last remaining invader in Swinemanland. The very land of your\n
+    eternal arch-nemesis. The armestice between the Sheep and the Swinemen had been signed days before,\n 
+    but you refuse to return to the boring old civilian life at whatever cost. Even though all of your men\n
+    have deserted you, you refuse to give up the the strategic city of Vonn, the crown jewel of Swineman\n 
     "civilization".\n 
-    It is now your undisputed domain, your very own kingdom, and everyone in it mere flesh-logs.\n 
-    They are your servants, ready to serve your every depraved fantasy at any given moment. The city of Vonn\n 
-    took countless months of gruesome house-to-house fighting and thousands of Sheep lives to completely conquer.\n 
-    Are you going to let it all slip now?`, canvas.height / 10);
+    It is now your undisputed domain, your very own kingdom, and everyone in it mere flesh-logs. They are\n
+    your servants, ready to serve your every depraved fantasy at any given moment. The city of Vonn took\n 
+    months of gruesome house-to-house fighting and thousands of Sheep lives to completely conquer. Are you\n
+    going to let it all slip now?`, canvas.height / 10);
 
+const skipButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, "skip", true);
 const yesButton = new Button(250, canvas.height / 1.2, 100, '"Defend"', true);
 const noButton = new Button(canvas.width - 250 - 100, canvas.height / 1.2, 100, "Give up", true);
 
@@ -138,6 +144,7 @@ let showSpecialText = false;
 let specialRoundNum = 1;
 let specialRound = false;
 let showMenu = false;
+let startRound = false;
 
 let currentSpeed = 2;
 
@@ -169,12 +176,16 @@ function handleState() {
         case "INTRO":
             startText.draw();
 
+            skipButton.draw();
+            mouseCollision(shooter.mouse, skipButton, "MENU");
+
             setTimeout(() => {
                 showMenu = true;
                 if (score >= winningScore) {
                     cremate();
                 }
-            }, 25000);
+            }, 30000);
+
             if (showMenu) state = "MENU";
             break;
 
@@ -210,10 +221,19 @@ function handleState() {
             // state = "RUNNING";
             shooter.disabled = false;
     
+
+            if (currentRound == 1) {
+                setTimeout(() => {
+                    startRound = true
+                }, 2000);
+            }
+
             // reset after each round
-            showNextRound = false;
-            handleEnemy();
-            pushEnemy();
+            if (startRound) {
+                showNextRound = false;
+                handleEnemy();
+                pushEnemy();
+            }
             break;
         
         case "WIN": 
@@ -424,24 +444,12 @@ function handleEnemy() {
             current.y = flora.y - 150;
         }
 
-
-        // THIS CRAP NEEDS SERIOUS TWEAKING:
-        if (specialRound) {
-            if (current.x + current.width < canvas.width - 200) {
-                current.update();
-                current.draw();
-            }
-            else {
-                enemyQueue.splice(i, 1);
-                score += 10;
-            }
-        }
-        else if (current.x + current.width > 0) {
+        // FIX THIS CRAP --DONE. Takes into account both regular and special rounds:
+        if ((current.x + current.width > 0) && (current.x < canvas.width + 50)) {
+            console.log(enemyQueue);
             current.update();
             current.draw();
-        }
-        // remove enemy from queue if it supasses coord 0:
-         else {
+        } else {
             enemyQueue.splice(i, 1);
             score += 10;
         }
@@ -524,15 +532,11 @@ function animate() {
 
     if (state != "MENU") handleStatus();
 
-    // console.log(`enemyCount: ${enemyCount}
-    // score: ${score}
-    // winningScore: ${winningScore}
-    // currentRound: ${currentRound}
-    // currentSpeed: ${currentSpeed}
+    // console.log(`specialRound: ${specialRound}
     // enemyQueue: ${enemyQueue}`);
     
-    // console.log(roundCounts[0]);
-    console.log(state);
+    //console.log(enemyQueue);
+    // console.log(state);
 
     frame++;
 

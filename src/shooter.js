@@ -14,6 +14,7 @@ export default class Shooter {
 
         this.name = "Warren";
         this.disabled = true;
+        this.lives = 3;
 
         /* HOW PROJECTILES WORK: whenever user shoots, new projectile added to array. As he not shoots,
         it automatically decrements until it is empty :) */

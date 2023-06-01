@@ -41,6 +41,12 @@ export default class Enemy {
       // ground, crawl, air, civie
       this.type = "ground";
       this.health = 2;
+
+      // ENEMY GUN:
+      this.projectiles = [];
+      this.fireRate = 3;
+      this.shooting = false;
+      this.timer = 0;
     }
 
     draw() {
@@ -70,5 +76,9 @@ export default class Enemy {
   
     update() {
       this.x -= this.speed;
+
+      if (this.shooting) {
+        
+      }
     }
 }

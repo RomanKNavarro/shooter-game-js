@@ -20,9 +20,10 @@ export default class TextWall {
         cxt.fillStyle = "black";
         cxt.fillRect(0, 0, canvas.width, canvas.height);
 
-        // cxt.fillStyle = "white";
-        // cxt.fillStyle = "black";
-        cxt.font = "30px Permanent Marker";
+        cxt.fillStyle = "white";
+        //cxt.fillStyle = "black";
+        // cxt.font = "30px Permanent Marker";
+        cxt.font = "15px Times New Roman";
         for (let i = 0; i < this.lines.length; i++) {
             // cxt.fillText(this.lines[i], canvas.width / 2, canvas.height / 5 + (i * this.lineheight));
             cxt.fillText(this.lines[i], canvas.width / 2, this.y + (i * this.lineheight));
