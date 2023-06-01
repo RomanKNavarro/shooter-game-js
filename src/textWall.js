@@ -9,6 +9,7 @@ export default class TextWall {
         // this.y = 30;
 
         this.text = text;
+        //this.fontSize = fontSize;
         this.lineheight = 15;
         this.lines = this.text.split('\n');
     }
@@ -18,6 +19,7 @@ export default class TextWall {
         cxt.fillRect(0, 0, canvas.width, canvas.height);
 
         cxt.fillStyle = "white";
+        cxt.font = "15px Times New Roman";
         for (let i = 0; i < this.lines.length; i++) {
             cxt.fillText(this.lines[i], canvas.width / 2, canvas.height / 5 + (i * this.lineheight));
         };

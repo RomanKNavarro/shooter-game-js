@@ -50,8 +50,8 @@ var cxt = canvas.getContext("2d");
 // TODO: drop current weapon with q     --DONE
 // TODO: add second "special" round
 // TODO: make flammen hurt crawlies too --DONE
-
-// ENEMIES ARE SPAWNED AT THE SAME X. why do they take long to spawn?
+// TODO: FIX THIS STUPID MENU GLITCH
+// TODO: get stats and player weapon to reset on game over
 
 // determine num. of enemies per round
 // ten rounds total. Each one has 1.5 times more enemies than the last.
@@ -100,22 +100,23 @@ const endText4 = new Button(canvas.width / 2.5, canvas.height / 1.9, 100, "KAVEM
 
 const bossText = new TextWall(
 `Satellite imagery has exposed your horriffic atrocities in the city to the rest of the world,\n
-prompting international outcry and the formation of a Sheep-led coalition against YOU!\n
+prompting international outcry and the formation of a Sheep-led coalition against you.\n
 \n
 This is it! Destroy the coalition and the city is yours. Will you give up now and turn yourself\n
 in for war crimes, or will you defend the city to your last dying breath lest your efforts so far\n
 be in vain?`);
 
 const startText = new TextWall(
-    `You are Leutenant Colonel Warren Kilgore, the last remaining invader in Swinemanland, the very land of your 
-    people's eternal arch-nemesis. The armestice between the Sheep and the Swinemen had been signed 
-    days before due to immesurable losses and very little territorial gains from both sides, 
-    but you refuse to return to the boring old civilian life at whatever cost. Even though all of your men have deserted\n 
-    you, you refuse
-    to give up the the strategic city of Vonn, the crown jewel of Swineman "civilization". It is now your undisputed\n
-    domain, your very own kingdom, and everyone in it mere flesh-logs. They are your servants, ready to serve\n
-    your every depraved fantasy during any hour of the day. Conquering the city of Vonn took countless months of gruesome 
-    house-to-house fighting and thousands of Sheep lives. Are you going to let it all slip now?`);
+    `You are Leutenant Colonel Warren Kilgore, the last remaining invader in Swinemanland, 
+    the very land of your people's eternal arch-nemesis. The armestice between the Sheep and
+    the Swinemen had been signed days before, but you refuse to return to the boring old civilian 
+    life at whatever cost. Even though all of your men have deserted you, you refuse to give up 
+    the the strategic city of Vonn, the crown jewel of Swineman "civilization". It is now your 
+    undisputed domain, your very own kingdom, and everyone in it mere flesh-logs. They are your 
+    servants, ready to serve your every depraved fantasy at any given moment. The city of Vonn took 
+    countless months of gruesome house-to-house fighting and thousands of Sheep lives to completely 
+    conquer. Are you going to let it all slip now?`
+);
 
 const yesButton = new Button(250, canvas.height / 1.2, 100, '"Defend"', true);
 const noButton = new Button(canvas.width - 250 - 100, canvas.height / 1.2, 100, "Give up", true);
@@ -143,7 +144,8 @@ let currentSpeed = 2;
 let snackQueue = [];
 
 // states: MENU, RUNNING, WIN, LOSE, BOSS, OVER
-let state = "MENU";
+// let state = "MENU";
+let state = "INTRO";
 
 // functions:
 flora.draw();
@@ -162,10 +164,24 @@ function handleStatus() {
 // TODO: use switch case to handle states
 function handleState() {
     switch(state) {
+        case "INTRO":
+            startText.draw();
+            setTimeout(() => {
+                state = "MENU"
+            }, 1000);
+            break;
+
+        // glitch: menu -> running -> menu
         case "MENU": 
-            bossText.draw();
+            // bossText.draw();
             startButton.draw();
-    
+
+            if (score >= winningScore) {
+                cremate();
+            }
+
+            shooter.weapon = "pistol";
+            shooter.fireRate = 0;
             mouseCollision(shooter.mouse, startButton, "RUNNING");
             break;
 
@@ -509,7 +525,7 @@ function animate() {
     // enemyQueue: ${enemyQueue}`);
     
     // console.log(roundCounts[0]);
-    // console.log(winningScore);
+    console.log(state);
 
     frame++;
 
