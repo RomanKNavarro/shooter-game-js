@@ -59,7 +59,7 @@ var cxt = canvas.getContext("2d");
          at any given time. The rest pass by. 
 */
 // TODO: empty pickup array on restart  --DONE
-// TODO: get enemies to shoot. Keep their "projectiles" array from growing alot
+// TODO: get enemies to shoot. Keep their "projectiles" array from growing too much --DONE
 
 // determine num. of enemies per round
 // ten rounds total. Each one has 1.5 times more enemies than the last.
@@ -158,7 +158,8 @@ let baddiePositions = {"1": {"inPos": false, "distance": 50},
 "2": {"inPos": false, "distance": 150}, "3": {"inPos": false, "distance": 250}};
 
 // ENEMY SPEED:
-let currentSpeed = 2;
+// let currentSpeed = 2;
+let currentSpeed = 4;
 
 // DROPPED PICKUPS:
 let snackQueue = [];
@@ -354,9 +355,13 @@ function handleEnemyProjectiles(orc) {
     for (let i = 0; i < projectiles.length; i++) {
         let current = projectiles[i];
 
-        if (current.x > shooter.x + shooter.width) {
+        if (current.x > shooter.x + shooter.width || current.x > 0) {
             current.update();
             current.draw();
+        }
+        else {
+            projectiles.splice(i, 1);
+            i--;
         }
     }
 }
@@ -479,6 +484,14 @@ function handleEnemy() {
 
         if (current.type != "ground") current.health = 1;
 
+        // if (specialRound) current.type = "civie";
+
+        // if (current.shooting) {
+        //     handleEnemyProjectiles(current);
+        // }
+
+        handleEnemyProjectiles(current);
+
         // DETERMINE ENEMY Y AXIS BASED ON THEIR TYPE
         if (current.type == "ground" || current.type == "crawl") {
             current.y = flora.y - current.height;
@@ -511,7 +524,6 @@ function handleEnemy() {
                 current.type == "ground" && !specialRound) {
                     current.shooting = true; 
                     baddiePositions[i.toString()]["inPos"] = true;
-                    handleEnemyProjectiles(current);
             } 
         }
     }

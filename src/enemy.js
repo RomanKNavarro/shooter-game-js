@@ -46,7 +46,7 @@ export default class Enemy {
 
       // ENEMY GUN:
       this.projectiles = [];
-      this.fireRate = 3;
+      this.fireRate = 10;
       this.shooting = false;
       this.timer = 0;
     }
@@ -62,6 +62,8 @@ export default class Enemy {
       cxt.textAlign = "center";
       cxt.textBaseline = "middle";
 
+      if (this.type == "civie") this.color = "gray";
+
       if (this.pickupNum <= this.pickupOdds) {
         this.pickup = true   
       }
@@ -72,11 +74,12 @@ export default class Enemy {
       }
       else if (this.typeNum <= this.airOdds) this.type = "air";
 
-      cxt.fillText(this.health, this.x + (this.width / 2), this.y + (this.height / 2));
+      cxt.fillText(this.type, this.x + (this.width / 2), this.y + (this.height / 2));
 
     }
   
     update() {
+      // THIS WORKS
       if (!this.shooting) {
         this.x -= this.speed;
       } else {
