@@ -58,10 +58,13 @@ var cxt = canvas.getContext("2d");
 /* TODO: Make enemies shoot at player once they reach a certain distance. 3 enemies can shoot at you 
          at any given time. The rest pass by. 
 */
+// TODO: empty pickup array on restart
 
 // determine num. of enemies per round
 // ten rounds total. Each one has 1.5 times more enemies than the last.
 // let roundCounts = [0, 10];
+
+// THIS WILL BE A PROBLEM WHEN RESETING. ARRAY GETS MUTATED EVERY ROUND:
 let roundCounts = [3, 10];
 for (let i = 0; i <= 9; i++) {
     roundCounts.push(Math.floor(roundCounts[roundCounts.length -1] * 1.5));
@@ -92,6 +95,7 @@ const winText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Round 
 const nextText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Next round incoming...", false);
 const failText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "FAILURE", false);
 
+// UI
 const enemyText = new Button(canvas.width / 2.45, 0, 100, enemiesLeft, false);
 const roundText = new Button(canvas.width / 3, 0, 100, currentRound, false);
 const scoreText = new Button(canvas.width / 2, 0, 100, score, false);
@@ -115,7 +119,7 @@ be in vain?`, canvas.height / 5);
 const startText = new TextWall(
     `You are Lieutenant Warren Kilgore, the last remaining invader in Swinemanland. The very land of your\n
     eternal arch-nemesis. The armestice between the Sheep and the Swinemen had been signed days before,\n 
-    but you refuse to return to the boring old civilian life at whatever cost. Even though all of your men\n
+    but you reject returning to the boring old civilian life at whatever cost. Even though all of your men\n
     have deserted you, you refuse to give up the the strategic city of Vonn, the crown jewel of Swineman\n 
     "civilization".\n 
     It is now your undisputed domain, your very own kingdom, and everyone in it mere flesh-logs. They are\n
@@ -152,10 +156,7 @@ let startRound = false;
 let baddiePositions = {"1": {"inPos": false, "distance": 50}, 
 "2": {"inPos": false, "distance": 150}, "3": {"inPos": false, "distance": 250}};
 
-// max: 3
-let positionNum = 0;
-
-
+// ENEMY SPEED:
 let currentSpeed = 2;
 
 // DROPPED PICKUPS:
@@ -175,6 +176,15 @@ function handleStatus() {
     enemyText.draw();
     roundText.draw();
     scoreText.draw();
+}
+
+function greatReset() {
+    score = 0;
+    winningScore = 30;
+    currentRound = 1;
+    shooter.weapon = "pistol";
+    shooter.fireRate = 0;
+    roundCounts = [3, 10];
 }
 
 // states: MENU, RUNNING, WIN, SPECIAL, BOSS, END, LOSE.
@@ -207,6 +217,9 @@ function handleState() {
             if (score >= winningScore) {
                 cremate();
             }
+
+            // FIX THIS CRAP:
+            greatReset();
 
             shooter.weapon = "pistol";
             shooter.fireRate = 0;
@@ -317,12 +330,6 @@ function cremate() {
     roundCounts.splice(0, 1);
     enemyCount = enemiesLeft = roundCounts[0];
     winningScore += enemyCount * 10;
-
-    // RESET ENEMY POS'S EVERY ROUND:
-    for (let i = 1; i <= Object.keys(baddiePositions).length; i++) {   
-        baddiePositions[i.toString()]["inPos"] = false;
-    }
-    
 }
 
 function handleShooter() {
@@ -379,6 +386,11 @@ function handleProjectile() {
                     j--;
 
                     enemiesLeft--;
+
+                    // RESET ENEMY POS'S EVERY ROUND
+                    for (let i = 1; i <= Object.keys(baddiePositions).length; i++) {   
+                        baddiePositions[i.toString()]["inPos"] = false;
+                    }
                 }
             }
         }
@@ -466,11 +478,12 @@ function handleEnemy() {
         //     current.shooting = true;
         // };
 
+        // enemy shooting positions:
         // FIX THIS CRAP ASAP:      --DONE
         for (let i = 1; i <= Object.keys(baddiePositions).length; i++) {   
             if (!baddiePositions[i.toString()]["inPos"] && 
                 current.x < shooter.x + shooter.width + baddiePositions[i.toString()]["distance"] &&
-                current.type == "ground") {
+                current.type == "ground" && !specialRound) {
                     current.shooting = true; 
                     baddiePositions[i.toString()]["inPos"] = true;
             } 
