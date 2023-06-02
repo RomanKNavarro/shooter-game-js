@@ -40,6 +40,8 @@ export default class Enemy {
       this.airOdds = 5;
       this.crawlOdds = 1.5;
 
+      this.isCivie = false;
+
       // ground, crawl, air, civie
       this.type = "ground";
       this.health = 2;
@@ -49,6 +51,7 @@ export default class Enemy {
       this.fireRate = 10;
       this.shooting = false;
       this.timer = 0;
+      this.angle = "back";
     }
 
     draw() {
@@ -62,7 +65,7 @@ export default class Enemy {
       cxt.textAlign = "center";
       cxt.textBaseline = "middle";
 
-      if (this.type == "civie") this.color = "gray";
+      if (this.isCivie) this.color = "gray";
 
       if (this.pickupNum <= this.pickupOdds) {
         this.pickup = true   
@@ -74,8 +77,7 @@ export default class Enemy {
       }
       else if (this.typeNum <= this.airOdds) this.type = "air";
 
-      cxt.fillText(this.type, this.x + (this.width / 2), this.y + (this.height / 2));
-
+      cxt.fillText(this.isCivie, this.x + (this.width / 2), this.y + (this.height / 2));
     }
   
     update() {
@@ -86,7 +88,7 @@ export default class Enemy {
           this.speed = 0;
           this.timer++;
           if (this.timer % this.fireRate === 0  || this.timer == 1) {
-            this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, "back"));  
+              this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle));            
           }
       }
     }

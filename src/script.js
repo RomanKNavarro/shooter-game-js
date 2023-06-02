@@ -55,11 +55,13 @@ var cxt = canvas.getContext("2d");
 // TODO: get sick font
 // TODO: brief delay before spawning round 1 enemies.   --DONE
 // TODO: frontal player/enemy collision game over.
-/* TODO: Make enemies shoot at player once they reach a certain distance. 3 enemies can shoot at you 
-         at any given time. The rest pass by. 
+/* TODO: Make enemies shoot at player once they reach a certain distance. 3 enemies can shoot at you   --DONE
+         at any given time. The rest pass by.       
 */
 // TODO: empty pickup array on restart  --DONE
 // TODO: get enemies to shoot. Keep their "projectiles" array from growing too much --DONE
+// TODO: fix civie crap     --DONE
+// TODO: stop airs from stopping after killing air shooter
 
 // determine num. of enemies per round
 // ten rounds total. Each one has 1.5 times more enemies than the last.
@@ -67,9 +69,6 @@ var cxt = canvas.getContext("2d");
 
 // THIS WILL BE A PROBLEM WHEN RESETING. ARRAY GETS MUTATED EVERY ROUND:
 let roundCounts = [3, 10];
-// for (let i = 0; i <= 9; i++) {
-//     roundCounts.push(Math.floor(roundCounts[roundCounts.length -1] * 1.5));
-// }
 
 // NEW SCORE STUFF:
 let score = 0;
@@ -154,8 +153,11 @@ let showMenu = false;
 let startRound = false;
 
 // ENEMY SHOOTING STUFF:
-let baddiePositions = {"1": {"inPos": false, "distance": 50}, 
-"2": {"inPos": false, "distance": 150}, "3": {"inPos": false, "distance": 250}};
+let baddiePositions = {
+    "1": {"inPos": false, "distance": 50, "type": "ground"}, 
+    "2": {"inPos": false, "distance": 150, "type": "ground"}, 
+    "3": {"inPos": false, "distance": 250, "type": "ground"},
+    "4": {"inPos": false, "distance": 180, "type": "air"}};
 
 // ENEMY SPEED:
 // let currentSpeed = 2;
@@ -484,6 +486,8 @@ function handleEnemy() {
 
         if (current.type != "ground") current.health = 1;
 
+        if (specialRound) current.isCivie = true;
+
         // if (specialRound) current.type = "civie";
 
         // if (current.shooting) {
@@ -495,8 +499,10 @@ function handleEnemy() {
         // DETERMINE ENEMY Y AXIS BASED ON THEIR TYPE
         if (current.type == "ground" || current.type == "crawl") {
             current.y = flora.y - current.height;
+            current.angle = "back";
         } else {
             current.y = flora.y - 150;
+            current.angle = "down-diagnal";
         }
 
         // FIX THIS CRAP --DONE. Takes into account both regular and special rounds:
@@ -521,10 +527,11 @@ function handleEnemy() {
         for (let i = 1; i <= Object.keys(baddiePositions).length; i++) {   
             if (!baddiePositions[i.toString()]["inPos"] && 
                 current.x < shooter.x + shooter.width + baddiePositions[i.toString()]["distance"] &&
-                current.type == "ground" && !specialRound) {
+                current.type == baddiePositions[i.toString()]["type"] && 
+                !specialRound) {
                     current.shooting = true; 
                     baddiePositions[i.toString()]["inPos"] = true;
-            } 
+            }
         }
     }
 }
@@ -540,7 +547,8 @@ function pushEnemy() {
             if (!specialRound) {
                 enemyQueue.push(new Enemy(canvas.width, currentSpeed));
                 enemyCount--;  
-            }  else {
+            }  
+            else {
                 if (enemyCount > 0) {
                     enemyQueue.push(new Enemy(0, -currentSpeed));
                     enemyCount--; 
