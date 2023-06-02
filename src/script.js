@@ -136,15 +136,25 @@ let randomFrames = [10, 30, 50, 80, 110,];
 const rounds = Array.from(Array(10).keys());
 
 let enemyQueue = [];
-let showNextRound = false;
-let showNextText = false;
-let showSpecialText = false;
 
+
+// stupid timer vars:
 // let specialRoundNum = _.sample(_.range(1, 3));
 let specialRoundNum = 1;
 let specialRound = false;
+let showNextRound = false;
+let showNextText = false;
+let showSpecialText = false;
 let showMenu = false;
 let startRound = false;
+
+// ENEMY SHOOTING STUFF:
+let baddiePositions = {"1": {"inPos": false, "distance": 50}, 
+"2": {"inPos": false, "distance": 150}, "3": {"inPos": false, "distance": 250}};
+
+// max: 3
+let positionNum = 0;
+
 
 let currentSpeed = 2;
 
@@ -225,7 +235,7 @@ function handleState() {
             if (currentRound == 1) {
                 setTimeout(() => {
                     startRound = true
-                }, 2000);
+                }, 1000);
             }
 
             // reset after each round
@@ -307,7 +317,12 @@ function cremate() {
     roundCounts.splice(0, 1);
     enemyCount = enemiesLeft = roundCounts[0];
     winningScore += enemyCount * 10;
-    //enemiesLeft = roundCounts[0];
+
+    // RESET ENEMY POS'S EVERY ROUND:
+    for (let i = 1; i <= Object.keys(baddiePositions).length; i++) {   
+        baddiePositions[i.toString()]["inPos"] = false;
+    }
+    
 }
 
 function handleShooter() {
@@ -396,14 +411,6 @@ function handleProjectile() {
             }
         }
 
-        // remove bullets if they exceed canvas width:
-        // OVERHAUL THIS COMPLETELY: --DONE
-        // if ((projectiles[i] && projectiles[i].x > canvas.width - 100) ||
-        // (shooter.weapon == "flammen" && projectiles[i] && projectiles[i].x > canvas.width - 10)) {
-        //     projectiles.splice(i, 1);
-        //     i--;
-        // }
-
         // projectiles despawn logic:
         if (projectiles[i]) {
             if ((projectiles[i].x > canvas.width - 100 || projectiles[i].x < 0 || projectiles[i].y < 0)
@@ -452,6 +459,21 @@ function handleEnemy() {
         } else {
             enemyQueue.splice(i, 1);
             score += 10;
+        }
+
+        // THIS WORKS:
+        // if (current.x < shooter.x + shooter.width + 100) {
+        //     current.shooting = true;
+        // };
+
+        // FIX THIS CRAP ASAP:      --DONE
+        for (let i = 1; i <= Object.keys(baddiePositions).length; i++) {   
+            if (!baddiePositions[i.toString()]["inPos"] && 
+                current.x < shooter.x + shooter.width + baddiePositions[i.toString()]["distance"] &&
+                current.type == "ground") {
+                    current.shooting = true; 
+                    baddiePositions[i.toString()]["inPos"] = true;
+            } 
         }
     }
 }
@@ -536,7 +558,7 @@ function animate() {
     // enemyQueue: ${enemyQueue}`);
     
     //console.log(enemyQueue);
-    // console.log(state);
+    // console.log(baddiePositions);
 
     frame++;
 

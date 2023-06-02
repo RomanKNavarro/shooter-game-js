@@ -75,10 +75,13 @@ export default class Enemy {
     }
   
     update() {
-      this.x -= this.speed;
-
-      if (this.shooting) {
-        
+      // if (this.)
+      // 
+      if (!this.shooting) {
+        this.x -= this.speed;
+      } else {
+        this.speed = 0;
       }
+      
     }
 }
