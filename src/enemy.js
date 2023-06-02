@@ -1,3 +1,5 @@
+import Projectile from "./projectile.js";
+
 var canvas = document.getElementById("canvas1");
 var cxt = canvas.getContext("2d"); 
 
@@ -75,13 +77,14 @@ export default class Enemy {
     }
   
     update() {
-      // if (this.)
-      // 
       if (!this.shooting) {
         this.x -= this.speed;
       } else {
-        this.speed = 0;
+          this.speed = 0;
+          this.timer++;
+          if (this.timer % this.fireRate === 0  || this.timer == 1) {
+            this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, "back"));  
+          }
       }
-      
     }
 }

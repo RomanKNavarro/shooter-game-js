@@ -58,7 +58,8 @@ var cxt = canvas.getContext("2d");
 /* TODO: Make enemies shoot at player once they reach a certain distance. 3 enemies can shoot at you 
          at any given time. The rest pass by. 
 */
-// TODO: empty pickup array on restart
+// TODO: empty pickup array on restart  --DONE
+// TODO: get enemies to shoot. Keep their "projectiles" array from growing alot
 
 // determine num. of enemies per round
 // ten rounds total. Each one has 1.5 times more enemies than the last.
@@ -66,9 +67,9 @@ var cxt = canvas.getContext("2d");
 
 // THIS WILL BE A PROBLEM WHEN RESETING. ARRAY GETS MUTATED EVERY ROUND:
 let roundCounts = [3, 10];
-for (let i = 0; i <= 9; i++) {
-    roundCounts.push(Math.floor(roundCounts[roundCounts.length -1] * 1.5));
-}
+// for (let i = 0; i <= 9; i++) {
+//     roundCounts.push(Math.floor(roundCounts[roundCounts.length -1] * 1.5));
+// }
 
 // NEW SCORE STUFF:
 let score = 0;
@@ -103,7 +104,7 @@ const scoreText = new Button(canvas.width / 2, 0, 100, score, false);
 const specialText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "SPECIAL ROUND", false);
 const specialText2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "MASSACRE THE CIVILIANS", false);
 
-const endText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "You win", false);
+const endText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Coalition defeated. City aquired.", false);
 const endText2 = new Button(canvas.width / 2.5, canvas.height / 1.7, 100, "Thanks for playing!!!", false);
 const endText3 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Made with ❤️ by", false);
 const endText4 = new Button(canvas.width / 2.5, canvas.height / 1.9, 100, "KAVEMANKORPS", false);
@@ -180,11 +181,21 @@ function handleStatus() {
 
 function greatReset() {
     score = 0;
+    scoreText.text = score;
+    enemyCount = enemiesLeft = roundCounts[0];
+
     winningScore = 30;
     currentRound = 1;
     shooter.weapon = "pistol";
     shooter.fireRate = 0;
+    shooter.specialAmmo = 0;
+    // roundCounts = [3, 10];
     roundCounts = [3, 10];
+    for (let i = 0; i <= 9; i++) {
+        roundCounts.push(Math.floor(roundCounts[roundCounts.length -1] * 1.5));
+    }
+
+    snackQueue = [];
 }
 
 // states: MENU, RUNNING, WIN, SPECIAL, BOSS, END, LOSE.
@@ -221,8 +232,8 @@ function handleState() {
             // FIX THIS CRAP:
             greatReset();
 
-            shooter.weapon = "pistol";
-            shooter.fireRate = 0;
+            // shooter.weapon = "pistol";
+            // shooter.fireRate = 0;
             mouseCollision(shooter.mouse, startButton, "RUNNING");
             break;
 
@@ -337,7 +348,19 @@ function handleShooter() {
     shooter.update();
 }
 
-// gets all the projectiles in the array and automatically shoots them.
+function handleEnemyProjectiles(orc) {
+    let projectiles = orc.projectiles;
+
+    for (let i = 0; i < projectiles.length; i++) {
+        let current = projectiles[i];
+
+        if (current.x > shooter.x + shooter.width) {
+            current.update();
+            current.draw();
+        }
+    }
+}
+
 function handleProjectile() {
     let projectiles = shooter.projectiles;
 
@@ -465,7 +488,7 @@ function handleEnemy() {
 
         // FIX THIS CRAP --DONE. Takes into account both regular and special rounds:
         if ((current.x + current.width > 0) && (current.x < canvas.width + 50)) {
-            console.log(enemyQueue);
+            //console.log(enemyQueue);
             current.update();
             current.draw();
         } else {
@@ -480,12 +503,15 @@ function handleEnemy() {
 
         // enemy shooting positions:
         // FIX THIS CRAP ASAP:      --DONE
+        console.log(current.projectiles);
+
         for (let i = 1; i <= Object.keys(baddiePositions).length; i++) {   
             if (!baddiePositions[i.toString()]["inPos"] && 
                 current.x < shooter.x + shooter.width + baddiePositions[i.toString()]["distance"] &&
                 current.type == "ground" && !specialRound) {
                     current.shooting = true; 
                     baddiePositions[i.toString()]["inPos"] = true;
+                    handleEnemyProjectiles(current);
             } 
         }
     }
@@ -570,7 +596,7 @@ function animate() {
     // console.log(`specialRound: ${specialRound}
     // enemyQueue: ${enemyQueue}`);
     
-    //console.log(enemyQueue);
+    // console.log(shooter.weapon);
     // console.log(baddiePositions);
 
     frame++;
