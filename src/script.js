@@ -62,8 +62,8 @@ var cxt = canvas.getContext("2d");
 // TODO: get enemies to shoot. Keep their "projectiles" array from growing too much --DONE
 // TODO: fix civie crap     --DONE
 // TODO: stop airs from stopping after killing air shooter  --DONE
-/* TODO: get civies to spawn in boss round (GET BOTH TROOPS AND CIVIES TO SPAWN SIMULTANEOUSLY)
-    will need to create seperate "civieQueue" it seems...*/
+/* TODO: get civies to spawn in boss round (GET BOTH TROOPS AND CIVIES TO SPAWN SIMULTANEOUSLY)     --DONE
+    will need to create seperate "civieQueue" it seems...*/     
 
 // determine num. of enemies per round
 // ten rounds total. Each one has 1.5 times more enemies than the last.
@@ -156,6 +156,8 @@ let showSpecialText = false;
 let showMenu = false;
 let startRound = false;
 
+let finalRound = false;
+
 // ENEMY SHOOTING STUFF:
 let baddiePositions = {
     "1": {"inPos": false, "distance": 50, "type": "ground"}, 
@@ -247,6 +249,7 @@ function handleState() {
 
         // this state is only for the boss text:
         case "BOSS":
+            finalRound = true;
             bossText.draw();
             yesButton.draw();
             noButton.draw();
@@ -287,7 +290,7 @@ function handleState() {
             specialRound = false;
     
             // special round cases:
-            let specRounds = {5: "SPECIAL", 1: "BOSS", 10: "END"};
+            let specRounds = {2: "SPECIAL", 4: "BOSS", 10: "END"};
             if (Object.keys(specRounds).includes(currentRound.toString())) {
                 state = specRounds[currentRound];
             }
@@ -496,12 +499,21 @@ function handleEnemy() {
 
         if (current.type != "ground") current.health = 1;
 
+        // HERE'S HOW WE DISCRIMINATE CIVIES:
+        if (current.speed < 0) current.isCivie = true;
+
+        // if (finalRound && i % 3 == 0) {
+        //     current.isCivie = true;
+        // }
+
+
         // spawn civies in last round, but only if 20 < e < 50. Every third enemy spawned is civie:
         // if ((enemiesLeft < 20 && enemiesLeft > 5) && i % 3 == 0 && currentRound == 3) {
         //     current.isCivie = true;
         // }
 
-        //if (specialRound) current.isCivie = true;
+        // ALL enemies given civie status on specialRound
+        if (specialRound) current.isCivie = true;
 
         // if (specialRound) current.type = "civie";
 
@@ -537,34 +549,34 @@ function handleEnemy() {
                 current.x < trueDistance &&
                 current.x > trueDistance - current.width  &&
                 current.type == baddiePositions[i.toString()]["type"] && 
-                !specialRound) {
+                !specialRound &&
+                current.speed > 0) {
                     current.shooting = true; 
                     baddiePositions[i.toString()]["inPos"] = true;
             }
         }
     }
 }
-
+// IDEA TO DETERMINE IF ENEMY IS A CIVIE: IF IT'S SPEED IS NEGATIVE
 function pushEnemy() {
     // so, if frame == 50 and I get randomFrames[0] (50), enemy gets pushed to queue.
 
     // RANDOMFRAMES determines distances between enemies
     if (frame % randomFrames[Math.floor(Math.random() * randomFrames.length)] === 0) {
-
-        if (currentRound == 9) {
-            for (let i = 0; i < 10; i++) {
-                civie
-            }
-        }
-
         
         if (enemyCount > 0) {   
             if (!specialRound) {
                 enemyQueue.push(new Enemy(canvas.width, currentSpeed));
                 enemyCount--;  
+
+                // SPAWN CIVIES IN LATTER PART OF FINAL ROUND:
+                if (finalRound && enemyCount % 3 == 0 && (enemyCount < 20 && enemyCount > 10)) {
+                    enemyQueue.push(new Enemy(0, -currentSpeed));
+                    enemyCount--; 
+                }
             }  
             else {
-                // CIVIES SPAWNED HERE:
+                // CIVIES SPAWNED HERE IN SPECIAL ROUND:
                 // DOESN'T ACTUALLY SPAWN CIVIES. Just normal enemies at coord 0 lol:
                 // REMEMBER: enemyCount only refers to num. of enemies to push to array :)
                 if (enemyCount > 0) {
@@ -578,6 +590,29 @@ function pushEnemy() {
                 else specialRound = false;
             }
         }
+
+        // if (enemyCount > 0) {   
+        //     if (specialRound || (finalRound == true && )) {
+        //         enemyQueue.push(new Enemy(0, -currentSpeed));
+        //         enemyCount--; 
+        //     }  
+        //     else {
+        //         // CIVIES SPAWNED HERE:
+        //         // DOESN'T ACTUALLY SPAWN CIVIES. Just normal enemies at coord 0 lol:
+        //         // REMEMBER: enemyCount only refers to num. of enemies to push to array :)
+        //         if (enemyCount > 0) {
+        //             enemyQueue.push(new Enemy(0, -currentSpeed));
+        //             enemyCount--; 
+
+        //             // if (enemyCount < 50 && enemyCount < 20) {
+        //             //     civieQueue.push
+        //             // }
+        //         }
+        //         else specialRound = false;
+        //     }
+        // }
+
+        
 
         else if (enemyQueue.length == 0) {
             state = "WIN";
@@ -641,7 +676,7 @@ function animate() {
     // console.log(shooter.weapon);
     // console.log(baddiePositions);
 
-    console.log(specialRoundNum);
+    console.log(finalRound);
 
     frame++;
 
