@@ -62,7 +62,8 @@ var cxt = canvas.getContext("2d");
 // TODO: get enemies to shoot. Keep their "projectiles" array from growing too much --DONE
 // TODO: fix civie crap     --DONE
 // TODO: stop airs from stopping after killing air shooter  --DONE
-// TODO: get civies to spawn in boss round (GET BOTH TROOPS AND CIVIES TO SPAWN SIMULTANEOUSLY)
+/* TODO: get civies to spawn in boss round (GET BOTH TROOPS AND CIVIES TO SPAWN SIMULTANEOUSLY)
+    will need to create seperate "civieQueue" it seems...*/
 
 // determine num. of enemies per round
 // ten rounds total. Each one has 1.5 times more enemies than the last.
@@ -79,7 +80,7 @@ let currentRound = 1;
 // enemyCount determines num of enemies to add to array. It decrements as they spawn
 let enemyCount = roundCounts[0];
 
-// might need further tweaking:
+// used to show current enemies remaining:
 let enemiesLeft = roundCounts[0];
 
 // objects
@@ -144,11 +145,10 @@ let randomFrames = [10, 30, 50, 80, 110,];
 const rounds = Array.from(Array(10).keys());
 
 let enemyQueue = [];
-
+let civieQueue = [];
 
 // stupid timer vars:
 let specialRoundNum = _.sample(_.range(3, 6));
-// let specialRoundNum = 1;
 let specialRound = false;
 let showNextRound = false;
 let showNextText = false;
@@ -161,7 +161,8 @@ let baddiePositions = {
     "1": {"inPos": false, "distance": 50, "type": "ground"}, 
     "2": {"inPos": false, "distance": 150, "type": "ground"}, 
     "3": {"inPos": false, "distance": 250, "type": "ground"},
-    "4": {"inPos": false, "distance": 180, "type": "air"}};
+    "4": {"inPos": false, "distance": 180, "type": "air"}
+};
 
 // ENEMY SPEED:
 // let currentSpeed = 2;
@@ -286,7 +287,7 @@ function handleState() {
             specialRound = false;
     
             // special round cases:
-            let specRounds = {specialRoundNum: "SPECIAL", 9: "BOSS", 10: "END"};
+            let specRounds = {5: "SPECIAL", 1: "BOSS", 10: "END"};
             if (Object.keys(specRounds).includes(currentRound.toString())) {
                 state = specRounds[currentRound];
             }
@@ -495,7 +496,12 @@ function handleEnemy() {
 
         if (current.type != "ground") current.health = 1;
 
-        if (specialRound) current.isCivie = true;
+        // spawn civies in last round, but only if 20 < e < 50. Every third enemy spawned is civie:
+        // if ((enemiesLeft < 20 && enemiesLeft > 5) && i % 3 == 0 && currentRound == 3) {
+        //     current.isCivie = true;
+        // }
+
+        //if (specialRound) current.isCivie = true;
 
         // if (specialRound) current.type = "civie";
 
@@ -524,7 +530,7 @@ function handleEnemy() {
             score += 10;
         }
 
-        // FIX THIS CRAP ASAP:      --DONE
+        // FIX THIS CRAP ASAP:  --DONE
         for (let i = 1; i <= Object.keys(baddiePositions).length; i++) {   
             let trueDistance = shooter.x + shooter.width + baddiePositions[i.toString()]["distance"];
             if (!baddiePositions[i.toString()]["inPos"] &&
@@ -544,18 +550,30 @@ function pushEnemy() {
 
     // RANDOMFRAMES determines distances between enemies
     if (frame % randomFrames[Math.floor(Math.random() * randomFrames.length)] === 0) {
-        let chance = Math.floor(Math.random() * 10);
 
+        if (currentRound == 9) {
+            for (let i = 0; i < 10; i++) {
+                civie
+            }
+        }
+
+        
         if (enemyCount > 0) {   
             if (!specialRound) {
                 enemyQueue.push(new Enemy(canvas.width, currentSpeed));
                 enemyCount--;  
             }  
             else {
+                // CIVIES SPAWNED HERE:
+                // DOESN'T ACTUALLY SPAWN CIVIES. Just normal enemies at coord 0 lol:
                 // REMEMBER: enemyCount only refers to num. of enemies to push to array :)
                 if (enemyCount > 0) {
                     enemyQueue.push(new Enemy(0, -currentSpeed));
                     enemyCount--; 
+
+                    // if (enemyCount < 50 && enemyCount < 20) {
+                    //     civieQueue.push
+                    // }
                 }
                 else specialRound = false;
             }
@@ -623,7 +641,7 @@ function animate() {
     // console.log(shooter.weapon);
     // console.log(baddiePositions);
 
-    console.log(specialRound);
+    console.log(specialRoundNum);
 
     frame++;
 
