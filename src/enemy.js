@@ -26,14 +26,13 @@ export default class Enemy {
 
       this.pickupNum = Math.floor(Math.random() * 10);
       // this.pickupOdds = 0.5;
-      this.pickupOdds = 8;
+      this.pickupOdds = 2;
       this.pickup = false;
 
       // this.types = ["stand", "crawl"];
 
       // this.type = _.sample(["ground", "crawl", "air"]);
 
-      // this.typeNum = Math.floor(Math.random() * 10);
       this.typeNum = Math.random() * 10;
 
       this.groundOdds = 8;

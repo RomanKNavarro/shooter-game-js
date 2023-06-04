@@ -63,7 +63,9 @@ var cxt = canvas.getContext("2d");
 // TODO: fix civie crap     --DONE
 // TODO: stop airs from stopping after killing air shooter  --DONE
 /* TODO: get civies to spawn in boss round (GET BOTH TROOPS AND CIVIES TO SPAWN SIMULTANEOUSLY)     --DONE
-    will need to create seperate "civieQueue" it seems...*/     
+    will need to create seperate "civieQueue" it seems...*/    
+    
+// TODO: ADD PLAYER HEALTH
 
 // determine num. of enemies per round
 // ten rounds total. Each one has 1.5 times more enemies than the last.
@@ -91,7 +93,10 @@ new InputHandler(shooter);
 
 // BUTTONS AND TEXT. (x, y, width, text, clickable)
 const startButton = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Initiate Bloodbath", true);
-const startButton2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "test lolol", true);
+const skipButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, "skip", true);
+const yesButton = new Button(250, canvas.height / 1.2, 100, '"Defend"', true);
+const noButton = new Button(canvas.width - 250 - 100, canvas.height / 1.2, 100, "Give up", true);
+const playAgainButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, "Play again?", true);
 
 const winText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Round Complete", false);
 const nextText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Next round incoming...", false);
@@ -125,16 +130,16 @@ const startText = new TextWall(
     have deserted you, you refuse to give up the the strategic city of Vonn, the crown jewel of Swineman\n 
     "civilization".\n 
     It is now your undisputed domain, your very own kingdom, and everyone in it mere flesh-logs. They are\n
-    your servants, ready to serve your every depraved fantasy at any given moment. The city of Vonn took\n 
+    your servants, ready to satisfy your every depraved fantasy at any given moment. The city of Vonn took\n 
     months of gruesome house-to-house fighting and thousands of Sheep lives to completely conquer. Are you\n
     going to let it all slip now?`, canvas.height / 10);
 
-const loserText = new TextWall(
-    `testing`, canvas.height / 10);
-
-const skipButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, "skip", true);
-const yesButton = new Button(250, canvas.height / 1.2, 100, '"Defend"', true);
-const noButton = new Button(canvas.width - 250 - 100, canvas.height / 1.2, 100, "Give up", true);
+const giveupText = new TextWall(
+    `You spare your fellow countrysheep and turn yourself in.\n
+    \n
+    The war crimes tribunal accuses you of innumerable atrocities, the charges of which are beyond the scope of this game.\n 
+    \n
+    You are put to the firing squad and your ashes thrown into the ocean.`, canvas.height / 5);
 
 // variables
 let frame = 0;
@@ -259,7 +264,7 @@ function handleState() {
             }
     
             mouseCollision(shooter.mouse, yesButton, "RUNNING");
-            mouseCollision(shooter.mouse, noButton, "MENU");
+            mouseCollision(shooter.mouse, noButton, "GIVEUP");
             break;
     
         case "RUNNING":
@@ -290,7 +295,7 @@ function handleState() {
             specialRound = false;
     
             // special round cases:
-            let specRounds = {2: "SPECIAL", 4: "BOSS", 10: "END"};
+            let specRounds = {5: "SPECIAL", 1: "BOSS", 10: "END"};
             if (Object.keys(specRounds).includes(currentRound.toString())) {
                 state = specRounds[currentRound];
             }
@@ -347,6 +352,13 @@ function handleState() {
                 endText4.draw();
             }
             break;
+
+        case "GIVEUP":
+            shooter.disabled = true;
+            giveupText.draw();
+            playAgainButton.draw();
+
+            mouseCollision(shooter.mouse, playAgainButton, "MENU");
     }
 }
 

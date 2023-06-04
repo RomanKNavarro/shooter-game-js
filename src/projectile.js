@@ -9,7 +9,7 @@ export default class Projectile {
       this.y = y;
 
       this.size = 5;
-      this.speed = 6;
+      this.speed = 10;
       this.delete = false;
 
       this.direction = direction;
@@ -34,7 +34,7 @@ export default class Projectile {
           
           case "diagnal":
             this.x += this.speed;
-            this.y -= this.speed;
+            this.y -= this.speed / 2;
           
           case "down":
             this.x += this.speed;
