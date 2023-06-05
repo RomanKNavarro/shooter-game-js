@@ -4,7 +4,7 @@ var cxt = canvas.getContext("2d");
 // BULLETS
 export default class Projectile {
     constructor(x, y, direction, weapon) {
-      // constructor(x, y) {
+      // constructor(x, y) { lol test
       this.x = x;
       this.y = y;
       this.direction = direction;
