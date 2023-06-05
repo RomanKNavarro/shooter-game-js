@@ -21,7 +21,7 @@ var cxt = canvas.getContext("2d");
 // TODO: all enemy classes in the same file.
 // TODO: add mouse hover stuff in game.js. Mouse input goes in inputHandler. MouseCollision needs to be global --DONE
 // TODO: figure out why color picker won't show up when hovering over.
-// TODO: add game states.   --DONE 
+// TODO: add game states.   --DONE
 // TODO: get button clicking to work & mouse position read. --DONE
 // TODO: limit enemies, implement win screen.   --DONE
 // TODO: make win text fade in and out.
@@ -66,6 +66,7 @@ var cxt = canvas.getContext("2d");
     will need to create seperate "civieQueue" it seems...*/    
     
 // TODO: ADD PLAYER HEALTH
+// TODO: fix gun shot audio
 
 // determine num. of enemies per round
 // ten rounds total. Each one has 1.5 times more enemies than the last.
@@ -244,11 +245,9 @@ function handleState() {
                 cremate();
             }
 
-            // FIX THIS CRAP:
+            // FIX THIS CRAP:   ---DONE
+            // REMEMBER TO UNCOMMENT THIS:
             greatReset();
-
-            // shooter.weapon = "pistol";
-            // shooter.fireRate = 0;
             mouseCollision(shooter.mouse, startButton, "RUNNING");
             break;
 
@@ -381,10 +380,12 @@ function handleEnemyProjectiles(orc) {
 
     for (let i = 0; i < projectiles.length; i++) {
         let current = projectiles[i];
+        
 
         if (current.x > shooter.x + shooter.width || current.x > 0) {
             current.update();
             current.draw();
+            // shotty.play();
         }
         else {
             projectiles.splice(i, 1);
@@ -416,10 +417,11 @@ function handleProjectile() {
         // enemy kill handling:
         for (let j = 0; j < enemyQueue.length; j++) {
             let currentEnemy = enemyQueue[j];
-            /* remove bullet and enemy if they conact eachother. Also make enemy 
+            /* remove bullet and enemy if they contact eachother. Also make enemy 
             drop pickup if applicable: */ 
             if (enemyQueue[j] && projectiles[i] && collision(projectiles[i], enemyQueue[j])) {
 
+                current.delete = true;
                 projectiles.splice(i, 1);
                 i--;
 
@@ -601,30 +603,7 @@ function pushEnemy() {
                 }
                 else specialRound = false;
             }
-        }
-
-        // if (enemyCount > 0) {   
-        //     if (specialRound || (finalRound == true && )) {
-        //         enemyQueue.push(new Enemy(0, -currentSpeed));
-        //         enemyCount--; 
-        //     }  
-        //     else {
-        //         // CIVIES SPAWNED HERE:
-        //         // DOESN'T ACTUALLY SPAWN CIVIES. Just normal enemies at coord 0 lol:
-        //         // REMEMBER: enemyCount only refers to num. of enemies to push to array :)
-        //         if (enemyCount > 0) {
-        //             enemyQueue.push(new Enemy(0, -currentSpeed));
-        //             enemyCount--; 
-
-        //             // if (enemyCount < 50 && enemyCount < 20) {
-        //             //     civieQueue.push
-        //             // }
-        //         }
-        //         else specialRound = false;
-        //     }
-        // }
-
-        
+        } 
 
         else if (enemyQueue.length == 0) {
             state = "WIN";
@@ -686,9 +665,6 @@ function animate() {
     // enemyQueue: ${enemyQueue}`);
     
     // console.log(shooter.weapon);
-    // console.log(baddiePositions);
-
-    console.log(finalRound);
 
     frame++;
 

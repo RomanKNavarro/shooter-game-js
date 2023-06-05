@@ -25,10 +25,10 @@ export default class Shooter {
         this.angle = "straight";
 
         // pistol, ar, and flamethrower
-        // this.weapon = "pistol";
         this.weapon = "pistol";
-        this.fireRate = 0;
-        this.specialAmmo = 0;
+        // this.weapon = "ar";
+        // this.fireRate = 10;
+        // this.specialAmmo = 100;
 
       // mouse stuff in here lol, used in script.js
         this.mouse = {
@@ -56,6 +56,7 @@ export default class Shooter {
         // code doesn't work. fireRate not set.    
         if (this.shooting && !this.disabled) {
 
+            
             // console.log(`this.weapon: ${this.weapon}
             // this.specialAmmo: ${this.specialAmmo}
             // this.fireRate: ${this.fireRate}`);
@@ -63,8 +64,9 @@ export default class Shooter {
             //console.log(this.specialAmmo);
             this.timer++; 
             if (this.timer % this.fireRate === 0  || this.timer == 1) {
-                this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle));  
-            
+                this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, this.weapon));  
+                // this.crack.play();
+
                 // what's this again?
                 if (this.specialAmmo > 0) {
                     this.specialAmmo--;

@@ -1,18 +1,26 @@
 var canvas = document.getElementById("canvas1");
-var cxt = canvas.getContext("2d"); 
+var cxt = canvas.getContext("2d");
 
 // BULLETS
 export default class Projectile {
-    constructor(x, y, direction) {
+    constructor(x, y, direction, weapon) {
       // constructor(x, y) {
       this.x = x;
       this.y = y;
+      this.direction = direction;
+      this.weapon = weapon;
 
       this.size = 5;
       this.speed = 10;
       this.delete = false;
 
-      this.direction = direction;
+      this.pistol = new Audio();
+      this.ar = new Audio();
+      this.shotty = new Audio();
+
+      this.pistol.src = "src/assets/sounds/shots/pistol.wav";
+      this.ar.src = "src/assets/sounds/Prepared SFX Library/AK-47/C_29P.wav";
+      this.shotty.src = "src/assets/sounds/shots/shotgun.wav";
 
       // place bullet's y low when shooting down:
       if (this.direction == "down" || this.direction == "down-back") {
@@ -21,6 +29,20 @@ export default class Projectile {
     }
     
     update() {
+      if (this.x > 0 && this.x < canvas.height && !this.delete) {
+        switch (this.weapon) {
+          case "pistol":
+            this.pistol.play();
+            break;
+          case "shotty":
+            this.shotty.play();
+            break;
+          case "ar":
+            this.pistol.play();
+            break;
+        }
+      }
+
       if (!this.delete) {
         switch (this.direction) {
           case "straight":

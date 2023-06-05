@@ -47,7 +47,9 @@ export default class Enemy {
 
       // ENEMY GUN:
       this.projectiles = [];
-      this.fireRate = 10;
+      // this.fireRate = 200;
+      // this.fireRate = 150;
+      this.fireRate = 100;
       this.shooting = false;
       this.timer = 0;
       this.angle = "back";
@@ -87,8 +89,9 @@ export default class Enemy {
           this.speed = 0;
           this.timer++;
           if (this.timer % this.fireRate === 0  || this.timer == 1) {
-              this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle));            
+            this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, "shotty")); 
           }
       }
     }
 }
+
