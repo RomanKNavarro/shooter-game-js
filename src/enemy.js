@@ -53,6 +53,10 @@ export default class Enemy {
       this.shooting = false;
       this.timer = 0;
       this.angle = "back";
+
+      // POSITION CRAP:
+      this.inPosition = false;
+      this.positionNum = 0;
     }
 
     draw() {

@@ -10,7 +10,8 @@ export default class Pickup {
         this.delete = false;
 
         this.typeNum = Math.random() * 10;
-        this.flammenOdds = 2.5;
+        this.flammenOdds = 1.5;
+        this.healthOdds = 1;
 
         // this.type = _.sample(["ar"]);
         this.type = "ar";
@@ -37,7 +38,8 @@ export default class Pickup {
             cxt.textAlign = "center";
             cxt.textBaseline = "middle";
 
-            if (this.typeNum <= this.flammenOdds) this.type = "flammen";
+            if (this.typeNum <= this.healthOdds) this.type = "health";
+            else if (this.typeNum <= this.flammenOdds) this.type = "flammen";
       
             cxt.fillText(this.type, this.x + (this.width / 2), this.y + (this.height / 2));
         };

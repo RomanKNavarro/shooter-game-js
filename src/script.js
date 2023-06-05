@@ -444,15 +444,10 @@ function handleProjectile() {
 
                     enemiesLeft--;
 
-                    // RESET ENEMY POS'S EVERY ROUND. What was I doing here again?
-                    // when enemy dies, and they are in position, reset position
-
-
+                    // RESET ENEMY POS'S every time an enemy is killed:
                     // FIX THIS CRAP:
                     for (let p = 1; p <= Object.keys(baddiePositions).length; p++) { 
-                        if (Object.keys(baddiePositions).includes(p.toString())) { 
-                            baddiePositions[p.toString()]["inPos"] = false;
-                        }
+                        baddiePositions[p.toString()]["inPos"] = false;
                     }
                     
                 }
@@ -559,6 +554,7 @@ function handleEnemy() {
         }
 
         // FIX THIS CRAP ASAP:  --DONE
+        // FIX THIS STUPID GLITCH:
         for (let i = 1; i <= Object.keys(baddiePositions).length; i++) {   
             let trueDistance = shooter.x + shooter.width + baddiePositions[i.toString()]["distance"];
             if (!baddiePositions[i.toString()]["inPos"] &&
