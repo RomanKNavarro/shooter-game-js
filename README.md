@@ -1,4 +1,3 @@
-// PORT: http://127.0.0.1:5500/
 // TODO: DELETE bullets once they reach end of screen. Log array of bullets. --DONE
 // TODO: reset bullet.x after hitting enemy.    --DONE
 // TODO: GET bullets to travel up when "w" is pressed.
@@ -6,7 +5,7 @@
 // TODO: all enemy classes in the same file.
 // TODO: add mouse hover stuff in game.js. Mouse input goes in inputHandler. MouseCollision needs to be global --DONE
 // TODO: figure out why color picker won't show up when hovering over.
-// TODO: add game states.   --DONE 
+// TODO: add game states.   --DONE
 // TODO: get button clicking to work & mouse position read. --DONE
 // TODO: limit enemies, implement win screen.   --DONE
 // TODO: make win text fade in and out.
@@ -29,7 +28,25 @@
 // TODO: make ground enemies die after two shots if shot at bottom  --DONE
 // TODO: FLAMETHROWER   --DONE
 // TODO: pick up weapon only if "specialAmmo" is 0  --DONE (resolved)
-// TODO: special atrocity round
+// TODO: special atrocity round     --DONE
 // TODO: get lodash working again.  --DONE
-// TODO: fix flammen top hit collision.
-// TODO: drop current weapon with q
+// TODO: fix flammen top hit collision. --DONE  
+// TODO: drop current weapon with q     --DONE
+// TODO: add second "special" round
+// TODO: make flammen hurt crawlies too --DONE
+// TODO: FIX THIS STUPID MENU GLITCH    --DONE
+// TODO: get stats and player weapon to reset on game over
+// TODO: get sick font
+// TODO: brief delay before spawning round 1 enemies.   --DONE
+// TODO: frontal player/enemy collision game over.
+/* TODO: Make enemies shoot at player once they reach a certain distance. 3 enemies can shoot at you   --DONE
+         at any given time. The rest pass by.       
+*/
+// TODO: empty pickup array on restart  --DONE
+// TODO: get enemies to shoot. Keep their "projectiles" array from growing too much --DONE
+// TODO: fix civie crap     --DONE
+// TODO: stop airs from stopping after killing air shooter  --DONE
+/* TODO: get civies to spawn in boss round (GET BOTH TROOPS AND CIVIES TO SPAWN SIMULTANEOUSLY)     --DONE
+    will need to create seperate "civieQueue" it seems...*/    
+// TODO: ADD PLAYER HEALTH
+// TODO: fix gun shot audio --DONE
