@@ -64,9 +64,10 @@ var cxt = canvas.getContext("2d");
 // TODO: stop airs from stopping after killing air shooter  --DONE
 /* TODO: get civies to spawn in boss round (GET BOTH TROOPS AND CIVIES TO SPAWN SIMULTANEOUSLY)     --DONE
     will need to create seperate "civieQueue" it seems...*/    
-    
 // TODO: ADD PLAYER HEALTH
 // TODO: fix gun shot audio
+// TODO: stupid glitch: multiple enemies stopping at the same position.
+/* figured it out: every time I kill an enemy in the kill zone, enemies immediately preceding it stop*/ 
 
 // determine num. of enemies per round
 // ten rounds total. Each one has 1.5 times more enemies than the last.
@@ -165,6 +166,7 @@ let startRound = false;
 let finalRound = false;
 
 // ENEMY SHOOTING STUFF:
+// possible glitch fix: add "id" property
 let baddiePositions = {
     "1": {"inPos": false, "distance": 50, "type": "ground"}, 
     "2": {"inPos": false, "distance": 150, "type": "ground"}, 
@@ -385,7 +387,6 @@ function handleEnemyProjectiles(orc) {
         if (current.x > shooter.x + shooter.width || current.x > 0) {
             current.update();
             current.draw();
-            // shotty.play();
         }
         else {
             projectiles.splice(i, 1);
@@ -404,14 +405,13 @@ function handleProjectile() {
         // increase size of flammen "bullets"
         if (shooter.weapon == "flammen") current.size = 15;
 
-        if (current.x < canvas.width - 100) {
+        if (current.x < canvas.width - 100 && state == "RUNNING") {
             current.update();
             current.draw();
         }
         else {
             projectiles.splice(i, 1);
             i--;
-            //remove(projectiles, i);
         }
 
         // enemy kill handling:
@@ -444,10 +444,17 @@ function handleProjectile() {
 
                     enemiesLeft--;
 
-                    // RESET ENEMY POS'S EVERY ROUND
-                    for (let i = 1; i <= Object.keys(baddiePositions).length; i++) {   
-                        baddiePositions[i.toString()]["inPos"] = false;
+                    // RESET ENEMY POS'S EVERY ROUND. What was I doing here again?
+                    // when enemy dies, and they are in position, reset position
+
+
+                    // FIX THIS CRAP:
+                    for (let p = 1; p <= Object.keys(baddiePositions).length; p++) { 
+                        if (Object.keys(baddiePositions).includes(p.toString())) { 
+                            baddiePositions[p.toString()]["inPos"] = false;
+                        }
                     }
+                    
                 }
             }
         }
@@ -465,8 +472,8 @@ function handleProjectile() {
                 if (shooter.weapon != "flammen") {
                     if (snack.type == "ar") {
                         shooter.weapon = "ar";
-                        shooter.fireRate = 10;
-                        shooter.specialAmmo = 10;
+                        shooter.fireRate = 15;
+                        shooter.specialAmmo = 100;
                     } else {
                         shooter.weapon = "flammen";
                         shooter.fireRate = 2;
@@ -529,12 +536,6 @@ function handleEnemy() {
         // ALL enemies given civie status on specialRound
         if (specialRound) current.isCivie = true;
 
-        // if (specialRound) current.type = "civie";
-
-        // if (current.shooting) {
-        //     handleEnemyProjectiles(current);
-        // }
-
         handleEnemyProjectiles(current);
 
         // DETERMINE ENEMY Y AXIS BASED ON THEIR TYPE
@@ -547,13 +548,14 @@ function handleEnemy() {
         }
 
         // FIX THIS CRAP --DONE. Takes into account both regular and special rounds:
-        if ((current.x + current.width > 0) && (current.x < canvas.width + 50)) {
+        if ((current.x + current.width > 0) && (current.x < canvas.width + 50) && !current.delete) {
             //console.log(enemyQueue);
             current.update();
             current.draw();
         } else {
             enemyQueue.splice(i, 1);
             score += 10;
+            current.delete;
         }
 
         // FIX THIS CRAP ASAP:  --DONE
@@ -664,7 +666,10 @@ function animate() {
     // console.log(`specialRound: ${specialRound}
     // enemyQueue: ${enemyQueue}`);
     
-    // console.log(shooter.weapon);
+    if (state == "RUNNING") {
+        console.log(baddiePositions);
+    };
+    
 
     frame++;
 

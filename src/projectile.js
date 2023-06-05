@@ -19,7 +19,8 @@ export default class Projectile {
       this.shotty = new Audio();
 
       this.pistol.src = "src/assets/sounds/shots/pistol.wav";
-      this.ar.src = "src/assets/sounds/Prepared SFX Library/AK-47/C_29P.wav";
+      this.ar.src = "src/assets/sounds/shots/cg1.wav";
+
       this.shotty.src = "src/assets/sounds/shots/shotgun.wav";
 
       // place bullet's y low when shooting down:
@@ -38,7 +39,7 @@ export default class Projectile {
             this.shotty.play();
             break;
           case "ar":
-            this.pistol.play();
+            this.ar.play();
             break;
         }
       }
