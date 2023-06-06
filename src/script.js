@@ -66,7 +66,7 @@ var cxt = canvas.getContext("2d");
     will need to create seperate "civieQueue" it seems...*/    
 // TODO: ADD PLAYER HEALTH
 // TODO: fix gun shot audio
-// TODO: stupid glitch: multiple enemies stopping at the same position.
+// TODO: stupid glitch: multiple enemies stopping at the same position.                             --DONE
 /* figured it out: every time I kill an enemy in the kill zone, enemies immediately preceding it stop*/ 
 
 // determine num. of enemies per round
@@ -167,6 +167,7 @@ let finalRound = false;
 
 // ENEMY SHOOTING STUFF:
 // possible glitch fix: add "id" property
+// NO MORE THAN 4 ENEMIES SHOULD BE SHOOTING.
 let baddiePositions = {
     "1": {"inPos": false, "distance": 50, "type": "ground"}, 
     "2": {"inPos": false, "distance": 150, "type": "ground"}, 
@@ -176,7 +177,7 @@ let baddiePositions = {
 
 // ENEMY SPEED:
 // let currentSpeed = 2;
-let currentSpeed = 4;
+let currentSpeed = 20;
 
 // DROPPED PICKUPS:
 let snackQueue = [];
@@ -437,6 +438,26 @@ function handleProjectile() {
                     if (currentEnemy.pickup) {
                         snackQueue.push(new Pickup(currentEnemy.x, currentEnemy.y - 100));
                     }
+
+                    // RESET ENEMY POS'S every time an enemy is killed:
+                    // FIX THIS CRAP:
+                    // for (let p = 1; p <= Object.keys(baddiePositions).length; p++) { 
+                    //     baddiePositions[p.toString()]["inPos"] = false;
+                    // }
+
+
+                    // TO TEST:
+                    // ["1", "2", "3", "4"]
+                    // for (let p = 0; p < Object.keys(baddiePositions).length; p++) { 
+                    //     // baddiePositions[p.toString()]["inPos"] = false;
+                    //     if (currentEnemy.position == Object.keys(baddiePositions)[p]) {
+                    //         baddiePositions[(p + 1).toString()]["inPos"] = false;
+                    //     }
+                    // }
+
+                    if (Object.keys(baddiePositions).includes(currentEnemy.position)) {
+                        baddiePositions[currentEnemy.position]["inPos"] = false;
+                    }
     
                     // here is how the enemies get deleted:
                     enemyQueue.splice(j, 1);
@@ -444,12 +465,6 @@ function handleProjectile() {
 
                     enemiesLeft--;
 
-                    // RESET ENEMY POS'S every time an enemy is killed:
-                    // FIX THIS CRAP:
-                    for (let p = 1; p <= Object.keys(baddiePositions).length; p++) { 
-                        baddiePositions[p.toString()]["inPos"] = false;
-                    }
-                    
                 }
             }
         }
@@ -556,15 +571,22 @@ function handleEnemy() {
         // FIX THIS CRAP ASAP:  --DONE
         // FIX THIS STUPID GLITCH:
         for (let i = 1; i <= Object.keys(baddiePositions).length; i++) {   
+            // this is the distance applicable to enemy (50, 150, 250, 180 (aerial))
             let trueDistance = shooter.x + shooter.width + baddiePositions[i.toString()]["distance"];
             if (!baddiePositions[i.toString()]["inPos"] &&
+
+                // what was my thought process behind this?
                 current.x < trueDistance &&
                 current.x > trueDistance - current.width  &&
+
+
                 current.type == baddiePositions[i.toString()]["type"] && 
                 !specialRound &&
                 current.speed > 0) {
+                    // enemy stops moving at shooting (enemy class logic)
                     current.shooting = true; 
                     baddiePositions[i.toString()]["inPos"] = true;
+                    current.position = i.toString();
             }
         }
     }
@@ -662,9 +684,9 @@ function animate() {
     // console.log(`specialRound: ${specialRound}
     // enemyQueue: ${enemyQueue}`);
     
-    if (state == "RUNNING") {
-        console.log(baddiePositions);
-    };
+    // if (state == "RUNNING") {
+    //     console.log(baddiePositions);
+    // };
     
 
     frame++;

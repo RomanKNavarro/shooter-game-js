@@ -56,7 +56,7 @@ export default class Enemy {
 
       // POSITION CRAP:
       this.inPosition = false;
-      this.positionNum = 0;
+      this.position = 0;
     }
 
     draw() {
@@ -82,7 +82,7 @@ export default class Enemy {
       }
       else if (this.typeNum <= this.airOdds) this.type = "air";
 
-      cxt.fillText(this.speed < 0, this.x + (this.width / 2), this.y + (this.height / 2));
+      cxt.fillText(this.position, this.x + (this.width / 2), this.y + (this.height / 2));
     }
   
     update() {

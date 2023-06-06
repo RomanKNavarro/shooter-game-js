@@ -13,6 +13,7 @@ export default class Projectile {
       this.size = 5;
       this.speed = 10;
       this.delete = false;
+      this.randomY = [1.4, 1.6, 1.8, 2, 2.2, 2.4];
 
       this.pistol = new Audio();
       this.ar = new Audio();
@@ -57,7 +58,7 @@ export default class Projectile {
           
           case "diagnal":
             this.x += this.speed;
-            this.y -= this.speed / 2;
+            this.y -= this.speed / this.randomY[Math.floor(Math.random() * this.randomY.length)];
           
           case "down":
             this.x += this.speed;
