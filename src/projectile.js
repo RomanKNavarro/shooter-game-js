@@ -81,9 +81,6 @@ export default class Projectile {
             break;
         }
       }
-      // if (this.x > canvas.width - 100) {
-      //   this.delete;
-      // }
     }
   
     draw() {

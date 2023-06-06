@@ -8,6 +8,7 @@ import Enemy from "./enemy.js";
 import Button from "./button.js";
 import Pickup from "./pickup.js";
 import TextWall from "./textWall.js";
+import Health from "./health.js";
 
 // canvas stuff
 var canvas = document.getElementById("canvas1");
@@ -68,6 +69,7 @@ var cxt = canvas.getContext("2d");
 // TODO: fix gun shot audio
 // TODO: stupid glitch: multiple enemies stopping at the same position.                             --DONE
 /* figured it out: every time I kill an enemy in the kill zone, enemies immediately preceding it stop*/ 
+// TODO: keep specialAmmo from depleting inbetween rounds   --DONE
 
 // determine num. of enemies per round
 // ten rounds total. Each one has 1.5 times more enemies than the last.
@@ -143,6 +145,8 @@ const giveupText = new TextWall(
     \n
     You are put to the firing squad and your ashes thrown into the ocean.`, canvas.height / 5);
 
+let health = new Health(30);
+
 // variables
 let frame = 0;
 // let randomFrames = [50, 80, 110, 150];
@@ -172,12 +176,13 @@ let baddiePositions = {
     "1": {"inPos": false, "distance": 50, "type": "ground"}, 
     "2": {"inPos": false, "distance": 150, "type": "ground"}, 
     "3": {"inPos": false, "distance": 250, "type": "ground"},
-    "4": {"inPos": false, "distance": 180, "type": "air"}
+    "4": {"inPos": false, "distance": 180, "type": "air"},
+    "5": {"inPos": false, "distance": 0, "type": "crawl"}
 };
 
 // ENEMY SPEED:
 // let currentSpeed = 2;
-let currentSpeed = 20;
+let currentSpeed = 4;
 
 // DROPPED PICKUPS:
 let snackQueue = [];
@@ -190,12 +195,17 @@ let state = "INTRO";
 flora.draw();
 
 function handleStatus() {
-    roundText.text = currentRound;
-    //enemyText.text = enemyCount;
-    enemyText.text = enemiesLeft;
-    enemyText.draw();
-    roundText.draw();
-    scoreText.draw();
+    if (state == "RUNNING") {
+        roundText.text = currentRound;
+        //enemyText.text = enemyCount;
+        enemyText.text = enemiesLeft;
+        enemyText.draw();
+        roundText.draw();
+        scoreText.draw();
+    
+        health.draw();
+    }
+
 }
 
 function greatReset() {
@@ -375,7 +385,10 @@ function cremate() {
 
 function handleShooter() {
     shooter.draw();
-    shooter.update();
+
+    if (state == "RUNNING") {
+        shooter.update();
+    }
 }
 
 function handleEnemyProjectiles(orc) {
@@ -679,7 +692,7 @@ function animate() {
     handleSnack()
     handleState();
 
-    if (state != "MENU") handleStatus();
+    handleStatus();
 
     // console.log(`specialRound: ${specialRound}
     // enemyQueue: ${enemyQueue}`);

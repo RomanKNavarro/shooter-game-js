@@ -92,7 +92,7 @@ export default class Enemy {
       } else {
           this.speed = 0;
           this.timer++;
-          if (this.timer % this.fireRate === 0  || this.timer == 1) {
+          if ((this.type != "crawl") && (this.timer % this.fireRate === 0  || this.timer == 1)) {
             this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, "shotty")); 
           }
       }
