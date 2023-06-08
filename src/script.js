@@ -70,7 +70,11 @@ var cxt = canvas.getContext("2d");
 // TODO: stupid glitch: multiple enemies stopping at the same position.                             --DONE
 /* figured it out: every time I kill an enemy in the kill zone, enemies immediately preceding it stop*/ 
 // TODO: keep specialAmmo from depleting inbetween rounds   --DONE
-// TODO: get player health to deplete on getting hurt
+// TODO: get player health to deplete on getting hurt   --DONE
+// TODO: flamethrower sound
+// TODO: make dogs hurt player
+// TODO: fix play again button on failure
+// TODO: implement health pickup functionality
 
 // determine num. of enemies per round
 // ten rounds total. Each one has 1.5 times more enemies than the last.
@@ -431,7 +435,7 @@ function handleEnemyProjectiles(orc) {
             projes.splice(i, 1);
             i--;
 
-            // playerHealth.number--;
+            playerHealth.number--;
         }
     }
 }
@@ -509,6 +513,7 @@ function handleProjectile() {
             }
         }
 
+        // PICKUP HANDLING CRAP:
         for (let l = 0; l < snackQueue.length; l++) {
             let snack = snackQueue[l];
             if (snack && projectiles[i] && collision(projectiles[i], snack)) {
@@ -517,9 +522,13 @@ function handleProjectile() {
                 i--;
                 // remove(i);
 
+                if (snack.type == "health") {
+                    playerHealth.number++;
+                }
+
                 // SPECIAL WEAPONS HERE:
                 // AR STACKING ALLOWED. NO PICKUPS IF WEAPON IS FLAMMEN
-                if (shooter.weapon != "flammen") {
+                else if (shooter.weapon != "flammen") {
                     if (snack.type == "ar") {
                         shooter.weapon = "ar";
                         shooter.fireRate = 15;

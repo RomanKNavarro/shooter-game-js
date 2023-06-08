@@ -10,8 +10,11 @@ export default class Pickup {
         this.delete = false;
 
         this.typeNum = Math.random() * 10;
+
+        // FIX THIS HEALTH CRAP:
         this.flammenOdds = 1.5;
         this.healthOdds = 1;
+
 
         // this.type = _.sample(["ar"]);
         this.type = "ar";
