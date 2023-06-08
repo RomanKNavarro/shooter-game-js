@@ -77,7 +77,7 @@ export default class Projectile {
 
           case "down-diagnal":
             this.x -= this.speed;
-            this.y += this.speed;
+            this.y += this.speed / 2;
             break;
         }
       }

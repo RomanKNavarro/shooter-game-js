@@ -10,9 +10,8 @@ export default class Health {
     }
     update() {
         if (this.hurt) {
-            this.instas--;
+            this.number--;
         }
-
     }
 
     draw() {

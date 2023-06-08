@@ -70,12 +70,12 @@ var cxt = canvas.getContext("2d");
 // TODO: stupid glitch: multiple enemies stopping at the same position.                             --DONE
 /* figured it out: every time I kill an enemy in the kill zone, enemies immediately preceding it stop*/ 
 // TODO: keep specialAmmo from depleting inbetween rounds   --DONE
+// TODO: get player health to deplete on getting hurt
 
 // determine num. of enemies per round
 // ten rounds total. Each one has 1.5 times more enemies than the last.
 // let roundCounts = [0, 10];
 
-// THIS WILL BE A PROBLEM WHEN RESETING. ARRAY GETS MUTATED EVERY ROUND:
 let roundCounts = [3, 10];
 
 // NEW SCORE STUFF:
@@ -104,7 +104,10 @@ const playAgainButton = new Button(canvas.width - 110, canvas.height / 1.15, 100
 
 const winText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Round Complete", false);
 const nextText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Next round incoming...", false);
-const failText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "FAILURE", false);
+
+const failText = new Button(canvas.width / 2.5, canvas.height / 4.5, 100, "FAILURE", false);
+const healthText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "You perished in the heat of battle.", false);
+const wallText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "Too many enemies have broken through.", false);
 
 // UI
 const enemyText = new Button(canvas.width / 2.45, 0, 100, enemiesLeft, false);
@@ -145,7 +148,9 @@ const giveupText = new TextWall(
     \n
     You are put to the firing squad and your ashes thrown into the ocean.`, canvas.height / 5);
 
-let health = new Health(30);
+// HEALTH:
+let playerHealth = new Health(30);
+let wallHealth = new Health(60);
 
 // variables
 let frame = 0;
@@ -187,15 +192,14 @@ let currentSpeed = 4;
 // DROPPED PICKUPS:
 let snackQueue = [];
 
-// states: MENU, RUNNING, WIN, LOSE, BOSS, OVER
 // let state = "MENU";
-let state = "INTRO";
+let state = "MENU";
 
 // functions:
 flora.draw();
 
 function handleStatus() {
-    if (state == "RUNNING") {
+    if (state == "RUNNING" || state == "WIN") {
         roundText.text = currentRound;
         //enemyText.text = enemyCount;
         enemyText.text = enemiesLeft;
@@ -203,7 +207,15 @@ function handleStatus() {
         roundText.draw();
         scoreText.draw();
     
-        health.draw();
+        playerHealth.draw();
+        playerHealth.update();
+        wallHealth.draw();
+    }
+
+    // REMEMBER TO UNCOMMENT:
+    // if (playerHealth.number <= 0 || wallHealth.number <= 0) {
+    if (wallHealth.number <= 0) {
+        state = "LOSE";
     }
 
 }
@@ -328,6 +340,18 @@ function handleState() {
                 }, 1000);
             }
             break;
+        
+        case "LOSE":
+            shooter.disabled = true;
+            failText.draw();
+            playAgainButton.draw();
+            if (playerHealth.number <= 0) {
+                healthText.draw();
+            } else {
+                wallText.draw();
+            }
+            mouseCollision(shooter.mouse, playAgainButton, "MENU");  
+            break;
 
         case "SPECIAL":
             //shooter.disabled = true;
@@ -371,6 +395,7 @@ function handleState() {
             playAgainButton.draw();
 
             mouseCollision(shooter.mouse, playAgainButton, "MENU");
+            break;
     }
 }
 
@@ -392,19 +417,21 @@ function handleShooter() {
 }
 
 function handleEnemyProjectiles(orc) {
-    let projectiles = orc.projectiles;
+    let projes = orc.projectiles;
 
-    for (let i = 0; i < projectiles.length; i++) {
-        let current = projectiles[i];
+    for (let i = 0; i < projes.length; i++) {
+        let current = projes[i];
         
 
-        if (current.x > shooter.x + shooter.width || current.x > 0) {
+        if (current.x > shooter.x + shooter.width) {
             current.update();
             current.draw();
         }
         else {
-            projectiles.splice(i, 1);
+            projes.splice(i, 1);
             i--;
+
+            // playerHealth.number--;
         }
     }
 }
@@ -546,16 +573,6 @@ function handleEnemy() {
         // HERE'S HOW WE DISCRIMINATE CIVIES:
         if (current.speed < 0) current.isCivie = true;
 
-        // if (finalRound && i % 3 == 0) {
-        //     current.isCivie = true;
-        // }
-
-
-        // spawn civies in last round, but only if 20 < e < 50. Every third enemy spawned is civie:
-        // if ((enemiesLeft < 20 && enemiesLeft > 5) && i % 3 == 0 && currentRound == 3) {
-        //     current.isCivie = true;
-        // }
-
         // ALL enemies given civie status on specialRound
         if (specialRound) current.isCivie = true;
 
@@ -571,6 +588,7 @@ function handleEnemy() {
         }
 
         // FIX THIS CRAP --DONE. Takes into account both regular and special rounds:
+        // delete enemies if they are off-canvas:
         if ((current.x + current.width > 0) && (current.x < canvas.width + 50) && !current.delete) {
             //console.log(enemyQueue);
             current.update();
@@ -579,6 +597,7 @@ function handleEnemy() {
             enemyQueue.splice(i, 1);
             score += 10;
             current.delete;
+            wallHealth.number--;
         }
 
         // FIX THIS CRAP ASAP:  --DONE
@@ -700,8 +719,6 @@ function animate() {
     // if (state == "RUNNING") {
     //     console.log(baddiePositions);
     // };
-    
-
     frame++;
 
 
