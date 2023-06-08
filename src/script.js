@@ -74,7 +74,7 @@ var cxt = canvas.getContext("2d");
 // TODO: flamethrower sound
 // TODO: make dogs hurt player
 // TODO: fix play again button on failure
-// TODO: implement health pickup functionality
+// TODO: implement health pickup functionality  --DONE
 
 // determine num. of enemies per round
 // ten rounds total. Each one has 1.5 times more enemies than the last.
@@ -218,6 +218,8 @@ function handleStatus() {
 
     // REMEMBER TO UNCOMMENT:
     // if (playerHealth.number <= 0 || wallHealth.number <= 0) {
+    //     state = "LOSE";
+    // }
     if (wallHealth.number <= 0) {
         state = "LOSE";
     }
@@ -520,9 +522,8 @@ function handleProjectile() {
 
                 projectiles.splice(i, 1);
                 i--;
-                // remove(i);
 
-                if (snack.type == "health") {
+                if (snack.type == "health" && playerHealth.number < 3) {
                     playerHealth.number++;
                 }
 

@@ -12,8 +12,14 @@ export default class Pickup {
         this.typeNum = Math.random() * 10;
 
         // FIX THIS HEALTH CRAP:
-        this.flammenOdds = 1.5;
-        this.healthOdds = 1;
+        // this.flammenOdds = 1.5;
+        // this.healthOdds = 5;
+
+
+        this.aidOdds = 5;
+
+        this.aid = ["health", "wall"][Math.floor(Math.random() * 2)];
+ 
 
 
         // this.type = _.sample(["ar"]);
@@ -26,7 +32,6 @@ export default class Pickup {
     update() {
         // this.y -= 15;
         this.y += 10;
-        //console.log(this.type);
     }
 
     draw() {
@@ -40,8 +45,9 @@ export default class Pickup {
             cxt.fillStyle = "black";
             cxt.textAlign = "center";
             cxt.textBaseline = "middle";
-
-            if (this.typeNum <= this.healthOdds) this.type = "health";
+            
+            if (this.typeNum <= this.aidOdds) this.type = this.aid;
+            // Math.floor(Math.random() * 10);
             else if (this.typeNum <= this.flammenOdds) this.type = "flammen";
       
             cxt.fillText(this.type, this.x + (this.width / 2), this.y + (this.height / 2));
