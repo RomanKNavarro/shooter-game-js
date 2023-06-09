@@ -11,12 +11,9 @@ export default class Pickup {
 
         this.typeNum = Math.random() * 10;
 
-        // FIX THIS HEALTH CRAP:
-        // this.flammenOdds = 1.5;
-        // this.healthOdds = 5;
 
-
-        this.aidOdds = 5;
+        this.flammenOdds = 8;
+        this.aidOdds = 1;
 
         this.aid = ["health", "wall"][Math.floor(Math.random() * 2)];
  

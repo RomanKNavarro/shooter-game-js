@@ -57,6 +57,9 @@ export default class Enemy {
       // POSITION CRAP:
       this.inPosition = false;
       this.position = 0;
+
+      this.growl = new Audio();
+      this.growl.src = "/src/assets/sounds/paco.flac";
     }
 
     draw() {
@@ -92,7 +95,11 @@ export default class Enemy {
       } else {
           this.speed = 0;
           this.timer++;
-          if ((this.type != "crawl") && (this.timer % this.fireRate === 0  || this.timer == 1)) {
+
+          let gunSound = this.type != "crawl" ? "shotty" : "growl";
+          //   MIGHT HAVE TO REVERT
+          // if ((this.type != "crawl") && (this.timer % this.fireRate === 0  || this.timer == 1)) {
+            if (this.timer % this.fireRate === 0  || this.timer == 1) {  
             this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, "shotty")); 
           }
       }

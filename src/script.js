@@ -220,9 +220,9 @@ function handleStatus() {
     // if (playerHealth.number <= 0 || wallHealth.number <= 0) {
     //     state = "LOSE";
     // }
-    if (wallHealth.number <= 0) {
-        state = "LOSE";
-    }
+    // if (wallHealth.number <= 0) {
+    //     state = "LOSE";
+    // }
 
 }
 
@@ -325,7 +325,7 @@ function handleState() {
             specialRound = false;
     
             // special round cases:
-            let specRounds = {5: "SPECIAL", 1: "BOSS", 10: "END"};
+            let specRounds = {5: "SPECIAL", 7: "BOSS", 10: "END"};
             if (Object.keys(specRounds).includes(currentRound.toString())) {
                 state = specRounds[currentRound];
             }
@@ -620,8 +620,6 @@ function handleEnemy() {
                 // what was my thought process behind this?
                 current.x < trueDistance &&
                 current.x > trueDistance - current.width  &&
-
-
                 current.type == baddiePositions[i.toString()]["type"] && 
                 !specialRound &&
                 current.speed > 0) {
@@ -629,6 +627,13 @@ function handleEnemy() {
                     current.shooting = true; 
                     baddiePositions[i.toString()]["inPos"] = true;
                     current.position = i.toString();
+            }
+
+            if (current.type == "crawl" && current.shooting && frame % 50) {
+                //let paco = current.dog[Math.floor(Math.random() * 3)];
+                // current.growl.play();
+                current.growl.play();
+                playerHealth.number--;
             }
         }
     }

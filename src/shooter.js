@@ -26,7 +26,10 @@ export default class Shooter {
 
         // pistol, ar, and flamethrower
         this.weapon = "pistol";
-        // this.weapon = "ar";
+        this.fireRate = 0;
+        this.specialAmmo = 0;
+
+        // this.weapon = "flammen";
         // this.fireRate = 10;
         // this.specialAmmo = 100;
 
@@ -38,6 +41,10 @@ export default class Shooter {
             height: 0.1,
             clicked: false
         };
+
+        this.flammen = new Audio();
+        this.flammen.src = "src/assets/sounds/flammen.mp3";
+
     }
     
     draw() {
@@ -53,15 +60,9 @@ export default class Shooter {
     }
 
     update() {
+
         // code doesn't work. fireRate not set.    
         if (this.shooting && !this.disabled) {
-
-            
-            // console.log(`this.weapon: ${this.weapon}
-            // this.specialAmmo: ${this.specialAmmo}
-            // this.fireRate: ${this.fireRate}`);
-
-            //console.log(this.specialAmmo);
             this.timer++; 
             if (this.timer % this.fireRate === 0  || this.timer == 1) {
                 this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, this.weapon));  

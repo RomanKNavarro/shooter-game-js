@@ -2,6 +2,9 @@
 var canvas = document.getElementById("canvas1");
 var cxt = canvas.getContext("2d");
 
+let flammen = new Audio();
+flammen.src = "src/assets/sounds/flammen.mp3";
+
 // TODO: while shooting straight, pressing d+w makes bullets shoot up instead of diagnal,
 // yet, pressing w+d does make it diagnal.    --DONE. Simply had to move if statement to bottom of cases.
 
@@ -20,6 +23,10 @@ export default class InputHandler {
         // this is just for SHOOTING, not look direction
         case ' ':
             entity.shooting = true;
+            flammen.play();
+            // if (entity.weapon == "flammen") {
+            //   flammen.play();
+            // }
             break;
 
         case 'w':

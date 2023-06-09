@@ -33,11 +33,7 @@ export default class Projectile {
     }
     
     update() {
-      // if (this.weapon == "flammen") {
-      //   this.flammen.play();
-      // }
-
-      if (this.x > 0 && this.x < canvas.height && !this.delete) {
+      if (this.x > 0 && this.x < canvas.height && !this.delete && this.weapon != "flammen") {
         switch (this.weapon) {
           case "pistol":
             this.pistol.play();
@@ -47,9 +43,6 @@ export default class Projectile {
             break;
           case "ar":
             this.ar.play();
-            break;
-          case "flammen":
-            this.flammen.play();
             break;
         }
       }
