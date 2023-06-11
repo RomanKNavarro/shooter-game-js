@@ -76,6 +76,7 @@ var cxt = canvas.getContext("2d");
 // TODO: fix play again button on failure       --DONE
 // TODO: implement health pickup functionality  --DONE
 // TODO: reset baddiePositions on new game      --DONE
+// TODO: shooting during round break possible
 
 // determine num. of enemies per round
 // ten rounds total. Each one has 1.5 times more enemies than the last.
@@ -449,6 +450,45 @@ function handleEnemyProjectiles(orc) {
 
             // UNCOMMENT THIS:
             //playerHealth.number--;
+        }
+    }
+}
+
+// TODO
+function handleFlammen() {
+    if (shooter.weapon == "flammen" && shooter.shooting == true) {
+
+        // standard width/height when shooting straight:
+        let width = 150;
+        let height = 30;
+
+        cxt.fillStyle = "black";
+        cxt.beginPath();
+
+        switch(shooter.direction) {
+            case "straight":
+
+                break
+    
+              case "up":
+                break;
+              
+              case "diagnal":
+                break;
+              
+              case "down":
+                break;
+              //   this.y = this.y + 30;
+    
+              case "back":
+              case "down-back":
+                break;
+              
+              case "diagnal-back":
+                break;
+    
+              case "down-diagnal":
+                break;
         }
     }
 }

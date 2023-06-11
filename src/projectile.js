@@ -67,6 +67,7 @@ export default class Projectile {
           case "diagnal":
             this.x += this.speed;
             this.y -= this.speed / this.randomY[Math.floor(Math.random() * this.randomY.length)];
+            break;
           
           case "down":
             this.x += this.speed;
