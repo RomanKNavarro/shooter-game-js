@@ -72,9 +72,10 @@ var cxt = canvas.getContext("2d");
 // TODO: keep specialAmmo from depleting inbetween rounds   --DONE
 // TODO: get player health to deplete on getting hurt   --DONE
 // TODO: flamethrower sound
-// TODO: make dogs hurt player
-// TODO: fix play again button on failure
+// TODO: make dogs hurt player  --DONE
+// TODO: fix play again button on failure       --DONE
 // TODO: implement health pickup functionality  --DONE
+// TODO: reset baddiePositions on new game      --DONE
 
 // determine num. of enemies per round
 // ten rounds total. Each one has 1.5 times more enemies than the last.
@@ -105,6 +106,8 @@ const skipButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, "sk
 const yesButton = new Button(250, canvas.height / 1.2, 100, '"Defend"', true);
 const noButton = new Button(canvas.width - 250 - 100, canvas.height / 1.2, 100, "Give up", true);
 const playAgainButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, "Play again?", true);
+
+const playAgainButton2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "test test", true);
 
 const winText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Round Complete", false);
 const nextText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Next round incoming...", false);
@@ -161,14 +164,9 @@ let frame = 0;
 // let randomFrames = [50, 80, 110, 150];
 let randomFrames = [10, 30, 50, 80, 110,];
 
-// level 1: 8/10 chance to spawn ground enemy. 20% chance to spawn air enemy.
-const rounds = Array.from(Array(10).keys());
-
 let enemyQueue = [];
-let civieQueue = [];
 
 // stupid timer vars:
-let specialRoundNum = _.sample(_.range(3, 6));
 let specialRound = false;
 let showNextRound = false;
 let showNextText = false;
@@ -215,34 +213,32 @@ function handleStatus() {
         playerHealth.update();
         wallHealth.draw();
     }
-
-    // REMEMBER TO UNCOMMENT:
-    // if (playerHealth.number <= 0 || wallHealth.number <= 0) {
-    //     state = "LOSE";
-    // }
-    // if (wallHealth.number <= 0) {
-    //     state = "LOSE";
-    // }
-
 }
 
 function greatReset() {
     score = 0;
     scoreText.text = score;
     enemyCount = enemiesLeft = roundCounts[0];
+    enemyQueue = [];
 
     winningScore = 30;
     currentRound = 1;
     shooter.weapon = "pistol";
     shooter.fireRate = 0;
     shooter.specialAmmo = 0;
-    // roundCounts = [3, 10];
     roundCounts = [3, 10];
     for (let i = 0; i <= 9; i++) {
         roundCounts.push(Math.floor(roundCounts[roundCounts.length -1] * 1.5));
     }
 
+    for (let i = 1; i <= Object.keys(baddiePositions).length; i++) {
+        baddiePositions[i.toString()]["inPos"] = false;
+    }
+
     snackQueue = [];
+    playerHealth.number = 3;
+    wallHealth.number = 3;
+    showMenu = false;
 }
 
 // states: MENU, RUNNING, WIN, SPECIAL, BOSS, END, LOSE.
@@ -258,6 +254,7 @@ function handleState() {
             mouseCollision(shooter.mouse, skipButton, "MENU");
 
             setTimeout(() => {
+                // what's up with this again?
                 showMenu = true;
                 if (score >= winningScore) {
                     cremate();
@@ -266,7 +263,7 @@ function handleState() {
 
             if (showMenu) state = "MENU";
             break;
-
+            
         // glitch: MENU -> RUNNING -> MENU
         case "MENU": 
             // bossText.draw();
@@ -318,6 +315,9 @@ function handleState() {
             // if (currentRound == 2) {
             //     specialRound = true;
             // }
+            if (playerHealth.number <= 0 || wallHealth.number <= 0) {
+                state = "LOSE";
+            }
 
             break;
         
@@ -350,13 +350,18 @@ function handleState() {
         case "LOSE":
             shooter.disabled = true;
             failText.draw();
-            playAgainButton.draw();
             if (playerHealth.number <= 0) {
                 healthText.draw();
             } else {
                 wallText.draw();
             }
-            mouseCollision(shooter.mouse, playAgainButton, "MENU");  
+
+            playAgainButton2.draw();
+            mouseCollision(shooter.mouse, playAgainButton2, "INTRO");  
+
+            // playAgainButton.draw();
+            // mouseCollision(shooter.mouse, playAgainButton, "MENU");
+
             break;
 
         case "SPECIAL":
@@ -399,7 +404,6 @@ function handleState() {
             shooter.disabled = true;
             giveupText.draw();
             playAgainButton.draw();
-
             mouseCollision(shooter.mouse, playAgainButton, "MENU");
             break;
     }
@@ -484,22 +488,6 @@ function handleProjectile() {
                     if (currentEnemy.pickup) {
                         snackQueue.push(new Pickup(currentEnemy.x, currentEnemy.y - 100));
                     }
-
-                    // RESET ENEMY POS'S every time an enemy is killed:
-                    // FIX THIS CRAP:
-                    // for (let p = 1; p <= Object.keys(baddiePositions).length; p++) { 
-                    //     baddiePositions[p.toString()]["inPos"] = false;
-                    // }
-
-
-                    // TO TEST:
-                    // ["1", "2", "3", "4"]
-                    // for (let p = 0; p < Object.keys(baddiePositions).length; p++) { 
-                    //     // baddiePositions[p.toString()]["inPos"] = false;
-                    //     if (currentEnemy.position == Object.keys(baddiePositions)[p]) {
-                    //         baddiePositions[(p + 1).toString()]["inPos"] = false;
-                    //     }
-                    // }
 
                     if (Object.keys(baddiePositions).includes(currentEnemy.position)) {
                         baddiePositions[currentEnemy.position]["inPos"] = false;
@@ -633,7 +621,7 @@ function handleEnemy() {
                 //let paco = current.dog[Math.floor(Math.random() * 3)];
                 // current.growl.play();
                 current.growl.play();
-                playerHealth.number--;
+                // playerHealth.number--;
             }
         }
     }
@@ -725,18 +713,11 @@ function animate() {
     handleProjectile();
     handleSnack()
     handleState();
-
     handleStatus();
 
-    // console.log(`specialRound: ${specialRound}
-    // enemyQueue: ${enemyQueue}`);
-    
-    // if (state == "RUNNING") {
-    //     console.log(baddiePositions);
-    // };
     frame++;
 
-
+    console.log(shooter.shooting);
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
 }

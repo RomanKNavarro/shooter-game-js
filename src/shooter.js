@@ -61,6 +61,13 @@ export default class Shooter {
 
     update() {
 
+        if (this.shooting == true) {
+            this.flammen.play();
+        } else {
+            this.flammen.pause();
+            this.flammen.currentTime = 0;
+        }
+
         // code doesn't work. fireRate not set.    
         if (this.shooting && !this.disabled) {
             this.timer++; 
