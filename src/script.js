@@ -441,7 +441,8 @@ function handleEnemyProjectiles(orc) {
             projes.splice(i, 1);
             i--;
 
-            playerHealth.number--;
+            // UNCOMMENT THIS:
+            //playerHealth.number--;
         }
     }
 }
@@ -717,7 +718,7 @@ function animate() {
 
     frame++;
 
-    console.log(shooter.shooting);
+    // console.log(shooter.shooting);
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
 }
