@@ -22,7 +22,7 @@ export default class Projectile {
 
       this.pistol.src = "src/assets/sounds/shots/pistol.wav";
       this.ar.src = "src/assets/sounds/shots/cg1.wav";
-      this.flammen.src = "src/assets/sounds/flammen.mp3";
+      this.flammen.src = "src/assets/sounds/flammen2.mp3";
 
       this.shotty.src = "src/assets/sounds/shots/shotgun.wav";
 
@@ -33,7 +33,8 @@ export default class Projectile {
     }
     
     update() {
-      if (this.x > 0 && this.x < canvas.height && !this.delete && this.weapon != "flammen") {
+      // if (this.x > 0 && this.x < canvas.height && !this.delete && this.weapon != "flammen") {
+      if (this.x > 0 && this.x < canvas.height && !this.delete) {
         switch (this.weapon) {
           case "pistol":
             this.pistol.play();
@@ -43,6 +44,11 @@ export default class Projectile {
             break;
           case "ar":
             this.ar.play();
+            break;
+          // default:
+          //   return;
+          case "flammen":
+            // this.flammen.play();
             break;
         }
       }

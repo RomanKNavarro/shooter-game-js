@@ -26,11 +26,10 @@ export default class InputHandler {
         // this is just for SHOOTING, not look direction
         case ' ':
             entity.shooting = true;
-            //flammen.play();
             // flammen.play();
-            if (entity.weapon == "flammen") {
-              flammen.play();
-            }
+            // if (entity.weapon == "flammen") {
+            //   flammen.play();
+            // }
             break;
 
         case 'w':
@@ -46,7 +45,8 @@ export default class InputHandler {
           break;
 
         case 'q':
-          entity.weapon = "pistol";
+          // TO UNCOMMENT:
+          // entity.weapon = "pistol";
           entity.fireRate = 0;
           entity.specialAmmo = 0;
           break;
@@ -67,8 +67,12 @@ export default class InputHandler {
           entity.shooting = false;
           if (entity.weapon == "flammen") {
             flammen.pause();
-            steam.play(); 
+            // steam.play(); 
           }
+
+          // flammen.pause();
+          // steam.play(); 
+
           break;
 
         case 'w':

@@ -81,7 +81,12 @@ var cxt = canvas.getContext("2d");
 // ten rounds total. Each one has 1.5 times more enemies than the last.
 // let roundCounts = [0, 10];
 
-let roundCounts = [3, 10];
+// FOR FLAMMEN: despite the glitchy noises, flammen actually makes no noise. 
+// MORE REVELATION: the firerate is what messes with the audio. 
+// ALSO QUITE POSSIBLY: the timer++
+
+// let roundCounts = [3, 10];
+let roundCounts = [20, 50];
 
 // NEW SCORE STUFF:
 let score = 0;
@@ -226,7 +231,8 @@ function greatReset() {
     shooter.weapon = "pistol";
     shooter.fireRate = 0;
     shooter.specialAmmo = 0;
-    roundCounts = [3, 10];
+    // roundCounts = [3, 10];
+    roundCounts = [30, 50];
     for (let i = 0; i <= 9; i++) {
         roundCounts.push(Math.floor(roundCounts[roundCounts.length -1] * 1.5));
     }
@@ -421,7 +427,7 @@ function cremate() {
 function handleShooter() {
     shooter.draw();
 
-    if (state == "RUNNING") {
+    if (state == "RUNNING" || state == "MENU") {
         shooter.update();
     }
 }
@@ -457,7 +463,8 @@ function handleProjectile() {
         // increase size of flammen "bullets"
         if (shooter.weapon == "flammen") current.size = 15;
 
-        if (current.x < canvas.width - 100 && state == "RUNNING") {
+        // TO REVERT LATER ON:
+        if (current.x < canvas.width - 100 && state == "RUNNING" || state == "MENU" ) {
             current.update();
             current.draw();
         }
@@ -518,6 +525,7 @@ function handleProjectile() {
 
                 // SPECIAL WEAPONS HERE:
                 // AR STACKING ALLOWED. NO PICKUPS IF WEAPON IS FLAMMEN
+                // TO UNCOMMENT:
                 else if (shooter.weapon != "flammen") {
                     if (snack.type == "ar") {
                         shooter.weapon = "ar";
@@ -526,6 +534,7 @@ function handleProjectile() {
                     } else {
                         shooter.weapon = "flammen";
                         shooter.fireRate = 2;
+                        // shooter.fireRate = 0;
                         shooter.specialAmmo = 100;  
                     }
                 }
@@ -536,7 +545,7 @@ function handleProjectile() {
             }
         }
 
-        // projectiles despawn logic:
+        // projectiles despawn logic. Takes into account all types:
         if (projectiles[i]) {
             if ((projectiles[i].x > canvas.width - 100 || projectiles[i].x < 0 || projectiles[i].y < 0)
             || (shooter.weapon == "flammen" && (projectiles[i].x > canvas.width - 400 
@@ -596,7 +605,8 @@ function handleEnemy() {
             enemyQueue.splice(i, 1);
             score += 10;
             current.delete;
-            wallHealth.number--;
+            // UNCOMMENT:
+            //wallHealth.number--;
         }
 
         // FIX THIS CRAP ASAP:  --DONE
@@ -621,7 +631,9 @@ function handleEnemy() {
             if (current.type == "crawl" && current.shooting && frame % 50) {
                 //let paco = current.dog[Math.floor(Math.random() * 3)];
                 // current.growl.play();
-                current.growl.play();
+
+                // UNCOMMENT THIS:
+                // current.growl.play();
                 // playerHealth.number--;
             }
         }

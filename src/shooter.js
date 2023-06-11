@@ -43,7 +43,7 @@ export default class Shooter {
         };
 
         this.flammen = new Audio();
-        this.flammen.src = "src/assets/sounds/flammen2.mp3";
+        this.flammen.src = "src/assets/sounds/flammen4.mp3";
 
         this.steam = new Audio();
         this.steam.src = "src/assets/sounds/steam_hisses/steamer22.wav";
@@ -71,13 +71,13 @@ export default class Shooter {
         //     this.flammen.currentTime = 0;
         // }
 
-        // if (this.weapon == "flammen") {
-        //     if (this.shooting) this.flammen.play();
-        //     else {
-        //         this.flammen.pause();
-        //         this.steam.play(); 
-        //     } 
-        // }
+        if (this.weapon == "flammen") {
+            // if (this.shooting) this.flammen.play();
+            // else {
+            //     this.flammen.pause();
+            //     this.steam.play(); 
+            // } 
+        }
 
         // code doesn't work. fireRate not set.    
         if (this.shooting && !this.disabled) {
@@ -87,6 +87,7 @@ export default class Shooter {
                 this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, this.weapon));  
                 // this.crack.play();
 
+                // REMEMBER TO UNCOMMENT:
                 // what's this again?
                 if (this.specialAmmo > 0) {
                     this.specialAmmo--;
