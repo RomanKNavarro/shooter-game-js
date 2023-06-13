@@ -455,42 +455,57 @@ function handleEnemyProjectiles(orc) {
 }
 
 // TODO
+let flameWidth = 50;
 function handleFlammen() {
-    if (shooter.weapon == "flammen" && shooter.shooting == true) {
-
-        // standard width/height when shooting straight:
-        let width = 150;
-        let height = 30;
-
-        cxt.fillStyle = "black";
+    // if (shooter.weapon == "flammen" && shooter.shooting == true) {
+    if (shooter.shooting == true) {  
+        if (flameWidth < 200) flameWidth += 5;
+        cxt.fillStyle = "red";
         cxt.beginPath();
-
-        switch(shooter.direction) {
-            case "straight":
-
-                break
-    
-              case "up":
-                break;
-              
-              case "diagnal":
-                break;
-              
-              case "down":
-                break;
-              //   this.y = this.y + 30;
-    
-              case "back":
-              case "down-back":
-                break;
-              
-              case "diagnal-back":
-                break;
-    
-              case "down-diagnal":
-                break;
-        }
+        cxt.rect(100, 100, flameWidth, 50);
+        cxt.fill();
+    } else {
+        shooter.flammen.pause();
+        flameWidth = 50;
     }
+
+    // if (shooter.weapon == "flammen" && shooter.shooting == true) {
+    //     // standard width/height when shooting straight:
+    //     let width = 150;
+    //     let height = 30;
+
+    //     cxt.fillStyle = "black";
+    //     cxt.beginPath();
+
+    //     switch(shooter.direction) {
+    //         case "straight":
+    //             // ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle)
+    //             ctx.beginPath();
+    //             ctx.ellipse(100, 100, 50, 75, Math.PI / 4, 0, 2 * Math.PI);
+    //             ctx.stroke();
+    //             break
+    
+    //           case "up":
+    //             break;
+              
+    //           case "diagnal":
+    //             break;
+              
+    //           case "down":
+    //             break;
+    //           //   this.y = this.y + 30;
+    
+    //           case "back":
+    //           case "down-back":
+    //             break;
+              
+    //           case "diagnal-back":
+    //             break;
+    
+    //           case "down-diagnal":
+    //             break;
+    //     }
+    // }
 }
 
 function handleProjectile() {
@@ -501,7 +516,7 @@ function handleProjectile() {
         let current = projectiles[i];
 
         // increase size of flammen "bullets"
-        if (shooter.weapon == "flammen") current.size = 15;
+        // if (shooter.weapon == "flammen") current.size = 15;
 
         // TO REVERT LATER ON:
         if (current.x < canvas.width - 100 && state == "RUNNING" || state == "MENU" ) {
@@ -767,6 +782,11 @@ function animate() {
     handleSnack()
     handleState();
     handleStatus();
+
+    if (shooter.weapon == "flammen") {
+        handleFlammen();
+    }
+    
 
     frame++;
 
