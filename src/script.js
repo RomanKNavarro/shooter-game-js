@@ -87,7 +87,7 @@ var cxt = canvas.getContext("2d");
 // ALSO QUITE POSSIBLY: the timer++
 
 // let roundCounts = [3, 10];
-let roundCounts = [20, 50];
+let roundCounts = [3, 50];
 
 // NEW SCORE STUFF:
 let score = 0;
@@ -189,7 +189,7 @@ let baddiePositions = {
     "1": {"inPos": false, "distance": 50, "type": "ground"}, 
     "2": {"inPos": false, "distance": 150, "type": "ground"}, 
     "3": {"inPos": false, "distance": 250, "type": "ground"},
-    "4": {"inPos": false, "distance": 180, "type": "air"},
+    "4": {"inPos": false, "distance": 120, "type": "air"},
     "5": {"inPos": false, "distance": 0, "type": "crawl"}
 };
 
@@ -233,7 +233,7 @@ function greatReset() {
     shooter.fireRate = 0;
     shooter.specialAmmo = 0;
     // roundCounts = [3, 10];
-    roundCounts = [30, 50];
+    roundCounts = [3, 50];
     for (let i = 0; i <= 9; i++) {
         roundCounts.push(Math.floor(roundCounts[roundCounts.length -1] * 1.5));
     }
@@ -330,6 +330,7 @@ function handleState() {
         
         case "WIN": 
             specialRound = false;
+            shooter.disabled = false;
     
             // special round cases:
             let specRounds = {5: "SPECIAL", 7: "BOSS", 10: "END"};
@@ -428,7 +429,7 @@ function cremate() {
 function handleShooter() {
     shooter.draw();
 
-    if (state == "RUNNING" || state == "MENU") {
+    if (state == "RUNNING" || state == "WIN") {
         shooter.update();
     }
 }
@@ -455,19 +456,16 @@ function handleEnemyProjectiles(orc) {
 }
 
 // TODO
-let flameWidth = 50;
 function handleFlammen() {
     // if (shooter.weapon == "flammen" && shooter.shooting == true) {
-    if (shooter.shooting == true) {  
-        if (flameWidth < 200) flameWidth += 5;
-        cxt.fillStyle = "red";
-        cxt.beginPath();
-        cxt.rect(100, 100, flameWidth, 50);
-        cxt.fill();
-    } else {
-        shooter.flammen.pause();
-        flameWidth = 50;
+    if (shooter.weapon == "flammen") {
+        if (shooter.shooting == true) {  
+            shooter.flammen.play();
+        } else {
+            shooter.flammen.pause();
+        }
     }
+
 
     // if (shooter.weapon == "flammen" && shooter.shooting == true) {
     //     // standard width/height when shooting straight:
@@ -516,10 +514,10 @@ function handleProjectile() {
         let current = projectiles[i];
 
         // increase size of flammen "bullets"
-        // if (shooter.weapon == "flammen") current.size = 15;
+        if (shooter.weapon == "flammen") current.size =  20;
 
         // TO REVERT LATER ON:
-        if (current.x < canvas.width - 100 && state == "RUNNING" || state == "MENU" ) {
+        if (current.x < canvas.width - 100 && (state == "RUNNING" || state == "WIN")) {
             current.update();
             current.draw();
         }
@@ -535,7 +533,6 @@ function handleProjectile() {
             drop pickup if applicable: */ 
             if (enemyQueue[j] && projectiles[i] && collision(projectiles[i], enemyQueue[j])) {
 
-                current.delete = true;
                 projectiles.splice(i, 1);
                 i--;
 
@@ -559,8 +556,9 @@ function handleProjectile() {
                     // here is how the enemies get deleted:
                     enemyQueue.splice(j, 1);
                     j--;
-
                     enemiesLeft--;
+
+                    current.dead = true;
 
                 }
             }
@@ -589,8 +587,7 @@ function handleProjectile() {
                     } else {
                         shooter.weapon = "flammen";
                         shooter.fireRate = 2;
-                        // shooter.fireRate = 0;
-                        shooter.specialAmmo = 100;  
+                        shooter.specialAmmo = 45;  
                     }
                 }
 
@@ -612,7 +609,6 @@ function handleProjectile() {
     }
 }
 
-// let weapons = {"ar": {"rate": 10, "ammo": 10}, "flammen": {"rate": 0, "ammo": 15}};
 
 // SNACK HANDLING
 function handleSnack() {
@@ -652,14 +648,14 @@ function handleEnemy() {
 
         // FIX THIS CRAP --DONE. Takes into account both regular and special rounds:
         // delete enemies if they are off-canvas:
-        if ((current.x + current.width > 0) && (current.x < canvas.width + 50) && !current.delete) {
+        if ((current.x + current.width > 0) && (current.x < canvas.width + 50) && !current.dead) {
             //console.log(enemyQueue);
             current.update();
             current.draw();
         } else {
             enemyQueue.splice(i, 1);
             score += 10;
-            current.delete;
+            current.dead;
             // UNCOMMENT:
             //wallHealth.number--;
         }
@@ -783,9 +779,10 @@ function animate() {
     handleState();
     handleStatus();
 
-    if (shooter.weapon == "flammen") {
-        handleFlammen();
-    }
+    handleFlammen();
+    // if (shooter.weapon == "flammen") {
+    //     handleFlammen();
+    // }
     
 
     frame++;

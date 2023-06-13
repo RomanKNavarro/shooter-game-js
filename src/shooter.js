@@ -15,6 +15,7 @@ export default class Shooter {
         this.name = "Warren";
         this.disabled = true;
         this.health = 3;
+        this.delete = false;
 
         /* HOW PROJECTILES WORK: whenever user shoots, new projectile added to array. As he not shoots,
         it automatically decrements until it is empty :) */
@@ -65,11 +66,11 @@ export default class Shooter {
     update() {
 
         // code doesn't work. fireRate not set.    
-        if (this.shooting && !this.disabled && this.weapon != "flammen") {
+        if (this.shooting && !this.disabled) {
             this.timer++;
             
             if (this.timer % this.fireRate === 0  || this.timer == 1) {
-                this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, this.weapon));  
+                this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, this.weapon, this.delete));  
 
                 if (this.specialAmmo > 0) {
                     this.specialAmmo--;

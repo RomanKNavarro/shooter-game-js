@@ -3,14 +3,16 @@ var cxt = canvas.getContext("2d");
 
 // BULLETS
 export default class Projectile {
-    constructor(x, y, direction, weapon) {
+    constructor(x, y, direction, weapon, dead) {
       // constructor(x, y) { lol test
       this.x = x;
       this.y = y;
       this.direction = direction;
       this.weapon = weapon;
+      this.dead = dead;
 
       this.size = 5;
+
       this.speed = 10;
       this.delete = false;
       this.randomY = [1.4, 1.6, 1.8, 2, 2.2, 2.4];
@@ -33,22 +35,21 @@ export default class Projectile {
     }
     
     update() {
-      // if (this.x > 0 && this.x < canvas.height && !this.delete && this.weapon != "flammen") {
-      if (this.x > 0 && this.x < canvas.height && !this.delete) {
+      if (this.x > 0 && this.x < canvas.height && !this.delete && this.weapon != "flammen") {
+      // if (this.x > 0 && this.x < canvas.height && !this.delete) {
         switch (this.weapon) {
           case "pistol":
             this.pistol.play();
             break;
           case "shotty":
-            this.shotty.play();
+            if (!this.dead) {
+              this.shotty.play();
+            } else {
+              this.shotty.pause();
+            } 
             break;
           case "ar":
             this.ar.play();
-            break;
-          // default:
-          //   return;
-          case "flammen":
-            // this.flammen.play();
             break;
         }
       }

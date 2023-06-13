@@ -21,7 +21,7 @@ export default class Enemy {
       this.moving = true;
 
       this.color = "pink"
-      this.delete = false;
+      this.dead = false;
       this.force = "ground";
 
       this.pickupNum = Math.floor(Math.random() * 10);
@@ -98,7 +98,7 @@ export default class Enemy {
           // if ((this.type != "crawl") && (this.timer % this.fireRate === 0  || this.timer == 1)) {
             if (this.timer % this.fireRate === 0  || this.timer == 1) {  
             // this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, "shotty")); 
-              this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, gunSound)); 
+              this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, gunSound, this.dead)); 
           }
       }
     }
