@@ -14,9 +14,10 @@ export default class Pickup {
 
         this.flammenOdds = 8;
         this.aidOdds = 1;
+        this.weaponOdds = 8;
 
         this.aid = ["health", "wall"][Math.floor(Math.random() * 2)];
- 
+        this.weapon = ["flammen", "launcher"][Math.floor(Math.random() * 2)];
 
 
         // this.type = _.sample(["ar"]);
@@ -45,7 +46,8 @@ export default class Pickup {
             
             if (this.typeNum <= this.aidOdds) this.type = this.aid;
             // Math.floor(Math.random() * 10);
-            else if (this.typeNum <= this.flammenOdds) this.type = "flammen";
+            // else if (this.typeNum <= this.flammenOdds) this.type = "flammen";
+            else if (this.typeNum <= this.flammenOdds) this.type = this.weapon;
       
             cxt.fillText(this.type, this.x + (this.width / 2), this.y + (this.height / 2));
         };

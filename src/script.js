@@ -579,6 +579,8 @@ function handleProjectile() {
                 // SPECIAL WEAPONS HERE:
                 // AR STACKING ALLOWED. NO PICKUPS IF WEAPON IS FLAMMEN
                 // TO UNCOMMENT:
+
+                // IMPLEMENT LAUNCHER PICKUP FUNCTIONALITY:
                 else if (shooter.weapon != "flammen") {
                     if (snack.type == "ar") {
                         shooter.weapon = "ar";
@@ -599,9 +601,15 @@ function handleProjectile() {
 
         // projectiles despawn logic. Takes into account all types:
         if (projectiles[i]) {
-            if ((projectiles[i].x > canvas.width - 100 || projectiles[i].x < 0 || projectiles[i].y < 0)
+            // delete when leaving canvas (for small arms)
+            if (
+            (projectiles[i].x > canvas.width - 100 || projectiles[i].x < 0 || projectiles[i].y < 0
+            && shooter.weapon != "launcher")
+            // deletion for flammen
             || (shooter.weapon == "flammen" && (projectiles[i].x > canvas.width - 400 
-            || projectiles[i].x < 0 || projectiles[i].y < 0))) {
+            || projectiles[i].x < 0 || projectiles[i].y < 0))
+            // deletion for launcher
+            || (shooter.weapon == "launcher" && projectiles[i].y <= flora.y)) {
                 projectiles.splice(i, 1);
                 i--;
             }

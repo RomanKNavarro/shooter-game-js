@@ -35,26 +35,66 @@ export default class Projectile {
     }
     
     update() {
-      if (this.x > 0 && this.x < canvas.height && !this.delete && this.weapon != "flammen") {
-      // if (this.x > 0 && this.x < canvas.height && !this.delete) {
-        switch (this.weapon) {
-          case "pistol":
-            this.pistol.play();
+      // if (this.x > 0 && this.x < canvas.height && !this.delete && this.weapon != "flammen") {
+      // // if (this.x > 0 && this.x < canvas.height && !this.delete) {
+      //   switch (this.weapon) {
+      //     case "pistol":
+      //       this.pistol.play();
+      //       break;
+      //     case "shotty":
+      //       if (!this.dead) {
+      //         this.shotty.play();
+      //       } else {
+      //         this.shotty.pause();
+      //       } 
+      //       break;
+      //     case "ar":
+      //       this.ar.play();
+      //       break;
+      //   }
+      // }
+
+      switch (this.weapon) {
+        case "pistol":
+          this.pistol.play();
+          break;
+        case "shotty":
+          if (!this.dead) {
+            this.shotty.play();
+          } else {
+            this.shotty.pause();
+          } 
+          break;
+        case "ar":
+          this.ar.play();
+          break;
+      }
+
+      if (this.weapon == "launcher") {
+        switch (this.direction) {
+
+          case "straight":
+          case "up":
+            if (this.y + this.size < 0) this.y -= this.speed;
+            else {
+              this.x = 100;
+              this.y += this.speed;
+            }
             break;
-          case "shotty":
-            if (!this.dead) {
-              this.shotty.play();
-            } else {
-              this.shotty.pause();
-            } 
-            break;
-          case "ar":
-            this.ar.play();
+          
+          case "diagnal":
+            if (this.y + this.size < 0) this.x += this.speed / 2;
+            else {
+              this.x = 100;
+              this.y += this.speed;
+              this.x += 2;
+            }
             break;
         }
       }
 
-      if (!this.delete) {
+      // if (!this.delete && this.weapon != "launcher") {
+      else {
         switch (this.direction) {
           case "straight":
             this.x += this.speed;
