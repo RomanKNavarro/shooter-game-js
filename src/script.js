@@ -80,7 +80,7 @@ var cxt = canvas.getContext("2d");
 // TODO: make flammen one shot one kill         --DONE
 // TODO: as levels progress, pickups become more common
 // TODO: add instructions at the beginning
-// TODO: make flammen destroy bullets
+// TODO: make flammen destroy bullets       --DONE
 // TODO: grenade pickup
 
 let roundCounts = [3, 10];
@@ -187,7 +187,7 @@ let baddiePositions = {
     "1": {"inPos": false, "distance": 50, "type": "ground"}, 
     "2": {"inPos": false, "distance": 150, "type": "ground"}, 
     "3": {"inPos": false, "distance": 250, "type": "ground"},
-    "4": {"inPos": false, "distance": 120, "type": "air"},
+    "4": {"inPos": false, "distance": 125, "type": "air"},
     "5": {"inPos": false, "distance": 0, "type": "crawl"}
 };
 
@@ -439,6 +439,17 @@ function handleShooter() {
     }
 }
 
+// GONNA HAVE TO MAKE GRENADE AN OBJECT
+let initSize = 10;
+function handleBoom() {
+    if (shooter.throwBoom && grenades.number > 0) {
+        if (initSize <= 100) initSize += 1
+        cxt.arc(canvas.width / 3, canvas.height / 3, initSize, 0, Math.PI * 2, true);
+        cxt.fill();
+    }  
+    
+}
+
 function handleEnemyProjectiles(orc) {
     let projes = orc.projectiles;
 
@@ -515,6 +526,16 @@ function handleProjectile() {
 
                     current.dead = true;
 
+                }
+            }
+
+            //FLAMMEN KILLS BULLETS
+            for (let p = 0; p < currentEnemy.projectiles.length; p++) {
+                if (shooter.weapon == "flammen" && collision(current, currentEnemy.projectiles[p])) {
+                    projectiles.splice(i, 1);
+                    i--;
+                    currentEnemy.projectiles.splice(p, 1);
+                    p--;
                 }
             }
         }
@@ -746,6 +767,7 @@ function animate() {
     handleSnack()
     handleState();
     handleStatus();
+    handleBoom();
     // if (shooter.weapon == "flammen") {
     //     handleFlammen();
     // }

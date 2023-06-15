@@ -34,6 +34,8 @@ export default class Shooter {
         // this.fireRate = 10;
         // this.specialAmmo = 100;
 
+        this.throwBoom = false; 
+
       // mouse stuff in here lol, used in script.js
         this.mouse = {
             x: 10,
