@@ -62,7 +62,7 @@ export default class Shooter {
         cxt.fillStyle = "black";
         cxt.textAlign = "center";
         cxt.textBaseline = "middle";
-        cxt.fillText(this.specialAmmo, this.x + (this.width / 2), this.y + (this.height / 2));
+        cxt.fillText(this.throwBoom, this.x + (this.width / 2), this.y + (this.height / 2));
     }
 
     update() {

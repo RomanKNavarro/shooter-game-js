@@ -9,6 +9,7 @@ import Button from "./button.js";
 import Pickup from "./pickup.js";
 import TextWall from "./textWall.js";
 import Health from "./health.js";
+import Grenade from "./grenade.js";
 
 // canvas stuff
 var canvas = document.getElementById("canvas1");
@@ -82,6 +83,7 @@ var cxt = canvas.getContext("2d");
 // TODO: add instructions at the beginning
 // TODO: make flammen destroy bullets       --DONE
 // TODO: grenade pickup
+// TODO: FIX THIS STUPID GLITCH. health/wall pickup gives player flamethrower.
 
 let roundCounts = [3, 10];
 // let roundCounts = [3, 50];
@@ -197,6 +199,7 @@ let currentSpeed = 2;
 
 // DROPPED PICKUPS:
 let snackQueue = [];
+let nadeQueue = [];
 
 // let state = "MENU";
 let state = "MENU";
@@ -429,26 +432,39 @@ function cremate() {
 
 function handleShooter() {
     shooter.draw();
-
     if (state == "RUNNING" || state == "WIN") {
         shooter.update();
     }
 
-    if (shooter.boom) {
-        // TODO
+    // if (shooter.throwBoom && grenades.number > 0) {
+    if (shooter.throwBoom) {
+        nadeQueue.push(new Grenade());
+        shooter.throwBoom = false;
     }
 }
 
-// GONNA HAVE TO MAKE GRENADE AN OBJECT
-let initSize = 10;
-function handleBoom() {
-    if (shooter.throwBoom && grenades.number > 0) {
-        if (initSize <= 100) initSize += 1
-        cxt.arc(canvas.width / 3, canvas.height / 3, initSize, 0, Math.PI * 2, true);
-        cxt.fill();
-    }  
-    
+// only one or two nades should be in the queue at any given time:
+function handleNade() {
+    for (let i = 0; i < nadeQueue.length; i++) {
+        nadeQueue[i].draw();
+        nadeQueue[i].update();
+    }
 }
+
+
+// GONNA HAVE TO MAKE GRENADE AN OBJECT
+// let initSize = 10;
+// function handleBoom() {
+//     if (shooter.throwBoom && grenades.number > 0) {
+
+
+
+//         if (initSize <= 100) initSize += 1
+//         cxt.arc(canvas.width / 3, canvas.height / 3, initSize, 0, Math.PI * 2, true);
+//         cxt.fill();
+//     }  
+    
+// }
 
 function handleEnemyProjectiles(orc) {
     let projes = orc.projectiles;
@@ -767,7 +783,7 @@ function animate() {
     handleSnack()
     handleState();
     handleStatus();
-    handleBoom();
+   //  handleBoom();
     // if (shooter.weapon == "flammen") {
     //     handleFlammen();
     // }
@@ -775,7 +791,7 @@ function animate() {
 
     frame++;
 
-    // console.log(shooter.projectiles);
+    console.log(nadeQueue);
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
 }
