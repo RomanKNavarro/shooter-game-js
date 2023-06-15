@@ -11,12 +11,16 @@ export default class Pickup {
 
         this.typeNum = Math.random() * 10;
 
+        this.flammenReady = false;  
 
-        // ONLY A 2/10 CHANCE TO SPAWN PICKUP IN GENERAL:
 
-        this.flammenOdds = 2;
+        // ONLY A 0/10 CHANCE TO SPAWN PICKUP IN GENERAL:
+
+        // this.flammenOdds = 2;
+        this.weaponOdds = 2;
         this.aidOdds = 5;
 
+        this.weapons = ["flammen", "grenade"][Math.floor(Math.random() * 2)];
         this.aid = ["health", "wall"][Math.floor(Math.random() * 2)];
 
         // type by default is ar
@@ -43,14 +47,16 @@ export default class Pickup {
             cxt.textAlign = "center";
             cxt.textBaseline = "middle";
             
-            if (this.typeNum <= this.flammenOdds) this.type = "flammen";
+            // if (this.typeNum <= this.flammenOdds && this.flammenReady == true) this.type = "flammen";
+            if (this.typeNum <= this.weaponOdds) {
+                if (this.flammenReady) this.type = "flammen";
+                else this.type = "grenade";
+            }
             else if (this.typeNum <= this.aidOdds) this.type = this.aid;
             // Math.floor(Math.random() * 10);
             // else if (this.typeNum <= this.flammenOdds) this.type = this.weapon;
       
             cxt.fillText(this.type, this.x + (this.width / 2), this.y + (this.height / 2));
-        };
-
-        
+        };        
     }
 }

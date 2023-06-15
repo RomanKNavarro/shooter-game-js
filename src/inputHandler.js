@@ -45,10 +45,14 @@ export default class InputHandler {
           break;
 
         case 'q':
-          // TO UNCOMMENT:
-          // entity.weapon = "pistol";
+          entity.weapon = "pistol";
           entity.fireRate = 0;
           entity.specialAmmo = 0;
+          break;
+
+        case 'e':
+          entity.boom = true;
+          
           break;
       }
 

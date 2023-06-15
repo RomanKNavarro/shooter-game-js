@@ -8,6 +8,7 @@ export default class Health {
         this.hurt = false;
         this.number = 3;
     }
+    
     update() {
         if (this.hurt) {
             this.number--;

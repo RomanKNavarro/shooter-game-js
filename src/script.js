@@ -79,7 +79,9 @@ var cxt = canvas.getContext("2d");
 // TODO: shooting during round break possible   --DONE
 // TODO: make flammen one shot one kill         --DONE
 // TODO: as levels progress, pickups become more common
-
+// TODO: add instructions at the beginning
+// TODO: make flammen destroy bullets
+// TODO: grenade pickup
 
 let roundCounts = [3, 10];
 // let roundCounts = [3, 50];
@@ -159,6 +161,7 @@ const giveupText = new TextWall(
 // HEALTH:
 let playerHealth = new Health(30);
 let wallHealth = new Health(60);
+let grenades = new Health(90);
 
 // variables
 let frame = 0;
@@ -213,6 +216,8 @@ function handleStatus() {
         playerHealth.draw();
         playerHealth.update();
         wallHealth.draw();
+
+        grenades.draw();
     }
 }
 
@@ -227,8 +232,8 @@ function greatReset() {
     shooter.weapon = "pistol";
     shooter.fireRate = 0;
     shooter.specialAmmo = 0;
-    // roundCounts = [3, 10];
-    roundCounts = [3, 50];
+    roundCounts = [3, 10];
+    // roundCounts = [3, 50];
     for (let i = 0; i <= 9; i++) {
         roundCounts.push(Math.floor(roundCounts[roundCounts.length -1] * 1.5));
     }
@@ -241,6 +246,7 @@ function greatReset() {
     playerHealth.number = 3;
     wallHealth.number = 3;
     showMenu = false;
+    grenades.number = 0;
 }
 
 // states: MENU, RUNNING, WIN, SPECIAL, BOSS, END, LOSE.
@@ -427,6 +433,10 @@ function handleShooter() {
     if (state == "RUNNING" || state == "WIN") {
         shooter.update();
     }
+
+    if (shooter.boom) {
+        // TODO
+    }
 }
 
 function handleEnemyProjectiles(orc) {
@@ -512,6 +522,7 @@ function handleProjectile() {
         // PICKUP HANDLING CRAP:
         for (let l = 0; l < snackQueue.length; l++) {
             let snack = snackQueue[l];
+            if (currentRound >= 5) snack.flammenReady == true;
             if (snack && projectiles[i] && collision(projectiles[i], snack)) {
 
                 projectiles.splice(i, 1);
@@ -521,11 +532,14 @@ function handleProjectile() {
                     playerHealth.number++;
                 }
 
+                if (snack.type == "grenade" && grenades.number < 3) {
+                    grenades.number++;
+                }
+
                 // SPECIAL WEAPONS HERE:
                 // AR STACKING ALLOWED. NO PICKUPS IF WEAPON IS FLAMMEN
                 // TO UNCOMMENT:
 
-                // IMPLEMENT LAUNCHER PICKUP FUNCTIONALITY:
                 // if weapon not equal to flammen, pickup new weapon
                 else if (shooter.weapon != "flammen") {
                     if (snack.type == "ar") {
@@ -553,9 +567,7 @@ function handleProjectile() {
             && shooter.weapon != "launcher")
             // deletion for flammen
             || (shooter.weapon == "flammen" && (projectiles[i].x > canvas.width - 400 
-            || projectiles[i].x < 0 || projectiles[i].y < 0))
-            // deletion for launcher
-            || (shooter.weapon == "launcher" && projectiles[i].y >= flora.y)) {
+            || projectiles[i].x < 0 || projectiles[i].y < 0))) {
                 projectiles.splice(i, 1);
                 i--;
             }
