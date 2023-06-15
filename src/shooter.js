@@ -69,8 +69,9 @@ export default class Shooter {
         if (this.shooting && !this.disabled) {
             this.timer++;
             
+
             if (this.timer % this.fireRate === 0  || this.timer == 1) {
-                this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, this.weapon, this.delete));  
+                this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, this.weapon, this.delete));
 
                 if (this.specialAmmo > 0) {
                     this.specialAmmo--;

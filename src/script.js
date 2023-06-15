@@ -76,18 +76,13 @@ var cxt = canvas.getContext("2d");
 // TODO: fix play again button on failure       --DONE
 // TODO: implement health pickup functionality  --DONE
 // TODO: reset baddiePositions on new game      --DONE
-// TODO: shooting during round break possible
+// TODO: shooting during round break possible   --DONE
+// TODO: make flammen one shot one kill         --DONE
+// TODO: as levels progress, pickups become more common
 
-// determine num. of enemies per round
-// ten rounds total. Each one has 1.5 times more enemies than the last.
-// let roundCounts = [0, 10];
 
-// FOR FLAMMEN: despite the glitchy noises, flammen actually makes no noise. 
-// MORE REVELATION: the firerate is what messes with the audio. 
-// ALSO QUITE POSSIBLY: the timer++
-
-// let roundCounts = [3, 10];
-let roundCounts = [3, 50];
+let roundCounts = [3, 10];
+// let roundCounts = [3, 50];
 
 // NEW SCORE STUFF:
 let score = 0;
@@ -195,7 +190,7 @@ let baddiePositions = {
 
 // ENEMY SPEED:
 // let currentSpeed = 2;
-let currentSpeed = 4;
+let currentSpeed = 2;
 
 // DROPPED PICKUPS:
 let snackQueue = [];
@@ -455,57 +450,6 @@ function handleEnemyProjectiles(orc) {
     }
 }
 
-// TODO
-function handleFlammen() {
-    // if (shooter.weapon == "flammen" && shooter.shooting == true) {
-    if (shooter.weapon == "flammen") {
-        if (shooter.shooting == true) {  
-            shooter.flammen.play();
-        } else {
-            shooter.flammen.pause();
-        }
-    }
-
-
-    // if (shooter.weapon == "flammen" && shooter.shooting == true) {
-    //     // standard width/height when shooting straight:
-    //     let width = 150;
-    //     let height = 30;
-
-    //     cxt.fillStyle = "black";
-    //     cxt.beginPath();
-
-    //     switch(shooter.direction) {
-    //         case "straight":
-    //             // ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle)
-    //             ctx.beginPath();
-    //             ctx.ellipse(100, 100, 50, 75, Math.PI / 4, 0, 2 * Math.PI);
-    //             ctx.stroke();
-    //             break
-    
-    //           case "up":
-    //             break;
-              
-    //           case "diagnal":
-    //             break;
-              
-    //           case "down":
-    //             break;
-    //           //   this.y = this.y + 30;
-    
-    //           case "back":
-    //           case "down-back":
-    //             break;
-              
-    //           case "diagnal-back":
-    //             break;
-    
-    //           case "down-diagnal":
-    //             break;
-    //     }
-    // }
-}
-
 function handleProjectile() {
     let projectiles = shooter.projectiles;
 
@@ -514,7 +458,8 @@ function handleProjectile() {
         let current = projectiles[i];
 
         // increase size of flammen "bullets"
-        if (shooter.weapon == "flammen") current.size =  20;
+        if (shooter.weapon == "flammen" && current.size <= 20) current.size += 2;
+        // else if (shooter.weapon == "flammen") current.size =  10;
 
         // TO REVERT LATER ON:
         if (current.x < canvas.width - 100 && (state == "RUNNING" || state == "WIN")) {
@@ -536,7 +481,7 @@ function handleProjectile() {
                 projectiles.splice(i, 1);
                 i--;
 
-                if (shooter.angle == "down" || shooter.angle == "down-back") {
+                if ((shooter.angle == "down" || shooter.angle == "down-back") && shooter.weapon != "flammen") {
                     currentEnemy.health -= 1;
                 } else currentEnemy.health -= 2;
                 
@@ -581,6 +526,7 @@ function handleProjectile() {
                 // TO UNCOMMENT:
 
                 // IMPLEMENT LAUNCHER PICKUP FUNCTIONALITY:
+                // if weapon not equal to flammen, pickup new weapon
                 else if (shooter.weapon != "flammen") {
                     if (snack.type == "ar") {
                         shooter.weapon = "ar";
@@ -588,7 +534,7 @@ function handleProjectile() {
                         shooter.specialAmmo = 100;
                     } else {
                         shooter.weapon = "flammen";
-                        shooter.fireRate = 2;
+                        shooter.fireRate = 10;
                         shooter.specialAmmo = 45;  
                     }
                 }
@@ -609,7 +555,7 @@ function handleProjectile() {
             || (shooter.weapon == "flammen" && (projectiles[i].x > canvas.width - 400 
             || projectiles[i].x < 0 || projectiles[i].y < 0))
             // deletion for launcher
-            || (shooter.weapon == "launcher" && projectiles[i].y <= flora.y)) {
+            || (shooter.weapon == "launcher" && projectiles[i].y >= flora.y)) {
                 projectiles.splice(i, 1);
                 i--;
             }
@@ -664,6 +610,7 @@ function handleEnemy() {
             enemyQueue.splice(i, 1);
             score += 10;
             current.dead;
+            enemiesLeft--;
             // UNCOMMENT:
             //wallHealth.number--;
         }
@@ -692,12 +639,13 @@ function handleEnemy() {
                 // current.growl.play();
 
                 // UNCOMMENT THIS:
-                // current.growl.play();
+                current.growl.play();
                 // playerHealth.number--;
             }
         }
     }
 }
+
 // IDEA TO DETERMINE IF ENEMY IS A CIVIE: IF IT'S SPEED IS NEGATIVE
 function pushEnemy() {
     // so, if frame == 50 and I get randomFrames[0] (50), enemy gets pushed to queue.
@@ -786,8 +734,6 @@ function animate() {
     handleSnack()
     handleState();
     handleStatus();
-
-    handleFlammen();
     // if (shooter.weapon == "flammen") {
     //     handleFlammen();
     // }
@@ -795,7 +741,7 @@ function animate() {
 
     frame++;
 
-    // console.log(shooter.shooting);
+    // console.log(shooter.projectiles);
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
 }

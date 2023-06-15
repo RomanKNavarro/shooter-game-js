@@ -24,7 +24,8 @@ export default class Projectile {
 
       this.pistol.src = "src/assets/sounds/shots/pistol.wav";
       this.ar.src = "src/assets/sounds/shots/cg1.wav";
-      this.flammen.src = "src/assets/sounds/flammen2.mp3";
+      // this.flammen.src = "src/assets/sounds/burst fire.mp3";
+      this.flammen.src = "src/assets/sounds/laser.mp3";
 
       this.shotty.src = "src/assets/sounds/shots/shotgun.wav";
 
@@ -35,25 +36,6 @@ export default class Projectile {
     }
     
     update() {
-      // if (this.x > 0 && this.x < canvas.height && !this.delete && this.weapon != "flammen") {
-      // // if (this.x > 0 && this.x < canvas.height && !this.delete) {
-      //   switch (this.weapon) {
-      //     case "pistol":
-      //       this.pistol.play();
-      //       break;
-      //     case "shotty":
-      //       if (!this.dead) {
-      //         this.shotty.play();
-      //       } else {
-      //         this.shotty.pause();
-      //       } 
-      //       break;
-      //     case "ar":
-      //       this.ar.play();
-      //       break;
-      //   }
-      // }
-
       switch (this.weapon) {
         case "pistol":
           this.pistol.play();
@@ -68,70 +50,48 @@ export default class Projectile {
         case "ar":
           this.ar.play();
           break;
+        case "flammen":
+          this.flammen.play();
+          break;
       }
 
-      if (this.weapon == "launcher") {
-        switch (this.direction) {
+      switch (this.direction) {
+        case "straight":
+          this.x += this.speed;
+          break
 
-          case "straight":
-          case "up":
-            if (this.y + this.size < 0) this.y -= this.speed;
-            else {
-              this.x = 100;
-              this.y += this.speed;
-            }
-            break;
-          
-          case "diagnal":
-            if (this.y + this.size < 0) this.x += this.speed / 2;
-            else {
-              this.x = 100;
-              this.y += this.speed;
-              this.x += 2;
-            }
-            break;
-        }
-      }
+        case "up":
+          this.x += 0;
+          this.y -= this.speed;
+          break;
+        
+        case "diagnal":
+          this.x += this.speed;
+          this.y -= this.speed / this.randomY[Math.floor(Math.random() * this.randomY.length)];
+          break;
+        
+        case "down":
+          this.x += this.speed;
+          break;
+        //   this.y = this.y + 30;
 
-      // if (!this.delete && this.weapon != "launcher") {
-      else {
-        switch (this.direction) {
-          case "straight":
-            this.x += this.speed;
-            break
+        case "back":
+        case "down-back":
+          this.x -= this.speed;
+          break;
+        
+        case "diagnal-back":
+          this.x -= this.speed;
+          this.y -= this.speed * 2;
+          break;
 
-          case "up":
-            this.x += 0;
-            this.y -= this.speed;
-            break;
-          
-          case "diagnal":
-            this.x += this.speed;
-            this.y -= this.speed / this.randomY[Math.floor(Math.random() * this.randomY.length)];
-            break;
-          
-          case "down":
-            this.x += this.speed;
-            break;
-          //   this.y = this.y + 30;
-
-          case "back":
-          case "down-back":
-            this.x -= this.speed;
-            break;
-          
-          case "diagnal-back":
-            this.x -= this.speed;
-            this.y -= this.speed * 2;
-            break;
-
-          case "down-diagnal":
-            this.x -= this.speed;
-            this.y += this.speed / 2;
-            break;
-        }
+        case "down-diagnal":
+          this.x -= this.speed;
+          this.y += this.speed / 2;
+          break;
       }
     }
+    
   
     draw() {
       cxt.fillStyle = "black";
