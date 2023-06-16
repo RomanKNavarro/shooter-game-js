@@ -249,7 +249,7 @@ function greatReset() {
     playerHealth.number = 3;
     wallHealth.number = 3;
     showMenu = false;
-    grenades.number = 0;
+    grenades.number = 3;
 }
 
 // states: MENU, RUNNING, WIN, SPECIAL, BOSS, END, LOSE.
@@ -430,20 +430,33 @@ function cremate() {
     winningScore += enemyCount * 10;
 }
 
+function nadeFuse() {
+    shooter.secondNade = true;
+    setTimeout(() => {
+        shooter.secondNade = false;
+    }, 1000);
+    // shooter.secondNade = false;
+}
+
+// NEED AN ALT TO NADEQUEUE
 function handleShooter() {
     shooter.draw();
     if (state == "RUNNING" || state == "WIN") {
         shooter.update();
     }
 
+    // CHECK IF NUM. IS ODD:    num % 2 !== 0
     // if (shooter.throwBoom && grenades.number > 0) {
+    
     if (shooter.throwBoom) {
-        if (nadeQueue.length % 2 == 0) shooter.secondNade = false;
-        else shooter.secondNade = true;
-        
-        setTimeout(() => {
-            shooter.secondNade = false;
-        }, 1000);
+
+        if (nadeQueue.length == 1 || nadeQueue.length % 2 != 0) {
+
+        }
+        if (grenades.number > 0) {
+            // shooter.secondNade = true;
+            nadeFuse();
+        }
 
         if (!shooter.secondNade) {
             nadeQueue.push(new Grenade(canvas.width / 2));
@@ -452,7 +465,6 @@ function handleShooter() {
         }
 
         shooter.throwBoom = false;
-
     }
 }
 
