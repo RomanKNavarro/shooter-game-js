@@ -82,7 +82,7 @@ var cxt = canvas.getContext("2d");
 // TODO: as levels progress, pickups become more common
 // TODO: add instructions at the beginning
 // TODO: make flammen destroy bullets       --DONE
-// TODO: grenade pickup
+// TODO: grenade pickup                     --DONE
 // TODO: FIX THIS STUPID GLITCH. health/wall pickup gives player flamethrower.
 
 let roundCounts = [3, 10];
@@ -189,7 +189,7 @@ let baddiePositions = {
     "1": {"inPos": false, "distance": 50, "type": "ground"}, 
     "2": {"inPos": false, "distance": 150, "type": "ground"}, 
     "3": {"inPos": false, "distance": 250, "type": "ground"},
-    "4": {"inPos": false, "distance": 125, "type": "air"},
+    "4": {"inPos": false, "distance": 129, "type": "air"},
     "5": {"inPos": false, "distance": 0, "type": "crawl"}
 };
 
@@ -424,18 +424,10 @@ function handleState() {
 // increment stuff to make next round slightly harder:
 function cremate() {
     currentRound++;
-    currentSpeed += 0.5;
+    currentSpeed += 0.1;
     roundCounts.splice(0, 1);
     enemyCount = enemiesLeft = roundCounts[0];
     winningScore += enemyCount * 10;
-}
-
-function nadeFuse() {
-    shooter.secondNade = true;
-    setTimeout(() => {
-        shooter.secondNade = false;
-    }, 1000);
-    // shooter.secondNade = false;
 }
 
 // NEED AN ALT TO NADEQUEUE
@@ -462,7 +454,7 @@ function handleShooter() {
         } else {
             nadeQueue.push(new Grenade(canvas.width / 1.2));
         }
-
+    
         shooter.throwBoom = false;
         grenades.number--;
     }
@@ -475,32 +467,15 @@ function handleNade() {
         let current = nadeQueue[i];
         current.draw();
         current.update();
-        if (current.size <= 100) current.size += 10;
+        // FIGURED OUT WHY IT WAS WORKING YESTERDAY: BECAUSE IT WAS RUNNING SLOW LOOOL  
+        if (current.size <= 100) current.size += 3;
         else {
             nadeQueue.splice(i, 1);
             i--;
-            // setTimeout(() => {   
-            //     nadeQueue.splice(i, 1);
-            //     i--;
-            // }, 500);
         }
     }
 };
 
-
-// GONNA HAVE TO MAKE GRENADE AN OBJECT
-// let initSize = 10;
-// function handleBoom() {
-//     if (shooter.throwBoom && grenades.number > 0) {
-
-
-
-//         if (initSize <= 100) initSize += 1
-//         cxt.arc(canvas.width / 3, canvas.height / 3, initSize, 0, Math.PI * 2, true);
-//         cxt.fill();
-//     }  
-    
-// }
 
 function handleEnemyProjectiles(orc) {
     let projes = orc.projectiles;
@@ -526,10 +501,11 @@ function handleEnemyProjectiles(orc) {
 function handleProjectile() {
     let projectiles = shooter.projectiles;
 
-    for (let i = 0; i < projectiles.length; i++) {
-        // console.log(projectiles[i].direction)
+    
+    for (let i = 0; i < shooter.projectiles.length; i++) {
         let current = projectiles[i];
 
+        console.log(current.y);
         // increase size of flammen "bullets"
         if (shooter.weapon == "flammen" && current.size <= 20) current.size += 2;
         // else if (shooter.weapon == "flammen") current.size =  10;
@@ -601,11 +577,13 @@ function handleProjectile() {
                 projectiles.splice(i, 1);
                 i--;
 
-                if (snack.type == "health" && playerHealth.number < 3) {
+                if (snack.type == "health" && playerHealth.number < 10) {
                     playerHealth.number++;
                 }
-
-                if (snack.type == "grenade" && grenades.number < 3) {
+                else if (snack.type == "health" && playerHealth.number < 10) {
+                    playerHealth.number++;
+                }
+                else if (snack.type == "grenade" && grenades.number < 10) {
                     grenades.number++;
                 }
 
@@ -614,17 +592,37 @@ function handleProjectile() {
                 // TO UNCOMMENT:
 
                 // if weapon not equal to flammen, pickup new weapon
-                else if (shooter.weapon != "flammen") {
+                // else if (shooter.weapon != "flammen") {
+                //     if (snack.type == "ar") {
+                //         shooter.weapon = "ar";
+                //         shooter.fireRate = 15;
+                //         shooter.specialAmmo = 100;
+                //     } else {
+                //         shooter.weapon = "flammen";
+                //         shooter.fireRate = 10;
+                //         shooter.specialAmmo = 45;  
+                //     }
+                // }
+
+                // FLAMMEN IS NOT SPAWNING AS FREQUENTLY
+                if (shooter.weapon != "flammen") {
                     if (snack.type == "ar") {
                         shooter.weapon = "ar";
                         shooter.fireRate = 15;
                         shooter.specialAmmo = 100;
-                    } else {
+                    } 
+                    else if (snack.type == "flammen") {
                         shooter.weapon = "flammen";
                         shooter.fireRate = 10;
-                        shooter.specialAmmo = 45;  
+                        shooter.specialAmmo = 45;
                     }
+                } 
+                else if (shooter.weapon == "flammen" && snack.type == "flammen") {
+                    shooter.weapon = "flammen";
+                    shooter.fireRate = 10;
+                    shooter.specialAmmo = 45;
                 }
+
 
                 snackQueue.splice(l, 1);
                 l--;
@@ -639,7 +637,7 @@ function handleProjectile() {
             (projectiles[i].x > canvas.width - 100 || projectiles[i].x < 0 || projectiles[i].y < 0
             && shooter.weapon != "launcher")
             // deletion for flammen
-            || (shooter.weapon == "flammen" && (projectiles[i].x > canvas.width - 400 
+            || (shooter.weapon == "flammen" && (projectiles[i].x > canvas.width - 350 
             || projectiles[i].x < 0 || projectiles[i].y < 0))) {
                 projectiles.splice(i, 1);
                 i--;
@@ -827,7 +825,6 @@ function animate() {
 
     frame++;
 
-    console.log(nadeQueue);
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
 }

@@ -9,17 +9,17 @@ export default class Pickup {
         this.y = y;
         this.delete = false;
 
-        this.typeNum = Math.random() * 10;
+        this.typeNum = Math.floor(Math.random() * 10);
 
-        this.flammenReady = false;  
+        this.isWeapon = false;
 
 
         // ONLY A 0/10 CHANCE TO SPAWN PICKUP IN GENERAL:
 
-        this.flammenOdds = 4;
+        this.weaponOdds = 1;
         this.aidOdds = 5;
 
-        this.weapons = ["flammen", "grenade"][Math.floor(Math.random() * 2)];
+        this.weapon = ["flammen", "grenade"][Math.floor(Math.random() * 2)];
         this.aid = ["health", "wall"][Math.floor(Math.random() * 2)];
 
         // type by default is ar
@@ -46,17 +46,13 @@ export default class Pickup {
             cxt.textAlign = "center";
             cxt.textBaseline = "middle";
             
-            // if (this.typeNum <= this.flammenOdds && this.flammenReady == true) this.type = "flammen";
             if (this.typeNum <= this.weaponOdds) {
-                this.type = "flammen";
-                //if (this.flammenReady) this.type = "flammen";
-                //else this.type = "grenade";
+                this.type = this.weapon;
+                this.isWeapon = true;
             }
-            else if (this.typeNum <= this.aidOdds) this.type = this.aid;
-            // Math.floor(Math.random() * 10);
-            // else if (this.typeNum <= this.flammenOdds) this.type = this.weapon;
+            else if (this.typeNum <= this.aidOdds && this.typeNum > this.weaponOdds) this.type = this.aid;
       
-            cxt.fillText(this.type, this.x + (this.width / 2), this.y + (this.height / 2));
+            cxt.fillText(`${this.type}, ${this.typeNum}`, this.x + (this.width / 2), this.y + (this.height / 2));
         };        
     }
 }
