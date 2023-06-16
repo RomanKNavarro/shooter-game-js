@@ -430,14 +430,6 @@ function cremate() {
     winningScore += enemyCount * 10;
 }
 
-function nadeFuse() {
-    shooter.secondNade = true;
-    setTimeout(() => {
-        shooter.secondNade = false;
-    }, 1000);
-    // shooter.secondNade = false;
-}
-
 // NEED AN ALT TO NADEQUEUE
 function handleShooter() {
     shooter.draw();
@@ -448,36 +440,43 @@ function handleShooter() {
     // CHECK IF NUM. IS ODD:    num % 2 !== 0
     // if (shooter.throwBoom && grenades.number > 0) {
     
-    if (shooter.throwBoom) {
-
-        if (nadeQueue.length == 1 || nadeQueue.length % 2 != 0) {
-
-        }
-        if (grenades.number > 0) {
-            // shooter.secondNade = true;
-            nadeFuse();
+    if (shooter.throwBoom && grenades.number > 0) {
+        if (nadeQueue.length < 1) {
+            shooter.secondNade = false;
+        } else {
+            shooter.secondNade = true;
         }
 
-        if (!shooter.secondNade) {
+        // THIS IS NECESSARY:
+        if (shooter.secondNade == false) {
             nadeQueue.push(new Grenade(canvas.width / 2));
         } else {
             nadeQueue.push(new Grenade(canvas.width / 1.2));
         }
 
         shooter.throwBoom = false;
+        grenades.number--;
     }
 }
 
 // only one or two nades should be in the queue at any given time:
 // when nade is thrown, there is 1 second fuse. Before that Sec. is up, the x for next nade will change
 function handleNade() {
-
-
     for (let i = 0; i < nadeQueue.length; i++) {
-        nadeQueue[i].draw();
-        nadeQueue[i].update();
+        let current = nadeQueue[i];
+        current.draw();
+        current.update();
+
+        if (current.size <= 100) current.size += 10;
+        else {
+            
+            setTimeout(() => {   
+                nadeQueue.splice(i, 1);
+                i--;
+            }, 500);
+        }
     }
-}
+};
 
 
 // GONNA HAVE TO MAKE GRENADE AN OBJECT

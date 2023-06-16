@@ -25,6 +25,6 @@ export default class Grenade {
     update() {
         this.thrown = true;
         // if (this.y < canvas.width / 2) this.y -= 5;
-        if (this.size <= 100) this.size += 10;
+       //  if (this.size <= 100) this.size += 10;
     }
 }
