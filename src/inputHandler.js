@@ -52,6 +52,8 @@ export default class InputHandler {
 
         case 'e':
           entity.throwBoom = true;
+          
+          // entity.throwBoom = true;
           break;
       }
 

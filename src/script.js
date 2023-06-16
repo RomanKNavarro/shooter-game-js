@@ -430,7 +430,16 @@ function cremate() {
     winningScore += enemyCount * 10;
 }
 
+function nadeFuse() {
+    shooter.secondNade = true;
+    setTimeout(() => {
+        shooter.secondNade = false;
+    }, 1000);
+    // shooter.secondNade = false;
+}
+
 // NEED AN ALT TO NADEQUEUE
+// TODO: GET THIS FUCKING SHIT RUNNING LIKE HOW IT DID EARLIER  --DONE
 function handleShooter() {
     shooter.draw();
     if (state == "RUNNING" || state == "WIN") {
@@ -466,14 +475,14 @@ function handleNade() {
         let current = nadeQueue[i];
         current.draw();
         current.update();
-
         if (current.size <= 100) current.size += 10;
         else {
-            
-            setTimeout(() => {   
-                nadeQueue.splice(i, 1);
-                i--;
-            }, 500);
+            nadeQueue.splice(i, 1);
+            i--;
+            // setTimeout(() => {   
+            //     nadeQueue.splice(i, 1);
+            //     i--;
+            // }, 500);
         }
     }
 };

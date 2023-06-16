@@ -36,6 +36,8 @@ export default class Shooter {
 
         this.throwBoom = false; 
         this.secondNade = false;
+        this.nextNadeReady = false;
+        this.firstNade = false;
 
       // mouse stuff in here lol, used in script.js
         this.mouse = {
