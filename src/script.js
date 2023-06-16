@@ -235,6 +235,8 @@ function greatReset() {
     shooter.weapon = "pistol";
     shooter.fireRate = 0;
     shooter.specialAmmo = 0;
+
+
     roundCounts = [3, 10];
     // roundCounts = [3, 50];
     for (let i = 0; i <= 9; i++) {
@@ -493,7 +495,7 @@ function handleEnemyProjectiles(orc) {
             i--;
 
             // UNCOMMENT THIS:
-            //playerHealth.number--;
+            playerHealth.number--;
         }
     }
 }
@@ -505,19 +507,23 @@ function handleProjectile() {
     for (let i = 0; i < shooter.projectiles.length; i++) {
         let current = projectiles[i];
 
-        console.log(current.y);
+        // BUG HERE:
         // increase size of flammen "bullets"
-        if (shooter.weapon == "flammen" && current.size <= 20) current.size += 2;
-        // else if (shooter.weapon == "flammen") current.size =  10;
-
-        // TO REVERT LATER ON:
-        if (current.x < canvas.width - 100 && (state == "RUNNING" || state == "WIN")) {
-            current.update();
-            current.draw();
-        }
-        else {
-            projectiles.splice(i, 1);
-            i--;
+        if (projectiles.length > 0) {
+            if (shooter.weapon == "pistol") current.speed = 7;
+            
+            if (shooter.weapon == "flammen" && current.size <= 20) current.size += 2;
+            // else if (shooter.weapon == "flammen") current.size =  10;
+    
+            // TO REVERT LATER ON:
+            if (current.x < canvas.width - 100 && (state == "RUNNING" || state == "WIN")) {
+                current.update();
+                current.draw();
+            }
+            else {
+                projectiles.splice(i, 1);
+                i--;
+            }
         }
 
         // enemy kill handling:
@@ -552,17 +558,17 @@ function handleProjectile() {
                     j--;
                     enemiesLeft--;
 
-                    current.dead = true;
-
                 }
             }
 
             //FLAMMEN KILLS BULLETS
-            for (let p = 0; p < currentEnemy.projectiles.length; p++) {
-                if (shooter.weapon == "flammen" && collision(current, currentEnemy.projectiles[p])) {
+            let orcProjes = currentEnemy.projectiles;
+            for (let p = 0; p < orcProjes.length; p++) {
+                if (shooter.weapon == "flammen" && orcProjes.length > 0 && collision(current, orcProjes[p])) {
+                    // console.log(true);
                     projectiles.splice(i, 1);
                     i--;
-                    currentEnemy.projectiles.splice(p, 1);
+                    orcProjes.splice(p, 1);
                     p--;
                 }
             }
@@ -723,7 +729,7 @@ function handleEnemy() {
 
                 // UNCOMMENT THIS:
                 current.growl.play();
-                // playerHealth.number--;
+                playerHealth.number--;
             }
         }
     }
@@ -781,6 +787,9 @@ function collision(bullet, orc) {
             bullet.y > orc.y && 
             bullet.y < orc.y + orc.width &&
             (bullet.y < orc.y + orc.height))
+        //  BULLET ON BULLET CONTACT:
+        || (bullet.x + bullet.size >= orc.x && bullet.y <= orc.y + orc.size && 
+            bullet.y + bullet.size >= orc.y)
     ) {
         return true;
     }

@@ -16,7 +16,7 @@ export default class Pickup {
 
         // ONLY A 0/10 CHANCE TO SPAWN PICKUP IN GENERAL:
 
-        this.weaponOdds = 1;
+        this.weaponOdds = 5;
         this.aidOdds = 5;
 
         this.weapon = ["flammen", "grenade"][Math.floor(Math.random() * 2)];
