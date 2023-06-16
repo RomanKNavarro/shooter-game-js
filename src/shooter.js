@@ -35,6 +35,7 @@ export default class Shooter {
         // this.specialAmmo = 100;
 
         this.throwBoom = false; 
+        this.secondNade = false;
 
       // mouse stuff in here lol, used in script.js
         this.mouse = {
@@ -62,7 +63,7 @@ export default class Shooter {
         cxt.fillStyle = "black";
         cxt.textAlign = "center";
         cxt.textBaseline = "middle";
-        cxt.fillText(this.throwBoom, this.x + (this.width / 2), this.y + (this.height / 2));
+        cxt.fillText(this.secondNade, this.x + (this.width / 2), this.y + (this.height / 2));
     }
 
     update() {

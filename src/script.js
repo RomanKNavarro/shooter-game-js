@@ -438,13 +438,29 @@ function handleShooter() {
 
     // if (shooter.throwBoom && grenades.number > 0) {
     if (shooter.throwBoom) {
-        nadeQueue.push(new Grenade());
+        if (nadeQueue.length % 2 == 0) shooter.secondNade = false;
+        else shooter.secondNade = true;
+        
+        setTimeout(() => {
+            shooter.secondNade = false;
+        }, 1000);
+
+        if (!shooter.secondNade) {
+            nadeQueue.push(new Grenade(canvas.width / 2));
+        } else {
+            nadeQueue.push(new Grenade(canvas.width / 1.2));
+        }
+
         shooter.throwBoom = false;
+
     }
 }
 
 // only one or two nades should be in the queue at any given time:
+// when nade is thrown, there is 1 second fuse. Before that Sec. is up, the x for next nade will change
 function handleNade() {
+
+
     for (let i = 0; i < nadeQueue.length; i++) {
         nadeQueue[i].draw();
         nadeQueue[i].update();
@@ -783,7 +799,7 @@ function animate() {
     handleSnack()
     handleState();
     handleStatus();
-   //  handleBoom();
+    handleNade();
     // if (shooter.weapon == "flammen") {
     //     handleFlammen();
     // }
