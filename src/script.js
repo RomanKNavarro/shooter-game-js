@@ -83,7 +83,8 @@ var cxt = canvas.getContext("2d");
 // TODO: add instructions at the beginning
 // TODO: make flammen destroy bullets       --DONE
 // TODO: grenade pickup                     --DONE
-// TODO: FIX THIS STUPID GLITCH. health/wall pickup gives player flamethrower.
+// TODO: FIX THIS STUPID GLITCH. health/wall pickup gives player flamethrower.  --DONE
+// TODO: get grenades to kill enemies
 
 let roundCounts = [3, 10];
 // let roundCounts = [3, 50];
@@ -467,17 +468,30 @@ function handleShooter() {
 function handleNade() {
     for (let i = 0; i < nadeQueue.length; i++) {
         let current = nadeQueue[i];
+        // console.log(current.x);
         current.draw();
         current.update();
         // FIGURED OUT WHY IT WAS WORKING YESTERDAY: BECAUSE IT WAS RUNNING SLOW LOOOL  
         if (current.size <= 100) current.size += 3;
         else {
-            nadeQueue.splice(i, 1);
-            i--;
+            // nadeQueue.splice(i, 1);
+            // i--;
+        }
+        // I CANT FUCKING THINK STRAIGHT
+        for (let y = 0; y <= enemyQueue.length; y++) { 
+            let currOrc = enemyQueue[y];
+            // console.log(collision(current, currOrc));
+            if (enemyQueue.length > 0) {
+                if (collision(current, shooter)) {
+                    enemyQueue.splice(i, 1);
+                    score += 10;
+                    enemiesLeft--;
+                }
+            }
+            console.log(currOrc);
         }
     }
 };
-
 
 function handleEnemyProjectiles(orc) {
     let projes = orc.projectiles;
@@ -509,9 +523,9 @@ function handleProjectile() {
 
         // BUG HERE:
         // increase size of flammen "bullets"
-        if (projectiles.length > 0) {
+        if (projectiles.length > 0 && current) {
             if (shooter.weapon == "pistol") current.speed = 7;
-            
+
             if (shooter.weapon == "flammen" && current.size <= 20) current.size += 2;
             // else if (shooter.weapon == "flammen") current.size =  10;
     
@@ -732,6 +746,18 @@ function handleEnemy() {
                 playerHealth.number--;
             }
         }
+
+        // for (let n = 0; n <= nadeQueue.length; n++) { 
+        //     let currNade = nadeQueue[n];
+        //     if (nadeQueue.length > 0) {
+        //         // if (collision(nadeQueue[n], shooter)) {
+        //         //     enemyQueue.splice(i, 1);
+        //         //     score += 10;
+        //         //     enemiesLeft--;
+        //         // }
+        //         console.log(currNade.x);
+        //     }
+        // }
     }
 }
 
@@ -790,6 +816,8 @@ function collision(bullet, orc) {
         //  BULLET ON BULLET CONTACT:
         || (bullet.x + bullet.size >= orc.x && bullet.y <= orc.y + orc.size && 
             bullet.y + bullet.size >= orc.y)
+        // GRENADE CONTACT, "size" refering to the radius:
+        // ||  (bullet.x + bullet.size)
     ) {
         return true;
     }
@@ -834,6 +862,7 @@ function animate() {
 
     frame++;
 
+    // console.log(nadeQueue);
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
 }
