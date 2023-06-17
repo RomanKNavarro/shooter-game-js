@@ -15,6 +15,9 @@ export default class Grenade {
         this.y = canvas.height / 2; 
 
         this.size = 10;
+
+        this.sound = new Audio();
+        this.sound.src = "src/assets/sounds/q009/explosion.ogg";
     }
 
     draw() {

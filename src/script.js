@@ -84,7 +84,9 @@ var cxt = canvas.getContext("2d");
 // TODO: make flammen destroy bullets       --DONE
 // TODO: grenade pickup                     --DONE
 // TODO: FIX THIS STUPID GLITCH. health/wall pickup gives player flamethrower.  --DONE
-// TODO: get grenades to kill enemies
+// TODO: get grenades to kill enemies   --DONE
+// TODO: 
+
 
 let roundCounts = [3, 10];
 // let roundCounts = [3, 50];
@@ -468,27 +470,27 @@ function handleShooter() {
 function handleNade() {
     for (let i = 0; i < nadeQueue.length; i++) {
         let current = nadeQueue[i];
-        // console.log(current.x);
+        current.sound.play();
         current.draw();
         current.update();
         // FIGURED OUT WHY IT WAS WORKING YESTERDAY: BECAUSE IT WAS RUNNING SLOW LOOOL  
         if (current.size <= 100) current.size += 3;
         else {
-            // nadeQueue.splice(i, 1);
-            // i--;
-        }
-        // I CANT FUCKING THINK STRAIGHT
+            nadeQueue.splice(i, 1);
+            i--;
+        }   
         for (let y = 0; y <= enemyQueue.length; y++) { 
             let currOrc = enemyQueue[y];
             // console.log(collision(current, currOrc));
-            if (enemyQueue.length > 0) {
-                if (collision(current, shooter)) {
+            if (enemyQueue.length > 0 && currOrc) {
+                if (collision(current, currOrc)) {
                     enemyQueue.splice(i, 1);
                     score += 10;
                     enemiesLeft--;
+                    //console.log(true);
                 }
             }
-            console.log(currOrc);
+            //console.log(currOrc);
         }
     }
 };
@@ -509,7 +511,7 @@ function handleEnemyProjectiles(orc) {
             i--;
 
             // UNCOMMENT THIS:
-            playerHealth.number--;
+            // playerHealth.number--;
         }
     }
 }
@@ -579,7 +581,6 @@ function handleProjectile() {
             let orcProjes = currentEnemy.projectiles;
             for (let p = 0; p < orcProjes.length; p++) {
                 if (shooter.weapon == "flammen" && orcProjes.length > 0 && collision(current, orcProjes[p])) {
-                    // console.log(true);
                     projectiles.splice(i, 1);
                     i--;
                     orcProjes.splice(p, 1);
@@ -706,7 +707,6 @@ function handleEnemy() {
         // FIX THIS CRAP --DONE. Takes into account both regular and special rounds:
         // delete enemies if they are off-canvas:
         if ((current.x + current.width > 0) && (current.x < canvas.width + 50) && !current.dead) {
-            //console.log(enemyQueue);
             current.update();
             current.draw();
         } else {
@@ -743,7 +743,7 @@ function handleEnemy() {
 
                 // UNCOMMENT THIS:
                 current.growl.play();
-                playerHealth.number--;
+                // playerHealth.number--;
             }
         }
 
@@ -755,7 +755,6 @@ function handleEnemy() {
         //         //     score += 10;
         //         //     enemiesLeft--;
         //         // }
-        //         console.log(currNade.x);
         //     }
         // }
     }
@@ -816,8 +815,9 @@ function collision(bullet, orc) {
         //  BULLET ON BULLET CONTACT:
         || (bullet.x + bullet.size >= orc.x && bullet.y <= orc.y + orc.size && 
             bullet.y + bullet.size >= orc.y)
-        // GRENADE CONTACT, "size" refering to the radius:
-        // ||  (bullet.x + bullet.size)
+        // GRENADE CONTACT, "size" refering to the radius. "Bullet" is the nade:
+        ||  (bullet.y + bullet.size >= orc.y && bullet.x + bullet.size >= orc.x && 
+            bullet.x - bullet.size <= orc.x + orc.width)
     ) {
         return true;
     }

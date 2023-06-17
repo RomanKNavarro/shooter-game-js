@@ -17,8 +17,6 @@ export default class Enemy {
 
       this.x = x;
       this.y;
-  
-      this.moving = true;
 
       this.color = "pink"
       this.dead = false;
