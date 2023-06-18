@@ -20,7 +20,7 @@ export default class Grenade {
         this.sound = new Audio();
         this.sound.src = "src/assets/sounds/explosionLoud.mp3";
 
-        
+
         this.bloopPlayed = false;
         this.bloop = new Audio();
         this.bloop.src = "src/assets/sounds/q009/glauncher.ogg";
@@ -28,6 +28,7 @@ export default class Grenade {
 
     draw() {
         cxt.arc(this.x, this.y, this.size, 0, Math.PI * 2, true);
+        // cxt.rect(this.x, this.y, this.size, this.size);
         cxt.stroke();
     }
 

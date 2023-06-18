@@ -199,7 +199,7 @@ let baddiePositions = {
 
 // ENEMY SPEED:
 // let currentSpeed = 2;
-let currentSpeed = 2;
+let currentSpeed = 4;
 
 // DROPPED PICKUPS:
 let snackQueue = [];
@@ -255,7 +255,8 @@ function greatReset() {
     playerHealth.number = 3;
     wallHealth.number = 3;
     showMenu = false;
-    grenades.number = 3;
+    // grenades.number = 3;
+    grenades.number = 10;
 }
 
 // states: MENU, RUNNING, WIN, SPECIAL, BOSS, END, LOSE.
@@ -469,6 +470,9 @@ function handleShooter() {
 
 // only one or two nades should be in the queue at any given time:
 // when nade is thrown, there is 1 second fuse. Before that Sec. is up, the x for next nade will change
+
+// GLITCH: if enemy  was present in time of throw, it gets deleted later on.
+// maximum "size" is 101
 function handleNade() {
     for (let i = 0; i < nadeQueue.length; i++) {
         let current = nadeQueue[i];
@@ -477,18 +481,21 @@ function handleNade() {
         //     current.bloop.play();
         //     current.bloopPlayed = false;
         // }
-
         
         setTimeout(() => {
             current.ready = true;
-        }, 2000);
+        }, 1000);
 
-        // console.log(current.ready);
+        console.log(current.ready);
         if (current.ready) {
             current.draw();
             current.update();
             current.sound.play();
-            if (current.size <= 100 && current.ready) current.size += 3;
+
+            if (current.size <= 100) {
+                current.size += 1;
+                console.log(current.size);
+            }
             else {
                 nadeQueue.splice(i, 1);
                 i--;
@@ -501,11 +508,11 @@ function handleNade() {
             let currOrc = enemyQueue[y];
             // console.log(collision(current, currOrc));
             if (enemyQueue.length > 0 && currOrc) {
-                if (collision(current, currOrc)) {
+                if (collision(current, currOrc) && current.ready == true &&
+                (currOrc.x + currOrc.width >= current.x - current.size)) {
                     enemyQueue.splice(i, 1);
                     score += 10;
                     enemiesLeft--;
-                    //console.log(true);
                 }
             }
             //console.log(currOrc);
