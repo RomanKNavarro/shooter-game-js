@@ -85,7 +85,8 @@ var cxt = canvas.getContext("2d");
 // TODO: grenade pickup                     --DONE
 // TODO: FIX THIS STUPID GLITCH. health/wall pickup gives player flamethrower.  --DONE
 // TODO: get grenades to kill enemies   --DONE
-// TODO: 
+// TODO: add delay to grenade, include throw "animation" and bloop
+// TODO: further fix grenade collision. fix delay bug
 
 
 let roundCounts = [3, 10];
@@ -314,7 +315,6 @@ function handleState() {
             // state = "RUNNING";
             shooter.disabled = false;
     
-
             if (currentRound == 1) {
                 setTimeout(() => {
                     startRound = true
@@ -456,8 +456,10 @@ function handleShooter() {
         // THIS IS NECESSARY:
         if (shooter.secondNade == false) {
             nadeQueue.push(new Grenade(canvas.width / 2));
+            shooter.bloop.play();
         } else {
             nadeQueue.push(new Grenade(canvas.width / 1.2));
+            shooter.bloop.play();
         }
     
         shooter.throwBoom = false;
@@ -470,15 +472,31 @@ function handleShooter() {
 function handleNade() {
     for (let i = 0; i < nadeQueue.length; i++) {
         let current = nadeQueue[i];
-        current.sound.play();
-        current.draw();
-        current.update();
+        // current.bloop.play();
+        // if (!current.bloopPlayed) {
+        //     current.bloop.play();
+        //     current.bloopPlayed = false;
+        // }
+
+        
+        setTimeout(() => {
+            current.ready = true;
+        }, 2000);
+
+        // console.log(current.ready);
+        if (current.ready) {
+            current.draw();
+            current.update();
+            current.sound.play();
+            if (current.size <= 100 && current.ready) current.size += 3;
+            else {
+                nadeQueue.splice(i, 1);
+                i--;
+            } 
+        }
+
         // FIGURED OUT WHY IT WAS WORKING YESTERDAY: BECAUSE IT WAS RUNNING SLOW LOOOL  
-        if (current.size <= 100) current.size += 3;
-        else {
-            nadeQueue.splice(i, 1);
-            i--;
-        }   
+        // REMEMBER TO UNCOMMENT:
         for (let y = 0; y <= enemyQueue.length; y++) { 
             let currOrc = enemyQueue[y];
             // console.log(collision(current, currOrc));
@@ -855,14 +873,13 @@ function animate() {
     handleState();
     handleStatus();
     handleNade();
+
     // if (shooter.weapon == "flammen") {
     //     handleFlammen();
     // }
-    
 
     frame++;
 
-    // console.log(nadeQueue);
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
 }

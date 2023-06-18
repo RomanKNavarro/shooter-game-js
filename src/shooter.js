@@ -36,8 +36,6 @@ export default class Shooter {
 
         this.throwBoom = false; 
         this.secondNade = false;
-        this.nextNadeReady = false;
-        this.firstNade = false;
 
       // mouse stuff in here lol, used in script.js
         this.mouse = {
@@ -54,6 +52,8 @@ export default class Shooter {
         this.steam = new Audio();
         this.steam.src = "src/assets/sounds/steam_hisses/steamer22.wav";
 
+        this.bloop = new Audio();
+        this.bloop.src = "src/assets/sounds/q009/glauncher.ogg";
     }
     
     draw() {
