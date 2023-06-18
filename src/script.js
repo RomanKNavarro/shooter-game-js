@@ -494,7 +494,7 @@ function handleNade() {
 
             if (current.size <= 100) {
                 current.size += 1;
-                console.log(current.size);
+                // console.log(current.size);
             }
             else {
                 nadeQueue.splice(i, 1);
@@ -508,14 +508,16 @@ function handleNade() {
             let currOrc = enemyQueue[y];
             // console.log(collision(current, currOrc));
             if (enemyQueue.length > 0 && currOrc) {
-                if (collision(current, currOrc) && current.ready == true &&
-                (currOrc.x + currOrc.width >= current.x - current.size)) {
+                if (collision(current, currOrc) && current.ready == true) {
+                    currOrc.inNadeRange = true;
+                }
+                if (currOrc.inNadeRange == true) {
                     enemyQueue.splice(i, 1);
                     score += 10;
                     enemiesLeft--;
                 }
             }
-            //console.log(currOrc);
+            // console.log(currOrc.inNodeRange);
         }
     }
 };
@@ -620,6 +622,7 @@ function handleProjectile() {
             if (currentRound >= 5) snack.flammenReady == true;
             if (snack && projectiles[i] && collision(projectiles[i], snack)) {
 
+                snack.sound.play();
                 projectiles.splice(i, 1);
                 i--;
 

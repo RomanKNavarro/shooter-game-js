@@ -13,6 +13,17 @@ export default class Pickup {
 
         this.isWeapon = false;
 
+        this.sound;
+
+
+        this.rifleReload = new Audio();
+        this.rifleReload.src = "src/assets/sounds/rifleReload.mp3";
+        // this.rifle.src = 
+        this.flammenReload = new Audio();
+        this.flammenReload.src = "src/assets/sounds/futureReload.mp3";
+
+        this.nadePin = new Audio(); 
+        this.nadePin.src
 
         // ONLY A 0/10 CHANCE TO SPAWN PICKUP IN GENERAL:
 
@@ -32,6 +43,22 @@ export default class Pickup {
     update() {
         // this.y -= 15;
         this.y += 10;
+
+        if (this.typeNum <= this.weaponOdds) {
+            this.type = this.weapon;
+            this.isWeapon = true;
+        }
+        else if (this.typeNum <= this.aidOdds && this.typeNum > this.weaponOdds) this.type = this.aid;
+
+        //  SOUND TO PLAY WHEN PICKED UP:
+        switch (this.type) {
+            case "flammen":
+                this.sound = this.flammenReload;
+            case "ar":
+                this.sound = this.rifleReload;
+            case "grenade":
+                this.sound = this.nadePin;
+        }
     }
 
     draw() {
@@ -46,11 +73,7 @@ export default class Pickup {
             cxt.textAlign = "center";
             cxt.textBaseline = "middle";
             
-            if (this.typeNum <= this.weaponOdds) {
-                this.type = this.weapon;
-                this.isWeapon = true;
-            }
-            else if (this.typeNum <= this.aidOdds && this.typeNum > this.weaponOdds) this.type = this.aid;
+
       
             cxt.fillText(`${this.type}, ${this.typeNum}`, this.x + (this.width / 2), this.y + (this.height / 2));
         };        
