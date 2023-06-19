@@ -87,6 +87,7 @@ var cxt = canvas.getContext("2d");
 // TODO: get grenades to kill enemies   --DONE
 // TODO: add delay to grenade, include throw "animation" and bloop
 // TODO: further fix grenade collision. fix delay bug
+// TODO: fix bullet collision
 
 
 let roundCounts = [3, 10];
