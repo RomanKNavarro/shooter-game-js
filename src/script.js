@@ -510,13 +510,19 @@ function handleNade() {
             // console.log(collision(current, currOrc));
             if (enemyQueue.length > 0 && currOrc) {
                 if (collision(current, currOrc) && current.ready == true) {
-                    currOrc.inNadeRange = true;
-                }
-                if (currOrc.inNadeRange == true) {
                     enemyQueue.splice(i, 1);
                     score += 10;
                     enemiesLeft--;
                 }
+                //     if (collision(current, currOrc)) {    
+                //     currOrc.inNadeRange = true;
+                // }
+
+                // if (currOrc.inNadeRange == true) {
+                //     enemyQueue.splice(i, 1);
+                //     score += 10;
+                //     enemiesLeft--;
+                // }
             }
             // console.log(currOrc.inNodeRange);
         }
@@ -835,7 +841,9 @@ function collision(bullet, orc) {
         // BACKWARDS SHOOTING:
         //  for forward ground and air (ensure bullet is inbetween x and width)
         (bullet.x + bullet.size >= orc.x && bullet.x <= orc.x + orc.width &&
-        bullet.y + bullet.size >= orc.y && bullet.y <= orc.y + orc.height)
+        bullet.y + bullet.size >= orc.y && bullet.y <= orc.y + orc.height) 
+        // GRENADE SHIT:
+        //  && bullet.x - bullet.size >= orc.x && bullet.x - bullet.size <= orc.x + orc.width)
         || (bullet.x <= orc.x + orc.width && 
             bullet.x >= orc.x &&
             bullet.y > orc.y && 
@@ -845,8 +853,18 @@ function collision(bullet, orc) {
         || (bullet.x + bullet.size >= orc.x && bullet.y <= orc.y + orc.size && 
             bullet.y + bullet.size >= orc.y)
         // GRENADE CONTACT, "size" refering to the radius. "Bullet" is the nade:
-        ||  (bullet.y + bullet.size >= orc.y && bullet.x + bullet.size >= orc.x && 
-            bullet.x - bullet.size <= orc.x + orc.width)
+        // THE ERROR IS NOT HERE. IT IS ELSEWHERE IN MY COLLISION LOGIC. IT HAS TO BE
+        ||  (
+                // TWO FUCKING CASES: 1 FOR FORWARD. OTHER FOR BACK:
+                bullet.y + bullet.size >= orc.y && 
+                bullet.x + bullet.size >= orc.x && 
+                bullet.x - bullet.size <= orc.x
+            )
+            
+            // bullet.y + bullet.size >= orc.y && bullet.x + bullet.size >= orc.x && 
+            // bullet.x - bullet.size <= orc.x + orc.width && bullet.y && 
+            // bullet.y <= orc.y + orc.height && 
+            // bullet.x - bullet.size <= orc.x
     ) {
         return true;
     }
