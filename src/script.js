@@ -482,16 +482,21 @@ function handleNade() {
         //     current.bloop.play();
         //     current.bloopPlayed = false;
         // }
+
+
         
         setTimeout(() => {
             current.ready = true;
         }, 1000);
 
-        console.log(current.ready);
+        
         if (current.ready) {
             current.draw();
             current.update();
             current.sound.play();
+
+            // THIS IS 299:
+            console.log(current.x - current.size);
 
             if (current.size <= 100) {
                 current.size += 1;
@@ -503,20 +508,27 @@ function handleNade() {
             } 
         }
 
+        // OTHER THEORY WHY IT DOES NOT WORK: 
+        // since enemies at the very front are not being killed, game not used to killing 
+        // enemies at the back.
+
+
         // FIGURED OUT WHY IT WAS WORKING YESTERDAY: BECAUSE IT WAS RUNNING SLOW LOOOL  
         // REMEMBER TO UNCOMMENT:
         for (let y = 0; y <= enemyQueue.length; y++) { 
             let currOrc = enemyQueue[y];
             // console.log(collision(current, currOrc));
             if (enemyQueue.length > 0 && currOrc) {
-                if (collision(current, currOrc) && current.ready == true) {
+                if (nadeCollision(current, currOrc)) {    
+                    currOrc.inNadeRange = true;
+                } else currOrc.inNadeRange = false;
+
+                if (current.ready == true && currOrc.inNadeRange) {
                     enemyQueue.splice(i, 1);
                     score += 10;
                     enemiesLeft--;
                 }
-                //     if (collision(current, currOrc)) {    
-                //     currOrc.inNadeRange = true;
-                // }
+
 
                 // if (currOrc.inNadeRange == true) {
                 //     enemyQueue.splice(i, 1);
@@ -835,6 +847,21 @@ function pushEnemy() {
     }
 }
 
+function nadeCollision(nade, orc) {
+    if (
+        // FRONT:
+        nade.y + nade.size >= orc.y && 
+        nade.x + nade.size >= orc.x && 
+        // BACK:
+        // YES, THIS IS CORRECT:
+        nade.x - nade.size <= orc.x + orc.width
+        
+    ) {
+        return true;
+    }
+
+}
+
 // collission successful.
 function collision(bullet, orc) {
     if (
@@ -854,12 +881,12 @@ function collision(bullet, orc) {
             bullet.y + bullet.size >= orc.y)
         // GRENADE CONTACT, "size" refering to the radius. "Bullet" is the nade:
         // THE ERROR IS NOT HERE. IT IS ELSEWHERE IN MY COLLISION LOGIC. IT HAS TO BE
-        ||  (
-                // TWO FUCKING CASES: 1 FOR FORWARD. OTHER FOR BACK:
-                bullet.y + bullet.size >= orc.y && 
-                bullet.x + bullet.size >= orc.x && 
-                bullet.x - bullet.size <= orc.x
-            )
+        // ||  (
+        //         // TWO FUCKING CASES: 1 FOR FORWARD. OTHER FOR BACK:
+        //         bullet.y + bullet.size >= orc.y && 
+        //         bullet.x + bullet.size >= orc.x && 
+        //         bullet.x - bullet.size <= orc.x
+        //     )
             
             // bullet.y + bullet.size >= orc.y && bullet.x + bullet.size >= orc.x && 
             // bullet.x - bullet.size <= orc.x + orc.width && bullet.y && 

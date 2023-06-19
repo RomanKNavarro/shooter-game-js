@@ -65,7 +65,10 @@ export default class Pickup {
         if (!this.delete) {
             cxt.beginPath();
             cxt.fillStyle = "purple";
-            cxt.fillRect(this.x, this.y, this.width, this.height);
+
+            // cxt.fillRect(this.x, this.y, this.width, this.height);
+            cxt.fillRect(299, this.y, this.width, this.height);
+
             // cxt.fill();
 
             cxt.font = "20px serif";
