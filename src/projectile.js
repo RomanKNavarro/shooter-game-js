@@ -16,7 +16,7 @@ export default class Projectile {
       this.speed = 10;
       // this.speed =5;
       this.delete = false;
-      this.randomY = [2.4, 2.6, 2.8, 3, 3.2, 3.4];
+      this.randomY = [2, 2.2, 2.4, 2.6, 2.8, 3, 3.2, 3.4];
       // this.randomY = [0.95, 1.0, 1.6, 1.8, 2, 2.2, 2.4];
 
       this.pistol = new Audio();

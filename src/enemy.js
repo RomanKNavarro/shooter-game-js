@@ -54,6 +54,8 @@ export default class Enemy {
       this.inPosition = false;
       this.position = 0;
 
+      this.dead = false;
+
       this.growl = new Audio();
       this.growl.src = "/src/assets/sounds/paco.flac";
     }

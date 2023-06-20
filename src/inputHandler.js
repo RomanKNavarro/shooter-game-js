@@ -85,6 +85,10 @@ export default class InputHandler {
         case 'a':
           entity.angle = "straight";
           break;
+
+        case 'e':
+          entity.throwBoom = false;
+          break;
         
         // i need nothing for case q
       }

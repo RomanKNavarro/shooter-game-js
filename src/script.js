@@ -86,8 +86,8 @@ var cxt = canvas.getContext("2d");
 // TODO: FIX THIS STUPID GLITCH. health/wall pickup gives player flamethrower.  --DONE
 // TODO: get grenades to kill enemies   --DONE
 // TODO: add delay to grenade, include throw "animation" and bloop
-// TODO: further fix grenade collision. fix delay bug
-// TODO: fix bullet collision
+// TODO: further fix grenade collision. fix delay bug   --DONE
+// TODO: fix bullet collision --DONE
 
 
 let roundCounts = [3, 10];
@@ -478,18 +478,17 @@ function handleNade() {
     for (let i = 0; i < nadeQueue.length; i++) {
         let current = nadeQueue[i];
         // current.bloop.play();
-        // if (!current.bloopPlayed) {
-        //     current.bloop.play();
-        //     current.bloopPlayed = false;
-        // }
 
+        if (!current.bloopPlayed) {
+            current.bloop.play();
+            current.bloopPlayed = false;
+        }
 
-        
         setTimeout(() => {
             current.ready = true;
-        }, 1000);
+        }, 500);
 
-        
+        // current.ready = true;
         if (current.ready) {
             current.draw();
             current.update();
@@ -499,7 +498,7 @@ function handleNade() {
             console.log(current.x - current.size);
 
             if (current.size <= 100) {
-                current.size += 1;
+                current.size += 4;
                 // console.log(current.size);
             }
             else {
@@ -508,33 +507,17 @@ function handleNade() {
             } 
         }
 
-        // OTHER THEORY WHY IT DOES NOT WORK: 
-        // since enemies at the very front are not being killed, game not used to killing 
-        // enemies at the back.
-
-
         // FIGURED OUT WHY IT WAS WORKING YESTERDAY: BECAUSE IT WAS RUNNING SLOW LOOOL  
         // REMEMBER TO UNCOMMENT:
         for (let y = 0; y <= enemyQueue.length; y++) { 
             let currOrc = enemyQueue[y];
             // console.log(collision(current, currOrc));
             if (enemyQueue.length > 0 && currOrc) {
-                if (nadeCollision(current, currOrc)) {    
-                    currOrc.inNadeRange = true;
-                } else currOrc.inNadeRange = false;
-
-                if (current.ready == true && currOrc.inNadeRange) {
-                    enemyQueue.splice(i, 1);
-                    score += 10;
-                    enemiesLeft--;
-                }
-
-
-                // if (currOrc.inNadeRange == true) {
-                //     enemyQueue.splice(i, 1);
-                //     score += 10;
-                //     enemiesLeft--;
-                // }
+                if (nadeCollision(current, currOrc) && current.ready == true) {    
+                    currOrc.dead = true;
+                    // currOrc.inNadeRange = true;
+                } 
+                // else currOrc.inNadeRange = false;
             }
             // console.log(currOrc.inNodeRange);
         }
@@ -753,16 +736,23 @@ function handleEnemy() {
 
         // FIX THIS CRAP --DONE. Takes into account both regular and special rounds:
         // delete enemies if they are off-canvas:
-        if ((current.x + current.width > 0) && (current.x < canvas.width + 50) && !current.dead) {
+        if ((current.x + current.width > 0) && (current.x < canvas.width + 50)) {
             current.update();
             current.draw();
         } else {
-            enemyQueue.splice(i, 1);
-            score += 10;
-            current.dead;
-            enemiesLeft--;
+            // enemyQueue.splice(i, 1);
+            // score += 10;
+            // current.dead;
+            // enemiesLeft--;
+            current.dead = true;
             // UNCOMMENT:
             //wallHealth.number--;
+        }
+
+        if (current.dead) {
+            enemyQueue.splice(i, 1);
+            score += 10;
+            enemiesLeft--;
         }
 
         // FIX THIS CRAP ASAP:  --DONE
@@ -879,19 +869,6 @@ function collision(bullet, orc) {
         //  BULLET ON BULLET CONTACT:
         || (bullet.x + bullet.size >= orc.x && bullet.y <= orc.y + orc.size && 
             bullet.y + bullet.size >= orc.y)
-        // GRENADE CONTACT, "size" refering to the radius. "Bullet" is the nade:
-        // THE ERROR IS NOT HERE. IT IS ELSEWHERE IN MY COLLISION LOGIC. IT HAS TO BE
-        // ||  (
-        //         // TWO FUCKING CASES: 1 FOR FORWARD. OTHER FOR BACK:
-        //         bullet.y + bullet.size >= orc.y && 
-        //         bullet.x + bullet.size >= orc.x && 
-        //         bullet.x - bullet.size <= orc.x
-        //     )
-            
-            // bullet.y + bullet.size >= orc.y && bullet.x + bullet.size >= orc.x && 
-            // bullet.x - bullet.size <= orc.x + orc.width && bullet.y && 
-            // bullet.y <= orc.y + orc.height && 
-            // bullet.x - bullet.size <= orc.x
     ) {
         return true;
     }
@@ -936,6 +913,7 @@ function animate() {
 
     frame++;
 
+    console.log(nadeQueue);
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
 }
