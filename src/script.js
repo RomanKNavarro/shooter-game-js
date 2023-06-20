@@ -457,10 +457,10 @@ function handleShooter() {
 
         // THIS IS NECESSARY:
         if (shooter.secondNade == false) {
-            nadeQueue.push(new Grenade(canvas.width / 2));
+            nadeQueue.push(new Grenade(canvas.width / 2, shooter));
             shooter.bloop.play();
         } else {
-            nadeQueue.push(new Grenade(canvas.width / 1.2));
+            nadeQueue.push(new Grenade(canvas.width / 1.2, shooter));
             shooter.bloop.play();
         }
     
@@ -472,12 +472,26 @@ function handleShooter() {
 // only one or two nades should be in the queue at any given time:
 // when nade is thrown, there is 1 second fuse. Before that Sec. is up, the x for next nade will change
 
+// function drawDud() {
+//     cxt.arc(shooter.x, dudY, 10, 0, Math.PI * 2, true);
+//     cxt.fill();
+// }
+
+// function updateDud() {
+//     dudY -= 10;
+// }
+
 // GLITCH: if enemy  was present in time of throw, it gets deleted later on.
 // maximum "size" is 101
 function handleNade() {
     for (let i = 0; i < nadeQueue.length; i++) {
         let current = nadeQueue[i];
         // current.bloop.play();
+
+        if (current.dudY > 0) {
+            current.drawDud();
+            current.updateDud();
+        }
 
         if (!current.bloopPlayed) {
             current.bloop.play();
@@ -499,7 +513,6 @@ function handleNade() {
 
             if (current.size <= 100) {
                 current.size += 4;
-                // console.log(current.size);
             }
             else {
                 nadeQueue.splice(i, 1);
@@ -515,7 +528,6 @@ function handleNade() {
             if (enemyQueue.length > 0 && currOrc) {
                 if (nadeCollision(current, currOrc) && current.ready == true) {    
                     currOrc.dead = true;
-                    // currOrc.inNadeRange = true;
                 } 
                 // else currOrc.inNadeRange = false;
             }
