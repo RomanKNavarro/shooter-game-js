@@ -4,6 +4,64 @@ var cxt = canvas.getContext("2d");
 // BULLETS
 export default class Projectile {
     constructor(x, y, direction, weapon, dead) {
+
+      // NEW HOWLER CRAP (sound fx "bucket"):
+      this.sfx = {
+        pistol: new Howl({
+          /* accepts multiple versions of the same audio! (automatically selects the best one for the 
+          current web browser */
+          src: [
+            "src/assets/sounds/shots/pistol.wav",
+          ],
+          loop: false,
+        }),
+        ar: new Howl({
+          src: [
+            "src/assets/sounds/shots/cg1.wav",
+          ],
+          // the "loop" flag is false by default!
+          loop: false,
+          // function to execute as soon as the sound effect ends:
+          // good use case: when there is an intro to a song. Play the intro first, then use "onend" 
+          // to play the song without having to worry about the intro repeating. 
+          onend: function() {}
+        }), 
+        flammen: new Howl({
+          src: [
+            "src/assets/sounds/laser.mp3",
+          ],
+          // the "loop" flag is false by default!
+          loop: false,
+          // function to execute as soon as the sound effect ends:
+          // good use case: when there is an intro to a song. Play the intro first, then use "onend" 
+          // to play the song without having to worry about the intro repeating. 
+          onend: function() {}
+        }), 
+        shotty: new Howl({
+          src: [
+            "src/assets/sounds/shots/rifle.wav",
+          ],
+          // the "loop" flag is false by default!
+          loop: false,
+          // function to execute as soon as the sound effect ends:
+          // good use case: when there is an intro to a song. Play the intro first, then use "onend" 
+          // to play the song without having to worry about the intro repeating. 
+          onend: function() {}
+        }), 
+        growl: new Howl({
+          src: [
+            "src/assets/sounds/shots/rifle.wav",
+          ],
+          // the "loop" flag is false by default!
+          loop: false,
+          // function to execute as soon as the sound effect ends:
+          // good use case: when there is an intro to a song. Play the intro first, then use "onend" 
+          // to play the song without having to worry about the intro repeating. 
+          onend: function() {}
+        }), 
+
+      }
+
       // constructor(x, y) { lol test
       this.x = x;
       this.y = y;
@@ -36,24 +94,38 @@ export default class Projectile {
         this.y = this.y + 25;
       }
     }
+
+    playSound(sound) {
+      if (!sound.playing()) {
+        sound.play();
+      }
+    }
     
     update() {
       switch (this.weapon) {
         case "pistol":
-          this.pistol.play();
+          // this.pistol.play();
+          // if (!this.sfx.pistol.playing()) {
+          //   this.sfx.pistol.play();
+          // }
+          this.playSound(this.sfx.pistol);
+          
           break;
         case "shotty":
           if (!this.dead) {
-            this.shotty.play();
+            // this.shotty.play();
+            this.playSound(this.sfx.shotty);
           } else {
-            this.shotty.pause();
+            // this.shotty.pause();
+            this.sfx.shotty.stop();
           } 
           break;
         case "ar":
-          this.ar.play();
+          // this.ar.play();
+          this.playSound(this.sfx.ar);
           break;
         case "flammen":
-          this.flammen.play();
+          this.playSound(this.sfx.flammen);
           break;
       }
 

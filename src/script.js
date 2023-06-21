@@ -85,10 +85,18 @@ var cxt = canvas.getContext("2d");
 // TODO: grenade pickup                     --DONE
 // TODO: FIX THIS STUPID GLITCH. health/wall pickup gives player flamethrower.  --DONE
 // TODO: get grenades to kill enemies   --DONE
-// TODO: add delay to grenade, include throw "animation" and bloop
+// TODO: add delay to grenade, include throw "animation" and bloop  --DONE
 // TODO: further fix grenade collision. fix delay bug   --DONE
 // TODO: fix bullet collision --DONE
-
+// TODO: add pre-intro "loading" state  --DONE
+// TODO: on round 9 or so, baddiePositions stop functioning.
+// TODO: learn about and implement better audio practices (too many audio files sound like crap)
+// TODO: get more civvies to spawn in boss round
+// TODO: higher enemy density in boss round
+// TODO: more random loading screen times   --DONE
+// TODO: add play button as soon as "loading" ends. Initiate music.
+// TODO: more nade explosion sounds
+// TODO: fix nade sounds (I need them to overlap)
 
 let roundCounts = [3, 10];
 // let roundCounts = [3, 50];
@@ -117,7 +125,7 @@ const yesButton = new Button(250, canvas.height / 1.2, 100, '"Defend"', true);
 const noButton = new Button(canvas.width - 250 - 100, canvas.height / 1.2, 100, "Give up", true);
 const playAgainButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, "Play again?", true);
 
-const playAgainButton2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "test test", true);
+const playAgainButton2 = new Button(canvas.width / 2.5, canvas.height / 2, 100, "test test", true);
 
 const winText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Round Complete", false);
 const nextText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Next round incoming...", false);
@@ -150,7 +158,7 @@ be in vain?`, canvas.height / 5);
 const startText = new TextWall(
     `You are Lieutenant Warren Kilgore, the last remaining invader in Swinemanland. The very land of your\n
     eternal arch-nemesis. The armestice between the Sheep and the Swinemen had been signed days before,\n 
-    but you reject returning to the boring old civilian life at whatever cost. Even though all of your men\n
+    but you reject returning to the boring old civilian life at whatever cost. Even though all of your men\n 
     have deserted you, you refuse to give up the the strategic city of Vonn, the crown jewel of Swineman\n 
     "civilization".\n 
     It is now your undisputed domain, your very own kingdom, and everyone in it mere flesh-logs. They are\n
@@ -163,7 +171,10 @@ const giveupText = new TextWall(
     \n
     The war crimes tribunal accuses you of innumerable atrocities, the charges of which are beyond the scope of this game.\n 
     \n
-    You are put to the firing squad and your ashes thrown into the ocean.`, canvas.height / 5);
+    You are put to the firing squad and your ashes thrown into the dirty Googa river.`, canvas.height / 5);
+
+const loadingText = new TextWall(`Loading`, canvas.height / 5
+)
 
 // HEALTH:
 let playerHealth = new Health(30);
@@ -183,6 +194,7 @@ let showNextRound = false;
 let showNextText = false;
 let showSpecialText = false;
 let showMenu = false;
+let showIntro = false;
 let startRound = false;
 
 let finalRound = false;
@@ -207,10 +219,60 @@ let snackQueue = [];
 let nadeQueue = [];
 
 // let state = "MENU";
-let state = "MENU";
+let state = "LOADING";
+let loadingTime = [3000, 4000, 5000][Math.floor(Math.random() * 3)];
 
 // functions:
 flora.draw();
+
+let music1 = new Audio;
+music1.src = "/src/assets/music/prey's stand 2.mp3";
+
+var sfx = {
+    growl: new Howl({
+      /* accepts multiple versions of the same audio! (automatically selects the best one for the 
+      current web browser */
+      src: [
+        "src/assets/sounds/paco.flac",
+      ],
+      loop: false,
+    }),
+    boom: new Howl({
+        /* accepts multiple versions of the same audio! (automatically selects the best one for the 
+        current web browser */
+        src: [
+          "src/assets/sounds/explosionLoud.mp3",
+        ],
+        loop: false,
+    }),
+    bloop: new Howl({
+        /* accepts multiple versions of the same audio! (automatically selects the best one for the 
+        current web browser */
+        src: [
+          "src/assets/sounds/glauncher.ogg",
+        ],
+        loop: false,
+    }),
+};
+
+/* there is a stupid security measure in some browsers where no sound is allowed to play unless the 
+user explicitly interacts with the page. To work around this, add a "play" button that has to be clicked */
+var music = {
+    dramatic: new Howl({
+        src: [
+        "src/assets/music/prey's stand.mp3"
+        ], 
+    })
+};
+
+function playSound(sound) {
+    if (!sound.playing()) {
+        sound.play();
+    }
+}
+
+// music1.play();
+// music.dramatic.play();
 
 function handleStatus() {
     if (state == "RUNNING" || state == "WIN") {
@@ -256,6 +318,7 @@ function greatReset() {
     playerHealth.number = 3;
     wallHealth.number = 3;
     showMenu = false;
+    showIntro = false;
     // grenades.number = 3;
     grenades.number = 10;
 }
@@ -265,6 +328,19 @@ function greatReset() {
 // TODO: use switch case to handle states
 function handleState() {
     switch(state) {
+        case "LOADING":
+            loadingText.draw();
+            setTimeout(() => {
+                // what's up with this again?
+                showIntro = true;
+                if (score >= winningScore) {
+                    cremate();
+                }
+            }, loadingTime);
+
+            if (showIntro) state = "INTRO";
+            break;
+
         // GLITCH SOMEWHERE IN INTRO:
         case "INTRO":
             startText.draw();
@@ -448,7 +524,7 @@ function handleShooter() {
     // CHECK IF NUM. IS ODD:    num % 2 !== 0
     // if (shooter.throwBoom && grenades.number > 0) {
     
-    if (shooter.throwBoom && grenades.number > 0) {
+    if (shooter.throwBoom && grenades.number > 0 && state != "MENU") {
         if (nadeQueue.length < 1) {
             shooter.secondNade = false;
         } else {
@@ -458,10 +534,12 @@ function handleShooter() {
         // THIS IS NECESSARY:
         if (shooter.secondNade == false) {
             nadeQueue.push(new Grenade(canvas.width / 2, shooter));
-            shooter.bloop.play();
+            // shooter.bloop.play();
+            playSound(sfx.bloop);
         } else {
             nadeQueue.push(new Grenade(canvas.width / 1.2, shooter));
-            shooter.bloop.play();
+            //shooter.bloop.play();
+            playSound(sfx.bloop);
         }
     
         shooter.throwBoom = false;
@@ -471,15 +549,6 @@ function handleShooter() {
 
 // only one or two nades should be in the queue at any given time:
 // when nade is thrown, there is 1 second fuse. Before that Sec. is up, the x for next nade will change
-
-// function drawDud() {
-//     cxt.arc(shooter.x, dudY, 10, 0, Math.PI * 2, true);
-//     cxt.fill();
-// }
-
-// function updateDud() {
-//     dudY -= 10;
-// }
 
 // GLITCH: if enemy  was present in time of throw, it gets deleted later on.
 // maximum "size" is 101
@@ -506,10 +575,12 @@ function handleNade() {
         if (current.ready) {
             current.draw();
             current.update();
-            current.sound.play();
+            // current.sound.play();
+
+            playSound(sfx.boom);
 
             // THIS IS 299:
-            console.log(current.x - current.size);
+            // console.log(current.x - current.size);
 
             if (current.size <= 100) {
                 current.size += 4;
@@ -560,7 +631,6 @@ function handleEnemyProjectiles(orc) {
 function handleProjectile() {
     let projectiles = shooter.projectiles;
 
-    
     for (let i = 0; i < shooter.projectiles.length; i++) {
         let current = projectiles[i];
 
@@ -649,23 +719,6 @@ function handleProjectile() {
                 else if (snack.type == "grenade" && grenades.number < 10) {
                     grenades.number++;
                 }
-
-                // SPECIAL WEAPONS HERE:
-                // AR STACKING ALLOWED. NO PICKUPS IF WEAPON IS FLAMMEN
-                // TO UNCOMMENT:
-
-                // if weapon not equal to flammen, pickup new weapon
-                // else if (shooter.weapon != "flammen") {
-                //     if (snack.type == "ar") {
-                //         shooter.weapon = "ar";
-                //         shooter.fireRate = 15;
-                //         shooter.specialAmmo = 100;
-                //     } else {
-                //         shooter.weapon = "flammen";
-                //         shooter.fireRate = 10;
-                //         shooter.specialAmmo = 45;  
-                //     }
-                // }
 
                 // FLAMMEN IS NOT SPAWNING AS FREQUENTLY
                 if (shooter.weapon != "flammen") {
@@ -791,21 +844,11 @@ function handleEnemy() {
                 // current.growl.play();
 
                 // UNCOMMENT THIS:
-                current.growl.play();
+                // sfx.growl.play();
+                playSound(sfx.growl);
                 // playerHealth.number--;
             }
         }
-
-        // for (let n = 0; n <= nadeQueue.length; n++) { 
-        //     let currNade = nadeQueue[n];
-        //     if (nadeQueue.length > 0) {
-        //         // if (collision(nadeQueue[n], shooter)) {
-        //         //     enemyQueue.splice(i, 1);
-        //         //     score += 10;
-        //         //     enemiesLeft--;
-        //         // }
-        //     }
-        // }
     }
 }
 
@@ -919,13 +962,17 @@ function animate() {
     handleStatus();
     handleNade();
 
+    // if (state != "LOADING") {
+    //     music1.play();
+    // }
+
     // if (shooter.weapon == "flammen") {
     //     handleFlammen();
     // }
 
     frame++;
 
-    console.log(nadeQueue);
+    // console.log(state);
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
 }
