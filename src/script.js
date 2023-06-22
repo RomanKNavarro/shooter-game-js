@@ -96,7 +96,7 @@ var cxt = canvas.getContext("2d");
 // TODO: more random loading screen times   --DONE
 // TODO: add play button as soon as "loading" ends. Initiate music.
 // TODO: more nade explosion sounds
-// TODO: fix nade sounds (I need them to overlap)
+// TODO: fix nade sounds (I need them to overlap)   --DONE
 /* TODO: FIX THIS STUPID ERROR (ONLY GET IT ON LAST ROUND):
 Uncaught TypeError: Cannot read properties of undefined (reading 'x')
     at collision (script.js:916:17)
@@ -106,6 +106,9 @@ Uncaught TypeError: Cannot read properties of undefined (reading 'x')
 */
 // TODO: nadesNumber default should be 0. Nades av. on round 3. flammen only available after round 5. 
 // TODO: add sound fx on pickups
+// TODO: make music louder  --DONE
+// TODO: add brief pause before boss round.
+
 
 
 let roundCounts = [3, 10];
@@ -129,6 +132,7 @@ const shooter = new Shooter(100, flora.y - 50);
 new InputHandler(shooter);
 
 // BUTTONS AND TEXT. (x, y, width, text, clickable)
+const playButton = new Button(canvas.width / 2.2, canvas.height / 2.5, 100, "Play", true);
 const startButton = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Initiate Bloodbath", true);
 const skipButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, "skip", true);
 const yesButton = new Button(250, canvas.height / 1.2, 100, '"Defend"', true);
@@ -171,7 +175,7 @@ const startText = new TextWall(
     but you reject returning to the boring old civilian life at whatever cost. Even though all of your men\n 
     have deserted you, you refuse to give up the the strategic city of Vonn, the crown jewel of Swineman\n 
     "civilization".\n 
-    It is now your undisputed domain, your very own kingdom, and everyone in it mere flesh-logs. They are\n
+    It is now your undisputed domain, your very own kingdom, and everyone in it mere civy cattle. They are\n
     your servants, ready to satisfy your every depraved fantasy at any given moment. The city of Vonn took\n 
     months of gruesome house-to-house fighting and thousands of Sheep lives to completely conquer. Are you\n
     going to let it all slip now?`, canvas.height / 10);
@@ -183,8 +187,10 @@ const giveupText = new TextWall(
     \n
     You are put to the firing squad and your ashes thrown into the dirty Googa river.`, canvas.height / 5);
 
-const loadingText = new TextWall(`Loading`, canvas.height / 5
-)
+// const loadingText = new TextWall(`\n\n\n\n\nLoading`, canvas.height / 5);
+const loadingText = new TextWall(`Loading`, canvas.height / 2.5);
+
+const playText = new TextWall(``, canvas.height / 5);
 
 // HEALTH:
 let playerHealth = new Health(30);
@@ -197,17 +203,6 @@ let frame = 0;
 let randomFrames = [10, 30, 50, 80, 110,];
 
 let enemyQueue = [];
-
-// stupid timer vars:
-let specialRound = false;
-let showNextRound = false;
-let showNextText = false;
-let showSpecialText = false;
-let showMenu = false;
-let showIntro = false;
-let startRound = false;
-
-let finalRound = false;
 
 // ENEMY SHOOTING STUFF:
 // possible glitch fix: add "id" property
@@ -230,8 +225,8 @@ let snackQueue = [];
 let nadeQueue = [];
 
 // let state = "MENU";
-let state = "MENU";
-let loadingTime = [3000, 4000, 5000][Math.floor(Math.random() * 3)];
+let state = "LOADING";
+let loadingTime = [2000, 3000, 4000, 5000][Math.floor(Math.random() * 3)];
 
 // functions:
 flora.draw();
@@ -276,7 +271,6 @@ var sfx = {
             "src/assets/sounds/grenadePin.mp3",
         ]
     })
-
 };
 
 /* there is a stupid security measure in some browsers where no sound is allowed to play unless the 
@@ -286,15 +280,28 @@ var music = {
         src: [
         "src/assets/music/prey's stand.mp3"
         ], 
+        loop: true,
+        volume: 5.5,
     })
 };
 
 function playSound(sound) {
-
     if (!sound.playing()) {
         sound.play();
     }
 }
+
+// stupid timer vars:
+let showLoading = true;
+let showPlay = false
+let specialRound = false;
+let showNextRound = false;
+let showNextText = false;
+let showSpecialText = false;
+let showMenu = false;
+let showIntro = false;
+let startRound = false;
+let finalRound = false;
 
 // music1.play();
 // music.dramatic.play();
@@ -360,21 +367,45 @@ function greatReset() {
 // TODO: use switch case to handle states
 function handleState() {
     switch(state) {
+        case "PLAY":
+            playText.draw();
+            playButton.draw();
+            mouseCollision(shooter.mouse, playButton, "INTRO")
+            break;
+
         case "LOADING":
+            // loadingText.draw();
+            // setTimeout(() => {
+            //     // what's up with this again?
+            //     showIntro = true;
+            //     if (score >= winningScore) {
+            //         cremate();
+            //     }
+            // }, loadingTime);
+
+            // if (showIntro) state = "INTRO";
+            // break;
+
             loadingText.draw();
+            // if (showLoading) {
+            //     loadingText.draw();
+            // }
             setTimeout(() => {
-                // what's up with this again?
-                showIntro = true;
+                // showLoading = false;
+                showPlay = true;
                 if (score >= winningScore) {
                     cremate();
                 }
             }, loadingTime);
 
-            if (showIntro) state = "INTRO";
+            if (showPlay) state = "PLAY";
+            // mouseCollision(shooter.mouse, playButton, "INTRO");
             break;
 
         // GLITCH SOMEWHERE IN INTRO:
         case "INTRO":
+            playSound(music.dramatic);
+
             startText.draw();
 
             skipButton.draw();
