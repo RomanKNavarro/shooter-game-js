@@ -27,12 +27,12 @@ export default class Pickup {
 
         // ONLY A 0/10 CHANCE TO SPAWN PICKUP IN GENERAL:
 
-        // this.weaponOdds = 1;
+        this.weaponOdds = 1;
         this.aidOdds = 5;
 
         //  FIX THIS CRAP
         this.flammenOdds = 1;
-        // this.weapon = ["flammen", "grenade"][Math.floor(Math.random() * 2)];
+        this.weapon = ["flammen", "grenade"][Math.floor(Math.random() * 2)];
         this.aid = ["health", "wall"][Math.floor(Math.random() * 2)];
 
         // type by default is ar
@@ -48,9 +48,19 @@ export default class Pickup {
         this.y += 10;
 
         if (this.typeNum <= this.weaponOdds) {
-            if (this.weapon == "flammen")
+            if (this.weapon == "flammen") {
+                if (this.round >= 6) {
+                    this.type = "flammen";
+                }
+                else this.type = "ar";
+            }
+            else if (this.weapon == "grenade") {
+                if (this.round >= 3) {
+                    this.type = "grenade";
+                }
+                else this.type = "ar";
+            }
             // this.type = this.weapon;
-
         }
         else if (this.typeNum <= this.aidOdds && this.typeNum > this.weaponOdds) this.type = this.aid;
 
@@ -82,7 +92,7 @@ export default class Pickup {
             
 
       
-            cxt.fillText(`${this.round}`, this.x + (this.width / 2), this.y + (this.height / 2));
+            cxt.fillText(`${this.type}, ${this.round}`, this.x + (this.width / 2), this.y + (this.height / 2));
         };        
     }
 }

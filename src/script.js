@@ -89,7 +89,7 @@ var cxt = canvas.getContext("2d");
 // TODO: further fix grenade collision. fix delay bug   --DONE
 // TODO: fix bullet collision --DONE
 // TODO: add pre-intro "loading" state  --DONE
-// TODO: on round 9 or so, baddiePositions stop functioning.
+// TODO: on round 9 (YES), baddiePositions stop functioning. Specifically, air and last ground
 // TODO: learn about and implement better audio practices (too many audio files sound like crap)
 // TODO: get more civvies to spawn in boss round
 // TODO: higher enemy density in boss round
@@ -102,6 +102,7 @@ Uncaught TypeError: Cannot read properties of undefined (reading 'x')
     at collision (script.js:916:17)
     at handleProjectile (script.js:695:76)
     at animate (script.js:960:5)
+    ONLY GET ERROR WHEN USING FLAMMEN
 */
 // TODO: nadesNumber default should be 0. Nades av. on round 3. flammen only available after round 5. 
 // TODO: add sound fx on pickups
@@ -221,7 +222,8 @@ let baddiePositions = {
 
 // ENEMY SPEED:
 // let currentSpeed = 2;
-let currentSpeed = 4;
+// let currentSpeed = 4;
+let currentSpeed = 8;
 
 // DROPPED PICKUPS:
 let snackQueue = [];
@@ -252,7 +254,7 @@ var sfx = {
         src: [
           "src/assets/sounds/explosionLoud.mp3",
         ],
-        loop: false,
+        loop: true,
     }),
     bloop: new Howl({
         /* accepts multiple versions of the same audio! (automatically selects the best one for the 
@@ -262,6 +264,19 @@ var sfx = {
         ],
         loop: false,
     }),
+
+    // PICKUP SFX:
+    arReload: new Howl({
+        src: [
+            "src/assets/sounds/explosionLoud.mp3",
+        ]
+    }),
+    nadePin: new Howl({
+        src: [
+            "src/assets/sounds/grenadePin.mp3",
+        ]
+    })
+
 };
 
 /* there is a stupid security measure in some browsers where no sound is allowed to play unless the 
@@ -301,6 +316,12 @@ function handleStatus() {
     }
 }
 
+function resetBaddies() {
+    for (let i = 1; i <= Object.keys(baddiePositions).length; i++) {
+        baddiePositions[i.toString()]["inPos"] = false;
+    }
+}
+
 function greatReset() {
     score = 0;
     scoreText.text = score;
@@ -320,9 +341,10 @@ function greatReset() {
         roundCounts.push(Math.floor(roundCounts[roundCounts.length -1] * 1.5));
     }
 
-    for (let i = 1; i <= Object.keys(baddiePositions).length; i++) {
-        baddiePositions[i.toString()]["inPos"] = false;
-    }
+    // for (let i = 1; i <= Object.keys(baddiePositions).length; i++) {
+    //     baddiePositions[i.toString()]["inPos"] = false;
+    // }
+    resetBaddies();
 
     snackQueue = [];
     playerHealth.number = 3;
@@ -429,6 +451,8 @@ function handleState() {
             specialRound = false;
             shooter.disabled = false;
     
+            resetBaddies();
+
             // special round cases:
             let specRounds = {5: "SPECIAL", 4: "BOSS", 10: "END"};
             if (Object.keys(specRounds).includes(currentRound.toString())) {
@@ -517,7 +541,7 @@ function handleState() {
 // increment stuff to make next round slightly harder:
 function cremate() {
     currentRound++;
-    currentSpeed += 0.2;
+    currentSpeed += 0.1;
     roundCounts.splice(0, 1);
     enemyCount = enemiesLeft = roundCounts[0];
     winningScore += enemyCount * 10;
@@ -716,7 +740,7 @@ function handleProjectile() {
             if (currentRound >= 5) snack.flammenReady == true;
             if (snack && projectiles[i] && collision(projectiles[i], snack)) {
 
-                snack.sound.play();
+                // snack.sound.play();
                 projectiles.splice(i, 1);
                 i--;
 
