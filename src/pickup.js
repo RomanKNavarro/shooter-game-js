@@ -5,12 +5,14 @@ export default class Pickup {
     constructor(x, y, round) {
         this.width = this.height = 20;
 
+
         this.x = x;
         this.y = y;
         this.delete = false;
 
         this.typeNum = Math.floor(Math.random() * 10);
 
+        // this.sound;
         this.sound;
         this.round = round;
 
@@ -37,6 +39,35 @@ export default class Pickup {
 
         // type by default is ar
         this.type = "ar";
+
+        this.sfx = {
+            // PICKUP SFX:
+            arReload: new Howl({
+                src: [
+                    "src/assets/sounds/rifleReload.mp3",
+                ]
+            }),
+            nadePin: new Howl({
+                src: [
+                    "src/assets/sounds/grenadePin.mp3",
+                ]
+            }),
+            flammenReload: new Howl({
+                src: [
+                    "src/assets/sounds/futureReload.mp3",
+                ]
+            }),
+            health: new Howl({
+                src: [
+                    "src/assets/sounds/3 heal spells/healspell1.mp3",
+                ]
+            }),
+            wall: new Howl({
+                src: [
+                    "src/assets/sounds/3 heal spells/healspell2.mp3",
+                ]
+            }),
+        }
 
         // ar: 6-10, aid: 2-5, weapon: 0-1
         // this.type = this.types[Math.floor(Math.random() * this.types.length)];
@@ -67,11 +98,14 @@ export default class Pickup {
         //  SOUND TO PLAY WHEN PICKED UP:
         switch (this.type) {
             case "flammen":
-                this.sound = this.flammenReload;
+                // this.sound = this.flammenReload;
+                this.sound = this.sfx.flammenReload;
             case "ar":
-                this.sound = this.rifleReload;
+                this.sound = this.sfx.arReload;
             case "grenade":
-                this.sound = this.nadePin;
+                this.sound = this.sfx.nadePin;
+            case "health":
+                this.sound = this.sfx.health;
         }
     }
 

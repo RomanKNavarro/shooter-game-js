@@ -259,7 +259,7 @@ var sfx = {
         src: [
           "src/assets/sounds/glauncher.ogg",
         ],
-        loop: false,
+        //loop: false,
     }),
 
     // PICKUP SFX:
@@ -404,7 +404,7 @@ function handleState() {
 
         // GLITCH SOMEWHERE IN INTRO:
         case "INTRO":
-            playSound(music.dramatic);
+            // playSound(music.dramatic);
 
             startText.draw();
 
@@ -788,6 +788,7 @@ function handleProjectile() {
             if (snack && projectiles[i] && collision(projectiles[i], snack)) {
 
                 // snack.sound.play();
+                snack.sound.play();
                 projectiles.splice(i, 1);
                 i--;
 
