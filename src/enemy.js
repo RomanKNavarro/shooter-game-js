@@ -23,8 +23,8 @@ export default class Enemy {
       this.force = "ground";
 
       this.pickupNum = Math.floor(Math.random() * 10);
-      //this.pickupOdds = 0.5;
-      this.pickupOdds = 8;
+      this.pickupOdds = 0.5;
+      // this.pickupOdds = 8;
       this.pickup = false;
 
       this.typeNum = Math.random() * 10;
@@ -83,7 +83,7 @@ export default class Enemy {
       }
       else if (this.typeNum <= this.airOdds) this.type = "air";
 
-      cxt.fillText(this.inNadeRange, this.x + (this.width / 2), this.y + (this.height / 2));
+      cxt.fillText(this.pickupNum, this.x + (this.width / 2), this.y + (this.height / 2));
     } // projectiles
   
     update() {

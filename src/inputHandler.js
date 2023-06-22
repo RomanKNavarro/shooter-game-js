@@ -26,10 +26,6 @@ export default class InputHandler {
         // this is just for SHOOTING, not look direction
         case ' ':
             entity.shooting = true;
-            // flammen.play();
-            // if (entity.weapon == "flammen") {
-            //   flammen.play();
-            // }
             break;
 
         case 'w':

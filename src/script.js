@@ -66,8 +66,8 @@ var cxt = canvas.getContext("2d");
 // TODO: stop airs from stopping after killing air shooter  --DONE
 /* TODO: get civies to spawn in boss round (GET BOTH TROOPS AND CIVIES TO SPAWN SIMULTANEOUSLY)     --DONE
     will need to create seperate "civieQueue" it seems...*/    
-// TODO: ADD PLAYER HEALTH
-// TODO: fix gun shot audio
+// TODO: ADD PLAYER HEALTH      --DONE
+// TODO: fix gun shot audio     --DONE
 // TODO: stupid glitch: multiple enemies stopping at the same position.                             --DONE
 /* figured it out: every time I kill an enemy in the kill zone, enemies immediately preceding it stop*/ 
 // TODO: keep specialAmmo from depleting inbetween rounds   --DONE
@@ -97,6 +97,15 @@ var cxt = canvas.getContext("2d");
 // TODO: add play button as soon as "loading" ends. Initiate music.
 // TODO: more nade explosion sounds
 // TODO: fix nade sounds (I need them to overlap)
+/* TODO: FIX THIS STUPID ERROR (ONLY GET IT ON LAST ROUND):
+Uncaught TypeError: Cannot read properties of undefined (reading 'x')
+    at collision (script.js:916:17)
+    at handleProjectile (script.js:695:76)
+    at animate (script.js:960:5)
+*/
+// TODO: nadesNumber default should be 0. Nades av. on round 3. flammen only available after round 5. 
+// TODO: add sound fx on pickups
+
 
 let roundCounts = [3, 10];
 // let roundCounts = [3, 50];
@@ -219,7 +228,7 @@ let snackQueue = [];
 let nadeQueue = [];
 
 // let state = "MENU";
-let state = "LOADING";
+let state = "MENU";
 let loadingTime = [3000, 4000, 5000][Math.floor(Math.random() * 3)];
 
 // functions:
@@ -266,6 +275,7 @@ var music = {
 };
 
 function playSound(sound) {
+
     if (!sound.playing()) {
         sound.play();
     }
@@ -420,7 +430,7 @@ function handleState() {
             shooter.disabled = false;
     
             // special round cases:
-            let specRounds = {5: "SPECIAL", 7: "BOSS", 10: "END"};
+            let specRounds = {5: "SPECIAL", 4: "BOSS", 10: "END"};
             if (Object.keys(specRounds).includes(currentRound.toString())) {
                 state = specRounds[currentRound];
             }
@@ -507,7 +517,7 @@ function handleState() {
 // increment stuff to make next round slightly harder:
 function cremate() {
     currentRound++;
-    currentSpeed += 0.1;
+    currentSpeed += 0.2;
     roundCounts.splice(0, 1);
     enemyCount = enemiesLeft = roundCounts[0];
     winningScore += enemyCount * 10;
@@ -575,9 +585,9 @@ function handleNade() {
         if (current.ready) {
             current.draw();
             current.update();
-            // current.sound.play();
 
-            playSound(sfx.boom);
+            current.sound.play();
+            // playSound(sfx.boom);
 
             // THIS IS 299:
             // console.log(current.x - current.size);
@@ -673,7 +683,7 @@ function handleProjectile() {
                     scoreText.text = score;
 
                     if (currentEnemy.pickup) {
-                        snackQueue.push(new Pickup(currentEnemy.x, currentEnemy.y - 100));
+                        snackQueue.push(new Pickup(currentEnemy.x, currentEnemy.y - 100, currentRound));
                     }
 
                     if (Object.keys(baddiePositions).includes(currentEnemy.position)) {
