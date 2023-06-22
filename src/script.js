@@ -95,7 +95,7 @@ var cxt = canvas.getContext("2d");
 // TODO: higher enemy density in boss round
 // TODO: more random loading screen times   --DONE
 // TODO: add play button as soon as "loading" ends. Initiate music.
-// TODO: more nade explosion sounds
+// TODO: more nade explosion sounds    
 // TODO: fix nade sounds (I need them to overlap)   --DONE
 /* TODO: FIX THIS STUPID ERROR (ONLY GET IT ON LAST ROUND):
 Uncaught TypeError: Cannot read properties of undefined (reading 'x')
@@ -109,6 +109,7 @@ Uncaught TypeError: Cannot read properties of undefined (reading 'x')
 // TODO: make music louder  --DONE
 // TODO: add brief pause before boss round.
 // TODO: add end-music and credits screen (make it cheeky)
+// TODO: add bomber and sheep soldier enemy types
 
 let roundCounts = [3, 10];
 // let roundCounts = [3, 50];
@@ -160,7 +161,7 @@ const endText2 = new Button(canvas.width / 2.5, canvas.height / 1.7, 100, "Thank
 const endText3 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Made with ❤️ by", false);
 const endText4 = new Button(canvas.width / 2.5, canvas.height / 1.9, 100, "KAVEMANKORPS", false);
 
-const quietText = new Button(canvas.width / 2.5, canvas.height / 1.9, 100, "KILL KILL KILL KILL", false);
+const quietText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "KILL KILL KILL KILL", false);
 
 const bossText = new TextWall(
 `Satellite imagery has exposed your horriffic atrocities in the city to the rest of the world,\n
@@ -227,7 +228,7 @@ let nadeQueue = [];
 
 // let state = "MENU";
 let state = "LOADING";
-let loadingTime = [2000, 3000, 4000, 5000][Math.floor(Math.random() * 3)];
+let loadingTime = [2000, 3000][Math.floor(Math.random() * 3)];
 
 // functions:
 flora.draw();
@@ -271,7 +272,12 @@ var sfx = {
         src: [
             "src/assets/sounds/grenadePin.mp3",
         ]
-    })
+    }),
+    flammenReload: new Howl({
+        src: [
+            "src/assets/sounds/futureReload.mp3",
+        ]
+    }),
 };
 
 /* there is a stupid security measure in some browsers where no sound is allowed to play unless the 
@@ -310,7 +316,7 @@ let showQuietText = true;
 // music.dramatic.play();
 
 function handleStatus() {
-    if (state == "RUNNING" || state == "WIN") {
+    if (state == "RUNNING" || state == "WIN" || state == "QUIET") {
         roundText.text = currentRound;
         //enemyText.text = enemyCount;
         enemyText.text = enemiesLeft;
@@ -366,10 +372,6 @@ function greatReset() {
 }
 
 // quietFrames:
-let quietCounts = [];
-for (let i = 100; i <= 120; i++) {
-    quietCounts.push(Math.floor(quietCounts[quietCounts.length -1]));
-}
 
 // states: MENU, RUNNING, WIN, SPECIAL, BOSS, END, LOSE.
 // startButton.stroke property successfully set, but color won't change.
@@ -452,11 +454,11 @@ function handleState() {
             break;
 
         case "QUIET":
+            // if (showQuietText) quietText.draw();
+            shooter.disabled = false;
 
-
-            // quietText.draw();
+            quietText.draw();
             // if (frame % 100 !== 0) quietText.draw();
-
 
             setTimeout(() => {
                 startEnd = true
@@ -596,7 +598,7 @@ function cremate() {
 // TODO: GET THIS FUCKING SHIT RUNNING LIKE HOW IT DID EARLIER  --DONE
 function handleShooter() {
     shooter.draw();
-    if (state == "RUNNING" || state == "WIN") {
+    if (state == "RUNNING" || state == "WIN" || state == "QUIET") {
         shooter.update();
     }
 
@@ -722,7 +724,7 @@ function handleProjectile() {
             // else if (shooter.weapon == "flammen") current.size =  10;
     
             // TO REVERT LATER ON:
-            if (current.x < canvas.width - 100 && (state == "RUNNING" || state == "WIN")) {
+            if (current.x < canvas.width - 100 && (state == "RUNNING" || state == "WIN" || state == "QUIET")) {
                 current.update();
                 current.draw();
             }
@@ -1051,7 +1053,7 @@ function animate() {
 
     frame++;
 
-    // console.log(baddiePositions);
+    console.log(showQuietText);
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
 }
