@@ -108,8 +108,7 @@ Uncaught TypeError: Cannot read properties of undefined (reading 'x')
 // TODO: add sound fx on pickups
 // TODO: make music louder  --DONE
 // TODO: add brief pause before boss round.
-
-
+// TODO: add end-music and credits screen (make it cheeky)
 
 let roundCounts = [3, 10];
 // let roundCounts = [3, 50];
@@ -160,6 +159,8 @@ const endText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Coalit
 const endText2 = new Button(canvas.width / 2.5, canvas.height / 1.7, 100, "Thanks for playing!!!", false);
 const endText3 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Made with ❤️ by", false);
 const endText4 = new Button(canvas.width / 2.5, canvas.height / 1.9, 100, "KAVEMANKORPS", false);
+
+const quietText = new Button(canvas.width / 2.5, canvas.height / 1.9, 100, "KILL KILL KILL KILL", false);
 
 const bossText = new TextWall(
 `Satellite imagery has exposed your horriffic atrocities in the city to the rest of the world,\n
@@ -302,6 +303,8 @@ let showMenu = false;
 let showIntro = false;
 let startRound = false;
 let finalRound = false;
+let startEnd = false;
+let showQuietText = true;
 
 // music1.play();
 // music.dramatic.play();
@@ -362,6 +365,12 @@ function greatReset() {
     grenades.number = 10;
 }
 
+// quietFrames:
+let quietCounts = [];
+for (let i = 100; i <= 120; i++) {
+    quietCounts.push(Math.floor(quietCounts[quietCounts.length -1]));
+}
+
 // states: MENU, RUNNING, WIN, SPECIAL, BOSS, END, LOSE.
 // startButton.stroke property successfully set, but color won't change.
 // TODO: use switch case to handle states
@@ -374,17 +383,6 @@ function handleState() {
             break;
 
         case "LOADING":
-            // loadingText.draw();
-            // setTimeout(() => {
-            //     // what's up with this again?
-            //     showIntro = true;
-            //     if (score >= winningScore) {
-            //         cremate();
-            //     }
-            // }, loadingTime);
-
-            // if (showIntro) state = "INTRO";
-            // break;
 
             loadingText.draw();
             // if (showLoading) {
@@ -448,8 +446,23 @@ function handleState() {
                 cremate();
             }
     
-            mouseCollision(shooter.mouse, yesButton, "RUNNING");
+            // mouseCollision(shooter.mouse, yesButton, "RUNNING");
+            mouseCollision(shooter.mouse, yesButton, "QUIET");
             mouseCollision(shooter.mouse, noButton, "GIVEUP");
+            break;
+
+        case "QUIET":
+
+
+            // quietText.draw();
+            // if (frame % 100 !== 0) quietText.draw();
+
+
+            setTimeout(() => {
+                startEnd = true
+            }, 3000);
+
+            if (startEnd) state = "RUNNING";
             break;
     
         case "RUNNING":
@@ -485,7 +498,8 @@ function handleState() {
             resetBaddies();
 
             // special round cases:
-            let specRounds = {5: "SPECIAL", 4: "BOSS", 10: "END"};
+            // let specRounds = {5: "SPECIAL", 9: "BOSS", 10: "END"};
+            let specRounds = {1: "BOSS", 10: "END"};
             if (Object.keys(specRounds).includes(currentRound.toString())) {
                 state = specRounds[currentRound];
             }
@@ -1037,7 +1051,7 @@ function animate() {
 
     frame++;
 
-    // console.log(state);
+    // console.log(baddiePositions);
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
 }
