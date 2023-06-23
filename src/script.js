@@ -111,10 +111,10 @@ Uncaught TypeError: Cannot read properties of undefined (reading 'x')
     at animate (script.js:960:5)
     ONLY GET ERROR WHEN USING FLAMMEN
 */
-// TODO: nadesNumber default should be 0. Nades av. on round 3. flammen only available after round 5. 
+// TODO: nadesNumber default should be 0. Nades av. on round 3. flammen only available after round 5. --DONE (resolved)
 // TODO: add sound fx on pickups
 // TODO: make music louder  --DONE
-// TODO: add brief pause before boss round.
+// TODO: add brief pause before boss round.     --DONE
 // TODO: add end-music and credits screen (make it cheeky)
 // TODO: add bomber and sheep soldier enemy types
 
@@ -221,7 +221,9 @@ let baddiePositions = {
     "2": {"inPos": false, "distance": 150, "type": "ground"}, 
     "3": {"inPos": false, "distance": 250, "type": "ground"},
     "4": {"inPos": false, "distance": 129, "type": "air"},
-    "5": {"inPos": false, "distance": 0, "type": "crawl"}
+    "5": {"inPos": false, "distance": 0, "type": "crawl"},
+    //  THIS POS ONLY AVAILABLE IN BOSS ROUND:
+    "6": {"inPos": false, "distance": -shooter.width, "type": "air"},
 };
 
 // ENEMY SPEED:
@@ -411,7 +413,7 @@ function handleState() {
 
         // GLITCH SOMEWHERE IN INTRO:
         case "INTRO":
-            // playSound(music.dramatic);
+            playSound(music.dramatic);
 
             startText.draw();
 

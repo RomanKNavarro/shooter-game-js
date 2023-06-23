@@ -23,8 +23,8 @@ export default class Enemy {
       this.force = "ground";
 
       this.pickupNum = Math.floor(Math.random() * 10);
-      // this.pickupOdds = 0.5;
-      this.pickupOdds = 8;
+      this.pickupOdds = 0.5;
+      // this.pickupOdds = 8;
       this.pickup = false;
 
       this.typeNum = Math.random() * 10;

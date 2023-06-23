@@ -45,27 +45,32 @@ export default class Pickup {
             arReload: new Howl({
                 src: [
                     "src/assets/sounds/rifleReload.mp3",
-                ]
+                ],
+                volume: 5,
             }),
             nadePin: new Howl({
                 src: [
                     "src/assets/sounds/grenadePin.mp3",
-                ]
+                ],
+                volume: 5,
             }),
             flammenReload: new Howl({
                 src: [
                     "src/assets/sounds/futureReload.mp3",
-                ]
+                ],
+                volume: 5,
             }),
             health: new Howl({
                 src: [
                     "src/assets/sounds/3 heal spells/healspell1.mp3",
-                ]
+                ],
+                loop: false,
             }),
             wall: new Howl({
                 src: [
                     "src/assets/sounds/3 heal spells/healspell2.mp3",
-                ]
+                ], 
+                loop: false,
             }),
         }
 
@@ -100,12 +105,19 @@ export default class Pickup {
             case "flammen":
                 // this.sound = this.flammenReload;
                 this.sound = this.sfx.flammenReload;
+                break;
             case "ar":
                 this.sound = this.sfx.arReload;
+                break;
             case "grenade":
                 this.sound = this.sfx.nadePin;
+                break;
             case "health":
                 this.sound = this.sfx.health;
+                break;
+            case "wall":
+                this.sound = this.sfx.wall;
+                break;
         }
     }
 
@@ -126,7 +138,7 @@ export default class Pickup {
             
 
       
-            cxt.fillText(`${this.type}, ${this.round}`, this.x + (this.width / 2), this.y + (this.height / 2));
+            cxt.fillText(`${this.type}`, this.x + (this.width / 2), this.y + (this.height / 2));
         };        
     }
 }

@@ -35,8 +35,8 @@ export default class TextWall {
     
             cxt.fillStyle = "white";
             //cxt.fillStyle = "black";
-            cxt.font = "14px Permanent Marker";
-            // cxt.font = "15px Times New Roman";
+            //cxt.font = "14px Permanent Marker";
+            cxt.font = "17px Times New Roman";
             // cxt.font = "15px Blockschrift";
             // cxt.font = "15px blockschrift-f-regular";
             for (let i = 0; i < this.lines.length; i++) {

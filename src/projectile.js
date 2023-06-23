@@ -14,6 +14,7 @@ export default class Projectile {
             "src/assets/sounds/shots/pistol.wav",
           ],
           loop: false,
+          volume: 0.6
         }),
         ar: new Howl({
           src: [
@@ -21,10 +22,7 @@ export default class Projectile {
           ],
           // the "loop" flag is false by default!
           loop: false,
-          // function to execute as soon as the sound effect ends:
-          // good use case: when there is an intro to a song. Play the intro first, then use "onend" 
-          // to play the song without having to worry about the intro repeating. 
-          onend: function() {}
+          volume: 0.6
         }), 
         flammen: new Howl({
           src: [
@@ -43,6 +41,7 @@ export default class Projectile {
           ],
           // the "loop" flag is false by default!
           loop: false,
+          volume: 0.6,
           // function to execute as soon as the sound effect ends:
           // good use case: when there is an intro to a song. Play the intro first, then use "onend" 
           // to play the song without having to worry about the intro repeating. 
@@ -160,10 +159,15 @@ export default class Projectile {
           this.y -= this.speed * 2;
           break;
 
+        // THIS IS FOR AIR ENEMIES:
         case "down-diagnal":
           this.x -= this.speed;
           this.y += this.speed / 2;
           break;
+
+        case "straight down":
+          this.y -= 3;
+          break;  
       }
     }
     
