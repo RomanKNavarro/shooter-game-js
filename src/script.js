@@ -13,10 +13,16 @@ import Grenade from "./grenade.js";
 
 // canvas stuff
 var canvas = document.getElementById("canvas1");
-var cxt = canvas.getContext("2d");
+var cxt = canvas.getContext("2d", { alpha: false });
+
+canvas.style.width=canvas.getBoundingClientRect().width;//actual width of canvas
+canvas.style.height=canvas.getBoundingClientRect().height;//actual height of canvas
 
 // PORT: http://127.0.0.1:5500/
 // TEXTWALL FONT DEFINED IN TEXTWALL.JS
+/* TIPS FOR OPTIMIZATION:
+    1. use integers instead of floating-points
+    2.  */
 // TODO: DELETE bullets once they reach end of screen. Log array of bullets. --DONE
 // TODO: reset bullet.x after hitting enemy.    --DONE
 // TODO: GET bullets to travel up when "w" is pressed.
@@ -170,7 +176,7 @@ prompting international outcry and the formation of a Sheep-led coalition agains
 \n
 This is it! Destroy the coalition and the city is yours. Will you give up now and turn yourself\n
 in for war crimes, or will you defend the city to your last dying breath lest your efforts so far\n
-be in vain?`, canvas.height / 5);
+be in vain?`, Math.floor(canvas.height / 5));
 
 const startText = new TextWall(
     `You are Lieutenant Warren Kilgore, the last remaining invader in Swinemanland. The very land of your\n
@@ -181,19 +187,19 @@ const startText = new TextWall(
     It is now your undisputed domain, your very own kingdom, and everyone in it mere civy cattle. They are\n
     your servants, ready to satisfy your every depraved fantasy at any given moment. The city of Vonn took\n 
     months of gruesome house-to-house fighting and thousands of Sheep lives to completely conquer. Are you\n
-    going to let it all slip now?`, canvas.height / 10);
+    going to let it all slip now?`, Math.floor(canvas.height / 10));
 
 const giveupText = new TextWall(
     `You spare your fellow countrysheep and turn yourself in.\n
     \n
     The war crimes tribunal accuses you of innumerable atrocities, the charges of which are beyond the scope of this game.\n 
     \n
-    You are put to the firing squad and your ashes thrown into the dirty Googa river.`, canvas.height / 5);
+    You are put to the firing squad and your ashes thrown into the dirty Googa river.`, Math.floor(canvas.height / 5));
 
 // const loadingText = new TextWall(`\n\n\n\n\nLoading`, canvas.height / 5);
 const loadingText = new TextWall(`Loading`, canvas.height / 2.5);
 
-const playText = new TextWall(``, canvas.height / 5);
+const playText = new TextWall(``, Math.floor(canvas.height / 5));
 
 // HEALTH:
 let playerHealth = new Health(30);

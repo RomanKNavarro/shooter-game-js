@@ -1,5 +1,5 @@
 var canvas = document.getElementById("canvas1");
-var cxt = canvas.getContext("2d"); 
+var cxt = canvas.getContext("2d", { alpha: false }); 
 
 export default class Pickup {
     constructor(x, y, round) {

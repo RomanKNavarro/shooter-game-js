@@ -1,5 +1,5 @@
 var canvas = document.getElementById("canvas1");
-var cxt = canvas.getContext("2d"); 
+var cxt = canvas.getContext("2d", { alpha: false });
 
 export default class TextWall {
     constructor(text, y) {
@@ -19,8 +19,8 @@ export default class TextWall {
     draw() {
         // FONT CRAP:
         // cxt.fillStyle = "black";
-        var nazi_font = new FontFace('myFont', 'url(fonts/blockschrift.ttf)');
-        nazi_font.load().then(function(loaded_face) {
+        var block_font = new FontFace('myFont', 'url(fonts/blockschrift.ttf)');
+        block_font.load().then(function(loaded_face) {
             document.fonts.add(loaded_face);
               //document.body.style.fontFamily = '"Junction Regular", Arial';
               document.body.style.fontFamily = '"blockschrift-f-regular", ans-serif';
@@ -35,14 +35,15 @@ export default class TextWall {
     
             cxt.fillStyle = "white";
             //cxt.fillStyle = "black";
-            // cxt.font = "16px Permanent Marker";
+            cxt.font = "14px Permanent Marker";
             // cxt.font = "15px Times New Roman";
             // cxt.font = "15px Blockschrift";
-            cxt.font = "15px blockschrift-f-regular";
+            // cxt.font = "15px blockschrift-f-regular";
             for (let i = 0; i < this.lines.length; i++) {
                 // cxt.fillText(this.lines[i], canvas.width / 2, canvas.height / 5 + (i * this.lineheight));
                 cxt.fillText(this.lines[i], canvas.width / 2, this.y + (i * this.lineheight));
             }
         }
+        // cxt.clearRect(0, 0, canvas.width, canvas.height);
     }
 }

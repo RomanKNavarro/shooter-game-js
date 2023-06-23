@@ -1,7 +1,7 @@
 import Projectile from "./projectile.js";
 
 var canvas = document.getElementById("canvas1");
-var cxt = canvas.getContext("2d"); 
+var cxt = canvas.getContext("2d", { alpha: false }); 
 
 export default class Enemy {
     // constructor(x, y, speed) {
