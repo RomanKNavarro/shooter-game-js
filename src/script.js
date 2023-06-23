@@ -16,6 +16,7 @@ var canvas = document.getElementById("canvas1");
 var cxt = canvas.getContext("2d");
 
 // PORT: http://127.0.0.1:5500/
+// TEXTWALL FONT DEFINED IN TEXTWALL.JS
 // TODO: DELETE bullets once they reach end of screen. Log array of bullets. --DONE
 // TODO: reset bullet.x after hitting enemy.    --DONE
 // TODO: GET bullets to travel up when "w" is pressed.
@@ -257,7 +258,7 @@ var sfx = {
         /* accepts multiple versions of the same audio! (automatically selects the best one for the 
         current web browser */
         src: [
-          "src/assets/sounds/glauncher.ogg",
+          "src/assets/sounds/q009/glauncher.ogg",
         ],
         //loop: false,
     }),

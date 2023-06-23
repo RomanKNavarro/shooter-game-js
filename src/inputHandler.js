@@ -5,9 +5,6 @@ var cxt = canvas.getContext("2d");
 let flammen = new Audio();
 flammen.src = "src/assets/sounds/flammen2.mp3";
 
-let steam = new Audio();
-steam.src = "src/assets/sounds/steam_hisses/steamer22.wav";
-
 // TODO: while shooting straight, pressing d+w makes bullets shoot up instead of diagnal,
 // yet, pressing w+d does make it diagnal.    --DONE. Simply had to move if statement to bottom of cases.
 
@@ -68,11 +65,9 @@ export default class InputHandler {
           entity.shooting = false;
           if (entity.weapon == "flammen") {
             flammen.pause();
-            // steam.play(); 
           }
 
           // flammen.pause();
-          // steam.play(); 
 
           break;
 

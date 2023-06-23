@@ -2,5 +2,6 @@ body {
     margin-top: 0;
     margin-left: 0;
     background-color: "#fff";
-    font-family: 'Permanent Marker';
+    /* font-family: 'Permanent Marker'; */
+    font-family: 'blockschrift-f-regular', sans-serif;
 };

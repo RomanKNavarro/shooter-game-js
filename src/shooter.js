@@ -49,9 +49,6 @@ export default class Shooter {
         this.flammen = new Audio();
         this.flammen.src = "src/assets/sounds/flammen2.mp3";
 
-        this.steam = new Audio();
-        this.steam.src = "src/assets/sounds/steam_hisses/steamer22.wav";
-
         this.bloop = new Audio();
         this.bloop.src = "src/assets/sounds/q009/glauncher.ogg";
     }
