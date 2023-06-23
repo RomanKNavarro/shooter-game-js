@@ -12,10 +12,23 @@ export default class TextWall {
         this.lines = this.text.split('\n');
         this.y = y;
         this.vanish = false;
+
+        
     }
 
     draw() {
+        // FONT CRAP:
         // cxt.fillStyle = "black";
+        var nazi_font = new FontFace('myFont', 'url(fonts/blockschrift.ttf)');
+        nazi_font.load().then(function(loaded_face) {
+            document.fonts.add(loaded_face);
+              //document.body.style.fontFamily = '"Junction Regular", Arial';
+              document.body.style.fontFamily = '"blockschrift-f-regular", ans-serif';
+        }).catch(function(error) {
+            // error occurred
+            console.log("font download failed!!!")
+        });
+
         if (!this.vanish) {
             cxt.fillStyle = "black";
             cxt.fillRect(0, 0, canvas.width, canvas.height);
