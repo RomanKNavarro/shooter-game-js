@@ -5,8 +5,8 @@ var cxt = canvas.getContext("2d", { alpha: false });
 
 // OVERHAUL SPEED FUNCTIONALITY:
 export default class Enemy {
-    // constructor(x, speed, round) {
-    constructor(x, speed) {
+    constructor(x, speed, round) {
+    // constructor(x, speed) {
   
       // FASTER SPEED ON CRAWLIES
       this.width = 50;
@@ -23,7 +23,7 @@ export default class Enemy {
       this.x = x;
       this.y;
 
-      // this.round = round;
+      this.round = round;
       //this.round = 12;
 
       this.color = "pink"
@@ -37,9 +37,11 @@ export default class Enemy {
 
       this.typeNum = Math.floor(Math.random() * 10);
 
-      this.groundOdds = 8;
-      this.airOdds = 5;
-      this.crawlOdds = 1;
+      this.groundOdds = 10;
+      this.airOdds = 4;
+      this.crawlOdds = 2;
+      this.bomberOdds = 0;
+
 
       this.isCivie = false;
       this.inNadeRange = false;
@@ -94,8 +96,8 @@ export default class Enemy {
       // if (this.isCivie) this.speed = -2;
 
       // spawn crawlies first, then airs
-      // if (this.typeNum <= this.crawlOdds && this.round >= 1) {
-      if (this.typeNum <= this.crawlOdds) {
+      if (this.typeNum <= this.crawlOdds && this.round >= 3) {
+      // if (this.typeNum <= this.crawlOdds) {
           this.type = "crawl";
           this.width = 30;
           this.height = 30;
@@ -105,10 +107,10 @@ export default class Enemy {
           if (!this.isCivie) this.speed = 4;
           else this.speed = -3;
       }
-      // else if (this.typeNum <= this.airOdds && this.round >= 1) this.type = "air";
-      else if (this.typeNum <= this.airOdds) this.type = "air";
+      else if (this.typeNum <= this.airOdds && this.round >= 2) this.type = "air";
+      // else if (this.typeNum <= this.airOdds) this.type = "air";
 
-      cxt.fillText(this.typeNum, this.x + (this.width / 2), this.y + (this.height / 2));
+      cxt.fillText(this.round, this.x + (this.width / 2), this.y + (this.height / 2));
     } // projectiles
   
     update() {
@@ -138,8 +140,6 @@ export default class Enemy {
           //   MIGHT HAVE TO REVERT
           // if ((this.type != "crawl") && (this.timer % this.fireRate === 0  || this.timer == 1)) {
             if (this.timer % this.fireRate === 0  || this.timer == 1) {  
-            // this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, "shotty")); 
-              // this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, gunSound, this.dead));
               this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, this.sound, this.dead)); 
           }
       }

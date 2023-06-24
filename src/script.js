@@ -139,8 +139,10 @@ let enemiesLeft = roundCounts[0];
 // objects
 const flora = new Floor();
 const shooter = new Shooter(100, flora.y - 50);
+const shooter2 = new Shooter(200, flora.y - 50);
 // const shooter = new Shooter(600, flora.y - 50);
 new InputHandler(shooter);
+new InputHandler(shooter2);
 
 // BUTTONS AND TEXT. (x, y, width, text, clickable)
 const playButton = new Button(canvas.width / 2.2, canvas.height / 2.5, 100, "Play", true);
@@ -365,6 +367,10 @@ function greatReset() {
     shooter.fireRate = 0;
     shooter.specialAmmo = 0;
 
+    shooter2.weapon = "pistol";
+    shooter2.fireRate = 0;
+    shooter2.specialAmmo = 0;
+
 
     roundCounts = [3, 10];
     // roundCounts = [3, 50];
@@ -516,7 +522,7 @@ function handleState() {
 
             // special round cases:
             // let specRounds = {5: "SPECIAL", 9: "BOSS", 10: "END"};
-            let specRounds = {1: "SPECIAL", 9: "BOSS", 10: "END"};
+            let specRounds = {5: "SPECIAL", 9: "BOSS", 10: "END"};
             // let specRounds = {1: "BOSS", 10: "END"};
             if (Object.keys(specRounds).includes(currentRound.toString())) {
                 state = specRounds[currentRound];
@@ -614,13 +620,14 @@ function cremate() {
 // TODO: GET THIS FUCKING SHIT RUNNING LIKE HOW IT DID EARLIER  --DONE
 function handleShooter() {
     shooter.draw();
+    shooter2.draw();
+
     if (state == "RUNNING" || state == "WIN" || state == "QUIET") {
         shooter.update();
+        shooter2.update();
     }
 
-    // CHECK IF NUM. IS ODD:    num % 2 !== 0
-    // if (shooter.throwBoom && grenades.number > 0) {
-    
+    // GRENADE FUNCTIONALITY:
     if (shooter.throwBoom && grenades.number > 0 && state != "MENU") {
         if (nadeQueue.length < 1) {
             shooter.secondNade = false;
@@ -712,10 +719,6 @@ function handleEnemyProjectiles(orc) {
         
 
         // FIX THIS CRAP:
-        // if (current.x > shooter.x + shooter.width) {
-        //     current.update();
-        //     current.draw();
-        // }
         if (current.x > bulletLimit) {
         // if (current.x > 150) {
             current.update();
@@ -733,6 +736,7 @@ function handleEnemyProjectiles(orc) {
 
 function handleProjectile() {
     let projectiles = shooter.projectiles;
+    let projectiles2 = shooter2.projectiles;
 
     for (let i = 0; i < shooter.projectiles.length; i++) {
         let current = projectiles[i];
@@ -740,10 +744,13 @@ function handleProjectile() {
         // BUG HERE:
         // increase size of flammen "bullets"
         if (projectiles.length > 0 && current) {
-            if (shooter.weapon == "pistol") current.speed = 7;
+            if (shooter.weapon == "pistol") {
+                current.speed = 7;
+            }
 
-            if (shooter.weapon == "flammen" && current.size <= 20) current.size += 2;
-            // else if (shooter.weapon == "flammen") current.size =  10;
+            if (shooter.weapon == "flammen" && current.size <= 20) {
+                current.size += 2;
+            }
     
             // TO REVERT LATER ON:
             if (current.x < canvas.width - 100 && (state == "RUNNING" || state == "WIN" || state == "QUIET")) {
@@ -752,6 +759,7 @@ function handleProjectile() {
             }
             else {
                 projectiles.splice(i, 1);
+                projectiles2.splice(i, 1);
                 i--;
             }
         }
@@ -969,14 +977,14 @@ function pushEnemy() {
         if (enemyCount > 0) {   
             if (!specialRound) {
                 // DO NOT REVERT. NEED TO MAKE WAY FOR DIFFERENT SPEEDS:
-                // enemyQueue.push(new Enemy(canvas.width, currentSpeed, currentRound));
-                enemyQueue.push(new Enemy(canvas.width, currentRound));
+                enemyQueue.push(new Enemy(canvas.width, currentSpeed, currentRound));
+                // enemyQueue.push(new Enemy(canvas.width, currentRound));
                 enemyCount--;  
 
                 // SPAWN CIVIES IN LATTER PART OF FINAL ROUND:
                 if (finalRound && enemyCount % 3 == 0 && (enemyCount < 20 && enemyCount > 10)) {
-                    // enemyQueue.push(new Enemy(0, -currentSpeed, currentRound));
-                    enemyQueue.push(new Enemy(0, currentRound));
+                    enemyQueue.push(new Enemy(0, -currentSpeed, currentRound));
+                    // enemyQueue.push(new Enemy(0, currentRound));
                     enemyCount--; 
                 }
             }  
@@ -985,9 +993,9 @@ function pushEnemy() {
                 // DOESN'T ACTUALLY SPAWN CIVIES. Just normal enemies at coord 0 lol:
                 // REMEMBER: enemyCount only refers to num. of enemies to push to array :)
                 if (enemyCount > 0) {
-                    enemyQueue.push(new Enemy(0, -currentSpeed));
-                    // enemyQueue.push(new Enemy(-50, -currentSpeed, 1));
-                    // enemyQueue.push(new Enemy(canvas.width / 2, -currentSpeed, 1));
+                    // enemyQueue.push(new Enemy(0, -currentSpeed));
+                    // enemyQueue.push(new Enemy(canvas.width / 2, -currentSpeed, currentRound));
+                    enemyQueue.push(new Enemy(0, -currentSpeed, currentRound));
                     enemyCount--; 
 
                     // if (enemyCount < 50 && enemyCount < 20) {
@@ -1084,7 +1092,7 @@ function animate() {
 
     frame++;
 
-    // console.log(enemyQueue);
+    console.log(shooter2.projectiles);
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
 }
