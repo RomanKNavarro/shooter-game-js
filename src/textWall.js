@@ -12,8 +12,6 @@ export default class TextWall {
         this.lines = this.text.split('\n');
         this.y = y;
         this.vanish = false;
-
-        
     }
 
     draw() {
@@ -35,9 +33,9 @@ export default class TextWall {
     
             cxt.fillStyle = "white";
             //cxt.fillStyle = "black";
-            //cxt.font = "14px Permanent Marker";
+            // cxt.font = "14px Permanent Marker";
             cxt.font = "17px Times New Roman";
-            // cxt.font = "15px Blockschrift";
+            // cxt.font = "15px block_font";
             // cxt.font = "15px blockschrift-f-regular";
             for (let i = 0; i < this.lines.length; i++) {
                 // cxt.fillText(this.lines[i], canvas.width / 2, canvas.height / 5 + (i * this.lineheight));

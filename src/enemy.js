@@ -3,10 +3,12 @@ import Projectile from "./projectile.js";
 var canvas = document.getElementById("canvas1");
 var cxt = canvas.getContext("2d", { alpha: false }); 
 
+// OVERHAUL SPEED FUNCTIONALITY:
 export default class Enemy {
-    // constructor(x, y, speed) {
-    constructor(x, speed) {
+    constructor(x, speed, round) {
   
+      // FASTER SPEED ON CRAWLIES
+
       this.width = 50;
       this.height = 50;
 
@@ -17,6 +19,8 @@ export default class Enemy {
 
       this.x = x;
       this.y;
+
+      this.round = round;
 
       this.color = "pink"
       this.dead = false;
@@ -58,6 +62,7 @@ export default class Enemy {
 
       this.growl = new Audio();
       this.growl.src = "/src/assets/sounds/paco.flac";
+      this.sound;
     }
 
     draw() {
@@ -76,14 +81,16 @@ export default class Enemy {
       if (this.pickupNum <= this.pickupOdds) {
         this.pickup = true   
       }
-      if (this.typeNum <= this.crawlOdds) {
+
+      // spawn crawlies first, then airs
+      if (this.typeNum <= this.crawlOdds && this.round >= 2) {
         this.type = "crawl";
         this.width = 30;
         this.height = 30;
       }
-      else if (this.typeNum <= this.airOdds) this.type = "air";
+      else if (this.typeNum <= this.airOdds&& this.round >= 3) this.type = "air";
 
-      cxt.fillText(this.pickupNum, this.x + (this.width / 2), this.y + (this.height / 2));
+      cxt.fillText(this.round, this.x + (this.width / 2), this.y + (this.height / 2));
     } // projectiles
   
     update() {
@@ -94,12 +101,28 @@ export default class Enemy {
           this.speed = 0;
           this.timer++;
 
-          let gunSound = this.type != "crawl" ? "shotty" : "growl";
+          // REVISE FOR BOMBER AND ASSAULT SHEEP:
+          // let gunSound = this.type != "crawl" ? "shotty" : "growl";
+
+          switch(this.type) {
+            case "crawl":
+              this.sound = "growl";
+              break;
+            case "ground":
+            case "air":
+              this.sound = "shotty";
+              break;
+            case "bomber":
+              this.sound = "growl";
+              break;
+          }
+
           //   MIGHT HAVE TO REVERT
           // if ((this.type != "crawl") && (this.timer % this.fireRate === 0  || this.timer == 1)) {
             if (this.timer % this.fireRate === 0  || this.timer == 1) {  
             // this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, "shotty")); 
-              this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, gunSound, this.dead)); 
+              // this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, gunSound, this.dead));
+              this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, this.sound, this.dead)); 
           }
       }
     }

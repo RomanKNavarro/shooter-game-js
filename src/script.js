@@ -25,9 +25,9 @@ canvas.style.height=canvas.getBoundingClientRect().height;//actual height of can
     2.  */
 // TODO: DELETE bullets once they reach end of screen. Log array of bullets. --DONE
 // TODO: reset bullet.x after hitting enemy.    --DONE
-// TODO: GET bullets to travel up when "w" is pressed.
+// TODO: GET bullets to travel up when "w" is pressed.  --DONE
 // TODO: get game running fast again. Problem not in inputHandler. --DONE  
-// TODO: all enemy classes in the same file.
+// TODO: all enemy classes in the same file.    --DONE (resolved)
 // TODO: add mouse hover stuff in game.js. Mouse input goes in inputHandler. MouseCollision needs to be global --DONE
 // TODO: figure out why color picker won't show up when hovering over.
 // TODO: add game states.   --DONE
@@ -47,7 +47,7 @@ canvas.style.height=canvas.getBoundingClientRect().height;//actual height of can
 // TODO: backwards shooting capability  --DONE
 // TODO: crawling enemies   --DONE
 // TODO: add ALL enemy types in one class.  --DONE
-// TOO: fix diagnal-back shooting glitch
+// TOO: fix diagnal-back shooting glitch    --DONE  
 // TODO: victory state --DONE
 // TODO: shooting pickups from behind   --DONE  
 // TODO: make ground enemies die after two shots if shot at bottom  --DONE
@@ -112,11 +112,14 @@ Uncaught TypeError: Cannot read properties of undefined (reading 'x')
     ONLY GET ERROR WHEN USING FLAMMEN
 */
 // TODO: nadesNumber default should be 0. Nades av. on round 3. flammen only available after round 5. --DONE (resolved)
-// TODO: add sound fx on pickups
+// TODO: add sound fx on pickups    --DONE
 // TODO: make music louder  --DONE
 // TODO: add brief pause before boss round.     --DONE
 // TODO: add end-music and credits screen (make it cheeky)
 // TODO: add bomber and sheep soldier enemy types
+// TODO: add SECOND shooter
+// TODO: ducking down functionality
+// TODO: make special enemy types appear only after specific rounds
 
 let roundCounts = [3, 10];
 // let roundCounts = [3, 50];
@@ -184,7 +187,7 @@ const startText = new TextWall(
     but you reject returning to the boring old civilian life at whatever cost. Even though all of your men\n 
     have deserted you, you refuse to give up the the strategic city of Vonn, the crown jewel of Swineman\n 
     "civilization".\n 
-    It is now your undisputed domain, your very own kingdom, and everyone in it mere civy cattle. They are\n
+    It is now your undisputed domain, your very own kingdom, and everyone in it mere flesh-logs. They are\n
     your servants, ready to satisfy your every depraved fantasy at any given moment. The city of Vonn took\n 
     months of gruesome house-to-house fighting and thousands of Sheep lives to completely conquer. Are you\n
     going to let it all slip now?`, Math.floor(canvas.height / 10));
@@ -227,9 +230,9 @@ let baddiePositions = {
 };
 
 // ENEMY SPEED:
-// let currentSpeed = 2;
+let currentSpeed = 2;
 // let currentSpeed = 4;
-let currentSpeed = 8;
+// let currentSpeed = 8;
 
 // DROPPED PICKUPS:
 let snackQueue = [];
@@ -509,12 +512,12 @@ function handleState() {
             resetBaddies();
 
             // special round cases:
-            // let specRounds = {5: "SPECIAL", 9: "BOSS", 10: "END"};
-            let specRounds = {1: "BOSS", 10: "END"};
+            let specRounds = {5: "SPECIAL", 9: "BOSS", 10: "END"};
+            // let specRounds = {1: "BOSS", 10: "END"};
             if (Object.keys(specRounds).includes(currentRound.toString())) {
                 state = specRounds[currentRound];
             }
-    
+
             if (!showNextRound) {
                 winText.draw();
                 setTimeout(() => {
@@ -713,7 +716,7 @@ function handleEnemyProjectiles(orc) {
             i--;
 
             // UNCOMMENT THIS:
-            // playerHealth.number--;
+            playerHealth.number--;
         }
     }
 }
@@ -902,7 +905,7 @@ function handleEnemy() {
             // enemiesLeft--;
             current.dead = true;
             // UNCOMMENT:
-            //wallHealth.number--;
+            wallHealth.number--;
         }
 
         if (current.dead) {
@@ -952,11 +955,13 @@ function pushEnemy() {
         
         if (enemyCount > 0) {   
             if (!specialRound) {
-                enemyQueue.push(new Enemy(canvas.width, currentSpeed));
+                // enemyQueue.push(new Enemy(canvas.width, currentSpeed, currentRound));
+                enemyQueue.push(new Enemy(canvas.width, currentRound));
                 enemyCount--;  
 
                 // SPAWN CIVIES IN LATTER PART OF FINAL ROUND:
                 if (finalRound && enemyCount % 3 == 0 && (enemyCount < 20 && enemyCount > 10)) {
+                    // enemyQueue.push(new Enemy(0, -currentSpeed));
                     enemyQueue.push(new Enemy(0, -currentSpeed));
                     enemyCount--; 
                 }
