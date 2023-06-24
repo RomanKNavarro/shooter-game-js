@@ -120,6 +120,7 @@ Uncaught TypeError: Cannot read properties of undefined (reading 'x')
 // TODO: add SECOND shooter
 // TODO: ducking down functionality
 // TODO: make special enemy types appear only after specific rounds
+// TODO: get civy dogs/airplanes to spawn.
 
 let roundCounts = [3, 10];
 // let roundCounts = [3, 50];
@@ -556,7 +557,7 @@ function handleState() {
             break;
 
         case "SPECIAL":
-            //shooter.disabled = true;
+            // shooter.disabled = false;
             specialRound = true;
     
             if (!showSpecialText) {
@@ -968,14 +969,14 @@ function pushEnemy() {
         if (enemyCount > 0) {   
             if (!specialRound) {
                 // DO NOT REVERT. NEED TO MAKE WAY FOR DIFFERENT SPEEDS:
-                // enemyQueue.push(new Enemy(canvas.width, currentSpeed, currentRound));
-                enemyQueue.push(new Enemy(canvas.width, currentRound));
+                enemyQueue.push(new Enemy(canvas.width, currentSpeed, currentRound));
+                // enemyQueue.push(new Enemy(canvas.width, currentRound));
                 enemyCount--;  
 
                 // SPAWN CIVIES IN LATTER PART OF FINAL ROUND:
                 if (finalRound && enemyCount % 3 == 0 && (enemyCount < 20 && enemyCount > 10)) {
-                    // enemyQueue.push(new Enemy(0, -currentSpeed));
-                    enemyQueue.push(new Enemy(0, currentRound));
+                    enemyQueue.push(new Enemy(0, -currentSpeed, currentRound));
+                    //enemyQueue.push(new Enemy(0, currentRound));
                     enemyCount--; 
                 }
             }  
@@ -985,7 +986,7 @@ function pushEnemy() {
                 // REMEMBER: enemyCount only refers to num. of enemies to push to array :)
                 if (enemyCount > 0) {
                     // enemyQueue.push(new Enemy(0, -currentSpeed));
-                    enemyQueue.push(new Enemy(-50, currentRound));
+                    enemyQueue.push(new Enemy(-50, -currentSpeed, currentRound));
                     enemyCount--; 
 
                     // if (enemyCount < 50 && enemyCount < 20) {
@@ -1082,7 +1083,7 @@ function animate() {
 
     frame++;
 
-    console.log(showQuietText);
+    console.log(enemyQueue);
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
 }
