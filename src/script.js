@@ -908,7 +908,7 @@ function handleEnemy() {
 
         // FIX THIS CRAP --DONE. Takes into account both regular and special rounds:
         // delete enemies if they are off-canvas:
-        if ((current.x + current.width >= -1) && (current.x < canvas.width + 50)) {
+        if ((current.x + current.width >= 0) && (current.x < canvas.width + 50)) {
             current.update();
             current.draw();
         } else {
@@ -969,14 +969,14 @@ function pushEnemy() {
         if (enemyCount > 0) {   
             if (!specialRound) {
                 // DO NOT REVERT. NEED TO MAKE WAY FOR DIFFERENT SPEEDS:
-                enemyQueue.push(new Enemy(canvas.width, currentSpeed, currentRound));
-                // enemyQueue.push(new Enemy(canvas.width, currentRound));
+                // enemyQueue.push(new Enemy(canvas.width, currentSpeed, currentRound));
+                enemyQueue.push(new Enemy(canvas.width, currentRound));
                 enemyCount--;  
 
                 // SPAWN CIVIES IN LATTER PART OF FINAL ROUND:
                 if (finalRound && enemyCount % 3 == 0 && (enemyCount < 20 && enemyCount > 10)) {
-                    enemyQueue.push(new Enemy(0, -currentSpeed, currentRound));
-                    //enemyQueue.push(new Enemy(0, currentRound));
+                    // enemyQueue.push(new Enemy(0, -currentSpeed, currentRound));
+                    enemyQueue.push(new Enemy(0, currentRound));
                     enemyCount--; 
                 }
             }  
@@ -985,8 +985,9 @@ function pushEnemy() {
                 // DOESN'T ACTUALLY SPAWN CIVIES. Just normal enemies at coord 0 lol:
                 // REMEMBER: enemyCount only refers to num. of enemies to push to array :)
                 if (enemyCount > 0) {
-                    // enemyQueue.push(new Enemy(0, -currentSpeed));
-                    enemyQueue.push(new Enemy(-50, -currentSpeed, currentRound));
+                    enemyQueue.push(new Enemy(0, -currentSpeed));
+                    // enemyQueue.push(new Enemy(-50, -currentSpeed, 1));
+                    // enemyQueue.push(new Enemy(canvas.width / 2, -currentSpeed, 1));
                     enemyCount--; 
 
                     // if (enemyCount < 50 && enemyCount < 20) {
@@ -1083,7 +1084,7 @@ function animate() {
 
     frame++;
 
-    console.log(enemyQueue);
+    // console.log(enemyQueue);
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
 }

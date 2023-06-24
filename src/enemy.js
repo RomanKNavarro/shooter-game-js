@@ -5,8 +5,8 @@ var cxt = canvas.getContext("2d", { alpha: false });
 
 // OVERHAUL SPEED FUNCTIONALITY:
 export default class Enemy {
-    constructor(x, speed, round) {
-    // constructor(x, speed) {
+    // constructor(x, speed, round) {
+    constructor(x, speed) {
   
       // FASTER SPEED ON CRAWLIES
       this.width = 50;
@@ -23,7 +23,7 @@ export default class Enemy {
       this.x = x;
       this.y;
 
-      this.round = round;
+      // this.round = round;
       //this.round = 12;
 
       this.color = "pink"
@@ -35,11 +35,11 @@ export default class Enemy {
       // this.pickupOdds = 8;
       this.pickup = false;
 
-      this.typeNum = Math.random() * 10;
+      this.typeNum = Math.floor(Math.random() * 10);
 
       this.groundOdds = 8;
       this.airOdds = 5;
-      this.crawlOdds = 1.5;
+      this.crawlOdds = 1;
 
       this.isCivie = false;
       this.inNadeRange = false;
@@ -80,10 +80,9 @@ export default class Enemy {
       cxt.textAlign = "center";
       cxt.textBaseline = "middle";
 
-      if (this.isCivie) {
-        this.color = "gray";
+      if (this.isCivie) this.color = "gray";
         // this.speed = -3; 
-      }
+      
 
       // if (this.isCivie) this.color = "gray";
 
@@ -95,18 +94,21 @@ export default class Enemy {
       // if (this.isCivie) this.speed = -2;
 
       // spawn crawlies first, then airs
-      if (this.typeNum <= this.crawlOdds && this.round >= 2) {
-        this.type = "crawl";
-        this.width = 30;
-        this.height = 30;
+      // if (this.typeNum <= this.crawlOdds && this.round >= 1) {
+      if (this.typeNum <= this.crawlOdds) {
+          this.type = "crawl";
+          this.width = 30;
+          this.height = 30;
+          // this.speed = -3;
+          // this.speed = 3;
 
-        if (this.round != 2) this.speed = 3;
-        else this.speed = -3;
-        
+          if (!this.isCivie) this.speed = 4;
+          else this.speed = -3;
       }
-      else if (this.typeNum <= this.airOdds&& this.round >= 3) this.type = "air";
+      // else if (this.typeNum <= this.airOdds && this.round >= 1) this.type = "air";
+      else if (this.typeNum <= this.airOdds) this.type = "air";
 
-      cxt.fillText(this.isCivie, this.x + (this.width / 2), this.y + (this.height / 2));
+      cxt.fillText(this.typeNum, this.x + (this.width / 2), this.y + (this.height / 2));
     } // projectiles
   
     update() {
