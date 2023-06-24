@@ -214,6 +214,8 @@ let frame = 0;
 // let randomFrames = [50, 80, 110, 150];
 let randomFrames = [10, 30, 50, 80, 110,];
 
+let bulletLimit;
+
 let enemyQueue = [];
 
 // ENEMY SHOOTING STUFF:
@@ -512,7 +514,8 @@ function handleState() {
             resetBaddies();
 
             // special round cases:
-            let specRounds = {5: "SPECIAL", 9: "BOSS", 10: "END"};
+            // let specRounds = {5: "SPECIAL", 9: "BOSS", 10: "END"};
+            let specRounds = {1: "SPECIAL", 9: "BOSS", 10: "END"};
             // let specRounds = {1: "BOSS", 10: "END"};
             if (Object.keys(specRounds).includes(currentRound.toString())) {
                 state = specRounds[currentRound];
@@ -712,7 +715,8 @@ function handleEnemyProjectiles(orc) {
         //     current.update();
         //     current.draw();
         // }
-        if (current.x > current.bulletLimit) {
+        if (current.x > bulletLimit) {
+        // if (current.x > 150) {
             current.update();
             current.draw();
         }
@@ -879,8 +883,8 @@ function handleEnemy() {
     for (let i = 0; i < enemyQueue.length; i++) {
         let current = enemyQueue[i];
 
-        if (!shooter.duck) current.bulletLimit = shooter.x + shooter.width;
-        else current.bulletLimit = 0;
+        if (!shooter.duck) bulletLimit = shooter.x + shooter.width;
+        else bulletLimit = 0;
 
         if (current.type != "ground") current.health = 1;
 
@@ -903,7 +907,7 @@ function handleEnemy() {
 
         // FIX THIS CRAP --DONE. Takes into account both regular and special rounds:
         // delete enemies if they are off-canvas:
-        if ((current.x + current.width > 0) && (current.x < canvas.width + 50)) {
+        if ((current.x + current.width >= -1) && (current.x < canvas.width + 50)) {
             current.update();
             current.draw();
         } else {
@@ -963,6 +967,7 @@ function pushEnemy() {
         
         if (enemyCount > 0) {   
             if (!specialRound) {
+                // DO NOT REVERT. NEED TO MAKE WAY FOR DIFFERENT SPEEDS:
                 // enemyQueue.push(new Enemy(canvas.width, currentSpeed, currentRound));
                 enemyQueue.push(new Enemy(canvas.width, currentRound));
                 enemyCount--;  
@@ -980,7 +985,7 @@ function pushEnemy() {
                 // REMEMBER: enemyCount only refers to num. of enemies to push to array :)
                 if (enemyCount > 0) {
                     // enemyQueue.push(new Enemy(0, -currentSpeed));
-                    enemyQueue.push(new Enemy(0, currentRound));
+                    enemyQueue.push(new Enemy(-50, currentRound));
                     enemyCount--; 
 
                     // if (enemyCount < 50 && enemyCount < 20) {

@@ -6,16 +6,17 @@ var cxt = canvas.getContext("2d", { alpha: false });
 // OVERHAUL SPEED FUNCTIONALITY:
 export default class Enemy {
     // constructor(x, speed, round) {
-      constructor(x, round) {
+    constructor(x, round) {
   
       // FASTER SPEED ON CRAWLIES
-
       this.width = 50;
       this.height = 50;
 
       // speed is initially 5:
 
+      // this.speed = speed;
       this.speed = 2;
+
       // this.x = x;
       // this.y = y;
 
@@ -48,7 +49,6 @@ export default class Enemy {
       this.health = 2;
 
       // ENEMY GUN:
-      this.bulletLimit;
       this.projectiles = [];
       // this.fireRate = 200;
       // this.fireRate = 150;
@@ -79,11 +79,19 @@ export default class Enemy {
       cxt.textAlign = "center";
       cxt.textBaseline = "middle";
 
-      if (this.isCivie) this.color = "gray";
+      if (this.isCivie) {
+        this.color = "gray";
+        // this.speed = -3; 
+      }
+
+      // if (this.isCivie) this.color = "gray";
+
 
       if (this.pickupNum <= this.pickupOdds) {
         this.pickup = true   
       }
+
+      if (this.isCivie) this.speed = -2;
 
       // spawn crawlies first, then airs
       if (this.typeNum <= this.crawlOdds && this.round >= 2) {
@@ -94,7 +102,7 @@ export default class Enemy {
       }
       else if (this.typeNum <= this.airOdds&& this.round >= 3) this.type = "air";
 
-      cxt.fillText(this.bulletLimit, this.x + (this.width / 2), this.y + (this.height / 2));
+      cxt.fillText(this.isCivie, this.x + (this.width / 2), this.y + (this.height / 2));
     } // projectiles
   
     update() {
