@@ -139,8 +139,12 @@ let enemiesLeft = roundCounts[0];
 // objects
 const flora = new Floor();
 const shooter = new Shooter(100, flora.y - 50);
-const shooter2 = new Shooter(200, flora.y - 50);
-// const shooter = new Shooter(600, flora.y - 50);
+
+//  NEEDS TO START OFF SCREEN, then walk over to position 200:
+// const shooter2 = new Shooter(200, flora.y - 50);
+const shooter2 = new Shooter(50, flora.y - 50);
+shooter2.isSecond = true;
+
 new InputHandler(shooter);
 new InputHandler(shooter2);
 
@@ -173,6 +177,8 @@ const endText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Coalit
 const endText2 = new Button(canvas.width / 2.5, canvas.height / 1.7, 100, "Thanks for playing!!!", false);
 const endText3 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Made with ❤️ by", false);
 const endText4 = new Button(canvas.width / 2.5, canvas.height / 1.9, 100, "KAVEMANKORPS", false);
+
+const aidText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "HELP HAS ARRIVED", false);
 
 const quietText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "KILL KILL KILL KILL", false);
 
@@ -328,6 +334,7 @@ let startRound = false;
 let finalRound = false;
 let startEnd = false;
 let showQuietText = true;
+let aidAlive = false;
 
 // music1.play();
 // music.dramatic.play();
@@ -475,17 +482,25 @@ function handleState() {
             break;
 
         case "QUIET":
-            // if (showQuietText) quietText.draw();
             shooter.disabled = false;
 
             quietText.draw();
-            // if (frame % 100 !== 0) quietText.draw();
 
             setTimeout(() => {
                 startEnd = true
             }, 3000);
 
             if (startEnd) state = "RUNNING";
+            break;
+        
+        case "RELIEF":
+            aidText.draw();
+            
+            setTimeout(() => {
+                aidAlive = true;
+            }, 1000);
+
+            if (aidAlive) state = "RUNNING";
             break;
     
         case "RUNNING":
@@ -505,9 +520,6 @@ function handleState() {
                 pushEnemy();
             }
 
-            // if (currentRound == 2) {
-            //     specialRound = true;
-            // }
             if (playerHealth.number <= 0 || wallHealth.number <= 0) {
                 state = "LOSE";
             }
@@ -522,7 +534,7 @@ function handleState() {
 
             // special round cases:
             // let specRounds = {5: "SPECIAL", 9: "BOSS", 10: "END"};
-            let specRounds = {5: "SPECIAL", 9: "BOSS", 10: "END"};
+            let specRounds = {5: "RELIEF", 7: "SPECIAL", 9: "BOSS", 10: "END"};
             // let specRounds = {1: "BOSS", 10: "END"};
             if (Object.keys(specRounds).includes(currentRound.toString())) {
                 state = specRounds[currentRound];
@@ -556,10 +568,6 @@ function handleState() {
 
             playAgainButton2.draw();
             mouseCollision(shooter.mouse, playAgainButton2, "INTRO");  
-
-            // playAgainButton.draw();
-            // mouseCollision(shooter.mouse, playAgainButton, "MENU");
-
             break;
 
         case "SPECIAL":
@@ -736,7 +744,6 @@ function handleEnemyProjectiles(orc) {
 
 function handleProjectile() {
     let projectiles = shooter.projectiles;
-    let projectiles2 = shooter2.projectiles;
 
     for (let i = 0; i < shooter.projectiles.length; i++) {
         let current = projectiles[i];
@@ -759,7 +766,6 @@ function handleProjectile() {
             }
             else {
                 projectiles.splice(i, 1);
-                projectiles2.splice(i, 1);
                 i--;
             }
         }
@@ -993,8 +999,6 @@ function pushEnemy() {
                 // DOESN'T ACTUALLY SPAWN CIVIES. Just normal enemies at coord 0 lol:
                 // REMEMBER: enemyCount only refers to num. of enemies to push to array :)
                 if (enemyCount > 0) {
-                    // enemyQueue.push(new Enemy(0, -currentSpeed));
-                    // enemyQueue.push(new Enemy(canvas.width / 2, -currentSpeed, currentRound));
                     enemyQueue.push(new Enemy(0, -currentSpeed, currentRound));
                     enemyCount--; 
 
@@ -1086,13 +1090,8 @@ function animate() {
     //     music1.play();
     // }
 
-    // if (shooter.weapon == "flammen") {
-    //     handleFlammen();
-    // }
-
     frame++;
 
-    console.log(shooter2.projectiles);
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
 }

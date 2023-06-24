@@ -6,11 +6,15 @@ var cxt = canvas.getContext("2d", { alpha: false });
 
 // why is mouse stuff here? so that it can be used as "entity.mouse" in inputHandler.js
 export default class Shooter {
-    constructor(x, y) {
+    constructor(x, y) { 
         this.width = 50;
         this.height = 50;
-        this.x = x;
         this.y = y;
+
+        this.x = x;
+        this.secondX = 200;
+
+        this.isSecond = false;
 
         this.name = "Warren";
         this.disabled = true;
@@ -72,6 +76,10 @@ export default class Shooter {
     }
 
     update() {
+        
+        if (this.isSecond && this.x <= 200) {
+            this.x += 5;
+        }
 
         // code doesn't work. fireRate not set.    
         if (this.shooting && !this.disabled) {
@@ -80,8 +88,7 @@ export default class Shooter {
 
             if (this.timer % this.fireRate === 0  || this.timer == 1) {
                 this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, this.weapon, this.delete));
-
-                this.projectiles.push(new Projectile(this.x + 200, this.y + 10, this.angle, this.weapon, this.delete));
+                this.projectiles.push(new Projectile(this.secondX, this.y + 10, this.angle, this.weapon, this.delete));
                 if (this.specialAmmo > 0) {
                     this.specialAmmo--;
                 }
