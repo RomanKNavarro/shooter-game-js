@@ -238,8 +238,8 @@ let currentSpeed = 2;
 let snackQueue = [];
 let nadeQueue = [];
 
-// let state = "MENU";
-let state = "LOADING";
+let state = "MENU";
+// let state = "LOADING";
 let loadingTime = [2000, 3000][Math.floor(Math.random() * 3)];
 
 // functions:
@@ -707,7 +707,12 @@ function handleEnemyProjectiles(orc) {
         let current = projes[i];
         
 
-        if (current.x > shooter.x + shooter.width) {
+        // FIX THIS CRAP:
+        // if (current.x > shooter.x + shooter.width) {
+        //     current.update();
+        //     current.draw();
+        // }
+        if (current.x > current.bulletLimit) {
             current.update();
             current.draw();
         }
@@ -716,7 +721,7 @@ function handleEnemyProjectiles(orc) {
             i--;
 
             // UNCOMMENT THIS:
-            playerHealth.number--;
+            //playerHealth.number--;
         }
     }
 }
@@ -874,6 +879,9 @@ function handleEnemy() {
     for (let i = 0; i < enemyQueue.length; i++) {
         let current = enemyQueue[i];
 
+        if (!shooter.duck) current.bulletLimit = shooter.x + shooter.width;
+        else current.bulletLimit = 0;
+
         if (current.type != "ground") current.health = 1;
 
         // HERE'S HOW WE DISCRIMINATE CIVIES:
@@ -905,7 +913,7 @@ function handleEnemy() {
             // enemiesLeft--;
             current.dead = true;
             // UNCOMMENT:
-            wallHealth.number--;
+            // wallHealth.number--;
         }
 
         if (current.dead) {
@@ -962,7 +970,7 @@ function pushEnemy() {
                 // SPAWN CIVIES IN LATTER PART OF FINAL ROUND:
                 if (finalRound && enemyCount % 3 == 0 && (enemyCount < 20 && enemyCount > 10)) {
                     // enemyQueue.push(new Enemy(0, -currentSpeed));
-                    enemyQueue.push(new Enemy(0, -currentSpeed));
+                    enemyQueue.push(new Enemy(0, currentRound));
                     enemyCount--; 
                 }
             }  
@@ -971,7 +979,8 @@ function pushEnemy() {
                 // DOESN'T ACTUALLY SPAWN CIVIES. Just normal enemies at coord 0 lol:
                 // REMEMBER: enemyCount only refers to num. of enemies to push to array :)
                 if (enemyCount > 0) {
-                    enemyQueue.push(new Enemy(0, -currentSpeed));
+                    // enemyQueue.push(new Enemy(0, -currentSpeed));
+                    enemyQueue.push(new Enemy(0, currentRound));
                     enemyCount--; 
 
                     // if (enemyCount < 50 && enemyCount < 20) {

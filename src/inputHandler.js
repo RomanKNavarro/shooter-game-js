@@ -31,6 +31,8 @@ export default class InputHandler {
 
         case 's':
           entity.angle = "down";
+
+          entity.duck = true;
           break;
         
         case 'a':
@@ -66,13 +68,15 @@ export default class InputHandler {
           if (entity.weapon == "flammen") {
             flammen.pause();
           }
-
           // flammen.pause();
+          break;
 
+        case 's':
+          entity.duck = false;
+          entity.angle = "straight";
           break;
 
         case 'w':
-        case 's':
         case 'a':
           entity.angle = "straight";
           break;

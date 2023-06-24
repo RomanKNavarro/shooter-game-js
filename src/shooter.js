@@ -23,6 +23,8 @@ export default class Shooter {
         this.shooting = false;
         this.timer = 0;
 
+        this.duck = false;
+
         this.angle = "straight";
 
         // pistol, ar, and flamethrower
@@ -56,7 +58,11 @@ export default class Shooter {
     draw() {
         cxt.beginPath();
         cxt.fillStyle = "yellow";
-        cxt.fillRect(this.x, this.y, this.width, this.height);
+        if (!this.duck) {
+            cxt.fillRect(this.x, this.y, this.width, this.height);
+        } else {
+            cxt.fillRect(this.x, this.y + this.height / 2, this.width, this.height / 2);
+        }
 
         cxt.font = "20px serif";
         cxt.fillStyle = "black";
