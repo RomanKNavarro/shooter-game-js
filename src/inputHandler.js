@@ -30,9 +30,11 @@ export default class InputHandler {
           break;
 
         case 's':
-          entity.angle = "down";
-
-          entity.duck = true;
+          if (entity.duckable) {
+            entity.angle = "down";
+            entity.duck = true;
+          }
+          
           break;
         
         case 'a':

@@ -31,6 +31,7 @@ export default class Shooter {
         this.shooting = false;
         this.timer = 0;
 
+        this.duckable = true;
         this.duck = false;
 
         this.angle = "straight";
@@ -82,7 +83,7 @@ export default class Shooter {
     update() {
         
         // if (this.isSecond == true && this.x <= 200 && this.initSecond == true) {
-        if (this.isSecond == true) {
+        if (this.isSecond == true && this.initSecond == true) {
             if (this.x <= 200) this.x += 5;
             else this.secondReady = true;
         }  

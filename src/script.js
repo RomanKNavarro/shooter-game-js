@@ -97,11 +97,11 @@ canvas.style.height=canvas.getBoundingClientRect().height;//actual height of can
 // TODO: fix bullet collision --DONE
 // TODO: add pre-intro "loading" state  --DONE
 // TODO: on round 9 (YES), baddiePositions stop functioning. Specifically, air and last ground
-// TODO: learn about and implement better audio practices (too many audio files sound like crap)
+// TODO: learn about and implement better audio practices (too many audio files sound like crap)    --DONE
 // TODO: get more civvies to spawn in boss round
 // TODO: higher enemy density in boss round
 // TODO: more random loading screen times   --DONE
-// TODO: add play button as soon as "loading" ends. Initiate music.
+// TODO: add play button as soon as "loading" ends. Initiate music. --DONE
 // TODO: more nade explosion sounds    
 // TODO: fix nade sounds (I need them to overlap)   --DONE
 /* TODO: FIX THIS STUPID ERROR (ONLY GET IT ON LAST ROUND):
@@ -117,10 +117,12 @@ Uncaught TypeError: Cannot read properties of undefined (reading 'x')
 // TODO: add brief pause before boss round.     --DONE
 // TODO: add end-music and credits screen (make it cheeky)
 // TODO: add bomber and sheep soldier enemy types
-// TODO: add SECOND shooter
-// TODO: ducking down functionality
-// TODO: make special enemy types appear only after specific rounds
-// TODO: get civy dogs/airplanes to spawn.
+// TODO: add SECOND shooter             --DONE
+// TODO: ducking down functionality     --DONE
+// TODO: make special enemy types appear only after specific rounds     --DONE
+// TODO: get civy dogs/airplanes to spawn.      --DONE
+// TODO: ui showing special weapon and ammo (no ui for pistol)  
+// TODO: no ducking during relief phase     --DONE
 
 let roundCounts = [3, 10];
 // let roundCounts = [3, 50];
@@ -332,8 +334,8 @@ let showIntro = false;
 let startRound = false;
 let finalRound = false;
 let startEnd = false;
-let startSecond = false;
 let showAidText = false;
+let showEndRound = false;
 
 // music1.play();
 // music.dramatic.play();
@@ -396,6 +398,24 @@ function greatReset() {
     showIntro = false;
     // grenades.number = 3;
     grenades.number = 10;
+}
+
+function endRound() {
+    if (!showNextRound) {
+        winText.draw();
+        setTimeout(() => {
+            showNextRound = true;
+        }, 1000);
+    }
+    else {
+        nextText.draw();
+        setTimeout(() => {
+            state = "RUNNING";
+            if (score >= winningScore) {
+                cremate();
+            }
+        }, 1000);
+    }
 }
 
 // quietFrames:
@@ -530,21 +550,22 @@ function handleState() {
                 state = specRounds[currentRound];
             }
 
-            if (!showNextRound) {
-                winText.draw();
-                setTimeout(() => {
-                    showNextRound = true;
-                }, 1000);
-            }
-            else {
-                nextText.draw();
-                setTimeout(() => {
-                    state = "RUNNING";
-                    if (score >= winningScore) {
-                        cremate();
-                    }
-                }, 1000);
-            }
+            // if (!showNextRound) {
+            //     winText.draw();
+            //     setTimeout(() => {
+            //         showNextRound = true;
+            //     }, 1000);
+            // }
+            // else {
+            //     nextText.draw();
+            //     setTimeout(() => {
+            //         state = "RUNNING";
+            //         if (score >= winningScore) {
+            //             cremate();
+            //         }
+            //     }, 1000);
+            // }
+            endRound();
             break;
         
         case "LOSE":
@@ -582,18 +603,26 @@ function handleState() {
         
             // AIDTEXT IS CONFLICTING WITH ROUNDTEXT
             case "RELIEF":
+                shooter2.duckable = false;
                 // shooter.disabled = false;
-
+                shooter2.initSecond = true;
                 if (!showAidText) {
                     aidText.draw();
                     setTimeout(() => {
                         shooter.secondStream = true;
-                        startSecond = true;
                         showAidText = true;
-                    }, 3000);
-                }
-                showAidText = false;
-                if (startSecond) state = "RUNNING";
+                        showEndRound = true;
+                    }, 2000);
+                } else {
+                    nextText.draw();
+                    setTimeout(() => {
+                        state = "RUNNING";
+                        if (score >= winningScore) {
+                            cremate();
+                            shooter2.duckable = true;
+                        }
+                    }, 1000);
+                };
                 break;
 
         case "END":
@@ -636,7 +665,7 @@ function handleShooter() {
     shooter.draw();
     shooter2.draw();
 
-    if (state == "RUNNING" || state == "WIN" || state == "QUIET") {
+    if (state == "RUNNING" || state == "WIN" || state == "QUIET" || state == "RELIEF") {
         shooter.update();
         shooter2.update();
     }
@@ -1092,11 +1121,7 @@ function animate() {
     handleStatus();
     handleNade();
 
-    // if (state != "LOADING") {
-    //     music1.play();
-    // }
-
-    console.log(shooter2.secondReady);
+    console.log(shooter2.initSecond);
 
     frame++;
 
