@@ -142,7 +142,7 @@ const shooter = new Shooter(100, flora.y - 50);
 
 //  NEEDS TO START OFF SCREEN, then walk over to position 200:
 // const shooter2 = new Shooter(200, flora.y - 50);
-const shooter2 = new Shooter(50, flora.y - 50);
+const shooter2 = new Shooter(0 - shooter.width, flora.y - 50);
 shooter2.isSecond = true;
 
 new InputHandler(shooter);
@@ -241,9 +241,9 @@ let baddiePositions = {
 };
 
 // ENEMY SPEED:
-let currentSpeed = 2;
+// let currentSpeed = 2;
 // let currentSpeed = 4;
-// let currentSpeed = 8;
+let currentSpeed = 8;
 
 // DROPPED PICKUPS:
 let snackQueue = [];
@@ -333,7 +333,6 @@ let showIntro = false;
 let startRound = false;
 let finalRound = false;
 let startEnd = false;
-let showQuietText = true;
 let aidAlive = false;
 
 // music1.play();
@@ -485,6 +484,7 @@ function handleState() {
             shooter.disabled = false;
 
             quietText.draw();
+            // aidText.draw();
 
             setTimeout(() => {
                 startEnd = true
@@ -494,13 +494,15 @@ function handleState() {
             break;
         
         case "RELIEF":
+            shooter.disabled = true;
             aidText.draw();
             
             setTimeout(() => {
-                aidAlive = true;
-            }, 1000);
+                // shooter.initSecond = true;
+                shooter2.initSecond = true;
+            }, 3000);
 
-            if (aidAlive) state = "RUNNING";
+            if (shooter.secondReady) state = "RUNNING";
             break;
     
         case "RUNNING":
@@ -534,8 +536,9 @@ function handleState() {
 
             // special round cases:
             // let specRounds = {5: "SPECIAL", 9: "BOSS", 10: "END"};
-            let specRounds = {5: "RELIEF", 7: "SPECIAL", 9: "BOSS", 10: "END"};
-            // let specRounds = {1: "BOSS", 10: "END"};
+            // let specRounds = {1: "RELIEF", 7: "SPECIAL", 9: "BOSS", 10: "END"};
+
+            let specRounds = {1: "BOSS", 10: "END"};
             if (Object.keys(specRounds).includes(currentRound.toString())) {
                 state = specRounds[currentRound];
             }
@@ -1089,6 +1092,8 @@ function animate() {
     // if (state != "LOADING") {
     //     music1.play();
     // }
+
+    console.log(shooter2.initSecond);
 
     frame++;
 

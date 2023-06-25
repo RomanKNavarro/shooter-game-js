@@ -15,6 +15,8 @@ export default class Shooter {
         this.secondX = 200;
 
         this.isSecond = false;
+        this.initSecond = false;
+        this.secondReady = false;
 
         this.name = "Warren";
         this.disabled = true;
@@ -77,9 +79,13 @@ export default class Shooter {
 
     update() {
         
-        if (this.isSecond && this.x <= 200) {
-            this.x += 5;
-        }
+        // if (this.isSecond == true && this.x <= 200 && this.initSecond == true) {
+        if (this.isSecond == true) {
+            if (this.x <= 200) this.x += 5;
+            else this.secondReady = true;
+        }  
+
+        // else this.secondReady = true;
 
         // code doesn't work. fireRate not set.    
         if (this.shooting && !this.disabled) {
@@ -88,7 +94,12 @@ export default class Shooter {
 
             if (this.timer % this.fireRate === 0  || this.timer == 1) {
                 this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, this.weapon, this.delete));
-                this.projectiles.push(new Projectile(this.secondX, this.y + 10, this.angle, this.weapon, this.delete));
+
+                // this.projectiles.push(new Projectile(this.secondX, this.y + 10, this.angle, this.weapon, this.delete));
+                if (this.secondReady == true) {
+                    this.projectiles.push(new Projectile(this.secondX, this.y + 10, this.angle, this.weapon, this.delete));
+                }
+                
                 if (this.specialAmmo > 0) {
                     this.specialAmmo--;
                 }
