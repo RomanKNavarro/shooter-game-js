@@ -17,15 +17,15 @@ export default class TextWall {
     draw() {
         // FONT CRAP:
         // cxt.fillStyle = "black";
-        var block_font = new FontFace('myFont', 'url(fonts/blockschrift.ttf)');
-        block_font.load().then(function(loaded_face) {
-            document.fonts.add(loaded_face);
-              //document.body.style.fontFamily = '"Junction Regular", Arial';
-              document.body.style.fontFamily = '"blockschrift-f-regular", ans-serif';
-        }).catch(function(error) {
-            // error occurred
-            console.log("font download failed!!!")
-        });
+        // var block_font = new FontFace('myFont', 'url(fonts/blockschrift.ttf)');
+        // block_font.load().then(function(loaded_face) {
+        //     document.fonts.add(loaded_face);
+        //       //document.body.style.fontFamily = '"Junction Regular", Arial';
+        //       document.body.style.fontFamily = '"blockschrift-f-regular", ans-serif';
+        // }).catch(function(error) {
+        //     // error occurred
+        //     console.log("font download failed!!!")
+        // });
 
         if (!this.vanish) {
             cxt.fillStyle = "black";

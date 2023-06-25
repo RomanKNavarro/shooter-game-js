@@ -178,9 +178,8 @@ const endText2 = new Button(canvas.width / 2.5, canvas.height / 1.7, 100, "Thank
 const endText3 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Made with ❤️ by", false);
 const endText4 = new Button(canvas.width / 2.5, canvas.height / 1.9, 100, "KAVEMANKORPS", false);
 
-const aidText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "HELP HAS ARRIVED", false);
-
 const quietText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "KILL KILL KILL KILL", false);
+const aidText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "HELP HAS ARRIVED", false);
 
 const bossText = new TextWall(
 `Satellite imagery has exposed your horriffic atrocities in the city to the rest of the world,\n
@@ -333,13 +332,14 @@ let showIntro = false;
 let startRound = false;
 let finalRound = false;
 let startEnd = false;
-let aidAlive = false;
+let startSecond = false;
+let showAidText = false;
 
 // music1.play();
 // music.dramatic.play();
 
 function handleStatus() {
-    if (state == "RUNNING" || state == "WIN" || state == "QUIET") {
+    if (state == "RUNNING" || state == "WIN" || state == "QUIET" || state == "RELIEF") {
         roundText.text = currentRound;
         //enemyText.text = enemyCount;
         enemyText.text = enemiesLeft;
@@ -412,7 +412,6 @@ function handleState() {
             break;
 
         case "LOADING":
-
             loadingText.draw();
             // if (showLoading) {
             //     loadingText.draw();
@@ -492,18 +491,6 @@ function handleState() {
 
             if (startEnd) state = "RUNNING";
             break;
-        
-        case "RELIEF":
-            shooter.disabled = true;
-            aidText.draw();
-            
-            setTimeout(() => {
-                // shooter.initSecond = true;
-                shooter2.initSecond = true;
-            }, 3000);
-
-            if (shooter.secondReady) state = "RUNNING";
-            break;
     
         case "RUNNING":
             // state = "RUNNING";
@@ -536,9 +523,9 @@ function handleState() {
 
             // special round cases:
             // let specRounds = {5: "SPECIAL", 9: "BOSS", 10: "END"};
-            // let specRounds = {1: "RELIEF", 7: "SPECIAL", 9: "BOSS", 10: "END"};
+            let specRounds = {1: "RELIEF", 7: "SPECIAL", 9: "BOSS", 10: "END"};
 
-            let specRounds = {1: "BOSS", 10: "END"};
+            // let specRounds = {1: "BOSS", 10: "END"};
             if (Object.keys(specRounds).includes(currentRound.toString())) {
                 state = specRounds[currentRound];
             }
@@ -592,6 +579,22 @@ function handleState() {
                 }, 1000);
             }
             break;
+        
+            // AIDTEXT IS CONFLICTING WITH ROUNDTEXT
+            case "RELIEF":
+                // shooter.disabled = false;
+
+                if (!showAidText) {
+                    aidText.draw();
+                    setTimeout(() => {
+                        shooter.secondStream = true;
+                        startSecond = true;
+                        showAidText = true;
+                    }, 3000);
+                }
+                showAidText = false;
+                if (startSecond) state = "RUNNING";
+                break;
 
         case "END":
             shooter.disabled = true;
@@ -1093,7 +1096,7 @@ function animate() {
     //     music1.play();
     // }
 
-    console.log(shooter2.initSecond);
+    console.log(shooter2.secondReady);
 
     frame++;
 

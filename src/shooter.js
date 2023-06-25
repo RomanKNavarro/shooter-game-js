@@ -18,6 +18,8 @@ export default class Shooter {
         this.initSecond = false;
         this.secondReady = false;
 
+        this.secondStream = false;
+
         this.name = "Warren";
         this.disabled = true;
         this.health = 3;
@@ -96,7 +98,7 @@ export default class Shooter {
                 this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, this.weapon, this.delete));
 
                 // this.projectiles.push(new Projectile(this.secondX, this.y + 10, this.angle, this.weapon, this.delete));
-                if (this.secondReady == true) {
+                if (this.secondStream == true) {
                     this.projectiles.push(new Projectile(this.secondX, this.y + 10, this.angle, this.weapon, this.delete));
                 }
                 
