@@ -119,12 +119,14 @@ Uncaught TypeError: Cannot read properties of undefined (reading 'x')
 // TODO: add bomber and sheep soldier enemy types
 // TODO: add SECOND shooter             --DONE
 // TODO: ducking down functionality     --DONE
-// TODO: make special enemy types appear only after specific rounds     --DONE
+// TODO: make special enemy types appear only after specific rounds         --DONE
 // TODO: get civy dogs/airplanes to spawn.      --DONE
-// TODO: ui showing special weapon and ammo (no ui for pistol)          --DONE
+// TODO: ui showing special weapon and ammo (no ui for pistol)              --DONE
 // TODO: no ducking during relief phase     --DONE
 // TODO: baddiePositions last 2 positions stop working on round 10. Fix.
 // TODO: add delay before enemies start shooting.       --DONE
+// TODO: add delay after last round before "coalition defeated" message. Add victory music.
+// TODO: option to turn off music in menu (plus ui icon!)
 
 let roundCounts = [3, 10];
 // let roundCounts = [3, 50];
@@ -387,12 +389,12 @@ function greatReset() {
     shooter2.specialAmmo = 0;
 
 
-    roundCounts = [3, 10];
+    roundCounts = [7, 10];
     // roundCounts = [3, 50];
     // ALL ENEMY COUNTS ADDED HERE!:
     for (let i = 0; i <= 9; i++) {
-        // roundCounts.push(Math.floor(roundCounts[roundCounts.length -1] * 1.5));
-        roundCounts.push(Math.floor(roundCounts[roundCounts.length -1] * 1.2));
+        roundCounts.push(Math.floor(roundCounts[roundCounts.length -1] * 1.5));
+        //roundCounts.push(Math.floor(roundCounts[roundCounts.length -1] * 1.2));
     }
 
     resetBaddies();
@@ -497,6 +499,7 @@ function handleState() {
     
             if (score >= winningScore) {
                 cremate();
+
             }
     
             // mouseCollision(shooter.mouse, yesButton, "RUNNING");
@@ -662,6 +665,7 @@ function cremate() {
     roundCounts.splice(0, 1);
     enemyCount = enemiesLeft = roundCounts[0];
     winningScore += enemyCount * 10;
+    resetBaddies();
 }
 
 // NEED AN ALT TO NADEQUEUE
@@ -777,7 +781,7 @@ function handleEnemyProjectiles(orc) {
             i--;
 
             // UNCOMMENT THIS:
-            //playerHealth.number--;
+            playerHealth.number--;
         }
     }
 }
@@ -829,7 +833,7 @@ function handleProjectile() {
                     score += 10;
                     scoreText.text = score;
 
-                    if (currentEnemy.pickup) {
+                    if (currentEnemy.pickup && currentRound > 1) {
                         snackQueue.push(new Pickup(currentEnemy.x, currentEnemy.y - 100, currentRound));
                     }
 
@@ -878,12 +882,12 @@ function handleProjectile() {
                     grenades.number++;
                 }
 
-                // FLAMMEN IS NOT SPAWNING AS FREQUENTLY
+                // what's this? pick up weapon if current one is not flammen.
                 if (shooter.weapon != "flammen") {
                     if (snack.type == "ar") {
                         shooter.weapon = "ar";
                         shooter.fireRate = 15;
-                        shooter.specialAmmo = 100;
+                        shooter.specialAmmo = 50;
                     } 
                     else if (snack.type == "flammen") {
                         shooter.weapon = "flammen";
@@ -900,7 +904,6 @@ function handleProjectile() {
 
                 snackQueue.splice(l, 1);
                 l--;
-                //remove(snackQueue, l);
             }
         }
 
@@ -972,7 +975,7 @@ function handleEnemy() {
             // enemiesLeft--;
             current.dead = true;
             // UNCOMMENT:
-            // wallHealth.number--;
+            wallHealth.number--;
         }
 
         if (current.dead) {
@@ -1007,7 +1010,6 @@ function handleEnemy() {
                 // UNCOMMENT THIS:
                 // sfx.growl.play();
                 playSound(sfx.growl);
-                // playerHealth.number--;
             }
         }
     }

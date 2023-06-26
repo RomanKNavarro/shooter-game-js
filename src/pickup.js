@@ -16,8 +16,6 @@ export default class Pickup {
         this.sound;
         this.round = round;
 
-
-
         this.rifleReload = new Audio();
         this.rifleReload.src = "src/assets/sounds/rifleReload.mp3";
         // this.rifle.src = 
@@ -73,9 +71,6 @@ export default class Pickup {
                 loop: false,
             }),
         }
-
-        // ar: 6-10, aid: 2-5, weapon: 0-1
-        // this.type = this.types[Math.floor(Math.random() * this.types.length)];
     }
 
     // if not current respective weapon round, should default to aid pickup
@@ -83,20 +78,20 @@ export default class Pickup {
         // this.y -= 15;
         this.y += 10;
 
+        // weaponOdds encompasses flammen, ar, and grenade
         if (this.typeNum <= this.weaponOdds) {
             if (this.weapon == "flammen") {
                 if (this.round >= 6) {
                     this.type = "flammen";
                 }
-                else this.type = "ar";
+                this.type = "ar";
             }
             else if (this.weapon == "grenade") {
                 if (this.round >= 3) {
                     this.type = "grenade";
                 }
-                else this.type = "ar";
+                this.type = "ar";
             }
-            // this.type = this.weapon;
         }
         else if (this.typeNum <= this.aidOdds && this.typeNum > this.weaponOdds) this.type = this.aid;
 
