@@ -121,8 +121,10 @@ Uncaught TypeError: Cannot read properties of undefined (reading 'x')
 // TODO: ducking down functionality     --DONE
 // TODO: make special enemy types appear only after specific rounds     --DONE
 // TODO: get civy dogs/airplanes to spawn.      --DONE
-// TODO: ui showing special weapon and ammo (no ui for pistol)  
+// TODO: ui showing special weapon and ammo (no ui for pistol)          --DONE
 // TODO: no ducking during relief phase     --DONE
+// TODO: baddiePositions last 2 positions stop working on round 10. Fix.
+// TODO: add delay before enemies start shooting.       --DONE
 
 let roundCounts = [3, 10];
 // let roundCounts = [3, 50];
@@ -157,6 +159,7 @@ const skipButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, "sk
 const yesButton = new Button(250, canvas.height / 1.2, 100, '"Defend"', true);
 const noButton = new Button(canvas.width - 250 - 100, canvas.height / 1.2, 100, "Give up", true);
 const playAgainButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, "Play again?", true);
+const creditsButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, "READ ME", true);
 
 const playAgainButton2 = new Button(canvas.width / 2.5, canvas.height / 2, 100, "test test", true);
 
@@ -171,6 +174,7 @@ const wallText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "Too m
 const enemyText = new Button(canvas.width / 2.45, 0, 100, enemiesLeft, false);
 const roundText = new Button(canvas.width / 3, 0, 100, currentRound, false);
 const scoreText = new Button(canvas.width / 2, 0, 100, score, false);
+const ammoText = new Button(canvas.width - 100, 0, 100, shooter.specialAmmo, false);
 
 const specialText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "SPECIAL ROUND", false);
 const specialText2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "MASSACRE THE CIVILIANS", false);
@@ -323,19 +327,16 @@ function playSound(sound) {
 }
 
 // stupid timer vars:
-let showLoading = true;
 let showPlay = false
 let specialRound = false;
 let showNextRound = false;
 let showNextText = false;
 let showSpecialText = false;
 let showMenu = false;
-let showIntro = false;
 let startRound = false;
 let finalRound = false;
 let startEnd = false;
 let showAidText = false;
-let showEndRound = false;
 
 // music1.play();
 // music.dramatic.play();
@@ -348,6 +349,12 @@ function handleStatus() {
         enemyText.draw();
         roundText.draw();
         scoreText.draw();
+
+        if (shooter.weapon != "pistol") {
+            ammoText.draw();
+            ammoText.text = shooter.specialAmmo;
+        }
+
     
         playerHealth.draw();
         playerHealth.update();
@@ -382,20 +389,18 @@ function greatReset() {
 
     roundCounts = [3, 10];
     // roundCounts = [3, 50];
+    // ALL ENEMY COUNTS ADDED HERE!:
     for (let i = 0; i <= 9; i++) {
-        roundCounts.push(Math.floor(roundCounts[roundCounts.length -1] * 1.5));
+        // roundCounts.push(Math.floor(roundCounts[roundCounts.length -1] * 1.5));
+        roundCounts.push(Math.floor(roundCounts[roundCounts.length -1] * 1.2));
     }
 
-    // for (let i = 1; i <= Object.keys(baddiePositions).length; i++) {
-    //     baddiePositions[i.toString()]["inPos"] = false;
-    // }
     resetBaddies();
 
     snackQueue = [];
     playerHealth.number = 3;
     wallHealth.number = 3;
     showMenu = false;
-    showIntro = false;
     // grenades.number = 3;
     grenades.number = 10;
 }
@@ -509,6 +514,7 @@ function handleState() {
                 startEnd = true
             }, 3000);
 
+            resetBaddies();
             if (startEnd) state = "RUNNING";
             break;
     
@@ -543,7 +549,7 @@ function handleState() {
 
             // special round cases:
             // let specRounds = {5: "SPECIAL", 9: "BOSS", 10: "END"};
-            let specRounds = {1: "RELIEF", 7: "SPECIAL", 9: "BOSS", 10: "END"};
+            let specRounds = {5: "RELIEF", 7: "SPECIAL", 9: "BOSS", 10: "END"};
 
             // let specRounds = {1: "BOSS", 10: "END"};
             if (Object.keys(specRounds).includes(currentRound.toString())) {
@@ -611,7 +617,6 @@ function handleState() {
                     setTimeout(() => {
                         shooter.secondStream = true;
                         showAidText = true;
-                        showEndRound = true;
                     }, 2000);
                 } else {
                     nextText.draw();
@@ -1121,7 +1126,8 @@ function animate() {
     handleStatus();
     handleNade();
 
-    console.log(shooter2.initSecond);
+
+    // console.log(shooter2.initSecond);
 
     frame++;
 

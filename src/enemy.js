@@ -83,11 +83,6 @@ export default class Enemy {
       cxt.textBaseline = "middle";
 
       if (this.isCivie) this.color = "gray";
-        // this.speed = -3; 
-      
-
-      // if (this.isCivie) this.color = "gray";
-
 
       if (this.pickupNum <= this.pickupOdds) {
         this.pickup = true   
@@ -138,8 +133,8 @@ export default class Enemy {
           }
 
           //   MIGHT HAVE TO REVERT
-          // if ((this.type != "crawl") && (this.timer % this.fireRate === 0  || this.timer == 1)) {
-            if (this.timer % this.fireRate === 0  || this.timer == 1) {  
+          // if (this.timer % this.fireRate === 0  || this.timer == 1) {  
+            if ((this.timer % this.fireRate === 0  || this.timer == 1) && this.timer >= 100) {  
               this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, this.sound, this.dead)); 
           }
       }
