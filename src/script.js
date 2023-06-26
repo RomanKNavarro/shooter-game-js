@@ -127,6 +127,7 @@ Uncaught TypeError: Cannot read properties of undefined (reading 'x')
 // TODO: add delay before enemies start shooting.       --DONE
 // TODO: add delay after last round before "coalition defeated" message. Add victory music.
 // TODO: option to turn off music in menu (plus ui icon!)
+// TODO: tutorial state w/ multiple sections
 
 let roundCounts = [3, 10];
 // let roundCounts = [3, 50];
@@ -155,6 +156,7 @@ new InputHandler(shooter);
 new InputHandler(shooter2);
 
 // BUTTONS AND TEXT. (x, y, width, text, clickable)
+const tutButton = new Button(canvas.width / 2.2, canvas.height / 2.5, 100, "Start Tutorial", true);
 const playButton = new Button(canvas.width / 2.2, canvas.height / 2.5, 100, "Play", true);
 const startButton = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Initiate Bloodbath", true);
 const skipButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, "skip", true);
@@ -188,6 +190,41 @@ const endText4 = new Button(canvas.width / 2.5, canvas.height / 1.9, 100, "KAVEM
 
 const quietText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "KILL KILL KILL KILL", false);
 const aidText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "HELP HAS ARRIVED", false);
+
+// TUTORIAL CRAP:
+// BRUTAL IDEA: live captured enemies used as practice
+// YES, player can take damage/die in tutorial
+// 3 static grounds
+const tt1 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Press Space to shoot", false);
+// static grounds and airs:
+const tt2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Use WASD to aim in different directions", false);
+// 3 living ground enemies that shoot. Player shooting DISABLED:
+const tt3 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Press D to duck", false);
+// player shooting ENABLED:
+const tt4 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Note that shooting while ducking inflicts", false);
+const tt4_2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "only half the damage to enemies", false);
+// No targets. Shooting DISABLED:
+const tt5 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Well done soldier.", false);
+const tt5_2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "You are ready for advanced weapon handling.", false);
+
+const tt6 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "shoot while ducking to acquire pickups", false);
+// horde of live enemies ensues. 
+const tt7 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "press E to throw a grenade", false);
+
+const tt8 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "press E twice in rapid succession", false);
+const tt8_2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "for a grenade barrage", false);
+
+const tt9 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Massacre the remaining POWs", false);
+
+const tt10 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "You're a natural born killer!", false);
+
+const tt11 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Excellent work, Leuitenant.", false);
+const tt11_2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "You may proceed.", false);
+
+const tutorialText = new TextWall(
+    `Greetings soldier. For the sake of your training, we have -with much difficulty- acquired live targets for\n 
+    you to practice on. This is standard procedure and is meant to strengthen your  against the even more \n
+    gruesome bloodbath that is to ensue. Good luck soldier, and glory to Ariesa!`, Math.floor(canvas.height / 5));
 
 const bossText = new TextWall(
 `Satellite imagery has exposed your horriffic atrocities in the city to the rest of the world,\n
