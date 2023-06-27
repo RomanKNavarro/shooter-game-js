@@ -130,8 +130,7 @@ Uncaught TypeError: Cannot read properties of undefined (reading 'x')
 // TODO: tutorial state w/ multiple sections
 
 let roundCounts = [3, 10];
-let tutCounts = [];
-// let roundCounts = [3, 50];
+// single, triple, two shooters, ar hoarde (grounds and a few airs), grenade hoarde, civies (pows)
 
 // NEW SCORE STUFF:
 let score = 0;
@@ -140,6 +139,7 @@ let currentRound = 1;
 
 // enemyCount determines num of enemies to add to array. It decrements as they spawn
 let enemyCount = roundCounts[0];
+let tutCount = tutCounts[0];
 
 // used to show current enemies remaining:
 let enemiesLeft = roundCounts[0];
@@ -204,8 +204,8 @@ const tt2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Use WASD t
 // 3 living ground enemies that shoot. Player shooting DISABLED:
 const tt3 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Press D to duck", false);
 // player shooting ENABLED:
-const tt4 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Note that shooting while ducking inflicts", false);
-const tt4_2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "only half the damage to enemies", false);
+const tt4 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Shooting while ducking only inflicts", false);
+const tt4_2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "half the damage to enemies", false);
 // No targets. Shooting DISABLED:
 const tt5 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Well done soldier.", false);
 const tt5_2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "You are ready for advanced weapon handling.", false);
@@ -217,12 +217,30 @@ const tt7 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "press E to
 const tt8 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "press E twice in rapid succession", false);
 const tt8_2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "for a grenade barrage", false);
 
+// these pows will be civies!
 const tt9 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Massacre the remaining POWs", false);
 
 const tt10 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "You're a natural born killer!", false);
 
 const tt11 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Excellent work, Leuitenant.", false);
-const tt11_2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "You may proceed.", false);
+const tt11_2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Time to get to work.", false);
+
+let tutCounts = [1, 3, 2, 10, 15, 20];
+// NO END TEXT, only beginning text.
+// if player dies in tutorial, don't completely reset, just redo current phase.
+// fulfilled becomes true when all objectives for current phase have been met.
+let tutPhases = { 
+    1: {text: [tt1], count: 1, fulfilled: false}, 
+    2: {text: [tt2], count: 3, fulfilled: false}, 
+    3: {text: [[tt3], [tt4, tt4_2]], count: 2, fulfilled: false}, 
+    4: {text: [[tt5, tt5_2], [tt6]], count: 10, fulfilled: false}, 
+    5: {text: [[tt7], [tt8, tt8_2]], count: 15, fulfilled: false}, 
+    6: {text: [tt9], count: 20, fulfilled: false},
+    7: {text: [[tt10], [tt11, tt11_2]], count: 0, fulfilled: false}
+};
+
+let tutTexts = [[tt1], [tt2], [tt3], [tt4, tt4_2], [tt5, tt5_2], [tt6], 
+                [tt7], [tt8, tt8_2], [tt9], [tt10], [tt11, tt11_2]];
 
 const tutorialText = new TextWall(
     `Greetings soldier. For the sake of your training, we have -with much difficulty- acquired live targets for\n 
@@ -431,11 +449,9 @@ function greatReset() {
 
 
     roundCounts = [7, 10];
-    // roundCounts = [3, 50];
     // ALL ENEMY COUNTS ADDED HERE!:
     for (let i = 0; i <= 9; i++) {
         roundCounts.push(Math.floor(roundCounts[roundCounts.length -1] * 1.5));
-        //roundCounts.push(Math.floor(roundCounts[roundCounts.length -1] * 1.2));
     }
 
     resetBaddies();
@@ -466,12 +482,13 @@ function endRound() {
     }
 }
 
-
-
 // quietFrames:
 // states: MENU, RUNNING, WIN, SPECIAL, BOSS, END, LOSE.
 // startButton.stroke property successfully set, but color won't change.
 // TODO: use switch case to handle states
+
+// number of tutorial rounds: 6
+
 function handleState() {
     switch(state) {
         case "TUTORIAL":
@@ -479,7 +496,9 @@ function handleState() {
             tt1.draw();
 
             let tutOrc1 = new Enemy(canvas.width / 2, 0, 0);
-            tutOrc1.draw()
+            tutOrc1.y = flora.y - tutOrc1.height;
+            tutOrc1.update();
+            tutOrc1.draw();
 
             // skipTutButton.draw();
             skipButton.draw();
@@ -580,6 +599,7 @@ function handleState() {
             // state = "RUNNING";
             shooter.disabled = false;
     
+            // one second delay before round 1:
             if (currentRound == 1) {
                 setTimeout(() => {
                     startRound = true
