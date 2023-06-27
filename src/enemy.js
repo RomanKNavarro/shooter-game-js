@@ -140,7 +140,8 @@ export default class Enemy {
 
           //   MIGHT HAVE TO REVERT
           // if (this.timer % this.fireRate === 0  || this.timer == 1) {  
-            if ((this.timer % this.fireRate === 0  || this.timer == 1) && this.timer >= 50) {  
+            if ((this.timer % this.fireRate === 0  || this.timer == 1) 
+            && (this.timer >= 50 || this.type == "air")) {  
               this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, this.sound, this.dead)); 
           }
       }

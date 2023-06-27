@@ -17,6 +17,11 @@ var cxt = canvas.getContext("2d", { alpha: false });
 canvas.style.width=canvas.getBoundingClientRect().width;//actual width of canvas
 canvas.style.height=canvas.getBoundingClientRect().height;//actual height of canvas
 
+var ui_layer = document.getElementById("ui-layer");
+var cxt2 = ui_layer.getContext("2d", { alpha: false });
+ui_layer.style.width=ui_layer.getBoundingClientRect().width;//actual width of canvas
+ui_layer.style.height=ui_layer.getBoundingClientRect().height;//actual height of canvas
+
 // var canvas2 = document.getElementById("canvas1");
 // var cxt2 = canvas2.getContext("2d", { alpha: false });
 // canvas2.style.width=canvas.getBoundingClientRect().width;//actual width of canvas
@@ -133,8 +138,11 @@ Uncaught TypeError: Cannot read properties of undefined (reading 'x')
 // TODO: option to turn off music in menu (plus ui icon!)
 // TODO: tutorial state w/ multiple sections
 // TODO: try drawing projectiles on a seperate canvas (for optimization)    --DONE
+// TODO: use a multi-layered canvas (one for UI, another for static objects, other for enemies/bullets)
 
-let roundCounts = [3, 10];
+// let roundCounts = [3, 10];
+let roundCounts = [7, 10];
+
 // single, triple, two shooters, ar hoarde (grounds and a few airs), grenade hoarde, civies (pows)
 
 // NEW SCORE STUFF:
@@ -331,9 +339,9 @@ let baddiePositions = {
 };
 
 // ENEMY SPEED:
-// let currentSpeed = 2;
+let currentSpeed = 2;
 // let currentSpeed = 4;
-let currentSpeed = 8;
+// let currentSpeed = 8;
 
 // DROPPED PICKUPS:
 let snackQueue = [];
@@ -443,7 +451,6 @@ function handleStatus() {
 
     
         playerHealth.draw();
-        playerHealth.update();
         wallHealth.draw();
 
         grenades.draw();
@@ -472,8 +479,9 @@ function greatReset() {
     shooter2.fireRate = 0;
     shooter2.specialAmmo = 0;
 
-
+    // roundCounts = [7, 10];
     roundCounts = [7, 10];
+
     // ALL ENEMY COUNTS ADDED HERE!:
     for (let i = 0; i <= 9; i++) {
         roundCounts.push(Math.floor(roundCounts[roundCounts.length -1] * 1.5));
@@ -485,8 +493,8 @@ function greatReset() {
     playerHealth.number = 3;
     wallHealth.number = 3;
     showMenu = false;
-    // grenades.number = 3;
-    grenades.number = 10;
+    grenades.number = 3;
+    // grenades.number = 10;
 }
 
 function endRound() {
@@ -771,7 +779,8 @@ function handleState() {
 // increment stuff to make next round slightly harder:
 function cremate() {
     currentRound++;
-    currentSpeed += 0.1;
+    // currentSpeed += 0.1;
+    currentSpeed += 0.3;
     roundCounts.splice(0, 1);
     enemyCount = enemiesLeft = roundCounts[0];
     winningScore += enemyCount * 10;
@@ -1081,7 +1090,9 @@ function handleEnemy() {
 
         // FIX THIS CRAP --DONE. Takes into account both regular and special rounds:
         // delete enemies if they are off-canvas:
-        if ((current.x + current.width >= 0) && (current.x < canvas.width + 50)) {
+        // if ((current.x + current.width >= 0) && (current.x < canvas.width + 50)) {
+        // REVISION: don't force player to kill civilians
+        if ((current.x + current.width >= 0)) {    
             current.update();
             current.draw();
         } else {
@@ -1232,9 +1243,16 @@ function mouseCollision(first, second, nextState) {
 // FUNCTION TO GET ALL OUR OBJECTS UP AND RUNNING
 function animate() {
     cxt.clearRect(0, 0, canvas.width, canvas.height);
+    cxt2.clearRect(0, 0, ui_layer.width, ui_layer.height);
 
     cxt.fillStyle = "white";
     cxt.fillRect(0, 0, canvas.width, canvas.height);
+
+    
+    // cxt2.fillStyle = "white";
+    cxt2.fillStyle = "rgba(0, 0, 200, 0.5)";
+    cxt2.fillRect(0, 0, ui_layer.width, ui_layer.height);
+
 
     flora.draw();
     handleShooter();
@@ -1247,7 +1265,8 @@ function animate() {
 
     console.log(frame);
 
-    if (state == "RUNNING") frame++;
+    if (state == "RUNNING" && frame <= 100) frame++;
+    else frame = 0;
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);

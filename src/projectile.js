@@ -1,8 +1,8 @@
-// var canvas = document.getElementById("canvas1");
-// var cxt = canvas.getContext("2d", { alpha: false });
+var canvas = document.getElementById("canvas1");
+var cxt = canvas.getContext("2d", { alpha: false });
 
-var canvas2 = document.getElementById("canvas1");
-var cxt = canvas2.getContext("2d", { alpha: false });
+// var canvas2 = document.getElementById("canvas2");
+// var cxt = canvas2.getContext("2d", { alpha: false });
 
 // BULLETS
 export default class Projectile {

@@ -11,3 +11,21 @@ body {
     /* font-family: 'Permanent Marker'; */
     /* font-family: 'blockschrift-f-regular', sans-serif; */
 };
+
+#stage {
+    width: 800px;
+    height: 300px;
+    position: relative;
+    border: 2px solid black;
+}
+
+canvas {
+    position: absolute;
+}
+
+#ui-layer {
+    z-index: 2;
+}
+#canvas1 {
+    z-index: 1;
+}
