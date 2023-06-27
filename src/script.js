@@ -14,9 +14,13 @@ import Grenade from "./grenade.js";
 // canvas stuff
 var canvas = document.getElementById("canvas1");
 var cxt = canvas.getContext("2d", { alpha: false });
-
 canvas.style.width=canvas.getBoundingClientRect().width;//actual width of canvas
 canvas.style.height=canvas.getBoundingClientRect().height;//actual height of canvas
+
+// var canvas2 = document.getElementById("canvas1");
+// var cxt2 = canvas2.getContext("2d", { alpha: false });
+// canvas2.style.width=canvas.getBoundingClientRect().width;//actual width of canvas
+// canvas2.style.height=canvas.getBoundingClientRect().height;//actual height of canvas
 
 // PORT: http://127.0.0.1:5500/
 // TEXTWALL FONT DEFINED IN TEXTWALL.JS
@@ -128,7 +132,7 @@ Uncaught TypeError: Cannot read properties of undefined (reading 'x')
 // TODO: add delay after last round before "coalition defeated" message. Add victory music.
 // TODO: option to turn off music in menu (plus ui icon!)
 // TODO: tutorial state w/ multiple sections
-// TODO: try drawing enemies on a seperate canvas (for optimization)
+// TODO: try drawing projectiles on a seperate canvas (for optimization)    --DONE
 
 let roundCounts = [3, 10];
 // single, triple, two shooters, ar hoarde (grounds and a few airs), grenade hoarde, civies (pows)
