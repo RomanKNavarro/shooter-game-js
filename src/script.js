@@ -123,13 +123,14 @@ Uncaught TypeError: Cannot read properties of undefined (reading 'x')
 // TODO: get civy dogs/airplanes to spawn.      --DONE
 // TODO: ui showing special weapon and ammo (no ui for pistol)              --DONE
 // TODO: no ducking during relief phase     --DONE
-// TODO: baddiePositions last 2 positions stop working on round 10. Fix.
+// TODO: baddiePositions last 2 positions stop working on round 10. Fix.    
 // TODO: add delay before enemies start shooting.       --DONE
 // TODO: add delay after last round before "coalition defeated" message. Add victory music.
 // TODO: option to turn off music in menu (plus ui icon!)
 // TODO: tutorial state w/ multiple sections
 
 let roundCounts = [3, 10];
+let tutCounts = [];
 // let roundCounts = [3, 50];
 
 // NEW SCORE STUFF:
@@ -157,6 +158,8 @@ new InputHandler(shooter2);
 
 // BUTTONS AND TEXT. (x, y, width, text, clickable)
 const tutButton = new Button(canvas.width / 2.2, canvas.height / 2.5, 100, "Start Tutorial", true);
+// skip tut. button necessary -don't want to force players to kill POWS. 
+// const skipTutButton = new Button(canvas.width / 2.2, canvas.height / 2.5, 100, "Skip", true);
 const playButton = new Button(canvas.width / 2.2, canvas.height / 2.5, 100, "Play", true);
 const startButton = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Initiate Bloodbath", true);
 const skipButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, "skip", true);
@@ -293,8 +296,9 @@ let currentSpeed = 8;
 let snackQueue = [];
 let nadeQueue = [];
 
-let state = "MENU";
-// let state = "LOADING";
+// let state = "MENU";
+let state = "TUTORIAL";
+
 let loadingTime = [2000, 3000][Math.floor(Math.random() * 3)];
 
 // functions:
@@ -381,7 +385,7 @@ let showAidText = false;
 // music.dramatic.play();
 
 function handleStatus() {
-    if (state == "RUNNING" || state == "WIN" || state == "QUIET" || state == "RELIEF") {
+    if (state == "RUNNING" || state == "WIN" || state == "QUIET" || state == "RELIEF" || state == "TUTORIAL") {
         roundText.text = currentRound;
         //enemyText.text = enemyCount;
         enemyText.text = enemiesLeft;
@@ -462,17 +466,31 @@ function endRound() {
     }
 }
 
-// quietFrames:
 
+
+// quietFrames:
 // states: MENU, RUNNING, WIN, SPECIAL, BOSS, END, LOSE.
 // startButton.stroke property successfully set, but color won't change.
 // TODO: use switch case to handle states
 function handleState() {
     switch(state) {
+        case "TUTORIAL":
+            shooter.disabled = false;
+            tt1.draw();
+
+            let tutOrc1 = new Enemy(canvas.width / 2, 0, 0);
+            tutOrc1.draw()
+
+            // skipTutButton.draw();
+            skipButton.draw();
+            mouseCollision(shooter.mouse, playButton, "LOADING");
+            break;
+
+        // INITIAL BLACK SCREEN:
         case "PLAY":
             playText.draw();
             playButton.draw();
-            mouseCollision(shooter.mouse, playButton, "INTRO")
+            mouseCollision(shooter.mouse, playButton, "INTRO");
             break;
 
         case "LOADING":
@@ -711,7 +729,8 @@ function handleShooter() {
     shooter.draw();
     shooter2.draw();
 
-    if (state == "RUNNING" || state == "WIN" || state == "QUIET" || state == "RELIEF") {
+    // what states require shooter to be disabled?
+    if (state == "RUNNING" || state == "WIN" || state == "QUIET" || state == "RELIEF" || state == "TUTORIAL") {
         shooter.update();
         shooter2.update();
     }
@@ -841,7 +860,7 @@ function handleProjectile() {
             }
     
             // TO REVERT LATER ON:
-            if (current.x < canvas.width - 100 && (state == "RUNNING" || state == "WIN" || state == "QUIET")) {
+            if (current.x < canvas.width - 100 && (state == "RUNNING" || state == "WIN" || state == "QUIET" || state == "TUTORIAL")) {
                 current.update();
                 current.draw();
             }
@@ -1166,7 +1185,7 @@ function animate() {
     handleNade();
 
 
-    // console.log(shooter2.initSecond);
+    console.log(shooter.projectiles);
 
     frame++;
 

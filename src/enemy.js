@@ -69,6 +69,9 @@ export default class Enemy {
       this.growl = new Audio();
       this.growl.src = "/src/assets/sounds/paco.flac";
       this.sound;
+
+      // TUTORIAL CRAP:
+      this.meat = false;
     }
 
     draw() {
