@@ -17,15 +17,9 @@ var cxt = canvas.getContext("2d", { alpha: false });
 canvas.style.width=canvas.getBoundingClientRect().width;//actual width of canvas
 canvas.style.height=canvas.getBoundingClientRect().height;//actual height of canvas
 
-var ui_layer = document.getElementById("ui-layer");
-var cxt2 = ui_layer.getContext("2d", { alpha: false });
-ui_layer.style.width=ui_layer.getBoundingClientRect().width;//actual width of canvas
-ui_layer.style.height=ui_layer.getBoundingClientRect().height;//actual height of canvas
-
-// var canvas2 = document.getElementById("canvas1");
-// var cxt2 = canvas2.getContext("2d", { alpha: false });
-// canvas2.style.width=canvas.getBoundingClientRect().width;//actual width of canvas
-// canvas2.style.height=canvas.getBoundingClientRect().height;//actual height of canvas
+var canvas_stack = new CanvasStack("canvas1");
+var main_layer = canvas_stack.createLayer();
+var main_layer_cxt = document.getElementById(main_layer).getContext("2d");
 
 // PORT: http://127.0.0.1:5500/
 // TEXTWALL FONT DEFINED IN TEXTWALL.JS
@@ -1242,17 +1236,14 @@ function mouseCollision(first, second, nextState) {
 
 // FUNCTION TO GET ALL OUR OBJECTS UP AND RUNNING
 function animate() {
-    cxt.clearRect(0, 0, canvas.width, canvas.height);
-    cxt2.clearRect(0, 0, ui_layer.width, ui_layer.height);
+    // cxt.clearRect(0, 0, canvas.width, canvas.height);
+    // cxt2.clearRect(0, 0, ui_layer.width, ui_layer.height);
+    // cxt.fillStyle = "white";
+    // cxt.fillRect(0, 0, canvas.width, canvas.height);
 
-    cxt.fillStyle = "white";
-    cxt.fillRect(0, 0, canvas.width, canvas.height);
-
-    
-    // cxt2.fillStyle = "white";
-    cxt2.fillStyle = "rgba(0, 0, 200, 0.5)";
-    cxt2.fillRect(0, 0, ui_layer.width, ui_layer.height);
-
+    main_layer_cxt.clearRect(0, 0, canvas.width, canvas.height);
+    main_layer_cxt.fillStyle = "white";
+    main_layer_cxt.fillRect(0, 0, canvas.width, canvas.height);
 
     flora.draw();
     handleShooter();
