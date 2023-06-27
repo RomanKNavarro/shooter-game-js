@@ -230,17 +230,37 @@ let tutCounts = [1, 3, 2, 10, 15, 20];
 // if player dies in tutorial, don't completely reset, just redo current phase.
 // fulfilled becomes true when all objectives for current phase have been met.
 let tutPhases = { 
-    1: {text: [tt1], count: 1, fulfilled: false}, 
-    2: {text: [tt2], count: 3, fulfilled: false}, 
-    3: {text: [[tt3], [tt4, tt4_2]], count: 2, fulfilled: false}, 
-    4: {text: [[tt5, tt5_2], [tt6]], count: 10, fulfilled: false}, 
-    5: {text: [[tt7], [tt8, tt8_2]], count: 15, fulfilled: false}, 
-    6: {text: [tt9], count: 20, fulfilled: false},
-    7: {text: [[tt10], [tt11, tt11_2]], count: 0, fulfilled: false}
+    1: {text: tt1, count: 1, fulfilled: false},                         // 1 static
+    2: {text: tt2, count: 3, fulfilled: false},                         // 1 ground, 1 air, 1 bomber (statics)
+    3: {text: [[tt3], [tt4, tt4_2]], count: 2, fulfilled: false},       // 2 ground shooters
+    4: {text: [[tt5, tt5_2], [tt6]], count: 10, fulfilled: false},      // ar pickup. Once picked up, 10 shooters
+    5: {text: [[tt7], [tt8, tt8_2]], count: 3, fulfilled: false},       // nade. 3 statics (2 ground, 1 air)
+    6: {text: tt9, count: 20, fulfilled: false},                        // nade barrage. MANY statics.
+    7: {text: [[tt10], [tt11, tt11_2]], count: 0, fulfilled: false}     // 20 civvies
 };
 
-let tutTexts = [[tt1], [tt2], [tt3], [tt4, tt4_2], [tt5, tt5_2], [tt6], 
-                [tt7], [tt8, tt8_2], [tt9], [tt10], [tt11, tt11_2]];
+// function handleTutorial() {
+//     // let phaseCounts = tutPhases
+//     for (let i = 1; i <= Object.keys(tutPhases).length; i++) {
+//         let current = tutPhases[i]
+//         if (!current[fulfilled]) {
+//             switch (i) {
+//                 case 1:
+//                     current[text].draw(); 
+                    
+//                     let tutOrc1 = new Enemy(canvas.width / 2, 0, 0);
+//                     tutOrc1.y = flora.y - tutOrc1.height;
+//                     tutOrc1.update();
+//                     tutOrc1.draw();
+
+//                     break;
+//             }
+//         }
+//     }
+// }
+
+// let tutTexts = [[tt1], [tt2], [tt3], [tt4, tt4_2], [tt5, tt5_2], [tt6], 
+//                 [tt7], [tt8, tt8_2], [tt9], [tt10], [tt11, tt11_2]];
 
 const tutorialText = new TextWall(
     `Greetings soldier. For the sake of your training, we have -with much difficulty- acquired live targets for\n 
@@ -488,6 +508,10 @@ function endRound() {
 // TODO: use switch case to handle states
 
 // number of tutorial rounds: 6
+
+function tutCollision() {
+    // TODO
+}
 
 function handleState() {
     switch(state) {
