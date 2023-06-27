@@ -124,8 +124,6 @@ export default class Pickup {
             cxt.fillRect(this.x, this.y, this.width, this.height);
             // cxt.fillRect(299, this.y, this.width, this.height);
 
-            // cxt.fill();
-
             cxt.font = "20px serif";
             cxt.fillStyle = "black";
             cxt.textAlign = "center";

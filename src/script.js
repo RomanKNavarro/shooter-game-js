@@ -128,6 +128,7 @@ Uncaught TypeError: Cannot read properties of undefined (reading 'x')
 // TODO: add delay after last round before "coalition defeated" message. Add victory music.
 // TODO: option to turn off music in menu (plus ui icon!)
 // TODO: tutorial state w/ multiple sections
+// TODO: try drawing enemies on a seperate canvas (for optimization)
 
 let roundCounts = [3, 10];
 // single, triple, two shooters, ar hoarde (grounds and a few airs), grenade hoarde, civies (pows)
@@ -139,7 +140,7 @@ let currentRound = 1;
 
 // enemyCount determines num of enemies to add to array. It decrements as they spawn
 let enemyCount = roundCounts[0];
-let tutCount = tutCounts[0];
+// let tutCount = tutCounts[0];
 
 // used to show current enemies remaining:
 let enemiesLeft = roundCounts[0];
@@ -335,7 +336,7 @@ let snackQueue = [];
 let nadeQueue = [];
 
 // let state = "MENU";
-let state = "TUTORIAL";
+let state = "MENU";
 
 let loadingTime = [2000, 3000][Math.floor(Math.random() * 3)];
 
@@ -509,13 +510,17 @@ function endRound() {
 
 // number of tutorial rounds: 6
 
-function tutCollision() {
-    // TODO
+// for the tutorial enemies:
+
+function tutCollision(tutCount) {
+    for (let i = 0; i <= tutCount; i++) {
+
+    }
 }
 
 function handleState() {
     switch(state) {
-        case "TUTORIAL":
+        case "TUTORIAL1":
             shooter.disabled = false;
             tt1.draw();
 
@@ -523,6 +528,8 @@ function handleState() {
             tutOrc1.y = flora.y - tutOrc1.height;
             tutOrc1.update();
             tutOrc1.draw();
+
+            currTutCount.push(tutOrc1)
 
             // skipTutButton.draw();
             skipButton.draw();
@@ -764,6 +771,7 @@ function cremate() {
     roundCounts.splice(0, 1);
     enemyCount = enemiesLeft = roundCounts[0];
     winningScore += enemyCount * 10;
+    frame = 0;
     resetBaddies();
 }
 
@@ -808,7 +816,9 @@ function handleShooter() {
 
 // GLITCH: if enemy  was present in time of throw, it gets deleted later on.
 // maximum "size" is 101
-function handleNade() {
+
+// maybe I can make this accept an array arg (one array for tuts, other for enemyQueue)
+function handleNade(arr) {
     for (let i = 0; i < nadeQueue.length; i++) {
         let current = nadeQueue[i];
         // current.bloop.play();
@@ -849,10 +859,10 @@ function handleNade() {
 
         // FIGURED OUT WHY IT WAS WORKING YESTERDAY: BECAUSE IT WAS RUNNING SLOW LOOOL  
         // REMEMBER TO UNCOMMENT:
-        for (let y = 0; y <= enemyQueue.length; y++) { 
-            let currOrc = enemyQueue[y];
+        for (let y = 0; y <= arr.length; y++) { 
+            let currOrc = arr[y];
             // console.log(collision(current, currOrc));
-            if (enemyQueue.length > 0 && currOrc) {
+            if (arr.length > 0 && currOrc) {
                 if (nadeCollision(current, currOrc) && current.ready == true) {    
                     currOrc.dead = true;
                 } 
@@ -886,7 +896,9 @@ function handleEnemyProjectiles(orc) {
     }
 }
 
-function handleProjectile() {
+
+// PASS IN ENEMY/TUT QUEUE
+function handleProjectile(arr) {
     let projectiles = shooter.projectiles;
 
     for (let i = 0; i < shooter.projectiles.length; i++) {
@@ -915,11 +927,11 @@ function handleProjectile() {
         }
 
         // enemy kill handling:
-        for (let j = 0; j < enemyQueue.length; j++) {
-            let currentEnemy = enemyQueue[j];
+        for (let j = 0; j < arr.length; j++) {
+            let currentEnemy = arr[j];
             /* remove bullet and enemy if they contact eachother. Also make enemy 
             drop pickup if applicable: */ 
-            if (enemyQueue[j] && projectiles[i] && collision(projectiles[i], enemyQueue[j])) {
+            if (arr[j] && projectiles[i] && collision(projectiles[i], arr[j])) {
 
                 projectiles.splice(i, 1);
                 i--;
@@ -942,7 +954,7 @@ function handleProjectile() {
                     }
     
                     // here is how the enemies get deleted:
-                    enemyQueue.splice(j, 1);
+                    arr.splice(j, 1);
                     j--;
                     enemiesLeft--;
 
@@ -1222,16 +1234,16 @@ function animate() {
 
     flora.draw();
     handleShooter();
-    handleProjectile();
     handleSnack()
     handleState();
     handleStatus();
-    handleNade();
 
+    handleProjectile(enemyQueue);
+    handleNade(enemyQueue);
 
-    console.log(shooter.projectiles);
+    console.log(frame);
 
-    frame++;
+    if (state == "RUNNING") frame++;
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);

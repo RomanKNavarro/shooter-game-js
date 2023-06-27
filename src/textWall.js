@@ -28,6 +28,7 @@ export default class TextWall {
         // });
 
         if (!this.vanish) {
+            cxt.beginPath();
             cxt.fillStyle = "black";
             cxt.fillRect(0, 0, canvas.width, canvas.height);
     

@@ -19,12 +19,10 @@ export default class Button {
     draw() {
         if (this.clickable) {
             cxt.beginPath();
-
-            // x, y, width, height:
             cxt.rect(this.x, this.y, this.width, this.height); 
             cxt.fillStyle = 'gray'; 
             cxt.fill();
-    
+            
             // button outline:
             cxt.lineWidth = 2;
             cxt.strokeStyle = this.stroke;

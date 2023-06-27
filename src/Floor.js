@@ -9,6 +9,7 @@ export default class Floor {
         this.height = canvas.height / 2;
     }
     draw() {
+        cxt.beginPath();
         cxt.fillStyle = "red";
         cxt.fillRect(this.x, this.y, this.width, this.height);
     }
