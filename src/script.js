@@ -11,22 +11,36 @@ import TextWall from "./textWall.js";
 import Health from "./health.js";
 import Grenade from "./grenade.js";
 
-// canvas stuff
+// canvas stuff (OLD):
+// var canvas = document.getElementById("canvas1");
 // var cxt = canvas.getContext("2d", { alpha: false });
 // canvas.style.width=canvas.getBoundingClientRect().width;//actual width of canvas
 // canvas.style.height=canvas.getBoundingClientRect().height;//actual height of canvas
-var canvas = document.getElementById("canvas1");
-var cxt = canvas.getContext("2d");
 
-var canvas_stack = new CanvasStack("canvas1");
+// NEW MULTI-LAYERED CANVAS:
+var canvas = document.getElementById('canvas1');
+var cxt = canvas.getContext('2d');
+
+// canvas.style.width=canvas.getBoundingClientRect().width;//actual width of canvas
+// canvas.style.height=canvas.getBoundingClientRect().height;//actual height of canvas
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+var canvas_stack = new CanvasStack('canvas1');
+// var canvas_stack = new CanvasStack('can');
+
 var main_layer = canvas_stack.createLayer();
 var main_layer_cxt = document.getElementById(main_layer).getContext("2d");
+
 
 // PORT: http://127.0.0.1:5500/
 // TEXTWALL FONT DEFINED IN TEXTWALL.JS
 /* TIPS FOR OPTIMIZATION:
     1. use integers instead of floating-points
-    2.  */
+    2. use MULTIPLE canvases
+    3. recycle objects instead of deleting them
+    4. no TEXT
+*/
 // TODO: DELETE bullets once they reach end of screen. Log array of bullets. --DONE
 // TODO: reset bullet.x after hitting enemy.    --DONE
 // TODO: GET bullets to travel up when "w" is pressed.  --DONE
@@ -83,7 +97,7 @@ var main_layer_cxt = document.getElementById(main_layer).getContext("2d");
 /* figured it out: every time I kill an enemy in the kill zone, enemies immediately preceding it stop*/ 
 // TODO: keep specialAmmo from depleting inbetween rounds   --DONE
 // TODO: get player health to deplete on getting hurt   --DONE
-// TODO: flamethrower sound
+// TODO: flamethrower sound     --DONE
 // TODO: make dogs hurt player  --DONE
 // TODO: fix play again button on failure       --DONE
 // TODO: implement health pickup functionality  --DONE
@@ -134,6 +148,7 @@ Uncaught TypeError: Cannot read properties of undefined (reading 'x')
 // TODO: tutorial state w/ multiple sections
 // TODO: try drawing projectiles on a seperate canvas (for optimization)    --DONE
 // TODO: use a multi-layered canvas (one for UI, another for static objects, other for enemies/bullets)
+// TODO: WAY too many ar pickups. Minimize them
 
 // let roundCounts = [3, 10];
 let roundCounts = [7, 10];
@@ -1087,7 +1102,7 @@ function handleEnemy() {
         // delete enemies if they are off-canvas:
         // if ((current.x + current.width >= 0) && (current.x < canvas.width + 50)) {
         // REVISION: don't force player to kill civilians
-        if ((current.x + current.width >= 0)) {    
+        if ((current.x + current.width >= 0) && (current.x < canvas.width + 50)) {    
             current.update();
             current.draw();
         } else {
@@ -1097,7 +1112,7 @@ function handleEnemy() {
             // enemiesLeft--;
             current.dead = true;
             // UNCOMMENT:
-            wallHealth.number--;
+            if (!current.isCivie) wallHealth.number--;
         }
 
         if (current.dead) {
@@ -1192,7 +1207,6 @@ function nadeCollision(nade, orc) {
     ) {
         return true;
     }
-
 }
 
 // collission successful.
@@ -1238,7 +1252,6 @@ function mouseCollision(first, second, nextState) {
 // FUNCTION TO GET ALL OUR OBJECTS UP AND RUNNING
 function animate() {
     // cxt.clearRect(0, 0, canvas.width, canvas.height);
-    // cxt2.clearRect(0, 0, ui_layer.width, ui_layer.height);
     // cxt.fillStyle = "white";
     // cxt.fillRect(0, 0, canvas.width, canvas.height);
 
