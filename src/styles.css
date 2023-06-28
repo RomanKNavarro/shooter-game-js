@@ -12,6 +12,10 @@ body {
     /* font-family: 'blockschrift-f-regular', sans-serif; */
 };
 
+#canvas1 {
+    background: transparent;
+}
+
 /* #stage {
     width: 800px;
     height: 300px;

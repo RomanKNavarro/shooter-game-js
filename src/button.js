@@ -48,20 +48,4 @@ export default class Button {
             this.fadeIn();
         }
     }
-
-    fadeIn() {
-        this.contexto.fillStyle = "rgba(0, 0, 0, " + this.alpha + ")";
-        this.contexto.font = "30px Tourney";
-        this.contexto.fillText(this.text, this.x + (this.width / 2), this.y + (this.height / 2));
-
-        this.contexto.textAlign = "center";
-        this.contexto.textBaseline = "middle";
-        this.contexto.fillText(this.text, this.x + (this.width / 2), this.y + (this.height / 2));
-    }
-
-    delete() {
-        this.alpha = 0.3;
-        this.fadeIn();
-        this.contexto.clearRect(this.x, this.y, this.width, this.height);
-    }
 }

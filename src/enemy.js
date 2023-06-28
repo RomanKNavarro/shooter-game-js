@@ -6,10 +6,11 @@ import Projectile from "./projectile.js";
 // OVERHAUL SPEED FUNCTIONALITY:
 export default class Enemy {
     constructor(x, speed, round, canvasa, contexto) {
-    // constructor(x, speed) {
+    // constructor(x, speed, round) {
       this.canvasa = canvasa;
       this.contexto = contexto;
   
+      // cxt
       // FASTER SPEED ON CRAWLIES
       this.width = 50;
       this.height = 50;
@@ -18,9 +19,6 @@ export default class Enemy {
 
       this.speed = speed;
       // this.speed = 2;
-
-      // this.x = x;
-      // this.y = y;
 
       this.x = x;
       this.y;

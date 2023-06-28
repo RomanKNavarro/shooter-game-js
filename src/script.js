@@ -34,6 +34,8 @@ var canvas_stack = new CanvasStack('canvas1');
 var main_layer = canvas_stack.createLayer();
 var main_layer_cxt = document.getElementById(main_layer).getContext("2d");
 
+var dynamic_layer = canvas_stack.createLayer();
+var dynamic_layer_cxt = document.getElementById(dynamic_layer).getContext("2d");
 
 // PORT: http://127.0.0.1:5500/
 // TEXTWALL FONT DEFINED IN TEXTWALL.JS
@@ -179,8 +181,8 @@ const shooter = new Shooter(100, flora.y - 50, canvas, main_layer_cxt);
 const shooter2 = new Shooter(0 - shooter.width, flora.y - 50, canvas, main_layer_cxt);
 shooter2.isSecond = true;
 
-new InputHandler(shooter);
-new InputHandler(shooter2);
+new InputHandler(shooter, canvas, main_layer_cxt);
+new InputHandler(shooter2), canvas, main_layer_cxt;
 
 // BUTTONS AND TEXT. (x, y, width, text, clickable)
 const tutButton = new Button(canvas.width / 2.2, canvas.height / 2.5, 100, "Start Tutorial", true, canvas, main_layer_cxt);
@@ -265,29 +267,6 @@ let tutPhases = {
     7: {text: [[tt10], [tt11, tt11_2]], count: 0, fulfilled: false}     // 20 civvies
 };
 
-// function handleTutorial() {
-//     // let phaseCounts = tutPhases
-//     for (let i = 1; i <= Object.keys(tutPhases).length; i++) {
-//         let current = tutPhases[i]
-//         if (!current[fulfilled]) {
-//             switch (i) {
-//                 case 1:
-//                     current[text].draw(); 
-                    
-//                     let tutOrc1 = new Enemy(canvas.width / 2, 0, 0);
-//                     tutOrc1.y = flora.y - tutOrc1.height;
-//                     tutOrc1.update();
-//                     tutOrc1.draw();
-
-//                     break;
-//             }
-//         }
-//     }
-// }
-
-// let tutTexts = [[tt1], [tt2], [tt3], [tt4, tt4_2], [tt5, tt5_2], [tt6], 
-//                 [tt7], [tt8, tt8_2], [tt9], [tt10], [tt11, tt11_2]];
-
 const tutorialText = new TextWall(
     `Greetings soldier. For the sake of your training, we have -with much difficulty- acquired live targets for\n 
     you to practice on. This is standard procedure and is meant to strengthen your  against the even more \n
@@ -360,8 +339,8 @@ let currentSpeed = 2;
 let snackQueue = [];
 let nadeQueue = [];
 
-// let state = "MENU";
 let state = "MENU";
+// let state = "RUNNING";
 
 let loadingTime = [2000, 3000][Math.floor(Math.random() * 3)];
 
@@ -1234,7 +1213,7 @@ function collision(bullet, orc) {
     //else return false;
 }
 
-// used to determine if the mouse is inside a given button. (mouse, button)
+// used to determine if the mouse is inside a given button. (mouse, button, state)
 function mouseCollision(first, second, nextState) {
     if (
       first.x >= second.x &&
@@ -1245,9 +1224,11 @@ function mouseCollision(first, second, nextState) {
         second.stroke = "red";
         if (first.clicked) {
             state = nextState;
+            console.log(true);
         }
     } else {
         second.stroke = "black";
+        console.log(false);
     }
 }
 
@@ -1257,6 +1238,10 @@ function animate() {
     // cxt.fillStyle = "white";
     // cxt.fillRect(0, 0, canvas.width, canvas.height);
 
+    dynamic_layer_cxt.fillRect(0, 0, canvas.width, canvas.height);
+    dynamic_layer_cxt.clearRect(0, 0, canvas.width, canvas.height);
+    //dynamic_layer_cxt.fillStyle = "white";
+    
     main_layer_cxt.clearRect(0, 0, canvas.width, canvas.height);
     main_layer_cxt.fillStyle = "white";
     main_layer_cxt.fillRect(0, 0, canvas.width, canvas.height);
@@ -1264,14 +1249,12 @@ function animate() {
     // dont want it redrawing the floor over and over again
     flora.draw();
     handleShooter();
-    handleSnack()
+    handleSnack();
     handleState();
     handleStatus();
 
     handleProjectile(enemyQueue);
     handleNade(enemyQueue);
-
-    console.log(frame);
 
     if (state == "RUNNING" && frame <= 100) frame++;
     else frame = 0;

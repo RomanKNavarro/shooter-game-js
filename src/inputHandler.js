@@ -1,5 +1,5 @@
 // keyboard keys
-var canvas = document.getElementById("canvas1");
+// var canvas = document.getElementById("canvas1");
 
 let flammen = new Audio();
 flammen.src = "src/assets/sounds/flammen2.mp3";
@@ -8,8 +8,12 @@ flammen.src = "src/assets/sounds/flammen2.mp3";
 // yet, pressing w+d does make it diagnal.    --DONE. Simply had to move if statement to bottom of cases.
 
 export default class InputHandler {
-  constructor(entity) {
+  constructor(entity, canvasa, contexto) {
+    // constructor(entity) {
     // why doesn't this work as "this.keys"?
+    this.canvasa = canvasa;
+    this.contexto = contexto;
+
     let keys = {"space": false, "d": false, "w": false, "s": false, "a": false};
     
     document.addEventListener("keydown", (event) => {
@@ -99,14 +103,17 @@ export default class InputHandler {
     });
     
     // here is what actually reads the mouse's location:
-    let canvasPosition = canvas.getBoundingClientRect();
-    canvas.addEventListener("mousemove", function (e) {
+    // FUCKING SHITTY
+    // let canvasPosition = canvas.getBoundingClientRect();
+    let canvasPosition = this.canvasa.getBoundingClientRect();
+    this.canvasa.addEventListener("mousemove", function (e) {
       entity.mouse.x = e.x - canvasPosition.left;
       entity.mouse.y = e.y - canvasPosition.top;
     });
-    canvas.addEventListener("mouseleave", function () {
+    this.canvasa.addEventListener("mouseleave", function () {
       entity.mouse.x = undefined;
       entity.mouse.y = undefined;
     });
   }
 }
+// cxt
