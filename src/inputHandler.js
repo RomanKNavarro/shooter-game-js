@@ -1,6 +1,5 @@
 // keyboard keys
 var canvas = document.getElementById("canvas1");
-var cxt = canvas.getContext("2d", { alpha: false });
 
 let flammen = new Audio();
 flammen.src = "src/assets/sounds/flammen2.mp3";

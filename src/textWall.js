@@ -1,16 +1,16 @@
-var canvas = document.getElementById("canvas1");
-var cxt = canvas.getContext("2d", { alpha: false });
+// var canvas = document.getElementById("canvas1");
+// var cxt = canvas.getContext("2d", { alpha: false });
 
 export default class TextWall {
-    constructor(text, y) {
-        // this.x = 30;
-        // this.y = 30;
+    constructor(text, y, canvasa, contexto) {
+        this.canvasa = canvasa;
+        this.contexto = contexto;
 
         this.text = text;
         //this.fontSize = fontSize;
         this.lineheight = 15;
         this.lines = this.text.split('\n');
-        this.y = y;
+        this.y = Math.floor(y);
         this.vanish = false;
     }
 

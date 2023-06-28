@@ -1,12 +1,14 @@
 import Projectile from "./projectile.js";
 
-var canvas = document.getElementById("canvas1");
-var cxt = canvas.getContext("2d", { alpha: false }); 
+// var canvas = document.getElementById("canvas1");
+// var cxt = canvas.getContext("2d", { alpha: false }); 
 
 // OVERHAUL SPEED FUNCTIONALITY:
 export default class Enemy {
-    constructor(x, speed, round) {
+    constructor(x, speed, round, canvasa, contexto) {
     // constructor(x, speed) {
+      this.canvasa = canvasa;
+      this.contexto = contexto;
   
       // FASTER SPEED ON CRAWLIES
       this.width = 50;
@@ -75,15 +77,15 @@ export default class Enemy {
     }
 
     draw() {
-      cxt.beginPath();
-      cxt.fillStyle = this.color;
-      cxt.fillRect(this.x, this.y, this.width, this.height);
+      this.contexto.beginPath();
+      this.contexto.fillStyle = this.color;
+      this.contexto.fillRect(this.x, this.y, this.width, this.height);
 
-      cxt.font = "20px serif";
-      cxt.fillStyle = "black";
+      this.contexto.font = "20px serif";
+      this.contexto.fillStyle = "black";
 
-      cxt.textAlign = "center";
-      cxt.textBaseline = "middle";
+      this.contexto.textAlign = "center";
+      this.contexto.textBaseline = "middle";
 
       if (this.isCivie) this.color = "gray";
 
@@ -111,7 +113,7 @@ export default class Enemy {
       // in last round, crawlies and bombers have equal chance of spawning:
       else if (this.typeNum <= this.crawlOdds && this.round >= 9) this.type = ["crawl", "bomber"][ Math.floor(Math.random() * 2)];
 
-      cxt.fillText(this.round, this.x + (this.width / 2), this.y + (this.height / 2));
+      this.contexto.fillText(this.round, this.x + (this.width / 2), this.y + (this.height / 2));
     } // projectiles
   
     update() {

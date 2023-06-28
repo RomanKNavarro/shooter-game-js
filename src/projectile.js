@@ -1,12 +1,14 @@
-var canvas = document.getElementById("canvas1");
-var cxt = canvas.getContext("2d", { alpha: false });
+// var canvas = document.getElementById("canvas1");
+// var cxt = canvas.getContext("2d", { alpha: false });
 
 // var canvas2 = document.getElementById("canvas2");
 // var cxt = canvas2.getContext("2d", { alpha: false });
 
 // BULLETS
 export default class Projectile {
-    constructor(x, y, direction, weapon, dead) {
+    constructor(x, y, direction, weapon, dead, canvasa, contexto) {
+      this.canvasa = canvasa;
+      this.contexto = contexto;
 
       // NEW HOWLER CRAP (sound fx "bucket"):
       this.sfx = {
@@ -174,11 +176,10 @@ export default class Projectile {
       }
     }
     
-  
     draw() {
-      cxt.fillStyle = "black";
-      cxt.beginPath();
-      cxt.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-      cxt.fill();
+      this.contexto.fillStyle = "black";
+      this.contexto.beginPath();
+      this.contexto.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      this.contexto.fill();
     }
 }

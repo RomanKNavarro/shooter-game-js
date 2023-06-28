@@ -14,6 +14,7 @@ import Grenade from "./grenade.js";
 // canvas stuff (OLD):
 // var canvas = document.getElementById("canvas1");
 // var cxt = canvas.getContext("2d", { alpha: false });
+
 // canvas.style.width=canvas.getBoundingClientRect().width;//actual width of canvas
 // canvas.style.height=canvas.getBoundingClientRect().height;//actual height of canvas
 
@@ -21,10 +22,10 @@ import Grenade from "./grenade.js";
 var canvas = document.getElementById('canvas1');
 var cxt = canvas.getContext('2d');
 
-// canvas.style.width=canvas.getBoundingClientRect().width;//actual width of canvas
-// canvas.style.height=canvas.getBoundingClientRect().height;//actual height of canvas
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+canvas.style.width=canvas.getBoundingClientRect().width;//actual width of canvas
+canvas.style.height=canvas.getBoundingClientRect().height;//actual height of canvas
+// canvas.width = window.innerWidth;
+// canvas.height = window.innerHeight;
 
 // FUCKING STUPID: "could not find CanvasStack" is a FUCKING LIE. It sees it and everything works
 var canvas_stack = new CanvasStack('canvas1');
@@ -170,85 +171,85 @@ let enemyCount = roundCounts[0];
 let enemiesLeft = roundCounts[0];
 
 // objects
-const flora = new Floor();
-const shooter = new Shooter(100, flora.y - 50);
+const flora = new Floor(canvas, main_layer_cxt);
+const shooter = new Shooter(100, flora.y - 50, canvas, main_layer_cxt);
 
 //  NEEDS TO START OFF SCREEN, then walk over to position 200:
 // const shooter2 = new Shooter(200, flora.y - 50);
-const shooter2 = new Shooter(0 - shooter.width, flora.y - 50);
+const shooter2 = new Shooter(0 - shooter.width, flora.y - 50, canvas, main_layer_cxt);
 shooter2.isSecond = true;
 
 new InputHandler(shooter);
 new InputHandler(shooter2);
 
 // BUTTONS AND TEXT. (x, y, width, text, clickable)
-const tutButton = new Button(canvas.width / 2.2, canvas.height / 2.5, 100, "Start Tutorial", true);
+const tutButton = new Button(canvas.width / 2.2, canvas.height / 2.5, 100, "Start Tutorial", true, canvas, main_layer_cxt);
 // skip tut. button necessary -don't want to force players to kill POWS. 
 // const skipTutButton = new Button(canvas.width / 2.2, canvas.height / 2.5, 100, "Skip", true);
-const playButton = new Button(canvas.width / 2.2, canvas.height / 2.5, 100, "Play", true);
-const startButton = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Initiate Bloodbath", true);
-const skipButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, "skip", true);
-const yesButton = new Button(250, canvas.height / 1.2, 100, '"Defend"', true);
-const noButton = new Button(canvas.width - 250 - 100, canvas.height / 1.2, 100, "Give up", true);
-const playAgainButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, "Play again?", true);
-const creditsButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, "READ ME", true);
+const playButton = new Button(canvas.width / 2.2, canvas.height / 2.5, 100, "Play", true, canvas, main_layer_cxt);
+const startButton = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Initiate Bloodbath", true, canvas, main_layer_cxt);
+const skipButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, "skip", true, canvas, main_layer_cxt);
+const yesButton = new Button(250, canvas.height / 1.2, 100, '"Defend"', true, canvas, main_layer_cxt);
+const noButton = new Button(canvas.width - 250 - 100, canvas.height / 1.2, 100, "Give up", true, canvas, main_layer_cxt);
+const playAgainButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, "Play again?", true, canvas, main_layer_cxt);
+const creditsButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, "READ ME", true, canvas, main_layer_cxt);
 
-const playAgainButton2 = new Button(canvas.width / 2.5, canvas.height / 2, 100, "test test", true);
+const playAgainButton2 = new Button(canvas.width / 2.5, canvas.height / 2, 100, "test test", true, canvas, main_layer_cxt);
 
-const winText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Round Complete", false);
-const nextText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Next round incoming...", false);
+const winText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Round Complete", false, canvas, main_layer_cxt);
+const nextText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Next round incoming...", false, canvas, main_layer_cxt);
 
-const failText = new Button(canvas.width / 2.5, canvas.height / 4.5, 100, "FAILURE", false);
-const healthText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "You perished in the heat of battle.", false);
-const wallText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "Too many enemies have broken through.", false);
+const failText = new Button(canvas.width / 2.5, canvas.height / 4.5, 100, "FAILURE", false, canvas, main_layer_cxt);
+const healthText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "You perished in the heat of battle.", false, canvas, main_layer_cxt);
+const wallText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "Too many enemies have broken through.", false, canvas, main_layer_cxt);
 
 // UI
-const enemyText = new Button(canvas.width / 2.45, 0, 100, enemiesLeft, false);
-const roundText = new Button(canvas.width / 3, 0, 100, currentRound, false);
-const scoreText = new Button(canvas.width / 2, 0, 100, score, false);
-const ammoText = new Button(canvas.width - 100, 0, 100, shooter.specialAmmo, false);
+const enemyText = new Button(canvas.width / 2.45, 0, 100, enemiesLeft, false, canvas, main_layer_cxt);
+const roundText = new Button(canvas.width / 3, 0, 100, currentRound, false, canvas, main_layer_cxt);
+const scoreText = new Button(canvas.width / 2, 0, 100, score, false, canvas, main_layer_cxt);
+const ammoText = new Button(canvas.width - 100, 0, 100, shooter.specialAmmo, false, canvas, main_layer_cxt);
 
-const specialText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "SPECIAL ROUND", false);
-const specialText2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "MASSACRE THE CIVILIANS", false);
+const specialText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "SPECIAL ROUND", false, canvas, main_layer_cxt);
+const specialText2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "MASSACRE THE CIVILIANS", false, canvas, main_layer_cxt);
 
-const endText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Coalition defeated. City aquired.", false);
-const endText2 = new Button(canvas.width / 2.5, canvas.height / 1.7, 100, "Thanks for playing!!!", false);
-const endText3 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Made with ❤️ by", false);
-const endText4 = new Button(canvas.width / 2.5, canvas.height / 1.9, 100, "KAVEMANKORPS", false);
+const endText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Coalition defeated. City aquired.", false, canvas, main_layer_cxt);
+const endText2 = new Button(canvas.width / 2.5, canvas.height / 1.7, 100, "Thanks for playing!!!", false, canvas, main_layer_cxt);
+const endText3 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Made with ❤️ by", false, canvas, main_layer_cxt);
+const endText4 = new Button(canvas.width / 2.5, canvas.height / 1.9, 100, "KAVEMANKORPS", false, canvas, main_layer_cxt);
 
-const quietText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "KILL KILL KILL KILL", false);
-const aidText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "HELP HAS ARRIVED", false);
+const quietText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "KILL KILL KILL KILL", false, canvas, main_layer_cxt);
+const aidText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "HELP HAS ARRIVED", false, canvas, main_layer_cxt);
 
 // TUTORIAL CRAP:
 // BRUTAL IDEA: live captured enemies used as practice
 // YES, player can take damage/die in tutorial
 // 3 static grounds
-const tt1 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Press Space to shoot", false);
+const tt1 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Press Space to shoot", false, canvas, main_layer_cxt);
 // static grounds and airs:
-const tt2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Use WASD to aim in different directions", false);
+const tt2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Use WASD to aim in different directions", false, canvas, main_layer_cxt);
 // 3 living ground enemies that shoot. Player shooting DISABLED:
-const tt3 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Press D to duck", false);
+const tt3 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Press D to duck", false, canvas, main_layer_cxt);
 // player shooting ENABLED:
-const tt4 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Shooting while ducking only inflicts", false);
-const tt4_2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "half the damage to enemies", false);
+const tt4 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Shooting while ducking only inflicts", false, canvas, main_layer_cxt);
+const tt4_2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "half the damage to enemies", false, canvas, main_layer_cxt);
 // No targets. Shooting DISABLED:
-const tt5 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Well done soldier.", false);
-const tt5_2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "You are ready for advanced weapon handling.", false);
+const tt5 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Well done soldier.", false, canvas, main_layer_cxt);
+const tt5_2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "You are ready for advanced weapon handling.", false, canvas, main_layer_cxt);
 
-const tt6 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "shoot while ducking to acquire pickups", false);
+const tt6 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "shoot while ducking to acquire pickups", false, canvas, main_layer_cxt);
 // horde of live enemies ensues. 
-const tt7 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "press E to throw a grenade", false);
+const tt7 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "press E to throw a grenade", false, canvas, main_layer_cxt);
 
-const tt8 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "press E twice in rapid succession", false);
-const tt8_2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "for a grenade barrage", false);
+const tt8 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "press E twice in rapid succession", false, canvas, main_layer_cxt);
+const tt8_2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "for a grenade barrage", false, canvas, main_layer_cxt);
 
 // these pows will be civies!
-const tt9 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Massacre the remaining POWs", false);
+const tt9 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Massacre the remaining POWs", false, canvas, main_layer_cxt);
 
-const tt10 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "You're a natural born killer!", false);
+const tt10 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "You're a natural born killer!", false, canvas, main_layer_cxt);
 
-const tt11 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Excellent work, Leuitenant.", false);
-const tt11_2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Time to get to work.", false);
+const tt11 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Excellent work, Leuitenant.", false, canvas, main_layer_cxt);
+const tt11_2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Time to get to work.", false, canvas, main_layer_cxt);
 
 let tutCounts = [1, 3, 2, 10, 15, 20];
 // NO END TEXT, only beginning text.
@@ -290,7 +291,7 @@ let tutPhases = {
 const tutorialText = new TextWall(
     `Greetings soldier. For the sake of your training, we have -with much difficulty- acquired live targets for\n 
     you to practice on. This is standard procedure and is meant to strengthen your  against the even more \n
-    gruesome bloodbath that is to ensue. Good luck soldier, and glory to Ariesa!`, Math.floor(canvas.height / 5));
+    gruesome bloodbath that is to ensue. Good luck soldier, and glory to Ariesa!`, Math.floor(canvas.height / 5), canvas, main_layer_cxt);
 
 const bossText = new TextWall(
 `Satellite imagery has exposed your horriffic atrocities in the city to the rest of the world,\n
@@ -298,7 +299,7 @@ prompting international outcry and the formation of a Sheep-led coalition agains
 \n
 This is it! Destroy the coalition and the city is yours. Will you give up now and turn yourself\n
 in for war crimes, or will you defend the city to your last dying breath lest your efforts so far\n
-be in vain?`, Math.floor(canvas.height / 5));
+be in vain?`, Math.floor(canvas.height / 5), canvas, main_layer_cxt);
 
 const startText = new TextWall(
     `You are Lieutenant Warren Kilgore, the last remaining invader in Swinemanland. The very land of your\n
@@ -309,24 +310,24 @@ const startText = new TextWall(
     It is now your undisputed domain, your very own kingdom, and everyone in it mere flesh-logs. They are\n
     your servants, ready to satisfy your every depraved fantasy at any given moment. The city of Vonn took\n 
     months of gruesome house-to-house fighting and thousands of Sheep lives to completely conquer. Are you\n
-    going to let it all slip now?`, Math.floor(canvas.height / 10));
+    going to let it all slip now?`, Math.floor(canvas.height / 10), canvas, main_layer_cxt);
 
 const giveupText = new TextWall(
     `You spare your fellow countrysheep and turn yourself in.\n
     \n
     The war crimes tribunal accuses you of innumerable atrocities, the charges of which are beyond the scope of this game.\n 
     \n
-    You are put to the firing squad and your ashes thrown into the dirty Googa river.`, Math.floor(canvas.height / 5));
+    You are put to the firing squad and your ashes thrown into the dirty Googa river.`, Math.floor(canvas.height / 5), canvas, main_layer_cxt);
 
 // const loadingText = new TextWall(`\n\n\n\n\nLoading`, canvas.height / 5);
-const loadingText = new TextWall(`Loading`, canvas.height / 2.5);
+const loadingText = new TextWall(`Loading`, Math.floor(canvas.height / 2.5), canvas, main_layer_cxt);
 
-const playText = new TextWall(``, Math.floor(canvas.height / 5));
+const playText = new TextWall(``, Math.floor(canvas.height / 5), canvas, main_layer_cxt);
 
 // HEALTH:
-let playerHealth = new Health(30);
-let wallHealth = new Health(60);
-let grenades = new Health(90);
+let playerHealth = new Health(30, canvas, main_layer_cxt);
+let wallHealth = new Health(60, canvas, main_layer_cxt);
+let grenades = new Health(90, canvas, main_layer_cxt);
 
 // variables
 let frame = 0;
@@ -364,11 +365,10 @@ let state = "MENU";
 
 let loadingTime = [2000, 3000][Math.floor(Math.random() * 3)];
 
-// functions:
-flora.draw();
-
 let music1 = new Audio;
 music1.src = "/src/assets/music/prey's stand 2.mp3";
+
+// FUNCTIONS:
 
 var sfx = {
     growl: new Howl({
@@ -548,7 +548,7 @@ function handleState() {
             shooter.disabled = false;
             tt1.draw();
 
-            let tutOrc1 = new Enemy(canvas.width / 2, 0, 0);
+            let tutOrc1 = new Enemy(canvas.width / 2, 0, 0, canvas, main_layer_cxt);
             tutOrc1.y = flora.y - tutOrc1.height;
             tutOrc1.update();
             tutOrc1.draw();
@@ -1262,7 +1262,7 @@ function animate() {
     main_layer_cxt.fillRect(0, 0, canvas.width, canvas.height);
 
     // dont want it redrawing the floor over and over again
-    // flora.draw();
+    flora.draw();
     handleShooter();
     handleSnack()
     handleState();

@@ -1,8 +1,11 @@
-var canvas = document.getElementById("canvas1");
-var cxt = canvas.getContext("2d", { alpha: false });
+// var canvas = document.getElementById("canvas1");
+// var cxt = canvas.getContext("2d", { alpha: false });
 
 export default class Button {
-    constructor(x, y, width, text, clickable) {
+    constructor(x, y, width, text, clickable, canvasa, contexto) {
+        this.canvasa = canvasa;
+        this.contexto = contexto;
+
         this.x = x;
         this.y = y;
         this.width = width;
@@ -18,27 +21,27 @@ export default class Button {
 
     draw() {
         if (this.clickable) {
-            cxt.beginPath();
-            cxt.rect(this.x, this.y, this.width, this.height); 
-            cxt.fillStyle = 'gray'; 
-            cxt.fill();
+            this.contexto.beginPath();
+            this.contexto.rect(this.x, this.y, this.width, this.height); 
+            this.contexto.fillStyle = 'gray'; 
+            this.contexto.fill();
             
             // button outline:
-            cxt.lineWidth = 2;
-            cxt.strokeStyle = this.stroke;
-            cxt.stroke();
-            //cxt.closePath();
+            this.contexto.lineWidth = 2;
+            this.contexto.strokeStyle = this.stroke;
+            this.contexto.stroke();
+            //this.contexto.closePath();
     
             // button text:
-            cxt.font = "12px serif";
+            this.contexto.font = "12px serif";
     
-            cxt.fillStyle = "black";
-            //cxt.fillStyle = "rgba(255, 255, 255, " + this.alpha + ")";
+            this.contexto.fillStyle = "black";
+            //this.contexto.fillStyle = "rgba(255, 255, 255, " + this.alpha + ")";
     
             // HOW TO CENTER TEXT IN BUTTON:
-            cxt.textAlign = "center";
-            cxt.textBaseline = "middle";
-            cxt.fillText(this.text, this.x + (this.width / 2), this.y + (this.height / 2));
+            this.contexto.textAlign = "center";
+            this.contexto.textBaseline = "middle";
+            this.contexto.fillText(this.text, this.x + (this.width / 2), this.y + (this.height / 2));
         }
         
         else if (this.show) {
@@ -47,18 +50,18 @@ export default class Button {
     }
 
     fadeIn() {
-        cxt.fillStyle = "rgba(0, 0, 0, " + this.alpha + ")";
-        cxt.font = "30px Tourney";
-        cxt.fillText(this.text, this.x + (this.width / 2), this.y + (this.height / 2));
+        this.contexto.fillStyle = "rgba(0, 0, 0, " + this.alpha + ")";
+        this.contexto.font = "30px Tourney";
+        this.contexto.fillText(this.text, this.x + (this.width / 2), this.y + (this.height / 2));
 
-        cxt.textAlign = "center";
-        cxt.textBaseline = "middle";
-        cxt.fillText(this.text, this.x + (this.width / 2), this.y + (this.height / 2));
+        this.contexto.textAlign = "center";
+        this.contexto.textBaseline = "middle";
+        this.contexto.fillText(this.text, this.x + (this.width / 2), this.y + (this.height / 2));
     }
 
     delete() {
         this.alpha = 0.3;
         this.fadeIn();
-        cxt.clearRect(this.x, this.y, this.width, this.height);
+        this.contexto.clearRect(this.x, this.y, this.width, this.height);
     }
 }

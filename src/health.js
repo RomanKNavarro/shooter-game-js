@@ -1,13 +1,11 @@
-var canvas = document.getElementById("canvas1");
-var cxt = canvas.getContext("2d", { alpha: false }); 
-
-// var ui_layer = document.getElementById("ui-layer");
-// var cxt2 = ui_layer.getContext("2d", { alpha: false });
-// ui_layer.style.width=ui_layer.getBoundingClientRect().width;//actual width of canvas
-// ui_layer.style.height=ui_layer.getBoundingClientRect().height;//actual height of canvas
+// var canvas = document.getElementById("canvas1");
+// var cxt = canvas.getContext("2d", { alpha: false }); 
 
 export default class Health {
-    constructor(y) {
+    constructor(y, canvasa, contexto) {
+        this.canvasa = canvasa;
+        this.contexto = contexto;
+
         this.x = 0;
         this.y = y;
         this.hurt = false;
@@ -21,11 +19,11 @@ export default class Health {
     }
 
     draw() {
-        cxt.beginPath();
-        cxt.fillStyle = "green";
+        this.contexto.beginPath();
+        this.contexto.fillStyle = "green";
 
         for (let i = 0; i < this.number; i++) {
-            cxt.fillRect(i * 30, this.y, 20, 20);
+            this.contexto.fillRect(i * 30, this.y, 20, 20);
         }     
     }
 }

@@ -1,12 +1,15 @@
 import Projectile from "./projectile.js";
 
-var canvas = document.getElementById("canvas1");
-var cxt = canvas.getContext("2d", { alpha: false });
+// var canvas = document.getElementById("canvas1");
+// var cxt = canvas.getContext("2d", { alpha: false });
 
 
 // why is mouse stuff here? so that it can be used as "entity.mouse" in inputHandler.js
 export default class Shooter {
-    constructor(x, y) { 
+    constructor(x, y, canvasa, contexto) { 
+        this.canvasa = canvasa;
+        this.contexto = contexto;
+
         this.width = 50;
         this.height = 50;
         this.y = y;
@@ -65,23 +68,22 @@ export default class Shooter {
     }
     
     draw() {
-        cxt.beginPath();
-        cxt.fillStyle = "yellow";
+        this.contexto.beginPath();
+        this.contexto.fillStyle = "yellow";
         if (!this.duck) {
-            cxt.fillRect(this.x, this.y, this.width, this.height);
+            this.contexto.fillRect(this.x, this.y, this.width, this.height);
         } else {
-            cxt.fillRect(this.x, this.y + this.height / 2, this.width, this.height / 2);
+            this.contexto.fillRect(this.x, this.y + this.height / 2, this.width, this.height / 2);
         }
 
-        cxt.font = "20px serif";
-        cxt.fillStyle = "black";
-        cxt.textAlign = "center";
-        cxt.textBaseline = "middle";
-        cxt.fillText(this.secondNade, this.x + (this.width / 2), this.y + (this.height / 2));
+        this.contexto.font = "20px serif";
+        this.contexto.fillStyle = "black";
+        this.contexto.textAlign = "center";
+        this.contexto.textBaseline = "middle";
+        this.contexto.fillText(this.secondNade, this.x + (this.width / 2), this.y + (this.height / 2));
     }
 
     update() {
-        
         // if (this.isSecond == true && this.x <= 200 && this.initSecond == true) {
         if (this.isSecond == true && this.initSecond == true) {
             if (this.x <= 200) this.x += 5;
