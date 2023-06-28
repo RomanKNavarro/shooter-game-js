@@ -26,6 +26,7 @@ var cxt = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
+// FUCKING STUPID: "could not find CanvasStack" is a FUCKING LIE. It sees it and everything works
 var canvas_stack = new CanvasStack('canvas1');
 // var canvas_stack = new CanvasStack('can');
 
@@ -149,6 +150,7 @@ Uncaught TypeError: Cannot read properties of undefined (reading 'x')
 // TODO: try drawing projectiles on a seperate canvas (for optimization)    --DONE
 // TODO: use a multi-layered canvas (one for UI, another for static objects, other for enemies/bullets)
 // TODO: WAY too many ar pickups. Minimize them
+// TODO: HUGE ASS OVERHAUL: have all the classes accept "cxt" arguments to determine canv. to draw on
 
 // let roundCounts = [3, 10];
 let roundCounts = [7, 10];
@@ -1259,7 +1261,8 @@ function animate() {
     main_layer_cxt.fillStyle = "white";
     main_layer_cxt.fillRect(0, 0, canvas.width, canvas.height);
 
-    flora.draw();
+    // dont want it redrawing the floor over and over again
+    // flora.draw();
     handleShooter();
     handleSnack()
     handleState();
