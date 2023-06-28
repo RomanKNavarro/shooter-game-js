@@ -182,7 +182,7 @@ const shooter2 = new Shooter(0 - shooter.width, flora.y - 50, canvas, main_layer
 shooter2.isSecond = true;
 
 new InputHandler(shooter, canvas, main_layer_cxt);
-new InputHandler(shooter2), canvas, main_layer_cxt;
+new InputHandler(shooter2, canvas, main_layer_cxt);
 
 // BUTTONS AND TEXT. (x, y, width, text, clickable)
 const tutButton = new Button(canvas.width / 2.2, canvas.height / 2.5, 100, "Start Tutorial", true, canvas, main_layer_cxt);
@@ -339,7 +339,7 @@ let currentSpeed = 2;
 let snackQueue = [];
 let nadeQueue = [];
 
-let state = "MENU";
+let state = "RUNNING";
 // let state = "RUNNING";
 
 let loadingTime = [2000, 3000][Math.floor(Math.random() * 3)];
@@ -528,6 +528,7 @@ function handleState() {
             tt1.draw();
 
             let tutOrc1 = new Enemy(canvas.width / 2, 0, 0, canvas, main_layer_cxt);
+            // const shooter = new Shooter(100, flora.y - 50, canvas, main_layer_cxt);
             tutOrc1.y = flora.y - tutOrc1.height;
             tutOrc1.update();
             tutOrc1.draw();
@@ -1234,12 +1235,12 @@ function mouseCollision(first, second, nextState) {
 
 // FUNCTION TO GET ALL OUR OBJECTS UP AND RUNNING
 function animate() {
-    // cxt.clearRect(0, 0, canvas.width, canvas.height);
-    // cxt.fillStyle = "white";
-    // cxt.fillRect(0, 0, canvas.width, canvas.height);
+    cxt.clearRect(0, 0, canvas.width, canvas.height);
+    cxt.fillStyle = "white";
+    cxt.fillRect(0, 0, canvas.width, canvas.height);
 
-    dynamic_layer_cxt.fillRect(0, 0, canvas.width, canvas.height);
-    dynamic_layer_cxt.clearRect(0, 0, canvas.width, canvas.height);
+    // dynamic_layer_cxt.fillRect(0, 0, canvas.width, canvas.height);
+    // dynamic_layer_cxt.clearRect(0, 0, canvas.width, canvas.height);
     //dynamic_layer_cxt.fillStyle = "white";
     
     main_layer_cxt.clearRect(0, 0, canvas.width, canvas.height);

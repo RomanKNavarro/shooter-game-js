@@ -3,6 +3,25 @@ import Projectile from "./projectile.js";
 // var canvas = document.getElementById("canvas1");
 // var cxt = canvas.getContext("2d", { alpha: false }); 
 
+// NEW MULTI-LAYERED CANVAS:
+var canvas = document.getElementById('canvas1');
+var cxt = canvas.getContext('2d');
+
+// canvas.style.width=canvas.getBoundingClientRect().width;//actual width of canvas
+// canvas.style.height=canvas.getBoundingClientRect().height;//actual height of canvas
+// // canvas.width = window.innerWidth;
+// // canvas.height = window.innerHeight;
+
+// // FUCKING STUPID: "could not find CanvasStack" is a FUCKING LIE. It sees it and everything works
+// var canvas_stack = new CanvasStack('canvas1');
+// // var canvas_stack = new CanvasStack('can');
+
+// var main_layer = canvas_stack.createLayer();
+// var main_layer_cxt = document.getElementById(main_layer).getContext("2d");
+
+// var dynamic_layer = canvas_stack.createLayer();
+// var dynamic_layer_cxt = document.getElementById(dynamic_layer).getContext("2d");
+
 // OVERHAUL SPEED FUNCTIONALITY:
 export default class Enemy {
     constructor(x, speed, round, canvasa, contexto) {
@@ -111,6 +130,7 @@ export default class Enemy {
       // in last round, crawlies and bombers have equal chance of spawning:
       else if (this.typeNum <= this.crawlOdds && this.round >= 9) this.type = ["crawl", "bomber"][ Math.floor(Math.random() * 2)];
 
+      // this.contexto.fillText(this.round, this.x + (this.width / 2), this.y + (this.height / 2));
       this.contexto.fillText(this.round, this.x + (this.width / 2), this.y + (this.height / 2));
     } // projectiles
   
@@ -142,7 +162,7 @@ export default class Enemy {
           // if (this.timer % this.fireRate === 0  || this.timer == 1) {  
             if ((this.timer % this.fireRate === 0  || this.timer == 1) 
             && (this.timer >= 50 || this.type == "air")) {  
-              this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, this.sound, this.dead)); 
+              // this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, this.sound, this.dead, canvas, cxt)); 
           }
       }
     }

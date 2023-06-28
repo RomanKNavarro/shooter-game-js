@@ -43,9 +43,5 @@ export default class Button {
             this.contexto.textBaseline = "middle";
             this.contexto.fillText(this.text, this.x + (this.width / 2), this.y + (this.height / 2));
         }
-        
-        else if (this.show) {
-            this.fadeIn();
-        }
     }
 }
