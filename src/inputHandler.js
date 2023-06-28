@@ -1,6 +1,9 @@
 // keyboard keys
 // var canvas = document.getElementById("canvas1");
 
+var canvas = document.getElementById("canvas1");
+var cxt = canvas.getContext("2d", { alpha: false });
+
 let flammen = new Audio();
 flammen.src = "src/assets/sounds/flammen2.mp3";
 
@@ -105,7 +108,7 @@ export default class InputHandler {
     // here is what actually reads the mouse's location:
     // FUCKING SHITTY
     // let canvasPosition = canvas.getBoundingClientRect();
-    // let canvasPosition = this.canvasa.getBoundingClientRect();
+    let canvasPosition = this.canvasa.getBoundingClientRect();
     this.canvasa.addEventListener("mousemove", function (e) {
       entity.mouse.x = e.x - canvasPosition.left;
       entity.mouse.y = e.y - canvasPosition.top;

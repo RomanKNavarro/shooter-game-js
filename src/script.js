@@ -154,6 +154,7 @@ Uncaught TypeError: Cannot read properties of undefined (reading 'x')
 // TODO: use a multi-layered canvas (one for UI, another for static objects, other for enemies/bullets)
 // TODO: WAY too many ar pickups. Minimize them
 // TODO: HUGE ASS OVERHAUL: have all the classes accept "cxt" arguments to determine canv. to draw on
+// TODO: get mouse position read
 
 // let roundCounts = [3, 10];
 let roundCounts = [7, 10];
@@ -527,7 +528,9 @@ function handleState() {
             shooter.disabled = false;
             tt1.draw();
 
-            let tutOrc1 = new Enemy(canvas.width / 2, 0, 0, canvas, main_layer_cxt);
+            // let tutOrc1 = new Enemy(canvas.width / 2, 0, 0, canvas, main_layer_cxt);
+            // let tutOrc1 = new Enemy(canvas.width / 2, 0, 0, canvas, main_layer_cxt);
+
             // const shooter = new Shooter(100, flora.y - 50, canvas, main_layer_cxt);
             tutOrc1.y = flora.y - tutOrc1.height;
             tutOrc1.update();
@@ -951,7 +954,7 @@ function handleProjectile(arr) {
                     scoreText.text = score;
 
                     if (currentEnemy.pickup && currentRound > 1) {
-                        snackQueue.push(new Pickup(currentEnemy.x, currentEnemy.y - 100, currentRound));
+                        snackQueue.push(new Pickup(currentEnemy.x, currentEnemy.y - 100, currentRound, canvas, main_layer_cxt));
                     }
 
                     if (Object.keys(baddiePositions).includes(currentEnemy.position)) {
@@ -1144,13 +1147,13 @@ function pushEnemy() {
         if (enemyCount > 0) {   
             if (!specialRound) {
                 // DO NOT REVERT. NEED TO MAKE WAY FOR DIFFERENT SPEEDS:
-                enemyQueue.push(new Enemy(canvas.width, currentSpeed, currentRound));
+                enemyQueue.push(new Enemy(canvas.width, currentSpeed, currentRound, canvas, main_layer_cxt));
                 // enemyQueue.push(new Enemy(canvas.width, currentRound));
                 enemyCount--;  
 
                 // SPAWN CIVIES IN LATTER PART OF FINAL ROUND:
                 if (finalRound && enemyCount % 3 == 0 && (enemyCount < 20 && enemyCount > 10)) {
-                    enemyQueue.push(new Enemy(0, -currentSpeed, currentRound));
+                    enemyQueue.push(new Enemy(0, -currentSpeed, currentRound, canvas, main_layer_cxt));
                     // enemyQueue.push(new Enemy(0, currentRound));
                     enemyCount--; 
                 }
@@ -1160,7 +1163,7 @@ function pushEnemy() {
                 // DOESN'T ACTUALLY SPAWN CIVIES. Just normal enemies at coord 0 lol:
                 // REMEMBER: enemyCount only refers to num. of enemies to push to array :)
                 if (enemyCount > 0) {
-                    enemyQueue.push(new Enemy(0, -currentSpeed, currentRound));
+                    enemyQueue.push(new Enemy(0, -currentSpeed, currentRound, canvas, main_layer_cxt));
                     enemyCount--; 
 
                     // if (enemyCount < 50 && enemyCount < 20) {
@@ -1225,11 +1228,9 @@ function mouseCollision(first, second, nextState) {
         second.stroke = "red";
         if (first.clicked) {
             state = nextState;
-            console.log(true);
         }
     } else {
         second.stroke = "black";
-        console.log(false);
     }
 }
 
@@ -1260,6 +1261,7 @@ function animate() {
     if (state == "RUNNING" && frame <= 100) frame++;
     else frame = 0;
 
+    console.log(shooter.mouse.x);
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
 }
