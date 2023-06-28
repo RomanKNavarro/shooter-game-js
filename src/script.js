@@ -182,8 +182,10 @@ const shooter = new Shooter(100, flora.y - 50, canvas, main_layer_cxt);
 const shooter2 = new Shooter(0 - shooter.width, flora.y - 50, canvas, main_layer_cxt);
 shooter2.isSecond = true;
 
+// const shooter = new Shooter(100, flora.y - 50, canvas, main_layer_cxt);
+// BRILLIANT IDEA: inputHandler doesn't need to take in these args. Use the ones from shooter.
 new InputHandler(shooter, canvas, main_layer_cxt);
-new InputHandler(shooter2, canvas, main_layer_cxt);
+// new InputHandler(shooter2, canvas, main_layer_cxt);
 
 // BUTTONS AND TEXT. (x, y, width, text, clickable)
 const tutButton = new Button(canvas.width / 2.2, canvas.height / 2.5, 100, "Start Tutorial", true, canvas, main_layer_cxt);
@@ -1236,9 +1238,9 @@ function mouseCollision(first, second, nextState) {
 
 // FUNCTION TO GET ALL OUR OBJECTS UP AND RUNNING
 function animate() {
-    cxt.clearRect(0, 0, canvas.width, canvas.height);
-    cxt.fillStyle = "white";
-    cxt.fillRect(0, 0, canvas.width, canvas.height);
+    // cxt.clearRect(0, 0, canvas.width, canvas.height);
+    // cxt.fillStyle = "white";
+    // cxt.fillRect(0, 0, canvas.width, canvas.height);
 
     // dynamic_layer_cxt.fillRect(0, 0, canvas.width, canvas.height);
     // dynamic_layer_cxt.clearRect(0, 0, canvas.width, canvas.height);
@@ -1254,14 +1256,13 @@ function animate() {
     handleSnack();
     handleState();
     handleStatus();
-
     handleProjectile(enemyQueue);
     handleNade(enemyQueue);
 
     if (state == "RUNNING" && frame <= 100) frame++;
     else frame = 0;
 
-    console.log(shooter.mouse.x);
+    console.log(shooter.mouse);
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
 }
