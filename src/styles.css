@@ -12,7 +12,7 @@ body {
     /* font-family: 'blockschrift-f-regular', sans-serif; */
 };
 
-#stage {
+/* #stage {
     width: 800px;
     height: 300px;
     position: relative;
@@ -28,4 +28,4 @@ canvas {
 }
 #canvas1 {
     z-index: 1;
-}
+} */

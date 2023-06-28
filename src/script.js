@@ -12,10 +12,11 @@ import Health from "./health.js";
 import Grenade from "./grenade.js";
 
 // canvas stuff
+// var cxt = canvas.getContext("2d", { alpha: false });
+// canvas.style.width=canvas.getBoundingClientRect().width;//actual width of canvas
+// canvas.style.height=canvas.getBoundingClientRect().height;//actual height of canvas
 var canvas = document.getElementById("canvas1");
-var cxt = canvas.getContext("2d", { alpha: false });
-canvas.style.width=canvas.getBoundingClientRect().width;//actual width of canvas
-canvas.style.height=canvas.getBoundingClientRect().height;//actual height of canvas
+var cxt = canvas.getContext("2d");
 
 var canvas_stack = new CanvasStack("canvas1");
 var main_layer = canvas_stack.createLayer();
