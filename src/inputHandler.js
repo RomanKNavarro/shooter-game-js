@@ -1,8 +1,25 @@
 // keyboard keys
-// var canvas = document.getElementById("canvas1");
 
-var canvas = document.getElementById("canvas1");
-var cxt = canvas.getContext("2d", { alpha: false });
+// var canvas = document.getElementById("canvas1");
+// var cxt = canvas.getContext("2d", { alpha: false });
+
+var canvas = document.getElementById('canvas1');
+var cxt = canvas.getContext('2d');
+
+canvas.style.width=canvas.getBoundingClientRect().width;//actual width of canvas
+canvas.style.height=canvas.getBoundingClientRect().height;//actual height of canvas
+// canvas.width = window.innerWidth;
+// canvas.height = window.innerHeight;
+
+// FUCKING STUPID: "could not find CanvasStack" is a FUCKING LIE. It sees it and everything works
+var canvas_stack = new CanvasStack('canvas1');
+// var canvas_stack = new CanvasStack('can');
+
+var main_layer = canvas_stack.createLayer();
+var main_layer_cxt = document.getElementById(main_layer).getContext("2d");
+
+var dynamic_layer = canvas_stack.createLayer();
+var dynamic_layer_cxt = document.getElementById(dynamic_layer).getContext("2d");
 
 let flammen = new Audio();
 flammen.src = "src/assets/sounds/flammen2.mp3";
@@ -11,11 +28,9 @@ flammen.src = "src/assets/sounds/flammen2.mp3";
 // yet, pressing w+d does make it diagnal.    --DONE. Simply had to move if statement to bottom of cases.
 
 export default class InputHandler {
-  constructor(entity, canvasa, contexto) {
+  constructor(entity) {
     // constructor(entity) {
     // why doesn't this work as "this.keys"?
-    this.canvasa = canvasa;
-    this.contexto = contexto;
 
     let keys = {"space": false, "d": false, "w": false, "s": false, "a": false};
     
@@ -108,12 +123,12 @@ export default class InputHandler {
     // here is what actually reads the mouse's location:
     // FUCKING SHITTY
     // let canvasPosition = canvas.getBoundingClientRect();
-    let canvasPosition = this.canvasa.getBoundingClientRect();
-    this.canvasa.addEventListener("mousemove", function (e) {
+    let canvasPosition = canvas.getBoundingClientRect();
+    canvas.addEventListener("mousemove", function (e) {
       entity.mouse.x = e.x - canvasPosition.left;
       entity.mouse.y = e.y - canvasPosition.top;
     });
-    this.canvasa.addEventListener("mouseleave", function () {
+    canvas.addEventListener("mouseleave", function () {
       entity.mouse.x = undefined;
       entity.mouse.y = undefined;
     });
