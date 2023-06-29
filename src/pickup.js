@@ -2,9 +2,7 @@
 // var cxt = canvas.getContext("2d", { alpha: false }); 
 
 export default class Pickup {
-    constructor(x, y, round, canvasa, contexto) {
-        this.canvasa = canvasa;
-        this.contexto = contexto;
+    constructor(x, y, round) {
 
         this.width = this.height = 20;
 
@@ -118,22 +116,22 @@ export default class Pickup {
         }
     }
 
-    draw() {
+    draw(context) {
         if (!this.delete) {
-            this.contexto.beginPath();
-            this.contexto.fillStyle = "purple";
+            context.beginPath();
+            context.fillStyle = "purple";
 
-            this.contexto.fillRect(this.x, this.y, this.width, this.height);
-            // this.contexto.fillRect(299, this.y, this.width, this.height);
+            context.fillRect(this.x, this.y, this.width, this.height);
+            // context.fillRect(299, this.y, this.width, this.height);
 
-            this.contexto.font = "20px serif";
-            this.contexto.fillStyle = "black";
-            this.contexto.textAlign = "center";
-            this.contexto.textBaseline = "middle";
+            context.font = "20px serif";
+            context.fillStyle = "black";
+            context.textAlign = "center";
+            context.textBaseline = "middle";
             
 
       
-            this.contexto.fillText(`${this.type}`, this.x + (this.width / 2), this.y + (this.height / 2));
+            context.fillText(`${this.type}`, this.x + (this.width / 2), this.y + (this.height / 2));
         };        
     }
 }

@@ -6,9 +6,7 @@
 
 // BULLETS
 export default class Projectile {
-    constructor(x, y, direction, weapon, dead, canvasa, contexto) {
-      this.canvasa = canvasa;
-      this.contexto = contexto;
+    constructor(x, y, direction, weapon, dead) {
 
       // NEW HOWLER CRAP (sound fx "bucket"):
       this.sfx = {
@@ -176,10 +174,10 @@ export default class Projectile {
       }
     }
     
-    draw() {
-      this.contexto.fillStyle = "black";
-      this.contexto.beginPath();
-      this.contexto.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-      this.contexto.fill();
+    draw(context) {
+      context.fillStyle = "black";
+      context.beginPath();
+      context.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      context.fill();
     }
 }

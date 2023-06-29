@@ -156,7 +156,6 @@ Uncaught TypeError: Cannot read properties of undefined (reading 'x')
 // TODO: HUGE ASS OVERHAUL: have all the classes accept "cxt" arguments to determine canv. to draw on
 // TODO: get mouse position read
 
-// let roundCounts = [3, 10];
 let roundCounts = [7, 10];
 
 // single, triple, two shooters, ar hoarde (grounds and a few airs), grenade hoarde, civies (pows)
@@ -174,7 +173,7 @@ let enemyCount = roundCounts[0];
 let enemiesLeft = roundCounts[0];
 
 // objects
-const flora = new Floor(canvas, cxt);
+const flora = new Floor(canvas);
 const shooter = new Shooter(100, flora.y - 50, canvas, cxt);
 
 //  NEEDS TO START OFF SCREEN, then walk over to position 200:
@@ -184,7 +183,7 @@ shooter2.isSecond = true;
 
 // const shooter = new Shooter(100, flora.y - 50, canvas, cxt);
 // BRILLIANT IDEA: inputHandler doesn't need to take in these args. Use the ones from shooter.
-new InputHandler(shooter);
+new InputHandler(shooter, canvas);
 // new InputHandler(shooter2, canvas, cxt);
 
 // BUTTONS AND TEXT. (x, y, width, text, clickable)
@@ -273,7 +272,7 @@ let tutPhases = {
 const tutorialText = new TextWall(
     `Greetings soldier. For the sake of your training, we have -with much difficulty- acquired live targets for\n 
     you to practice on. This is standard procedure and is meant to strengthen your  against the even more \n
-    gruesome bloodbath that is to ensue. Good luck soldier, and glory to Ariesa!`, Math.floor(canvas.height / 5), canvas, cxt);
+    gruesome bloodbath that is to ensue. Good luck soldier, and glory to Ariesa!`, Math.floor(canvas.height / 5), canvas);
 
 const bossText = new TextWall(
 `Satellite imagery has exposed your horriffic atrocities in the city to the rest of the world,\n
@@ -281,7 +280,7 @@ prompting international outcry and the formation of a Sheep-led coalition agains
 \n
 This is it! Destroy the coalition and the city is yours. Will you give up now and turn yourself\n
 in for war crimes, or will you defend the city to your last dying breath lest your efforts so far\n
-be in vain?`, Math.floor(canvas.height / 5), canvas, cxt);
+be in vain?`, Math.floor(canvas.height / 5), canvas);
 
 const startText = new TextWall(
     `You are Lieutenant Warren Kilgore, the last remaining invader in Swinemanland. The very land of your\n
@@ -292,19 +291,19 @@ const startText = new TextWall(
     It is now your undisputed domain, your very own kingdom, and everyone in it mere flesh-logs. They are\n
     your servants, ready to satisfy your every depraved fantasy at any given moment. The city of Vonn took\n 
     months of gruesome house-to-house fighting and thousands of Sheep lives to completely conquer. Are you\n
-    going to let it all slip now?`, Math.floor(canvas.height / 10), canvas, cxt);
+    going to let it all slip now?`, Math.floor(canvas.height / 10), canvas);
 
 const giveupText = new TextWall(
     `You spare your fellow countrysheep and turn yourself in.\n
     \n
     The war crimes tribunal accuses you of innumerable atrocities, the charges of which are beyond the scope of this game.\n 
     \n
-    You are put to the firing squad and your ashes thrown into the dirty Googa river.`, Math.floor(canvas.height / 5), canvas, cxt);
+    You are put to the firing squad and your ashes thrown into the dirty Googa river.`, Math.floor(canvas.height / 5), canvas);
 
 // const loadingText = new TextWall(`\n\n\n\n\nLoading`, canvas.height / 5);
-const loadingText = new TextWall(`Loading`, Math.floor(canvas.height / 2.5), canvas, cxt);
+const loadingText = new TextWall(`Loading`, Math.floor(canvas.height / 2.5), canvas);
 
-const playText = new TextWall(``, Math.floor(canvas.height / 5), canvas, cxt);
+const playText = new TextWall(``, Math.floor(canvas.height / 5), canvas);
 
 // HEALTH:
 let playerHealth = new Health(30, canvas, cxt);
@@ -342,7 +341,7 @@ let currentSpeed = 2;
 let snackQueue = [];
 let nadeQueue = [];
 
-let state = "RUNNING";
+let state = "MENU";
 // let state = "RUNNING";
 
 let loadingTime = [2000, 3000][Math.floor(Math.random() * 3)];
@@ -434,20 +433,20 @@ function handleStatus() {
         roundText.text = currentRound;
         //enemyText.text = enemyCount;
         enemyText.text = enemiesLeft;
-        enemyText.draw();
-        roundText.draw();
-        scoreText.draw();
+        enemyText.draw(cxt);
+        roundText.draw(cxt);
+        scoreText.draw(cxt);
 
         if (shooter.weapon != "pistol") {
-            ammoText.draw();
+            ammoText.draw(cxt);
             ammoText.text = shooter.specialAmmo;
         }
 
     
-        playerHealth.draw();
-        wallHealth.draw();
+        playerHealth.draw(cxt);
+        wallHealth.draw(cxt);
 
-        grenades.draw();
+        grenades.draw(cxt);
     }
 }
 
@@ -473,7 +472,6 @@ function greatReset() {
     shooter2.fireRate = 0;
     shooter2.specialAmmo = 0;
 
-    // roundCounts = [7, 10];
     roundCounts = [7, 10];
 
     // ALL ENEMY COUNTS ADDED HERE!:
@@ -493,13 +491,13 @@ function greatReset() {
 
 function endRound() {
     if (!showNextRound) {
-        winText.draw();
+        winText.draw(cxt);
         setTimeout(() => {
             showNextRound = true;
         }, 1000);
     }
     else {
-        nextText.draw();
+        nextText.draw(cxt);
         setTimeout(() => {
             state = "RUNNING";
             if (score >= winningScore) {
@@ -528,7 +526,7 @@ function handleState() {
     switch(state) {
         case "TUTORIAL1":
             shooter.disabled = false;
-            tt1.draw();
+            tt1.draw(cxt);
 
             // let tutOrc1 = new Enemy(canvas.width / 2, 0, 0, canvas, cxt);
             // let tutOrc1 = new Enemy(canvas.width / 2, 0, 0, canvas, cxt);
@@ -536,26 +534,26 @@ function handleState() {
             // const shooter = new Shooter(100, flora.y - 50, canvas, cxt);
             tutOrc1.y = flora.y - tutOrc1.height;
             tutOrc1.update();
-            tutOrc1.draw();
+            tutOrc1.draw(cxt);
 
             currTutCount.push(tutOrc1)
 
-            // skipTutButton.draw();
-            skipButton.draw();
+            // skipTutButton.draw(cxt);
+            skipButton.draw(cxt);
             mouseCollision(shooter.mouse, playButton, "LOADING");
             break;
 
         // INITIAL BLACK SCREEN:
         case "PLAY":
-            playText.draw();
-            playButton.draw();
+            playText.draw(cxt);
+            playButton.draw(cxt);
             mouseCollision(shooter.mouse, playButton, "INTRO");
             break;
 
         case "LOADING":
-            loadingText.draw();
+            loadingText.draw(cxt);
             // if (showLoading) {
-            //     loadingText.draw();
+            //     loadingText.draw(cxt);
             // }
             setTimeout(() => {
                 // showLoading = false;
@@ -573,9 +571,9 @@ function handleState() {
         case "INTRO":
             playSound(music.dramatic);
 
-            startText.draw();
+            startText.draw(cxt);
 
-            skipButton.draw();
+            skipButton.draw(cxt);
             mouseCollision(shooter.mouse, skipButton, "MENU");
 
             setTimeout(() => {
@@ -591,8 +589,8 @@ function handleState() {
             
         // glitch: MENU -> RUNNING -> MENU
         case "MENU": 
-            // bossText.draw();
-            startButton.draw();
+            // bossText.draw(cxt);
+            startButton.draw(cxt);
 
             if (score >= winningScore) {
                 cremate();
@@ -607,9 +605,9 @@ function handleState() {
         // this state is only for the boss text:
         case "BOSS":
             finalRound = true;
-            bossText.draw();
-            yesButton.draw();
-            noButton.draw();
+            bossText.draw(cxt);
+            yesButton.draw(cxt);
+            noButton.draw(cxt);
     
             if (score >= winningScore) {
                 cremate();
@@ -624,8 +622,8 @@ function handleState() {
         case "QUIET":
             shooter.disabled = false;
 
-            quietText.draw();
-            // aidText.draw();
+            quietText.draw(cxt);
+            // aidText.draw(cxt);
 
             setTimeout(() => {
                 startEnd = true
@@ -675,13 +673,13 @@ function handleState() {
             }
 
             // if (!showNextRound) {
-            //     winText.draw();
+            //     winText.draw(cxt);
             //     setTimeout(() => {
             //         showNextRound = true;
             //     }, 1000);
             // }
             // else {
-            //     nextText.draw();
+            //     nextText.draw(cxt);
             //     setTimeout(() => {
             //         state = "RUNNING";
             //         if (score >= winningScore) {
@@ -694,14 +692,14 @@ function handleState() {
         
         case "LOSE":
             shooter.disabled = true;
-            failText.draw();
+            failText.draw(cxt);
             if (playerHealth.number <= 0) {
-                healthText.draw();
+                healthText.draw(cxt);
             } else {
-                wallText.draw();
+                wallText.draw(cxt);
             }
 
-            playAgainButton2.draw();
+            playAgainButton2.draw(cxt);
             mouseCollision(shooter.mouse, playAgainButton2, "INTRO");  
             break;
 
@@ -710,12 +708,12 @@ function handleState() {
             specialRound = true;
     
             if (!showSpecialText) {
-                specialText.draw();
+                specialText.draw(cxt);
                 setTimeout(() => {
                     showSpecialText = true;
                 }, 1000);
             } else { 
-                specialText2.draw();
+                specialText2.draw(cxt);
                 setTimeout(() => {
                     state = "RUNNING";
                     if (score >= winningScore) {
@@ -731,13 +729,13 @@ function handleState() {
                 // shooter.disabled = false;
                 shooter2.initSecond = true;
                 if (!showAidText) {
-                    aidText.draw();
+                    aidText.draw(cxt);
                     setTimeout(() => {
                         shooter.secondStream = true;
                         showAidText = true;
                     }, 2000);
                 } else {
-                    nextText.draw();
+                    nextText.draw(cxt);
                     setTimeout(() => {
                         state = "RUNNING";
                         if (score >= winningScore) {
@@ -753,21 +751,21 @@ function handleState() {
     
             if (!showNextText) {
                 // YOU WIN 
-                endText.draw();
-                endText2.draw();
+                endText.draw(cxt);
+                endText2.draw(cxt);
                 setTimeout(() => {
                     showNextText = true;
                 }, 4000);
             } else {
-                endText3.draw();
-                endText4.draw();
+                endText3.draw(cxt);
+                endText4.draw(cxt);
             }
             break;
 
         case "GIVEUP":
             shooter.disabled = true;
-            giveupText.draw();
-            playAgainButton.draw();
+            giveupText.draw(cxt);
+            playAgainButton.draw(cxt);
             mouseCollision(shooter.mouse, playAgainButton, "MENU");
             break;
     }
@@ -788,8 +786,8 @@ function cremate() {
 // NEED AN ALT TO NADEQUEUE
 // TODO: GET THIS FUCKING SHIT RUNNING LIKE HOW IT DID EARLIER  --DONE
 function handleShooter() {
-    shooter.draw();
-    shooter2.draw();
+    shooter.draw(cxt);
+    shooter2.draw(cxt);
 
     // what states require shooter to be disabled?
     if (state == "RUNNING" || state == "WIN" || state == "QUIET" || state == "RELIEF" || state == "TUTORIAL") {
@@ -834,7 +832,7 @@ function handleNade(arr) {
         // current.bloop.play();
 
         if (current.dudY > 0) {
-            current.drawDud();
+            current.drawDud(cxt);
             current.updateDud();
         }
 
@@ -849,7 +847,7 @@ function handleNade(arr) {
 
         // current.ready = true;
         if (current.ready) {
-            current.draw();
+            current.draw(cxt);
             current.update();
 
             current.sound.play();
@@ -894,14 +892,14 @@ function handleEnemyProjectiles(orc) {
         if (current.x > bulletLimit) {
         // if (current.x > 150) {
             current.update();
-            current.draw();
+            current.draw(cxt);
         }
         else {
             projes.splice(i, 1);
             i--;
 
             // UNCOMMENT THIS:
-            playerHealth.number--;
+            // playerHealth.number--;
         }
     }
 }
@@ -928,7 +926,7 @@ function handleProjectile(arr) {
             // TO REVERT LATER ON:
             if (current.x < canvas.width - 100 && (state == "RUNNING" || state == "WIN" || state == "QUIET" || state == "TUTORIAL")) {
                 current.update();
-                current.draw();
+                current.draw(cxt);
             }
             else {
                 projectiles.splice(i, 1);
@@ -1050,7 +1048,7 @@ function handleProjectile(arr) {
 function handleSnack() {
     for (let i = 0; i < snackQueue.length; i++) {
         let snack = snackQueue[i];
-        snack.draw();
+        snack.draw(cxt);
 
         // drop until it touches the floor
         if (snack.y + snack.height < flora.y - 5) {
@@ -1091,7 +1089,7 @@ function handleEnemy() {
         // REVISION: don't force player to kill civilians
         if ((current.x + current.width >= 0) && (current.x < canvas.width + 50)) {    
             current.update();
-            current.draw();
+            current.draw(cxt);
         } else {
             // enemyQueue.splice(i, 1);
             // score += 10;
@@ -1251,7 +1249,7 @@ function animate() {
     cxt.fillRect(0, 0, canvas.width, canvas.height);
 
     // dont want it redrawing the floor over and over again
-    flora.draw();
+    flora.draw(cxt);
     handleShooter();
     handleSnack();
     handleState();
@@ -1262,7 +1260,7 @@ function animate() {
     if (state == "RUNNING" && frame <= 100) frame++;
     else frame = 0;
 
-    console.log(shooter.mouse.x);
+    console.log(roundCounts);
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
 }

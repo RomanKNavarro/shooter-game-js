@@ -6,10 +6,7 @@ import Projectile from "./projectile.js";
 
 // why is mouse stuff here? so that it can be used as "entity.mouse" in inputHandler.js
 export default class Shooter {
-    constructor(x, y, canvasa, contexto) { 
-        this.canvasa = canvasa;
-        this.contexto = contexto;
-
+    constructor(x, y) { 
         this.width = 50;
         this.height = 50;
         this.y = y;
@@ -67,20 +64,20 @@ export default class Shooter {
         this.bloop.src = "src/assets/sounds/q009/glauncher.ogg";
     }
     
-    draw() {
-        this.contexto.beginPath();
-        this.contexto.fillStyle = "yellow";
+    draw(context) {
+        context.beginPath();
+        context.fillStyle = "yellow";
         if (!this.duck) {
-            this.contexto.fillRect(this.x, this.y, this.width, this.height);
+            context.fillRect(this.x, this.y, this.width, this.height);
         } else {
-            this.contexto.fillRect(this.x, this.y + this.height / 2, this.width, this.height / 2);
+            context.fillRect(this.x, this.y + this.height / 2, this.width, this.height / 2);
         }
 
-        this.contexto.font = "20px serif";
-        this.contexto.fillStyle = "black";
-        this.contexto.textAlign = "center";
-        this.contexto.textBaseline = "middle";
-        this.contexto.fillText(this.secondNade, this.x + (this.width / 2), this.y + (this.height / 2));
+        context.font = "20px serif";
+        context.fillStyle = "black";
+        context.textAlign = "center";
+        context.textBaseline = "middle";
+        context.fillText(this.secondNade, this.x + (this.width / 2), this.y + (this.height / 2));
     }
 
     update() {
@@ -97,11 +94,11 @@ export default class Shooter {
             this.timer++;
             
             if (this.timer % this.fireRate === 0  || this.timer == 1) {
-                this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, this.weapon, this.delete, this.canvasa, this.contexto));
+                this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, this.weapon, this.delete));
 
                 // this.projectiles.push(new Projectile(this.secondX, this.y + 10, this.angle, this.weapon, this.delete));
                 if (this.secondStream == true) {
-                    this.projectiles.push(new Projectile(this.secondX, this.y + 10, this.angle, this.weapon, this.delete, this.canvasa, this.contexto));
+                    this.projectiles.push(new Projectile(this.secondX, this.y + 10, this.angle, this.weapon, this.delete));
                 }
                 
                 if (this.specialAmmo > 0) {

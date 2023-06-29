@@ -1,12 +1,7 @@
-// var canvas = document.getElementById("canvas1");
-// var cxt = canvas.getContext("2d", { alpha: false }); 
-
 // want to make two spots where grenade can land. 
 // cannot change x here for second grenade. Must do that in script.
 export default class Grenade {
-    constructor(x, entity, canvasa, contexto) {
-        this.canvasa = canvasa;
-        this.contexto = contexto;
+    constructor(x, entity) {
         this.x = x;
         // this.x = canvas.width / 2;
         // this.x1 = canvas.width / 2;
@@ -31,10 +26,10 @@ export default class Grenade {
         this.bloop.src = "src/assets/sounds/q009/glauncher.ogg";
     }
 
-    draw() {
-        this.contexto.arc(this.x, this.y, this.size, 0, Math.PI * 2, true);
+    draw(context) {
+        context.arc(this.x, this.y, this.size, 0, Math.PI * 2, true);
         // cxt.rect(this.x, this.y, this.size, this.size);
-        this.contexto.stroke();
+        context.stroke();
     }
     update() {
         this.thrown = true;
@@ -42,9 +37,9 @@ export default class Grenade {
        //  if (this.size <= 100) this.size += 10;
     }
 
-    drawDud() {
-        this.contexto.arc(this.entity.x + this.entity.width / 2, this.dudY, this.dudSize, 0, Math.PI * 2, true);
-        this.contexto.fill();
+    drawDud(context) {
+        context.arc(this.entity.x + this.entity.width / 2, this.dudY, this.dudSize, 0, Math.PI * 2, true);
+        context.fill();
     }
     updateDud() {
         if (this.dudY > 0) {

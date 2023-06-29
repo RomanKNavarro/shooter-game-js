@@ -2,9 +2,7 @@
 // var cxt = canvas.getContext("2d", { alpha: false }); 
 
 export default class Health {
-    constructor(y, canvasa, contexto) {
-        this.canvasa = canvasa;
-        this.contexto = contexto;
+    constructor(y) {
 
         this.x = 0;
         this.y = y;
@@ -18,12 +16,12 @@ export default class Health {
         }
     }
 
-    draw() {
-        this.contexto.beginPath();
-        this.contexto.fillStyle = "green";
+    draw(context) {
+        context.beginPath();
+        context.fillStyle = "green";
 
         for (let i = 0; i < this.number; i++) {
-            this.contexto.fillRect(i * 30, this.y, 20, 20);
+            context.fillRect(i * 30, this.y, 20, 20);
         }     
     }
 }
