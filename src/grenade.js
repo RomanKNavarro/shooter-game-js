@@ -1,7 +1,8 @@
 // want to make two spots where grenade can land. 
 // cannot change x here for second grenade. Must do that in script.
 export default class Grenade {
-    constructor(x, entity) {
+    constructor(x, entity, canvas) {
+        this.canvas = canvas;
         this.x = x;
         // this.x = canvas.width / 2;
         // this.x1 = canvas.width / 2;
@@ -10,7 +11,7 @@ export default class Grenade {
         // this.y = -20; 
 
         this.ready = false;
-        this.y = this.canvasa.height / 2; 
+        this.y = this.canvas.height / 2; 
 
         this.entity = entity;
         this.dudY = this.entity.y;
@@ -33,8 +34,6 @@ export default class Grenade {
     }
     update() {
         this.thrown = true;
-        // if (this.y < canvas.width / 2) this.y -= 5;
-       //  if (this.size <= 100) this.size += 10;
     }
 
     drawDud(context) {

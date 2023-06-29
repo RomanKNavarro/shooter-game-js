@@ -1,9 +1,5 @@
 import Projectile from "./projectile.js";
 
-// var canvas = document.getElementById("canvas1");
-// var cxt = canvas.getContext("2d", { alpha: false });
-
-
 // why is mouse stuff here? so that it can be used as "entity.mouse" in inputHandler.js
 export default class Shooter {
     constructor(x, y) { 

@@ -1,5 +1,3 @@
-// keyboard keys
-
 let flammen = new Audio();
 flammen.src = "src/assets/sounds/flammen2.mp3";
 

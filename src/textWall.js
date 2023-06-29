@@ -14,7 +14,7 @@ export default class TextWall {
         if (!this.vanish) {
             context.beginPath();
             context.fillStyle = "black";
-            context.fillRect(0, 0, canvas.width, canvas.height);
+            context.fillRect(0, 0, this.canvas.width, this.canvas.height);
     
             context.fillStyle = "white";
             //context.fillStyle = "black";
@@ -25,6 +25,5 @@ export default class TextWall {
                 context.fillText(this.lines[i], this.canvas.width / 2, this.y + (i * this.lineheight));
             }
         }
-        // context.clearRect(0, 0, canvas.width, canvas.height);
     }
 }

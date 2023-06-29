@@ -1,6 +1,3 @@
-// var canvas = document.getElementById("canvas1");
-// var cxt = canvas.getContext("2d", { alpha: false }); 
-
 export default class Health {
     constructor(y) {
 
