@@ -1,6 +1,6 @@
 // keyboard keys
 
-// var canvas = document.getElementById("canvas1");
+// var canvas = document.getElementById("canvas1")
 // var cxt = canvas.getContext("2d", { alpha: false });
 
 var canvas = document.getElementById('canvas1');
