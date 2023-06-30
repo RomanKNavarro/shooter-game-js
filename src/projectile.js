@@ -104,10 +104,6 @@ export default class Projectile {
     update() {
       switch (this.weapon) {
         case "pistol":
-          // this.pistol.play();
-          // if (!this.sfx.pistol.playing()) {
-          //   this.sfx.pistol.play();
-          // }
           this.playSound(this.sfx.pistol);
           
           break;
@@ -143,7 +139,6 @@ export default class Projectile {
         case "diagnal":
         case "diagnal-duck":
           this.x += this.speed;
-          // this.y -= this.speed / this.randomY[Math.floor(Math.random() * this.randomY.length)];
           this.y -= this.speed / this.randomY[Math.floor(Math.random() * this.randomY.length)];
           break;
         
@@ -164,7 +159,9 @@ export default class Projectile {
 
         // THIS IS FOR AIR ENEMIES:
         case "down-diagnal":
-          this.x -= this.speed;
+          // this.x -= this.speed;
+          // this.y += this.speed / 2;
+          this.x -= this.speed / 1.3;
           this.y += this.speed / 2;
           break;
 

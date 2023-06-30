@@ -38,6 +38,8 @@ export default class Enemy {
       this.isCivie = false;
       this.inNadeRange = false;
 
+      this.duckable = false;
+
       // ground, crawl, air, civie
       // this.type = "ground";
       this.type = "ground";

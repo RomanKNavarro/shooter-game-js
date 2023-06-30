@@ -144,10 +144,11 @@ Uncaught TypeError: Cannot read properties of undefined (reading 'x')
 // TODO: option to turn off music in menu (plus ui icon!)
 // TODO: tutorial state w/ multiple sections
 // TODO: try drawing projectiles on a seperate canvas (for optimization)    --DONE
-// TODO: use a multi-layered canvas (one for UI, another for static objects, other for enemies/bullets)
+// TODO: use a multi-layered canvas (one for UI, another for static objects, other for enemies/bullets)    --DONE
 // TODO: WAY too many ar pickups. Minimize them
-// TODO: HUGE ASS OVERHAUL: have all the classes accept "cxt" arguments to determine canv. to draw on
-// TODO: get mouse position read
+// TODO: HUGE ASS OVERHAUL: have all the classes accept "cxt" arguments to determine canv. to draw on   --DONE
+// TODO: get mouse position read    --DONE
+// TODO: change air enemy shooting angle
 
 let roundCounts = [7, 10];
 
@@ -308,7 +309,9 @@ let frame = 0;
 // let randomFrames = [50, 80, 110, 150];
 let randomFrames = [10, 30, 50, 80, 110,];
 
-let bulletLimit;
+let bulletLimitX;
+let bulletLimitY = shooter.y;
+
 
 let enemyQueue = [];
 
@@ -474,7 +477,7 @@ function greatReset() {
     resetBaddies();
 
     snackQueue = [];
-    playerHealth.number = 3;
+    playerHealth.number = 10;
     wallHealth.number = 3;
     showMenu = false;
     grenades.number = 3;
@@ -874,7 +877,7 @@ function handleEnemyProjectiles(orc) {
         
 
         // FIX THIS CRAP:
-        if (current.x > bulletLimit) {
+        if (current.x > bulletLimitX || (orc.type == "air" && current.y <= bulletLimitY)) {
         // if (current.x > 150) {
             current.update();
             current.draw(cxt);
@@ -884,7 +887,7 @@ function handleEnemyProjectiles(orc) {
             i--;
 
             // UNCOMMENT THIS:
-            if ((!shooter.duck) || orc.type == "air") playerHealth.number--;
+            //if ((!shooter.duck) || orc.type == "air") playerHealth.number--;
         }
     }
 }
@@ -1052,8 +1055,15 @@ function handleEnemy() {
     for (let i = 0; i < enemyQueue.length; i++) {
         let current = enemyQueue[i];
 
-        if (!shooter.duck) bulletLimit = shooter.x + shooter.width;
-        else bulletLimit = 0;
+        if (!shooter.duck) {
+            bulletLimitX = shooter.x + shooter.width;
+            bulletLimitY = shooter.y;
+        }
+        else {
+            // WHEN DUCKING:
+            bulletLimitX = 0;
+            bulletLimitY = shooter.y - 50;
+        }
 
         if (current.type != "ground") current.health = 1;
 
@@ -1259,7 +1269,7 @@ function animate() {
     if (state == "RUNNING" && frame <= 100) frame++;
     else frame = 0;
 
-    // console.log(shooter.angle);
+    console.log(bulletLimitY, shooter.mouse.y);
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
 }
