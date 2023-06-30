@@ -910,7 +910,6 @@ function handleProjectile(arr) {
         let current = projectiles[i];
 
         if (shooter.duck) current.isDucked = true;
-        console.log(current.isDucked);
 
         // BUG HERE:
         // increase size of flammen "bullets"
@@ -1265,7 +1264,7 @@ function animate() {
     if (state == "RUNNING" && frame <= 100) frame++;
     else frame = 0;
 
-    // console.log(shooter.duck);
+    console.log(shooter.angle);
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
 }

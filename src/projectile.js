@@ -128,6 +128,7 @@ export default class Projectile {
           break;
       }
 
+      // DIRECTION TO SHOOT IN:
       switch (this.direction) {
         case "straight":
           this.x += this.speed;
@@ -156,7 +157,7 @@ export default class Projectile {
         
         case "diagnal-back":
           this.x -= this.speed;
-          this.y -= this.speed * 2;
+          this.y -= this.speed * 2  
           break;
 
         // THIS IS FOR AIR ENEMIES:

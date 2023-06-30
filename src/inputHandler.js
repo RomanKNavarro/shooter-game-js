@@ -24,6 +24,10 @@ export default class InputHandler {
             entity.shooting = true;
             break;
 
+          case 'd':
+            entity.angle = "straight";
+            break;
+
         case 'w':
           entity.angle = "up";          
           break;
@@ -74,17 +78,34 @@ export default class InputHandler {
 
         case 's':
           entity.duck = false;
-          entity.angle = "straight";
+          if (entity.angle == "down-back") entity.angle = "back";
+          else entity.angle = "straight";
           break;
 
-        case 'w':
+        // case 'w':
+        // case 'a':
+        //   if (entity.duck) entity.angle = "down";
+        //   else entity.angle = "straight";
+        //   break;
+
         case 'a':
-          entity.angle = "straight";
-          break;
+          if (entity.angle == "diagnal-back") entity.angle = "up";
+          break
+
+        case 'd':
+          if (entity.angle == "diagnal") entity.angle = "up";
+          else entity.angle = "straight";
+          break
 
         case 'e':
           entity.throwBoom = false;
           break;
+
+        case 'w':
+           if (entity.angle == "diagnal-back") entity.angle = "back";
+           else if (entity.angle == "diagnal" || entity.angle == "up") entity.angle = "straight";
+
+        
         
         // i need nothing for case q
       }
