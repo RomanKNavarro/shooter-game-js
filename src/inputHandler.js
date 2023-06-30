@@ -88,18 +88,15 @@ export default class InputHandler {
           else entity.angle = "straight";
           break;
 
+          // NEEDS WORK HERE:
         case 'a':
           if (entity.angle == "diagnal-back") entity.angle = "up";
           break
 
-        // LAST CASE TO FIX:
-        case 'd':
-          if (entity.angle == "diagnal") entity.angle = "up";
-
-          else entity.angle = "straight";
-          // if (entity.duck) entity.angle = "down";
-          // else entity.angle = "straight";
-          break
+        case 'd':    
+        if (entity.angle == "diagnal-duck" || entity.angle == "diagnal") entity.angle = "up";
+        else entity.angle = "straight";
+          break;
 
         case 'e':
           entity.throwBoom = false;

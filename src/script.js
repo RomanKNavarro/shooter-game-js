@@ -18,29 +18,17 @@ var cxt = canvas.getContext("2d");
 canvas.style.width=canvas.getBoundingClientRect().width;//actual width of canvas
 canvas.style.height=canvas.getBoundingClientRect().height;//actual height of canvas
 
+// STRICTLY FOR BULLETS:
+var bullet_canvas = document.getElementById("bullet-canvas");
+var bullet_cxt = bullet_canvas.getContext("2d");
+bullet_canvas.style.width=bullet_canvas.getBoundingClientRect().width;//actual width of canvas
+bullet_canvas.style.height=bullet_canvas.getBoundingClientRect().height;//actual height of canvas
+
+// FOR STATICS:
 var canvas2 = document.getElementById("canvas2");
 var cxt2 = canvas2.getContext("2d");
-canvas2.style.width=canvas2.getBoundingClientRect().width;//actual width of canvas
-canvas2.style.height=canvas2.getBoundingClientRect().height;//actual height of canvas
-
-// NEW MULTI-LAYERED CANVAS:
-// var canvas = document.getElementById('canvas1');
-// var cxt = canvas.getContext('2d');
-
-// canvas.style.width=canvas.getBoundingClientRect().width;//actual width of canvas
-// canvas.style.height=canvas.getBoundingClientRect().height;//actual height of canvas
-// // canvas.width = window.innerWidth;
-// // canvas.height = window.innerHeight;
-
-// // FUCKING STUPID: "could not find CanvasStack" is a FUCKING LIE. It sees it and everything works
-// var canvas_stack = new CanvasStack('canvas1');
-// // var canvas_stack = new CanvasStack('can');
-
-// var main_layer = canvas_stack.createLayer();
-// var cxt = document.getElementById(main_layer).getContext("2d");
-
-// var dynamic_layer = canvas_stack.createLayer();
-// var dynamic_layer_cxt = document.getElementById(dynamic_layer).getContext("2d");
+// canvas2.style.width=canvas2.getBoundingClientRect().width;//actual width of canvas
+// canvas2.style.height=canvas2.getBoundingClientRect().height;//actual height of canvas
 
 // PORT: http://127.0.0.1:5500/
 // TEXTWALL FONT DEFINED IN TEXTWALL.JS
@@ -925,8 +913,11 @@ function handleProjectile(arr) {
             // TO REVERT LATER ON:
             if (current.x < canvas.width - 100 && (state == "RUNNING" || state == "WIN" 
             || state == "QUIET" || state == "TUTORIAL" || state == "MENU")) {
+                
                 current.update();
-                current.draw(cxt);
+                current.draw(bullet_cxt);
+                // current.draw(cxt2);
+                // current.draw(cxt);
             }
             else {
                 projectiles.splice(i, 1);
@@ -1252,6 +1243,10 @@ function animate() {
     cxt2.fillStyle = "transparent";
     cxt2.fillRect(0, 0, canvas2.width, canvas2.height);
 
+    bullet_cxt.clearRect(0, 0, bullet_canvas.width, bullet_canvas.height);
+    bullet_cxt.fillStyle = "transparent";
+    bullet_cxt.fillRect(0, 0, bullet_canvas.width, bullet_canvas.height);
+
     // dont want it redrawing the floor over and over again
     flora.draw(cxt2);
     handleShooter();
@@ -1264,7 +1259,7 @@ function animate() {
     if (state == "RUNNING" && frame <= 100) frame++;
     else frame = 0;
 
-    console.log(shooter.angle);
+    // console.log(shooter.angle);
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
 }
