@@ -27,6 +27,7 @@ export default class Shooter {
         this.shooting = false;
         this.timer = 0;
 
+        // used in input handler:
         this.duckable = true;
         this.duck = false;
 

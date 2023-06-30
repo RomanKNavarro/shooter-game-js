@@ -338,9 +338,9 @@ let baddiePositions = {
 };
 
 // ENEMY SPEED:
-let currentSpeed = 2;
+// let currentSpeed = 2;
 // let currentSpeed = 4;
-// let currentSpeed = 8;
+let currentSpeed = 8;
 
 // DROPPED PICKUPS:
 let snackQueue = [];
@@ -511,15 +511,6 @@ function endRound() {
     }
 }
 
-// quietFrames:
-// states: MENU, RUNNING, WIN, SPECIAL, BOSS, END, LOSE.
-// startButton.stroke property successfully set, but color won't change.
-// TODO: use switch case to handle states
-
-// number of tutorial rounds: 6
-
-// for the tutorial enemies:
-
 function tutCollision(tutCount) {
     for (let i = 0; i <= tutCount; i++) {
 
@@ -593,6 +584,7 @@ function handleState() {
             
         // glitch: MENU -> RUNNING -> MENU
         case "MENU": 
+            shooter.disabled = false;
             // bossText.draw(cxt);
             startButton.draw(cxt);
 
@@ -794,7 +786,8 @@ function handleShooter() {
     shooter2.draw(cxt2);
 
     // what states require shooter to be disabled?
-    if (state == "RUNNING" || state == "WIN" || state == "QUIET" || state == "RELIEF" || state == "TUTORIAL") {
+    if (state == "RUNNING" || state == "WIN" || state == "QUIET" 
+    || state == "RELIEF" || state == "TUTORIAL" || state == "MENU") {
         shooter.update();
         shooter2.update();
     }
@@ -903,18 +896,21 @@ function handleEnemyProjectiles(orc) {
             i--;
 
             // UNCOMMENT THIS:
-            // playerHealth.number--;
+            if ((!shooter.duck) || orc.type == "air") playerHealth.number--;
         }
     }
 }
 
-
+// Idea: make shooter completely immune when ducking?
 // PASS IN ENEMY/TUT QUEUE
 function handleProjectile(arr) {
     let projectiles = shooter.projectiles;
 
     for (let i = 0; i < shooter.projectiles.length; i++) {
         let current = projectiles[i];
+
+        if (shooter.duck) current.isDucked = true;
+        console.log(current.isDucked);
 
         // BUG HERE:
         // increase size of flammen "bullets"
@@ -928,7 +924,8 @@ function handleProjectile(arr) {
             }
     
             // TO REVERT LATER ON:
-            if (current.x < canvas.width - 100 && (state == "RUNNING" || state == "WIN" || state == "QUIET" || state == "TUTORIAL")) {
+            if (current.x < canvas.width - 100 && (state == "RUNNING" || state == "WIN" 
+            || state == "QUIET" || state == "TUTORIAL" || state == "MENU")) {
                 current.update();
                 current.draw(cxt);
             }
@@ -1268,7 +1265,7 @@ function animate() {
     if (state == "RUNNING" && frame <= 100) frame++;
     else frame = 0;
 
-    // console.log(roundCounts);
+    // console.log(shooter.duck);
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
 }

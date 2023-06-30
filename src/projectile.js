@@ -1,6 +1,7 @@
 // BULLETS
 export default class Projectile {
-    constructor(x, y, direction, weapon, dead) {
+    // "dead" used as determinant for playing sounds
+    constructor(x, y, direction, weapon, dead, entity) {
 
       // NEW HOWLER CRAP (sound fx "bucket"):
       this.sfx = {
@@ -72,6 +73,8 @@ export default class Projectile {
       this.delete = false;
       this.randomY = [2, 2.2, 2.4, 2.6, 2.8, 3, 3.2, 3.4];
       // this.randomY = [0.95, 1.0, 1.6, 1.8, 2, 2.2, 2.4];
+
+      this.isDucked = false;
 
       this.pistol = new Audio();
       this.ar = new Audio();

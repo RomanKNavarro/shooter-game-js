@@ -21,7 +21,6 @@ export default class Enemy {
 
       this.color = "pink"
       this.dead = false;
-      this.force = "ground";
 
       this.pickupNum = Math.floor(Math.random() * 10);
       this.pickupOdds = 0.5;
