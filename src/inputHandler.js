@@ -25,7 +25,9 @@ export default class InputHandler {
             break;
 
           case 'd':
-            entity.angle = "straight";
+            // entity.angle = "down";
+            if (entity.duck) entity.angle = "down";
+            else entity.angle = "straight";
             break;
 
         case 'w':
@@ -57,7 +59,11 @@ export default class InputHandler {
           break;
       }
 
-      if (keys["d"] && keys["w"]) entity.angle = "diagnal";
+      // if (keys["d"] && keys["w"]) entity.angle = "diagnal";
+      if (keys["d"] && keys["w"]) {
+        if (entity.duck) entity.angle = "diagnal-duck";
+        else entity.angle = "diagnal";
+      }
       else if (keys["a"] && keys["s"]) entity.angle = "down-back";
       else if (keys["a"] && keys["w"]) entity.angle = "diagnal-back";
     });
@@ -82,19 +88,17 @@ export default class InputHandler {
           else entity.angle = "straight";
           break;
 
-        // case 'w':
-        // case 'a':
-        //   if (entity.duck) entity.angle = "down";
-        //   else entity.angle = "straight";
-        //   break;
-
         case 'a':
           if (entity.angle == "diagnal-back") entity.angle = "up";
           break
 
+        // LAST CASE TO FIX:
         case 'd':
           if (entity.angle == "diagnal") entity.angle = "up";
+
           else entity.angle = "straight";
+          // if (entity.duck) entity.angle = "down";
+          // else entity.angle = "straight";
           break
 
         case 'e':
@@ -102,11 +106,14 @@ export default class InputHandler {
           break;
 
         case 'w':
-           if (entity.angle == "diagnal-back") entity.angle = "back";
-           else if (entity.angle == "diagnal" || entity.angle == "up") entity.angle = "straight";
+          if (entity.angle == "diagnal-back") entity.angle = "back";
+          // else if (entity.angle == "diagnal" || entity.angle == "up") entity.angle = "straight";
+          else if (entity.angle == "diagnal" || entity.angle == "up" || entity.angle == "diagnal-duck") {
+            if (entity.duck) entity.angle = "down";
+            else entity.angle = "straight";
+          }
+          break;
 
-        
-        
         // i need nothing for case q
       }
     });

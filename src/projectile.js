@@ -71,7 +71,7 @@ export default class Projectile {
       this.speed = 10;
       // this.speed =5;
       this.delete = false;
-      this.randomY = [2, 2.2, 2.4, 2.6, 2.8, 3, 3.2, 3.4];
+      this.randomY = [1.7, 2, 2.2, 2.4, 2.6, 2.8, 3, 3.2, 3.4];
       // this.randomY = [0.95, 1.0, 1.6, 1.8, 2, 2.2, 2.4];
 
       this.isDucked = false;
@@ -88,8 +88,9 @@ export default class Projectile {
 
       this.shotty.src = "src/assets/sounds/shots/shotgun.wav";
 
+      // HERE IS WHERE PROJECTILE'S Y GETS CHANGED:
       // place bullet's y low when shooting down:
-      if (this.direction == "down" || this.direction == "down-back") {
+      if (this.direction == "down" || this.direction == "down-back" || this.direction == "diagnal-duck") {
         this.y = this.y + 25;
       }
     }
@@ -140,6 +141,7 @@ export default class Projectile {
           break;
         
         case "diagnal":
+        case "diagnal-duck":
           this.x += this.speed;
           // this.y -= this.speed / this.randomY[Math.floor(Math.random() * this.randomY.length)];
           this.y -= this.speed / this.randomY[Math.floor(Math.random() * this.randomY.length)];
@@ -166,7 +168,8 @@ export default class Projectile {
           this.y += this.speed / 2;
           break;
 
-        case "straight down":
+        // FOR BOMBERS:
+        case "straight-down":
           this.y -= 3;
           break;  
       }
