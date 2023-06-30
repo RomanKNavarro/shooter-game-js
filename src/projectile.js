@@ -71,10 +71,11 @@ export default class Projectile {
       this.speed = 10;
       // this.speed =5;
       this.delete = false;
-      this.randomY = [1.7, 2, 2.2, 2.4, 2.6, 2.8, 3, 3.2, 3.4];
-      // this.randomY = [0.95, 1.0, 1.6, 1.8, 2, 2.2, 2.4];
+      this.randomY = [1.7, 2, 2.2, 2.4, 2.6, 2.8, 3];
+      // needs to shoot in the same directon (110 y) as randomY values:
+      this.randomY_duck = [1.1, 1.2, 1.3, 1.4];
 
-      this.isDucked = false;
+      this.bulletLimit;
 
       this.pistol = new Audio();
       this.ar = new Audio();
@@ -137,11 +138,15 @@ export default class Projectile {
           break;
         
         case "diagnal":
-        case "diagnal-duck":
           this.x += this.speed;
           this.y -= this.speed / this.randomY[Math.floor(Math.random() * this.randomY.length)];
           break;
         
+        case "diagnal-duck":
+          this.x += this.speed;
+          this.y -= this.speed / this.randomY_duck[Math.floor(Math.random() * this.randomY_duck.length)];
+          break;
+
         case "down":
           this.x += this.speed;
           break;

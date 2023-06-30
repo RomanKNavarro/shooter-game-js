@@ -148,7 +148,10 @@ Uncaught TypeError: Cannot read properties of undefined (reading 'x')
 // TODO: WAY too many ar pickups. Minimize them
 // TODO: HUGE ASS OVERHAUL: have all the classes accept "cxt" arguments to determine canv. to draw on   --DONE
 // TODO: get mouse position read    --DONE
-// TODO: change air enemy shooting angle
+// TODO: change air enemy shooting angle    --DONE
+// TODO: get 2nd shooter to duck
+// TODO: MORE nade pickups
+
 
 let roundCounts = [7, 10];
 
@@ -178,7 +181,7 @@ shooter2.isSecond = true;
 // const shooter = new Shooter(100, flora.y - 50);
 // BRILLIANT IDEA: inputHandler doesn't need to take in these args. Use the ones from shooter.
 new InputHandler(shooter, canvas);
-// new InputHandler(shooter2);
+new InputHandler(shooter2, canvas);
 
 // BUTTONS AND TEXT. (x, y, width, text, clickable)
 const tutButton = new Button(canvas.width / 2.2, canvas.height / 2.5, 100, "Start Tutorial", true);
@@ -877,7 +880,8 @@ function handleEnemyProjectiles(orc) {
         
 
         // FIX THIS CRAP:
-        if (current.x > bulletLimitX || (orc.type == "air" && current.y <= bulletLimitY)) {
+        // if (current.x > bulletLimitX || (orc.type == "air" && current.y <= bulletLimitY)) {
+        if (current.x > orc.bulletLimit) {
         // if (current.x > 150) {
             current.update();
             current.draw(cxt);
@@ -899,8 +903,6 @@ function handleProjectile(arr) {
 
     for (let i = 0; i < shooter.projectiles.length; i++) {
         let current = projectiles[i];
-
-        if (shooter.duck) current.isDucked = true;
 
         // BUG HERE:
         // increase size of flammen "bullets"
@@ -1056,13 +1058,19 @@ function handleEnemy() {
         let current = enemyQueue[i];
 
         if (!shooter.duck) {
-            bulletLimitX = shooter.x + shooter.width;
-            bulletLimitY = shooter.y;
+            // if (current.type == "ground" || current.type == "crawl") {
+            //     current.bulletLimit = shooter.x + shooter.width;
+            // }
+            // else if (current.type == "air") {}
+            current.bulletLimit = shooter.x + shooter.width;
+
+            // bulletLimitX = shooter.x + shooter.width;
+            // bulletLimitY = shooter.y;
         }
         else {
             // WHEN DUCKING:
-            bulletLimitX = 0;
-            bulletLimitY = shooter.y - 50;
+            if (current.type == "ground" || current.type == "crawl") current.bulletLimit = 0
+            else if (current.type == "air") current.bulletLimit = shooter.x + shooter.width / 2;
         }
 
         if (current.type != "ground") current.health = 1;
