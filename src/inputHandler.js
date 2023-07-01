@@ -125,8 +125,6 @@ export default class InputHandler {
     });
     
     // here is what actually reads the mouse's location:
-    // FUCKING SHITTY
-    // let canvasPosition = canvas.getBoundingClientRect();
     let canvasPosition = this.canvas.getBoundingClientRect();
     this.canvas.addEventListener("mousemove", function (e) {
       entity.mouse.x = e.x - canvasPosition.left;
