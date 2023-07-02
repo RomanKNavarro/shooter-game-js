@@ -40,7 +40,7 @@ export default class Button {
         }
         else if (this.show) {
             context.fillStyle = "rgba(0, 0, 0, " + this.alpha + ")";
-            context.font = "30px Tourney";
+            context.font = "25px Tourney";
             // context.fillText(this.text, Math.floor(this.x + (this.width / 2)), Math.floor(this.y + (this.height / 2)));
     
             context.textAlign = "center";

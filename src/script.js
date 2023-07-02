@@ -184,11 +184,11 @@ new InputHandler(shooter, canvas);
 new InputHandler(shooter2, canvas);
 
 // BUTTONS AND TEXT. (x, y, width, text, clickable)
-const tutButton = new Button(canvas.width / 2.2, canvas.height / 2.5, 100, "Start Tutorial", true);
+const tutButton = new Button(canvas.width / 2.2, canvas.height / 3, 100, "Start Tutorial", true);
 // skip tut. button necessary -don't want to force players to kill POWS. 
-// const skipTutButton = new Button(canvas.width / 2.2, canvas.height / 2.5, 100, "Skip", true);
+// const skipTutButton = new Button(canvas.width / 2.2, canvas.height / 3, 100, "Skip", true);
 const playButton = new Button(canvas2.width / 2.2, canvas2.height / 2.5, 100, "Play", true);
-const startButton = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Initiate Bloodbath", true);
+const startButton = new Button(canvas.width / 2.5, canvas.height / 3, 100, "Initiate Bloodbath", true);
 const skipButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, "skip", true);
 const yesButton = new Button(250, canvas.height / 1.2, 100, '"Defend"', true);
 const noButton = new Button(canvas.width - 250 - 100, canvas.height / 1.2, 100, "Give up", true);
@@ -198,8 +198,8 @@ const disableButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, 
 
 const playAgainButton2 = new Button(canvas.width / 2.5, canvas.height / 2, 100, "test test", true);
 
-const winText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Round Complete", false);
-const nextText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Next round incoming...", false);
+const winText = new Button(canvas.width / 2.5, canvas.height / 3, 100, "Round Complete", false);
+const nextText = new Button(canvas.width / 2.5, canvas.height / 3, 100, "Next round incoming...", false);
 
 const failText = new Button(canvas.width / 2.5, canvas.height / 4.5, 100, "FAILURE", false);
 const healthText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "You perished in the heat of battle.", false);
@@ -211,12 +211,12 @@ const roundText = new Button(canvas.width / 3, 0, 100, currentRound, false);
 const scoreText = new Button(canvas.width / 2, 0, 100, score, false);
 const ammoText = new Button(canvas.width - 100, 0, 100, shooter.specialAmmo, false);
 
-const specialText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "SPECIAL ROUND", false);
-const specialText2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "MASSACRE THE CIVILIANS", false);
+const specialText = new Button(canvas.width / 2.5, canvas.height / 3, 100, "SPECIAL ROUND", false);
+const specialText2 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "MASSACRE THE CIVILIANS", false);
 
-const endText = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Coalition defeated. City aquired.", false);
+const endText = new Button(canvas.width / 2.5, canvas.height / 3, 100, "Coalition defeated. City aquired.", false);
 const endText2 = new Button(canvas.width / 2.5, canvas.height / 1.7, 100, "Thanks for playing!!!", false);
-const endText3 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Made with ❤️ by", false);
+const endText3 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "Made with ❤️ by", false);
 const endText4 = new Button(canvas.width / 2.5, canvas.height / 1.9, 100, "KAVEMANKORPS", false);
 
 const quietText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "KILL KILL KILL KILL", false);
@@ -226,31 +226,30 @@ const aidText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "HELP H
 // BRUTAL IDEA: live captured enemies used as practice
 // YES, player can take damage/die in tutorial
 // 3 static grounds
-const tt1 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Press Space to shoot", false);
+const tt1 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "Press Space to shoot", false);
 // static grounds and airs:
-const tt2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Use WASD to aim in different directions", false);
+const tt2 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "Use WASD to aim in different directions", false);
 // 3 living ground enemies that shoot. Player shooting DISABLED:
-const tt3 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "hold D to duck", false);
+// NO DOGS ON ROUND 3:
+const tt3 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "hold D to crouch", false);
 // player shooting ENABLED:
-const tt4 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Shooting while ducking only inflicts", false);
+const tt4 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "crouch-shooting only inflicts", false);
 const tt4_2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "half the damage to enemies (not dogs)", false);
-// No targets. Shooting DISABLED:
-const tt5 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Well done soldier.", false);
 
-const tt6 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "shoot while ducking to acquire pickups", false);
+const tt6 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "shoot while ducking to acquire pickups", false);
 // horde of live enemies ensues. 
-const tt7 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "press E to throw a grenade", false);
+const tt7 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "press E to throw a grenade", false);
 
-const tt8 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "press E twice in rapid succession", false);
-const tt8_2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "for a grenade barrage", false);
+const tt8 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "press E twice in rapid succession", false);
+const tt8_2 = new Button(canvas.width / 2.5, canvas.height / 1.7, 100, "for a grenade barrage", false);
 
-// these pows will be civies!
-const tt9 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Massacre the remaining POWs", false);
+const tt9 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "You're a natural born killer!", false);
 
-const tt10 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "You're a natural born killer!", false);
+const tt10 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "Keep up the good work, Leuitenant.", false);
+const tt10_2 = new Button(canvas.width / 2.5, canvas.height / 1.7, 100, "Help will arrive soon.", false);
 
-const tt11 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Keep up the good work, Leuitenant.", false);
-const tt11_2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Help will arrive soon.", false);
+let tutRounds = {1: [tt1], 2: [tt2], 3: [tt3], 4: [tt4, tt4_2],  5: [tt6], 
+                 6: [tt7], 7: [tt8, tt8_2], 8: [tt9], 9: [tt10, tt10_2]};
 
 let tutCounts = [1, 3, 2, 10, 15, 20];
 // NO END TEXT, only beginning text.
@@ -294,7 +293,7 @@ const giveupText = new TextWall(
     You are put to the firing squad and your ashes thrown into the dirty Googa river.`, Math.floor(canvas.height / 5), canvas);
 
 // const loadingText = new TextWall(`\n\n\n\n\nLoading`, canvas.height / 5);
-const loadingText = new TextWall(`Loading`, Math.floor(canvas.height / 2.5), canvas);
+const loadingText = new TextWall(`Loading`, Math.floor(canvas.height / 3), canvas);
 
 const playText = new TextWall(``, Math.floor(canvas.height / 5), canvas);
 
@@ -336,7 +335,7 @@ let currentSpeed = 2;
 let snackQueue = [];
 let nadeQueue = [];
 
-let state = "LOADING";
+let state = "MENU";
 // let state = "RUNNING";
 
 let loadingTime = [2000, 3000][Math.floor(Math.random() * 3)];
@@ -616,6 +615,12 @@ function handleState() {
         case "RUNNING":
             // state = "RUNNING";
             shooter.disabled = false;
+
+            if (Object.keys(tutRounds).includes(currentRound.toString())) {
+                for (let i = 0; i < tutRounds[currentRound].length; i++) {
+                    tutRounds[currentRound][i].draw(cxt);
+                }
+            }
     
             // one second delay before round 1:
             if (currentRound == 1) {
@@ -640,6 +645,13 @@ function handleState() {
         case "WIN": 
             specialRound = false;
             shooter.disabled = false;
+
+            if (tutorial) {
+                switch (currentRound) {
+                    case 1:
+                        break
+                }
+            }
     
             resetBaddies();
 
@@ -1251,7 +1263,9 @@ function animate() {
     if (state == "RUNNING" && frame <= 100) frame++;
     else frame = 0;
 
-    console.log();
+    // currentRound changes only after the "next round incoming" text
+    // console.log(currentRound);
+
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
 }
