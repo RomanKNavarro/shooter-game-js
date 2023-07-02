@@ -885,6 +885,7 @@ function handleEnemyProjectiles(orc) {
 
         // FIX THIS CRAP:
         // if (current.x > bulletLimitX || (orc.type == "air" && current.y <= bulletLimitY)) {
+        // what's bulletLimit? 
         if (current.x > orc.bulletLimit) {
         // if (current.x > 150) {
             current.update();
@@ -895,7 +896,7 @@ function handleEnemyProjectiles(orc) {
             i--;
 
             // UNCOMMENT THIS:
-            //if ((!shooter.duck) || orc.type == "air") playerHealth.number--;
+            if ((!shooter.duck) || orc.type == "air") playerHealth.number--;
         }
     }
 }
@@ -911,9 +912,9 @@ function handleProjectile(arr) {
         // BUG HERE:
         // increase size of flammen "bullets"
         if (projectiles.length > 0 && current) {
-            if (shooter.weapon == "pistol") {
-                current.speed = 7;
-            }
+            // if (shooter.weapon == "pistol") {
+            //     current.speed = 7;
+            // }
 
             if (shooter.weapon == "flammen" && current.size <= 20) {
                 current.size += 2;
@@ -971,14 +972,14 @@ function handleProjectile(arr) {
 
             //FLAMMEN KILLS BULLETS
             let orcProjes = currentEnemy.projectiles;
-            for (let p = 0; p < orcProjes.length; p++) {
-                if (shooter.weapon == "flammen" && orcProjes.length > 0 && collision(current, orcProjes[p])) {
-                    projectiles.splice(i, 1);
-                    i--;
-                    orcProjes.splice(p, 1);
-                    p--;
-                }
-            }
+            // for (let p = 0; p < orcProjes.length; p++) {
+            //     if (shooter.weapon == "flammen" && orcProjes.length > 0 && collision(current, orcProjes[p])) {
+            //         projectiles.splice(i, 1);
+            //         i--;
+            //         orcProjes.splice(p, 1);
+            //         p--;
+            //     }
+            // }
         }
 
         // PICKUP HANDLING CRAP:
@@ -1097,7 +1098,8 @@ function handleEnemy() {
         } else {
             // BOMBER:
             current.y = flora.y - 175;
-            current.angle = "straight-down";
+            // current.angle = "straight-down";
+            current.angle = "straight";
         }
 
         // FIX THIS CRAP --DONE. Takes into account both regular and special rounds:
@@ -1226,8 +1228,8 @@ function collision(bullet, orc) {
             bullet.y < orc.y + orc.width &&
             (bullet.y < orc.y + orc.height))
         //  BULLET ON BULLET CONTACT:
-        || (bullet.x + bullet.size >= orc.x && bullet.y <= orc.y + orc.size && 
-            bullet.y + bullet.size >= orc.y)
+        // || (bullet.x + bullet.size >= orc.x && bullet.y <= orc.y + orc.size && 
+        //     bullet.y + bullet.size >= orc.y)
     ) {
         return true;
     }

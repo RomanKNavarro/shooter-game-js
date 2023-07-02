@@ -79,20 +79,17 @@ export default class Enemy {
 
       if (this.isCivie) this.color = "gray";
 
-      if (this.pickupNum <= this.pickupOdds) {
+      if (this.pickupNum <= this.pickupOdds && this.round <= 4) {
         this.pickup = true   
       }
-
-      // if (this.isCivie) this.speed = -2;
 
       // spawn crawlies first, then airs
       if (this.typeNum <= this.crawlOdds && this.round >= 3) {
       // if (this.typeNum <= this.crawlOdds) {
-          this.type = "crawl";
+          // this.type = "crawl";
+          this.type = "bomber";
           this.width = 30;
           this.height = 30;
-          // this.speed = -3;
-          // this.speed = 3;
 
           if (!this.isCivie) this.speed = 4;
           else this.speed = -3;
@@ -104,7 +101,7 @@ export default class Enemy {
       else if (this.typeNum <= this.crawlOdds && this.round >= 9) this.type = ["crawl", "bomber"][ Math.floor(Math.random() * 2)];
 
       // context.fillText(this.round, this.x + (this.width / 2), this.y + (this.height / 2));
-      context.fillText(this.type, this.x + (this.width / 2), this.y + (this.height / 2));
+      context.fillText(this.projectiles, this.x + (this.width / 2), this.y + (this.height / 2));
     } // projectiles
   
     update() {
@@ -114,9 +111,6 @@ export default class Enemy {
       } else {
           this.speed = 0;
           this.timer++;
-
-          // REVISE FOR BOMBER AND ASSAULT SHEEP:
-          // let gunSound = this.type != "crawl" ? "shotty" : "growl";
 
           switch(this.type) {
             case "crawl":
@@ -132,9 +126,10 @@ export default class Enemy {
           }
 
           //   MIGHT HAVE TO REVERT
-          // if (this.timer % this.fireRate === 0  || this.timer == 1) {  
             if ((this.timer % this.fireRate === 0  || this.timer == 1) 
-            && (this.timer >= 50 || this.type == "air")) {  
+                && (this.timer >= 50 || this.type == "air")) {  
+            // air shooters get a delay:
+            // && ((this.timer >= 50 && this.type == "air") || (this.timer >= 100 && this.type == "bomber"))) {  
               this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, this.sound, this.dead)); 
           }
       }

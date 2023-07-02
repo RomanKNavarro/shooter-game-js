@@ -68,7 +68,7 @@ export default class Projectile {
 
       this.size = 3;
 
-      this.speed = 12;
+      this.speed = 10;
       // this.speed =5;
       this.delete = false;
       this.randomY = [1.7, 2, 2.2, 2.4, 2.6, 2.8, 3];
@@ -84,7 +84,6 @@ export default class Projectile {
 
       this.pistol.src = "src/assets/sounds/shots/pistol.wav";
       this.ar.src = "src/assets/sounds/shots/cg1.wav";
-      // this.flammen.src = "src/assets/sounds/burst fire.mp3";
       this.flammen.src = "src/assets/sounds/laser.mp3";
 
       this.shotty.src = "src/assets/sounds/shots/shotgun.wav";
@@ -120,11 +119,14 @@ export default class Projectile {
           break;
         case "ar":
           this.size = 5;
+          this.speed = 12;
           // this.ar.play();
           this.playSound(this.sfx.ar);
           break;
+
         case "flammen":
           this.playSound(this.sfx.flammen);
+          this.speed = 12;
           break;
       }
 
