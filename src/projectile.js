@@ -66,9 +66,9 @@ export default class Projectile {
       this.weapon = weapon;
       this.dead = dead;
 
-      this.size = 5;
+      this.size = 3;
 
-      this.speed = 10;
+      this.speed = 12;
       // this.speed =5;
       this.delete = false;
       this.randomY = [1.7, 2, 2.2, 2.4, 2.6, 2.8, 3];
@@ -109,6 +109,7 @@ export default class Projectile {
           
           break;
         case "shotty":
+          this.size = 5;
           if (!this.dead) {
             // this.shotty.play();
             this.playSound(this.sfx.shotty);
@@ -118,6 +119,7 @@ export default class Projectile {
           } 
           break;
         case "ar":
+          this.size = 5;
           // this.ar.play();
           this.playSound(this.sfx.ar);
           break;

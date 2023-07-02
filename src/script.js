@@ -153,7 +153,7 @@ Uncaught TypeError: Cannot read properties of undefined (reading 'x')
 // TODO: MORE nade pickups
 
 
-let roundCounts = [7, 10];
+let roundCounts = [6, 10];
 
 // single, triple, two shooters, ar hoarde (grounds and a few airs), grenade hoarde, civies (pows)
 
@@ -219,39 +219,32 @@ const endText2 = new Button(canvas.width / 2.5, canvas.height / 1.7, 100, "Thank
 const endText3 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "Made with ❤️ by", false);
 const endText4 = new Button(canvas.width / 2.5, canvas.height / 1.9, 100, "KAVEMANKORPS", false);
 
-const quietText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "KILL KILL KILL KILL", false);
+const naturalText = new Button(canvas.width / 2.5, canvas.height / 3, 100, "You're a natural born killer!", false);
+
+const goodText = new Button(canvas.width / 2.5, canvas.height / 3, 100, "Keep up the good work, Leuitenant.", false);
+const soonText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "Help will arrive soon.", false);
+
 const aidText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "HELP HAS ARRIVED", false);
+const quietText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "KILL KILL KILL KILL", false);
+
 
 // TUTORIAL CRAP:
 // BRUTAL IDEA: live captured enemies used as practice
 // YES, player can take damage/die in tutorial
 // 3 static grounds
 const tt1 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "Press Space to shoot", false);
-// static grounds and airs:
 const tt2 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "Use WASD to aim in different directions", false);
-// 3 living ground enemies that shoot. Player shooting DISABLED:
-// NO DOGS ON ROUND 3:
 const tt3 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "hold D to crouch", false);
-// player shooting ENABLED:
 const tt4 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "crouch-shooting only inflicts", false);
 const tt4_2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "half the damage to enemies (not dogs)", false);
-
-const tt6 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "shoot while ducking to acquire pickups", false);
-// horde of live enemies ensues. 
 const tt7 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "press E to throw a grenade", false);
-
 const tt8 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "press E twice in rapid succession", false);
-const tt8_2 = new Button(canvas.width / 2.5, canvas.height / 1.7, 100, "for a grenade barrage", false);
+const tt8_2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "for a grenade barrage", false);
 
-const tt9 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "You're a natural born killer!", false);
+// rounds w/ tut text: 1-6
 
-const tt10 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "Keep up the good work, Leuitenant.", false);
-const tt10_2 = new Button(canvas.width / 2.5, canvas.height / 1.7, 100, "Help will arrive soon.", false);
+let tutRounds = {1: [tt1], 2: [tt2], 3: [tt3], 4: [tt4, tt4_2],  5: [tt7], 6: [tt8, tt8_2]};
 
-let tutRounds = {1: [tt1], 2: [tt2], 3: [tt3], 4: [tt4, tt4_2],  5: [tt6], 
-                 6: [tt7], 7: [tt8, tt8_2], 8: [tt9], 9: [tt10, tt10_2]};
-
-let tutCounts = [1, 3, 2, 10, 15, 20];
 // NO END TEXT, only beginning text.
 // if player dies in tutorial, don't completely reset, just redo current phase.
 // fulfilled becomes true when all objectives for current phase have been met.
@@ -418,6 +411,7 @@ let startRound = false;
 let finalRound = false;
 let startEnd = false;
 let showAidText = false;
+let showNatText = false;
 
 // music1.play();
 // music.dramatic.play();
@@ -465,11 +459,11 @@ function greatReset() {
     shooter2.fireRate = 0;
     shooter2.specialAmmo = 0;
 
-    roundCounts = [7, 10];
+    roundCounts = [6, 10];
 
     // ALL ENEMY COUNTS ADDED HERE!:
     for (let i = 0; i <= 9; i++) {
-        roundCounts.push(Math.floor(roundCounts[roundCounts.length -1] * 1.5));
+        roundCounts.push(Math.floor(roundCounts[roundCounts.length -1] * 1.3));
     }
 
     resetBaddies();
@@ -645,19 +639,12 @@ function handleState() {
         case "WIN": 
             specialRound = false;
             shooter.disabled = false;
-
-            if (tutorial) {
-                switch (currentRound) {
-                    case 1:
-                        break
-                }
-            }
     
             resetBaddies();
 
             // special round cases:
             // let specRounds = {5: "SPECIAL", 9: "BOSS", 10: "END"};
-            let specRounds = {5: "RELIEF", 7: "SPECIAL", 9: "BOSS", 10: "END"};
+            let specRounds = {7: "RELIEF", 8: "SPECIAL", 9: "BOSS", 10: "END"};
 
             // let specRounds = {1: "BOSS", 10: "END"};
             if (Object.keys(specRounds).includes(currentRound.toString())) {
@@ -698,6 +685,26 @@ function handleState() {
                 }, 1000);
             }
             break;
+
+            case "NATURAL":
+                if (!showNatText) {
+                    naturalText.draw(cxt);
+                    setTimeout(() => {
+                        showNatText = true;
+                    }, 1000);
+                }
+                else {
+                    goodText.draw(cxt);
+                    soonText.draw(cxt);
+                    setTimeout(() => {
+                        state = "RUNNING";
+                        if (score >= winningScore) {
+                            cremate();
+                        }
+                    }, 1000);
+                };
+                break;
+
         
             // AIDTEXT IS CONFLICTING WITH ROUNDTEXT
             case "RELIEF":

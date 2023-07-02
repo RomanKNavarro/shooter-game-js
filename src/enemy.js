@@ -97,7 +97,7 @@ export default class Enemy {
           if (!this.isCivie) this.speed = 4;
           else this.speed = -3;
       }
-      else if (this.typeNum <= this.airOdds && this.round >= 2) this.type = "air";
+      else if (this.typeNum <= this.airOdds && (this.round >= 2 && this.round != 3)) this.type = "air";
       // else if (this.typeNum <= this.bomberOdds && this.round >= 9) this.type = "bomber";
 
       // in last round, crawlies and bombers have equal chance of spawning:
