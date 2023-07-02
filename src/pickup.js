@@ -7,8 +7,6 @@ export default class Pickup {
         this.y = y;
         this.delete = false;
 
-        this.typeNum = Math.floor(Math.random() * 10);
-
         // this.sound;
         this.sound;
         this.round = round;
@@ -20,20 +18,7 @@ export default class Pickup {
         this.flammenReload.src = "src/assets/sounds/futureReload.mp3";
 
         this.nadePin = new Audio(); 
-        this.nadePin.src
-
-        // ONLY A 0/10 CHANCE TO SPAWN PICKUP IN GENERAL:
-
-        this.weaponOdds = 1;
-        this.aidOdds = 5;
-
-        //  FIX THIS CRAP
-        this.flammenOdds = 1;
-        this.weapon = ["flammen", "grenade"][Math.floor(Math.random() * 2)];
-        this.aid = ["health", "wall"][Math.floor(Math.random() * 2)];
-
-        // type by default is ar
-        this.type = "ar";
+        this.nadePin.src;
 
         this.sfx = {
             // PICKUP SFX:
@@ -68,20 +53,36 @@ export default class Pickup {
                 loop: false,
             }),
         }
+
+        // ONLY A 0/10 CHANCE TO SPAWN PICKUP IN GENERAL (see enemy.js):
+        // equal chance to spawn aid and weapons?
+        this.typeNum = Math.floor(Math.random() * 10);
+
+        // 4/10 chance to spawn weapon. 5/10 chance to spawn aid. Otherwise, spawn ar.
+        this.weaponOdds = 4;
+        this.aidOdds = 5;
+
+        //  FIX THIS CRAP
+        this.flammenOdds = 1;
+        this.weapon = ["flammen", "grenade"][Math.floor(Math.random() * 2)];
+        this.aid = ["health", "wall"][Math.floor(Math.random() * 2)];
+
+        // type by default is ar
+        this.type = "grenade";
     }
 
     // if not current respective weapon round, should default to aid pickup
     update() {
-        // this.y -= 15;
         this.y += 10;
 
         // weaponOdds encompasses flammen, ar, and grenade
+        // REMEMBER: typeNum is num 0-10
         if (this.typeNum <= this.weaponOdds) {
             if (this.weapon == "flammen") {
-                if (this.round >= 6) {
+                if (this.round >= 3) {
                     this.type = "flammen";
                 }
-                this.type = "ar";
+                this.type = "grenade";
             }
             else if (this.weapon == "grenade") {
                 if (this.round >= 3) {
@@ -125,9 +126,7 @@ export default class Pickup {
             context.fillStyle = "black";
             context.textAlign = "center";
             context.textBaseline = "middle";
-            
 
-      
             context.fillText(`${this.type}`, this.x + (this.width / 2), this.y + (this.height / 2));
         };        
     }

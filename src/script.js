@@ -194,6 +194,7 @@ const yesButton = new Button(250, canvas.height / 1.2, 100, '"Defend"', true);
 const noButton = new Button(canvas.width - 250 - 100, canvas.height / 1.2, 100, "Give up", true);
 const playAgainButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, "Play again?", true);
 const creditsButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, "READ ME", true);
+const disableButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, "Disable Tips", true);
 
 const playAgainButton2 = new Button(canvas.width / 2.5, canvas.height / 2, 100, "test test", true);
 
@@ -229,13 +230,12 @@ const tt1 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Press Spac
 // static grounds and airs:
 const tt2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Use WASD to aim in different directions", false);
 // 3 living ground enemies that shoot. Player shooting DISABLED:
-const tt3 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Press D to duck", false);
+const tt3 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "hold D to duck", false);
 // player shooting ENABLED:
 const tt4 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Shooting while ducking only inflicts", false);
-const tt4_2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "half the damage to enemies", false);
+const tt4_2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "half the damage to enemies (not dogs)", false);
 // No targets. Shooting DISABLED:
 const tt5 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Well done soldier.", false);
-const tt5_2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "You are ready for advanced weapon handling.", false);
 
 const tt6 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "shoot while ducking to acquire pickups", false);
 // horde of live enemies ensues. 
@@ -249,27 +249,22 @@ const tt9 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Massacre t
 
 const tt10 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "You're a natural born killer!", false);
 
-const tt11 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Excellent work, Leuitenant.", false);
-const tt11_2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Time to get to work.", false);
+const tt11 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Keep up the good work, Leuitenant.", false);
+const tt11_2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Help will arrive soon.", false);
 
 let tutCounts = [1, 3, 2, 10, 15, 20];
 // NO END TEXT, only beginning text.
 // if player dies in tutorial, don't completely reset, just redo current phase.
 // fulfilled becomes true when all objectives for current phase have been met.
-let tutPhases = { 
-    1: {text: tt1, count: 1, fulfilled: false},                         // 1 static
-    2: {text: tt2, count: 3, fulfilled: false},                         // 1 ground, 1 air, 1 bomber (statics)
-    3: {text: [[tt3], [tt4, tt4_2]], count: 2, fulfilled: false},       // 2 ground shooters
-    4: {text: [[tt5, tt5_2], [tt6]], count: 10, fulfilled: false},      // ar pickup. Once picked up, 10 shooters
-    5: {text: [[tt7], [tt8, tt8_2]], count: 3, fulfilled: false},       // nade. 3 statics (2 ground, 1 air)
-    6: {text: tt9, count: 20, fulfilled: false},                        // nade barrage. MANY statics.
-    7: {text: [[tt10], [tt11, tt11_2]], count: 0, fulfilled: false}     // 20 civvies
-};
-
-const tutorialText = new TextWall(
-    `Greetings soldier. For the sake of your training, we have -with much difficulty- acquired live targets for\n 
-    you to practice on. This is standard procedure and is meant to strengthen your  against the even more \n
-    gruesome bloodbath that is to ensue. Good luck soldier, and glory to Ariesa!`, Math.floor(canvas.height / 5), canvas);
+// let tutPhases = { 
+//     1: {text: tt1, count: 1, fulfilled: false},                         // 1 static
+//     2: {text: tt2, count: 3, fulfilled: false},                         // 1 ground, 1 air, 1 bomber (statics)
+//     3: {text: [[tt3], [tt4, tt4_2]], count: 2, fulfilled: false},       // 2 ground shooters
+//     4: {text: [[tt5, tt5_2], [tt6]], count: 10, fulfilled: false},      // ar pickup. Once picked up, 10 shooters
+//     5: {text: [[tt7], [tt8, tt8_2]], count: 3, fulfilled: false},       // nade. 3 statics (2 ground, 1 air)
+//     6: {text: tt9, count: 20, fulfilled: false},                        // nade barrage. MANY statics.
+//     7: {text: [[tt10], [tt11, tt11_2]], count: 0, fulfilled: false}     // 20 civvies
+// };
 
 const bossText = new TextWall(
 `Satellite imagery has exposed your horriffic atrocities in the city to the rest of the world,\n
@@ -279,6 +274,7 @@ This is it! Destroy the coalition and the city is yours. Will you give up now an
 in for war crimes, or will you defend the city to your last dying breath lest your efforts so far\n
 be in vain?`, Math.floor(canvas.height / 5), canvas);
 
+// DONT USE FLESH LOG (GAY)
 const startText = new TextWall(
     `You are Lieutenant Warren Kilgore, the last remaining invader in Swinemanland. The very land of your\n
     eternal arch-nemesis. The armestice between the Sheep and the Swinemen had been signed days before,\n 
@@ -314,9 +310,9 @@ let randomFrames = [10, 30, 50, 80, 110,];
 
 let bulletLimitX;
 let bulletLimitY = shooter.y;
-
-
 let enemyQueue = [];
+
+let tutorial = true;
 
 // ENEMY SHOOTING STUFF:
 // possible glitch fix: add "id" property
@@ -332,15 +328,15 @@ let baddiePositions = {
 };
 
 // ENEMY SPEED:
-// let currentSpeed = 2;
+let currentSpeed = 2;
 // let currentSpeed = 4;
-let currentSpeed = 8;
+// let currentSpeed = 8;
 
 // DROPPED PICKUPS:
 let snackQueue = [];
 let nadeQueue = [];
 
-let state = "MENU";
+let state = "LOADING";
 // let state = "RUNNING";
 
 let loadingTime = [2000, 3000][Math.floor(Math.random() * 3)];
@@ -505,12 +501,6 @@ function endRound() {
     }
 }
 
-function tutCollision(tutCount) {
-    for (let i = 0; i <= tutCount; i++) {
-
-    }
-}
-
 function handleState() {
     switch(state) {
         case "TUTORIAL1":
@@ -661,22 +651,6 @@ function handleState() {
             if (Object.keys(specRounds).includes(currentRound.toString())) {
                 state = specRounds[currentRound];
             }
-
-            // if (!showNextRound) {
-            //     winText.draw(cxt);
-            //     setTimeout(() => {
-            //         showNextRound = true;
-            //     }, 1000);
-            // }
-            // else {
-            //     nextText.draw(cxt);
-            //     setTimeout(() => {
-            //         state = "RUNNING";
-            //         if (score >= winningScore) {
-            //             cremate();
-            //         }
-            //     }, 1000);
-            // }
             endRound();
             break;
         
@@ -1277,7 +1251,7 @@ function animate() {
     if (state == "RUNNING" && frame <= 100) frame++;
     else frame = 0;
 
-    console.log(bulletLimitY, shooter.mouse.y);
+    console.log();
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
 }

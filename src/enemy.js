@@ -23,8 +23,7 @@ export default class Enemy {
       this.dead = false;
 
       this.pickupNum = Math.floor(Math.random() * 10);
-      this.pickupOdds = 0.5;
-      // this.pickupOdds = 8;
+      this.pickupOdds = 0;
       this.pickup = false;
 
       this.typeNum = Math.floor(Math.random() * 10);
@@ -33,7 +32,6 @@ export default class Enemy {
       this.airOdds = 4;
       this.crawlOdds = 2;
       this.bomberOdds = 2;
-
 
       this.isCivie = false;
       this.inNadeRange = false;
