@@ -8,7 +8,7 @@ export default class Floor {
     }
     draw(context) {
         context.beginPath();
-        context.fillStyle = "red";
+        context.fillStyle = "green";
         context.fillRect(this.x, this.y, this.width, this.height);
     }
 }

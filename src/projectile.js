@@ -174,7 +174,7 @@ export default class Projectile {
 
         // FOR BOMBERS:
         case "straight-down":
-          this.y -= 3;
+          this.y += this.speed;
           break;  
       }
     }

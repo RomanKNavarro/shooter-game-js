@@ -104,7 +104,7 @@ export default class Enemy {
       else if (this.typeNum <= this.crawlOdds && this.round >= 9) this.type = ["crawl", "bomber"][ Math.floor(Math.random() * 2)];
 
       // context.fillText(this.round, this.x + (this.width / 2), this.y + (this.height / 2));
-      context.fillText(this.bulletLimit, this.x + (this.width / 2), this.y + (this.height / 2));
+      context.fillText(this.type, this.x + (this.width / 2), this.y + (this.height / 2));
     } // projectiles
   
     update() {

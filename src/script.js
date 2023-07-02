@@ -145,12 +145,13 @@ Uncaught TypeError: Cannot read properties of undefined (reading 'x')
 // TODO: tutorial state w/ multiple sections
 // TODO: try drawing projectiles on a seperate canvas (for optimization)    --DONE
 // TODO: use a multi-layered canvas (one for UI, another for static objects, other for enemies/bullets)    --DONE
-// TODO: WAY too many ar pickups. Minimize them
+// TODO: WAY too many ar pickups. Minimize them     --DONE
 // TODO: HUGE ASS OVERHAUL: have all the classes accept "cxt" arguments to determine canv. to draw on   --DONE
 // TODO: get mouse position read    --DONE
 // TODO: change air enemy shooting angle    --DONE
-// TODO: get 2nd shooter to duck
+// TODO: get 2nd shooter to duck    --DONE
 // TODO: MORE nade pickups
+// successfully implement bomber
 
 
 let roundCounts = [6, 10];
@@ -316,7 +317,7 @@ let baddiePositions = {
     "4": {"inPos": false, "distance": 129, "type": "air"},
     "5": {"inPos": false, "distance": 0, "type": "crawl"},
     //  THIS POS ONLY AVAILABLE IN BOSS ROUND:
-    "6": {"inPos": false, "distance": -shooter.width, "type": "air"},
+    "6": {"inPos": false, "distance": -shooter.width, "type": "bomber"},
 };
 
 // ENEMY SPEED:
@@ -512,14 +513,14 @@ function handleState() {
 
             // skipTutButton.draw(cxt);
             skipButton.draw(cxt);
-            mouseCollision(shooter.mouse, playButton, "LOADING");
+            mouseCollision(shooter.mouse, playButton, () => state = "LOADING");
             break;
 
         // INITIAL BLACK SCREEN:
         case "PLAY":
             playText.draw(cxt);
             playButton.draw(cxt);
-            mouseCollision(shooter.mouse, playButton, "INTRO");
+            mouseCollision(shooter.mouse, playButton, () => state = "INTRO");
             break;
 
         case "LOADING":
@@ -536,7 +537,6 @@ function handleState() {
             }, loadingTime);
 
             if (showPlay) state = "PLAY";
-            // mouseCollision(shooter.mouse, playButton, "INTRO");
             break;
 
         // GLITCH SOMEWHERE IN INTRO:
@@ -546,7 +546,7 @@ function handleState() {
             startText.draw(cxt);
 
             skipButton.draw(cxt);
-            mouseCollision(shooter.mouse, skipButton, "MENU");
+            mouseCollision(shooter.mouse, skipButton, () => state = "MENU");
 
             setTimeout(() => {
                 // what's up with this again?
@@ -572,7 +572,7 @@ function handleState() {
             // FIX THIS CRAP:   ---DONE
             // REMEMBER TO UNCOMMENT THIS:
             greatReset();
-            mouseCollision(shooter.mouse, startButton, "RUNNING");
+            mouseCollision(shooter.mouse, startButton, () => state = "RUNNING");
             break;
 
         // this state is only for the boss text:
@@ -588,8 +588,8 @@ function handleState() {
             }
     
             // mouseCollision(shooter.mouse, yesButton, "RUNNING");
-            mouseCollision(shooter.mouse, yesButton, "QUIET");
-            mouseCollision(shooter.mouse, noButton, "GIVEUP");
+            mouseCollision(shooter.mouse, yesButton, () => state = "QUIET");
+            mouseCollision(shooter.mouse, noButton, () => state = "GIVEUP");
             break;
 
         case "QUIET":
@@ -610,7 +610,13 @@ function handleState() {
             // state = "RUNNING";
             shooter.disabled = false;
 
-            if (Object.keys(tutRounds).includes(currentRound.toString())) {
+            if (Object.keys(tutRounds).includes(currentRound.toString()) && tutorial === true) {
+                disableButton.draw(cxt);
+                mouseCollision(shooter.mouse, disableButton, () => {
+                    tutorial = false;
+                    disableButton.show = false;
+                });
+
                 for (let i = 0; i < tutRounds[currentRound].length; i++) {
                     tutRounds[currentRound][i].draw(cxt);
                 }
@@ -639,6 +645,11 @@ function handleState() {
         case "WIN": 
             specialRound = false;
             shooter.disabled = false;
+            disableButton.draw(cxt);
+            mouseCollision(shooter.mouse, disableButton, () => {
+                tutorial = false;
+                disableButton.show = false;
+            });
     
             resetBaddies();
 
@@ -663,7 +674,7 @@ function handleState() {
             }
 
             playAgainButton2.draw(cxt);
-            mouseCollision(shooter.mouse, playAgainButton2, "INTRO");  
+            mouseCollision(shooter.mouse, playAgainButton2, () => state = "INTRO");  
             break;
 
         case "SPECIAL":
@@ -749,7 +760,7 @@ function handleState() {
             shooter.disabled = true;
             giveupText.draw(cxt);
             playAgainButton.draw(cxt);
-            mouseCollision(shooter.mouse, playAgainButton, "MENU");
+            mouseCollision(shooter.mouse, playAgainButton, () => state = "MENU");
             break;
     }
 }
@@ -1080,9 +1091,13 @@ function handleEnemy() {
         if (current.type == "ground" || current.type == "crawl") {
             current.y = flora.y - current.height;
             current.angle = "back";
-        } else {
+        } else if (current.type == "air") {
             current.y = flora.y - 150;
             current.angle = "down-diagnal";
+        } else {
+            // BOMBER:
+            current.y = flora.y - 175;
+            current.angle = "straight-down";
         }
 
         // FIX THIS CRAP --DONE. Takes into account both regular and special rounds:
@@ -1220,7 +1235,7 @@ function collision(bullet, orc) {
 }
 
 // used to determine if the mouse is inside a given button. (mouse, button, state)
-function mouseCollision(first, second, nextState) {
+function mouseCollision(first, second, callback) {
     if (
       first.x >= second.x &&
       first.x <= second.x + second.width &&
@@ -1229,7 +1244,8 @@ function mouseCollision(first, second, nextState) {
     ) {
         second.stroke = "red";
         if (first.clicked) {
-            state = nextState;
+            //state = nextState;
+            callback();
         }
     } else {
         second.stroke = "black";
@@ -1271,7 +1287,7 @@ function animate() {
     else frame = 0;
 
     // currentRound changes only after the "next round incoming" text
-    // console.log(currentRound);
+    // console.log(tutorial);
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
