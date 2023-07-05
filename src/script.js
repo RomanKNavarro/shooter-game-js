@@ -1062,7 +1062,9 @@ function handleEnemy() {
     for (let i = 0; i < enemyQueue.length; i++) {
         let current = enemyQueue[i];
 
-        if (current.type == "bomber") current.renderBeam(cxt);
+        if (current.type == "bomber" && current.inPosition) {
+            current.renderBeam(cxt);
+        };
 
         if (!shooter.duck) current.bulletLimit = shooter.x + shooter.width;
         else {
@@ -1135,11 +1137,12 @@ function handleEnemy() {
                     current.shooting = true; 
                     baddiePositions[i.toString()]["inPos"] = true;
                     current.position = i.toString();
+                    current.inPosition = true;
 
-                    if (current.type == "bomber") {
-                        // current.renderBeam(cxt);
-                        current.beaming = true;
-                    }
+                    // if (current.type == "bomber") {
+                    //     // current.renderBeam(cxt);
+                    //     current.beaming = true;
+                    // }
             }
 
             if (current.type == "crawl" && current.shooting && frame % 50) {

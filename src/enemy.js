@@ -63,14 +63,16 @@ export default class Enemy {
       this.sound;
 
       this.beaming = false;
-      this.beamHeight = 60;
+      this.beamHeight = 200;
+      this.openFire = 100;
     }
 
     renderBeam(context) {
-      context.beginPath();
-      context.fillStyle = "purple";
-      context.fillRect(this.x, this.y, 20, this.beamHeight);
-      //beamHeight++;
+      if (this.timer >= this.openFire) {
+        context.beginPath();
+        context.fillStyle = "purple";
+        context.fillRect(this.x, this.y, 20, this.beamHeight);
+      }
     }
 
     draw(context) {
@@ -98,20 +100,24 @@ export default class Enemy {
           // this.width = 30;
           // this.height = 30;
           this.type = "bomber";
-          this.fireRate = 100;
+          this.openFire = 200;
+          this.fireRate = 15;
           this.width = 50;
           this.height = 50;
 
           if (!this.isCivie) this.speed = 4;
           else this.speed = -3;
       }
-      else if (this.typeNum <= this.airOdds && (this.round >= 2 && this.round != 3)) this.type = "air";
+      else if (this.typeNum <= this.airOdds && (this.round >= 2 && this.round != 3)) {
+        this.type = "air";
+        this.openFire = 150;
+        this.fireRate = 150;
+      }
 
       // in last round, crawlies and bombers have equal chance of spawning:
       // else if (this.typeNum <= this.crawlOdds && this.round >= 9) this.type = ["crawl", "bomber"][ Math.floor(Math.random() * 2)];
 
-      // context.fillText(this.round, this.x + (this.width / 2), this.y + (this.height / 2));
-      context.fillText(this.beaming, this.x + (this.width / 2), this.y + (this.height / 2));
+      context.fillText(`${this.openFire}, ${this.timer}`, this.x + (this.width / 2), this.y + (this.height / 2));
     } // projectiles
   
     update() {
@@ -119,31 +125,33 @@ export default class Enemy {
       if (!this.shooting) {
         this.x -= this.speed;
       } else {
-          this.speed = 0;
-          this.timer++;
+        this.speed = 0;
+        this.timer++;
 
-          switch(this.type) {
-            case "crawl":
-              this.sound = "growl";
-              break;
-            case "ground":
-            case "air":
-              this.sound = "shotty";
-              break;
-            case "bomber":
-              this.sound = "bomb-dropper";
-              break;
-          }
+        switch(this.type) {
+          case "crawl":
+            this.sound = "growl";
+            break;
+          case "ground":
+          case "air":
+            this.sound = "shotty";
+            break;
+          case "bomber":
+            this.sound = "bomb-dropper";
+            break;
+        }
 
-          //   MIGHT HAVE TO REVERT
-          // timer doesn't actually start until enemy is shooting :)
-          if ((this.timer % this.fireRate === 0  || this.timer == 1) 
-              && (this.timer >= 50 || this.type == "air")) {
-              // || (this.timer >= 100 && this.type == "bomber")) {  
-          // air shooters get a delay:
-          // && ((this.timer >= 50 && this.type == "air") || (this.timer >= 100 && this.type == "bomber"))) {  
-            this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, this.sound, this.dead)); 
-          }
+        //   MIGHT HAVE TO REVERT
+        // timer doesn't actually start until enemy is shooting :)
+        // if ((this.timer % this.fireRate === 0  || this.timer == 1) 
+        //     && (this.timer >= 50 || this.type == "air") 
+        //     || (this.timer >= 100 && this.type == "bomber")) {  
+        //   this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, this.sound, this.dead)); 
+        // }
+
+        if (this.timer >= this.openFire && this.timer % this.fireRate === 0) {
+          this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, this.sound, this.dead)); 
+        } 
       }
     }
 }
