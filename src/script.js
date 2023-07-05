@@ -1063,14 +1063,8 @@ function handleEnemy() {
         let current = enemyQueue[i];
 
         if (!shooter.duck) {
-            // if (current.type == "ground" || current.type == "crawl") {
-            //     current.bulletLimit = shooter.x + shooter.width;
-            // }
-            // else if (current.type == "air") {}
             current.bulletLimit = shooter.x + shooter.width;
 
-            // bulletLimitX = shooter.x + shooter.width;
-            // bulletLimitY = shooter.y;
         }
         else {
             // WHEN DUCKING:
@@ -1145,8 +1139,6 @@ function handleEnemy() {
             }
 
             if (current.type == "crawl" && current.shooting && frame % 50) {
-                //let paco = current.dog[Math.floor(Math.random() * 3)];
-                // current.growl.play();
 
                 // UNCOMMENT THIS:
                 // sfx.growl.play();

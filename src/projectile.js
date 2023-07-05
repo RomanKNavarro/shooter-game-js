@@ -47,7 +47,7 @@ export default class Projectile {
         }), 
         growl: new Howl({
           src: [
-            "src/assets/sounds/shots/rifle.wav",
+            "/src/assets/sounds/paco.flac",
           ],
           // the "loop" flag is false by default!
           loop: false,
@@ -55,6 +55,13 @@ export default class Projectile {
           // good use case: when there is an intro to a song. Play the intro first, then use "onend" 
           // to play the song without having to worry about the intro repeating. 
           onend: function() {}
+        }), 
+        bomber: new Howl({
+          src: [
+            "src/assets/sounds/ray-beam.mp3",
+          ],
+          // the "loop" flag is false by default!
+          loop: false,
         }), 
 
       }
@@ -127,8 +134,11 @@ export default class Projectile {
           this.playSound(this.sfx.flammen);
           this.speed = 12;
           break;
-        case "bomba":
-          
+
+        case "bomb-dropper":
+          this.playSound(this.sfx.bomber);
+          this.speed = 5;
+          break;
       }
 
       // DIRECTION TO SHOOT IN:
