@@ -62,8 +62,15 @@ export default class Enemy {
       this.growl.src = "/src/assets/sounds/paco.flac";
       this.sound;
 
-      // TUTORIAL CRAP:
-      this.meat = false;
+      this.beaming = false;
+      this.beamHeight = 60;
+    }
+
+    renderBeam(context) {
+      context.beginPath();
+      context.fillStyle = "purple";
+      context.fillRect(this.x, this.y, 20, this.beamHeight);
+      //beamHeight++;
     }
 
     draw(context) {
@@ -85,13 +92,13 @@ export default class Enemy {
 
       // spawn crawlies first, then airs
       // TEMPORARILY BOMBER FOR NOW:
-      if (this.typeNum <= this.crawlOdds && this.round >= 2) {
+      if (this.typeNum <= this.crawlOdds && this.round >= 1) {
       // if (this.typeNum <= this.crawlOdds) {
           // this.type = "crawl";
           // this.width = 30;
           // this.height = 30;
           this.type = "bomber";
-          this.fireRate = 10;
+          this.fireRate = 100;
           this.width = 50;
           this.height = 50;
 
@@ -101,10 +108,10 @@ export default class Enemy {
       else if (this.typeNum <= this.airOdds && (this.round >= 2 && this.round != 3)) this.type = "air";
 
       // in last round, crawlies and bombers have equal chance of spawning:
-      else if (this.typeNum <= this.crawlOdds && this.round >= 9) this.type = ["crawl", "bomber"][ Math.floor(Math.random() * 2)];
+      // else if (this.typeNum <= this.crawlOdds && this.round >= 9) this.type = ["crawl", "bomber"][ Math.floor(Math.random() * 2)];
 
       // context.fillText(this.round, this.x + (this.width / 2), this.y + (this.height / 2));
-      context.fillText(this.projectiles, this.x + (this.width / 2), this.y + (this.height / 2));
+      context.fillText(this.beaming, this.x + (this.width / 2), this.y + (this.height / 2));
     } // projectiles
   
     update() {
@@ -131,7 +138,8 @@ export default class Enemy {
           //   MIGHT HAVE TO REVERT
           // timer doesn't actually start until enemy is shooting :)
           if ((this.timer % this.fireRate === 0  || this.timer == 1) 
-              && (this.timer >= 50 || this.type == "air")) {  
+              && (this.timer >= 50 || this.type == "air")) {
+              // || (this.timer >= 100 && this.type == "bomber")) {  
           // air shooters get a delay:
           // && ((this.timer >= 50 && this.type == "air") || (this.timer >= 100 && this.type == "bomber"))) {  
             this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, this.sound, this.dead)); 

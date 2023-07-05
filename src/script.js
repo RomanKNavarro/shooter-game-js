@@ -1062,10 +1062,9 @@ function handleEnemy() {
     for (let i = 0; i < enemyQueue.length; i++) {
         let current = enemyQueue[i];
 
-        if (!shooter.duck) {
-            current.bulletLimit = shooter.x + shooter.width;
+        if (current.type == "bomber") current.renderBeam(cxt);
 
-        }
+        if (!shooter.duck) current.bulletLimit = shooter.x + shooter.width;
         else {
             // WHEN DUCKING:
             if (current.type == "ground" || current.type == "crawl") current.bulletLimit = 0
@@ -1126,7 +1125,7 @@ function handleEnemy() {
             let trueDistance = shooter.x + shooter.width + baddiePositions[i.toString()]["distance"];
             if (!baddiePositions[i.toString()]["inPos"] &&
 
-                // what was my thought process behind this?
+                // what was my thought process behind this? If orc is within "true" distance, set "inPos" to true
                 current.x < trueDistance &&
                 current.x > trueDistance - current.width  &&
                 current.type == baddiePositions[i.toString()]["type"] && 
@@ -1136,6 +1135,11 @@ function handleEnemy() {
                     current.shooting = true; 
                     baddiePositions[i.toString()]["inPos"] = true;
                     current.position = i.toString();
+
+                    if (current.type == "bomber") {
+                        // current.renderBeam(cxt);
+                        current.beaming = true;
+                    }
             }
 
             if (current.type == "crawl" && current.shooting && frame % 50) {
