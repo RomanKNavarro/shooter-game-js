@@ -151,7 +151,9 @@ Uncaught TypeError: Cannot read properties of undefined (reading 'x')
 // TODO: change air enemy shooting angle    --DONE
 // TODO: get 2nd shooter to duck    --DONE
 // TODO: MORE nade pickups
-// successfully implement bomber
+// TODO: successfully implement bomber
+// TODO: remove secondStream of bullets on gameOver.
+// TODO: get "help will arrive soon" text to show after natural text.
 
 
 let roundCounts = [6, 10];
@@ -371,7 +373,7 @@ var sfx = {
     }),
     rayBeam: new Howl({
         src: [
-            "src/assets/sounds/ray-beam.mp3",
+            "src/assets/sounds/pulse.wav",
         ],
         loop: false,
     }),
@@ -621,6 +623,8 @@ function handleState() {
                 }, 1000);
             }
 
+            if (currentRound >= 7) tutorial = false;
+
             // reset after each round
             if (startRound) {
                 showNextRound = false;
@@ -637,17 +641,17 @@ function handleState() {
         case "WIN": 
             specialRound = false;
             shooter.disabled = false;
-            disableButton.draw(cxt);
+            if (tutorial) disableButton.draw(cxt);
             mouseCollision(shooter.mouse, disableButton, () => {
                 tutorial = false;
                 disableButton.show = false;
             });
-    
+
             resetBaddies();
 
             // special round cases:
             // let specRounds = {7: "RELIEF", 8: "SPECIAL", 9: "BOSS", 10: "END"};
-            let specRounds = {7: "RELIEF", 3: "SPECIAL", 9: "BOSS", 10: "END"};
+            let specRounds = {7: "RELIEF", 3: "SPECIAL", 4: "NATURAL", 9: "BOSS", 10: "END"};
 
             // let specRounds = {1: "BOSS", 10: "END"};
             if (Object.keys(specRounds).includes(currentRound.toString())) {
@@ -658,6 +662,7 @@ function handleState() {
         
         case "LOSE":
             shooter.disabled = true;
+            shooter.secondStream = false;
             failText.draw(cxt);
             if (playerHealth.number <= 0) {
                 healthText.draw(cxt);
@@ -689,6 +694,7 @@ function handleState() {
             }
             break;
 
+            // where did I want to put this state again?
             case "NATURAL":
                 if (!showNatText) {
                     naturalText.draw(cxt);
@@ -1054,10 +1060,11 @@ function handleEnemy() {
     for (let i = 0; i < enemyQueue.length; i++) {
         let current = enemyQueue[i];
 
-        if (current.type == "bomber" && current.inPosition) {
+        if (current.type == "bomber" && current.inPosition == true) {
+
             current.renderBeam(cxt);
             if (!current.dead && current.timer >= current.openFire) playSound(sfx.rayBeam);
-            else sfx.rayBeam.stop();
+            // else sfx.rayBeam.stop();
         };
 
         if (!shooter.duck) current.bulletLimit = shooter.x + shooter.width;

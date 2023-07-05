@@ -61,6 +61,7 @@ export default class Enemy {
       this.beaming = false;
       this.beamHeight = 200;
       this.openFire = 100;
+      this.beamActive = false;
     }
 
     renderBeam(context) {
@@ -88,6 +89,10 @@ export default class Enemy {
         this.pickup = true   
       }
 
+      if (this.type == "bomber") {
+        
+      }
+
       // spawn crawlies first, then airs
       // TEMPORARILY BOMBER FOR NOW:
       if (this.typeNum <= this.crawlOdds && this.round >= 1) {
@@ -113,7 +118,7 @@ export default class Enemy {
       // in last round, crawlies and bombers have equal chance of spawning:
       // else if (this.typeNum <= this.crawlOdds && this.round >= 9) this.type = ["crawl", "bomber"][ Math.floor(Math.random() * 2)];
 
-      context.fillText(`${this.openFire}, ${this.timer}`, this.x + (this.width / 2), this.y + (this.height / 2));
+      context.fillText(`${this.beamActive}, ${this.timer}`, this.x + (this.width / 2), this.y + (this.height / 2));
     } // projectiles
   
     update() {
@@ -139,6 +144,8 @@ export default class Enemy {
 
         if (this.timer >= this.openFire && this.timer % this.fireRate === 0) {
           this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, this.sound, this.dead)); 
+
+          this.beamActive == true;
         } 
       }
     }

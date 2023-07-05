@@ -119,7 +119,6 @@ export default class Projectile {
             // this.shotty.play();
             this.playSound(this.sfx.shotty);
           } else {
-            // this.shotty.pause();
             this.sfx.shotty.stop();
           } 
           break;
