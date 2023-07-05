@@ -105,7 +105,6 @@ export default class Projectile {
       switch (this.weapon) {
         case "pistol":
           this.playSound(this.sfx.pistol);
-          
           break;
         case "shotty":
           this.size = 5;
@@ -128,12 +127,15 @@ export default class Projectile {
           this.playSound(this.sfx.flammen);
           this.speed = 12;
           break;
+        case "bomba":
+          
       }
 
       // DIRECTION TO SHOOT IN:
       switch (this.direction) {
         case "straight":
           this.x += this.speed;
+          // this.y += this.speed; <- yup, this works
           break
 
         case "up":

@@ -87,21 +87,22 @@ export default class Enemy {
       if (this.typeNum <= this.crawlOdds && this.round >= 3) {
       // if (this.typeNum <= this.crawlOdds) {
           // this.type = "crawl";
+          // this.width = 30;
+          // this.height = 30;
           this.type = "bomber";
-          this.width = 30;
-          this.height = 30;
+          this.width = 50;
+          this.height = 50;
 
           if (!this.isCivie) this.speed = 4;
           else this.speed = -3;
       }
       else if (this.typeNum <= this.airOdds && (this.round >= 2 && this.round != 3)) this.type = "air";
-      // else if (this.typeNum <= this.bomberOdds && this.round >= 9) this.type = "bomber";
 
       // in last round, crawlies and bombers have equal chance of spawning:
       else if (this.typeNum <= this.crawlOdds && this.round >= 9) this.type = ["crawl", "bomber"][ Math.floor(Math.random() * 2)];
 
       // context.fillText(this.round, this.x + (this.width / 2), this.y + (this.height / 2));
-      context.fillText(this.projectiles, this.x + (this.width / 2), this.y + (this.height / 2));
+      context.fillText(this.type, this.x + (this.width / 2), this.y + (this.height / 2));
     } // projectiles
   
     update() {

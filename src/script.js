@@ -169,6 +169,7 @@ let enemyCount = roundCounts[0];
 
 // used to show current enemies remaining:
 let enemiesLeft = roundCounts[0];
+let secondShooter = false;
 
 // objects
 const flora = new Floor(canvas);
@@ -321,7 +322,7 @@ let baddiePositions = {
 };
 
 // ENEMY SPEED:
-let currentSpeed = 2;
+let currentSpeed = 1.5;
 // let currentSpeed = 4;
 // let currentSpeed = 8;
 
@@ -456,6 +457,7 @@ function greatReset() {
     shooter.fireRate = 0;
     shooter.specialAmmo = 0;
 
+    secondShooter = false;
     shooter2.weapon = "pistol";
     shooter2.fireRate = 0;
     shooter2.specialAmmo = 0;
@@ -500,9 +502,6 @@ function handleState() {
         case "TUTORIAL1":
             shooter.disabled = false;
             tt1.draw(cxt);
-
-            // let tutOrc1 = new Enemy(canvas.width / 2, 0, 0);
-            // let tutOrc1 = new Enemy(canvas.width / 2, 0, 0);
 
             // const shooter = new Shooter(100, flora.y - 50);
             tutOrc1.y = flora.y - tutOrc1.height;
@@ -654,8 +653,8 @@ function handleState() {
             resetBaddies();
 
             // special round cases:
-            // let specRounds = {5: "SPECIAL", 9: "BOSS", 10: "END"};
-            let specRounds = {7: "RELIEF", 8: "SPECIAL", 9: "BOSS", 10: "END"};
+            // let specRounds = {7: "RELIEF", 8: "SPECIAL", 9: "BOSS", 10: "END"};
+            let specRounds = {7: "RELIEF", 3: "SPECIAL", 9: "BOSS", 10: "END"};
 
             // let specRounds = {1: "BOSS", 10: "END"};
             if (Object.keys(specRounds).includes(currentRound.toString())) {
@@ -719,6 +718,7 @@ function handleState() {
         
             // AIDTEXT IS CONFLICTING WITH ROUNDTEXT
             case "RELIEF":
+                secondShooter = true;
                 shooter2.duckable = false;
                 // shooter.disabled = false;
                 shooter2.initSecond = true;
@@ -781,13 +781,13 @@ function cremate() {
 // TODO: GET THIS FUCKING SHIT RUNNING LIKE HOW IT DID EARLIER  --DONE
 function handleShooter() {
     shooter.draw(cxt2);
-    shooter2.draw(cxt2);
+    if (secondShooter) shooter2.draw(cxt2);
 
     // what states require shooter to be disabled?
     if (state == "RUNNING" || state == "WIN" || state == "QUIET" 
     || state == "RELIEF" || state == "TUTORIAL" || state == "MENU") {
         shooter.update();
-        shooter2.update();
+        if (secondShooter) shooter2.update();
     }
 
     // GRENADE FUNCTIONALITY:
@@ -1167,22 +1167,20 @@ function pushEnemy() {
             if (!specialRound) {
                 // DO NOT REVERT. NEED TO MAKE WAY FOR DIFFERENT SPEEDS:
                 enemyQueue.push(new Enemy(canvas.width, currentSpeed, currentRound));
-                // enemyQueue.push(new Enemy(canvas.width, currentRound));
                 enemyCount--;  
 
                 // SPAWN CIVIES IN LATTER PART OF FINAL ROUND:
                 if (finalRound && enemyCount % 3 == 0 && (enemyCount < 20 && enemyCount > 10)) {
-                    enemyQueue.push(new Enemy(0, -currentSpeed, currentRound));
-                    // enemyQueue.push(new Enemy(0, currentRound));
+                    enemyQueue.push(new Enemy(-50, -currentSpeed, currentRound));
                     enemyCount--; 
                 }
             }  
             else {
                 // CIVIES SPAWNED HERE IN SPECIAL ROUND:
-                // DOESN'T ACTUALLY SPAWN CIVIES. Just normal enemies at coord 0 lol:
+                // DOESN'T ACTUALLY SPAWN CIVIES. Just normal enemies at coord -50 lol:
                 // REMEMBER: enemyCount only refers to num. of enemies to push to array :)
                 if (enemyCount > 0) {
-                    enemyQueue.push(new Enemy(0, -currentSpeed, currentRound));
+                    enemyQueue.push(new Enemy(-50, -currentSpeed, currentRound));
                     enemyCount--; 
 
                     // if (enemyCount < 50 && enemyCount < 20) {
