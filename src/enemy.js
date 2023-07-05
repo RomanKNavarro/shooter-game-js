@@ -58,10 +58,6 @@ export default class Enemy {
 
       this.dead = false;
 
-      this.growl = new Audio();
-      this.growl.src = "/src/assets/sounds/paco.flac";
-      this.sound;
-
       this.beaming = false;
       this.beamHeight = 200;
       this.openFire = 100;
@@ -140,14 +136,6 @@ export default class Enemy {
             this.sound = "bomb-dropper";
             break;
         }
-
-        //   MIGHT HAVE TO REVERT
-        // timer doesn't actually start until enemy is shooting :)
-        // if ((this.timer % this.fireRate === 0  || this.timer == 1) 
-        //     && (this.timer >= 50 || this.type == "air") 
-        //     || (this.timer >= 100 && this.type == "bomber")) {  
-        //   this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, this.sound, this.dead)); 
-        // }
 
         if (this.timer >= this.openFire && this.timer % this.fireRate === 0) {
           this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, this.sound, this.dead)); 

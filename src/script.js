@@ -247,19 +247,6 @@ const tt8_2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "for a gr
 
 let tutRounds = {1: [tt1], 2: [tt2], 3: [tt3], 4: [tt4, tt4_2],  5: [tt7], 6: [tt8, tt8_2]};
 
-// NO END TEXT, only beginning text.
-// if player dies in tutorial, don't completely reset, just redo current phase.
-// fulfilled becomes true when all objectives for current phase have been met.
-// let tutPhases = { 
-//     1: {text: tt1, count: 1, fulfilled: false},                         // 1 static
-//     2: {text: tt2, count: 3, fulfilled: false},                         // 1 ground, 1 air, 1 bomber (statics)
-//     3: {text: [[tt3], [tt4, tt4_2]], count: 2, fulfilled: false},       // 2 ground shooters
-//     4: {text: [[tt5, tt5_2], [tt6]], count: 10, fulfilled: false},      // ar pickup. Once picked up, 10 shooters
-//     5: {text: [[tt7], [tt8, tt8_2]], count: 3, fulfilled: false},       // nade. 3 statics (2 ground, 1 air)
-//     6: {text: tt9, count: 20, fulfilled: false},                        // nade barrage. MANY statics.
-//     7: {text: [[tt10], [tt11, tt11_2]], count: 0, fulfilled: false}     // 20 civvies
-// };
-
 const bossText = new TextWall(
 `Satellite imagery has exposed your horriffic atrocities in the city to the rest of the world,\n
 prompting international outcry and the formation of a Sheep-led coalition against you.\n
@@ -381,6 +368,12 @@ var sfx = {
         src: [
             "src/assets/sounds/futureReload.mp3",
         ]
+    }),
+    rayBeam: new Howl({
+        src: [
+            "src/assets/sounds/ray-beam.mp3",
+        ],
+        loop: false,
     }),
 };
 
@@ -966,7 +959,6 @@ function handleProjectile(arr) {
                     arr.splice(j, 1);
                     j--;
                     enemiesLeft--;
-
                 }
             }
 
@@ -1064,6 +1056,8 @@ function handleEnemy() {
 
         if (current.type == "bomber" && current.inPosition) {
             current.renderBeam(cxt);
+            if (!current.dead && current.timer >= current.openFire) playSound(sfx.rayBeam);
+            else sfx.rayBeam.stop();
         };
 
         if (!shooter.duck) current.bulletLimit = shooter.x + shooter.width;
