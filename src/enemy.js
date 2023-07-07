@@ -2,22 +2,19 @@ import Projectile from "./projectile.js";
 
 // OVERHAUL SPEED FUNCTIONALITY:
 export default class Enemy {
+    // what's the speed parameter for again? to increase speed globally as rounds progress :)
     constructor(x, speed, round) {
       // cxt
       // FASTER SPEED ON CRAWLIES
       this.width = 50;
       this.height = 50;
 
-      // speed is initially 5:
-
       this.speed = speed;
-      // this.speed = 2;
 
       this.x = x;
       this.y;
 
       this.round = round;
-      //this.round = 12;
 
       this.color = "pink"
       this.dead = false;
@@ -27,11 +24,6 @@ export default class Enemy {
       this.pickup = false;
 
       this.typeNum = Math.floor(Math.random() * 10);
-
-      this.groundOdds = 10;
-      this.airOdds = 4;
-      this.crawlOdds = 2;
-      this.bomberOdds = 2;
 
       this.isCivie = false;
       this.inNadeRange = false;
@@ -59,16 +51,33 @@ export default class Enemy {
       this.dead = false;
 
       this.beaming = false;
-      this.beamHeight = 200;
+      this.beamHeight = 180;
       this.openFire = 100;
       this.beamActive = false;
+
+      /* EVENTS:
+        round 3: pickups introduced (health, ar, grenade)
+        round 4
+      */
+
+
+      // ODDS CRAP:
+      // base enemies:
+      // 6/10 chance to spawn ground, 4/10 ch. to spawn air, 2/10 to spawn dog
+      this.groundOdds = 10;
+      this.airOdds = 4;
+      this.crawlOdds = 2;
+
+      // initially, bombers don't spawn until round
+      this.bomberOdds = 1;
+      this.sheepOdds = 1;
     }
 
     renderBeam(context) {
       if (this.timer >= this.openFire) {
         context.beginPath();
         context.fillStyle = "purple";
-        context.fillRect(this.x, this.y, 20, this.beamHeight);
+        context.fillRect(this.x + (this.width * 0.5), this.y, 30, this.beamHeight);
       }
     }
 
@@ -89,10 +98,6 @@ export default class Enemy {
         this.pickup = true   
       }
 
-      if (this.type == "bomber") {
-        
-      }
-
       // spawn crawlies first, then airs
       // TEMPORARILY BOMBER FOR NOW:
       if (this.typeNum <= this.crawlOdds && this.round >= 1) {
@@ -103,8 +108,8 @@ export default class Enemy {
           this.type = "bomber";
           this.openFire = 200;
           this.fireRate = 15;
-          this.width = 50;
-          this.height = 50;
+          this.width = 70;
+          this.height = 70;
 
           if (!this.isCivie) this.speed = 4;
           else this.speed = -3;
@@ -113,6 +118,9 @@ export default class Enemy {
         this.type = "air";
         this.openFire = 150;
         this.fireRate = 150;
+      }
+      else if (this.typeNum == "sheep") {
+        // this.speed = 
       }
 
       // in last round, crawlies and bombers have equal chance of spawning:
@@ -137,15 +145,13 @@ export default class Enemy {
           case "air":
             this.sound = "shotty";
             break;
-          case "bomber":
-            this.sound = "bomb-dropper";
-            break;
+          case "sheep":
+            this.sound = "pew-pew";
         }
 
         if (this.timer >= this.openFire && this.timer % this.fireRate === 0) {
           this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, this.sound, this.dead)); 
-
-          this.beamActive == true;
+          if (this.type == "bomber") this.beamActive = true;
         } 
       }
     }

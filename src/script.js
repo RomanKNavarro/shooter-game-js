@@ -142,7 +142,7 @@ Uncaught TypeError: Cannot read properties of undefined (reading 'x')
 // TODO: add delay before enemies start shooting.       --DONE
 // TODO: add delay after last round before "coalition defeated" message. Add victory music.
 // TODO: option to turn off music in menu (plus ui icon!)
-// TODO: tutorial state w/ multiple sections
+// TODO: tutorial state w/ multiple sections    --DONE (resolved)
 // TODO: try drawing projectiles on a seperate canvas (for optimization)    --DONE
 // TODO: use a multi-layered canvas (one for UI, another for static objects, other for enemies/bullets)    --DONE
 // TODO: WAY too many ar pickups. Minimize them     --DONE
@@ -151,10 +151,16 @@ Uncaught TypeError: Cannot read properties of undefined (reading 'x')
 // TODO: change air enemy shooting angle    --DONE
 // TODO: get 2nd shooter to duck    --DONE
 // TODO: MORE nade pickups
-// TODO: successfully implement bomber
-// TODO: remove secondStream of bullets on gameOver.
+// TODO: successfully implement bomber  --DONE
+// TODO: remove secondStream of bullets on gameOver.        --DONE
 // TODO: get "help will arrive soon" text to show after natural text.
-
+// TODO: ray beam should hurt when ducking too. --DONE
+// TODO: add flammen pickup again   --DONE
+// NO PICKUPS until round 3     --DONE
+// increase bomber altitude     --DONE
+// TODO: add stupid sheep troop type
+// TODO: give bomber and sheep 2x health 
+// TODO: IF PLAYER DUCKS, SHEEP DUCKS TOO!
 
 let roundCounts = [6, 10];
 
@@ -225,7 +231,7 @@ const endText4 = new Button(canvas.width / 2.5, canvas.height / 1.9, 100, "KAVEM
 
 const naturalText = new Button(canvas.width / 2.5, canvas.height / 3, 100, "You're a natural born killer!", false);
 
-const goodText = new Button(canvas.width / 2.5, canvas.height / 3, 100, "Keep up the good work, Leuitenant.", false);
+const goodText = new Button(canvas.width / 2.5, canvas.height / 4.5, 100, "Keep up the good work, Leuitenant.", false);
 const soonText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "Help will arrive soon.", false);
 
 const aidText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "HELP HAS ARRIVED", false);
@@ -238,7 +244,7 @@ const quietText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "KILL
 // 3 static grounds
 const tt1 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "Press Space to shoot", false);
 const tt2 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "Use WASD to aim in different directions", false);
-const tt3 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "hold D to crouch", false);
+const tt3 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "hold S to crouch", false);
 const tt4 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "crouch-shooting only inflicts", false);
 const tt4_2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "half the damage to enemies (not dogs)", false);
 const tt7 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "press E to throw a grenade", false);
@@ -312,8 +318,6 @@ let baddiePositions = {
 
 // ENEMY SPEED:
 let currentSpeed = 1.5;
-// let currentSpeed = 4;
-// let currentSpeed = 8;
 
 // DROPPED PICKUPS:
 let snackQueue = [];
@@ -494,22 +498,6 @@ function endRound() {
 
 function handleState() {
     switch(state) {
-        case "TUTORIAL1":
-            shooter.disabled = false;
-            tt1.draw(cxt);
-
-            // const shooter = new Shooter(100, flora.y - 50);
-            tutOrc1.y = flora.y - tutOrc1.height;
-            tutOrc1.update();
-            tutOrc1.draw(cxt);
-
-            currTutCount.push(tutOrc1)
-
-            // skipTutButton.draw(cxt);
-            skipButton.draw(cxt);
-            mouseCollision(shooter.mouse, playButton, () => state = "LOADING");
-            break;
-
         // INITIAL BLACK SCREEN:
         case "PLAY":
             playText.draw(cxt);
@@ -587,8 +575,6 @@ function handleState() {
             break;
 
         case "QUIET":
-            shooter.disabled = false;
-
             quietText.draw(cxt);
             // aidText.draw(cxt);
 
@@ -640,7 +626,6 @@ function handleState() {
         
         case "WIN": 
             specialRound = false;
-            shooter.disabled = false;
             if (tutorial) disableButton.draw(cxt);
             mouseCollision(shooter.mouse, disableButton, () => {
                 tutorial = false;
@@ -675,7 +660,6 @@ function handleState() {
             break;
 
         case "SPECIAL":
-            // shooter.disabled = false;
             specialRound = true;
     
             if (!showSpecialText) {
@@ -700,7 +684,7 @@ function handleState() {
                     naturalText.draw(cxt);
                     setTimeout(() => {
                         showNatText = true;
-                    }, 1000);
+                    }, 2000);
                 }
                 else {
                     goodText.draw(cxt);
@@ -710,11 +694,10 @@ function handleState() {
                         if (score >= winningScore) {
                             cremate();
                         }
-                    }, 1000);
+                    }, 3000);
                 };
                 break;
-
-        
+   
             // AIDTEXT IS CONFLICTING WITH ROUNDTEXT
             case "RELIEF":
                 secondShooter = true;
@@ -767,7 +750,6 @@ function handleState() {
 // increment stuff to make next round slightly harder:
 function cremate() {
     currentRound++;
-    // currentSpeed += 0.1;
     currentSpeed += 0.3;
     roundCounts.splice(0, 1);
     enemyCount = enemiesLeft = roundCounts[0];
@@ -881,9 +863,6 @@ function handleEnemyProjectiles(orc) {
     for (let i = 0; i < projes.length; i++) {
         let current = projes[i];
         
-
-        // FIX THIS CRAP:
-        // if (current.x > bulletLimitX || (orc.type == "air" && current.y <= bulletLimitY)) {
         // what's bulletLimit? 
         if (current.x > orc.bulletLimit) {
         // if (current.x > 150) {
@@ -895,6 +874,7 @@ function handleEnemyProjectiles(orc) {
             i--;
 
             // UNCOMMENT THIS:
+            // if ((!shooter.duck) || (orc.type == "air" || orc.type == "bomber")) playerHealth.number--;
             if ((!shooter.duck) || orc.type == "air") playerHealth.number--;
         }
     }
@@ -953,7 +933,7 @@ function handleProjectile(arr) {
                     score += 10;
                     scoreText.text = score;
 
-                    if (currentEnemy.pickup && currentRound > 1) {
+                    if (currentEnemy.pickup && currentRound >= 3) {
                         snackQueue.push(new Pickup(currentEnemy.x, currentEnemy.y - 100, currentRound));
                     }
 
@@ -1093,9 +1073,8 @@ function handleEnemy() {
             current.angle = "down-diagnal";
         } else {
             // BOMBER:
-            current.y = flora.y - 175;
-            // current.angle = "straight-down";
-            current.angle = "straight";
+            current.y = flora.y - 190;
+            current.angle = "straight-down";
         }
 
         // FIX THIS CRAP --DONE. Takes into account both regular and special rounds:
@@ -1127,7 +1106,6 @@ function handleEnemy() {
             // this is the distance applicable to enemy (50, 150, 250, 180 (aerial))
             let trueDistance = shooter.x + shooter.width + baddiePositions[i.toString()]["distance"];
             if (!baddiePositions[i.toString()]["inPos"] &&
-
                 // what was my thought process behind this? If orc is within "true" distance, set "inPos" to true
                 current.x < trueDistance &&
                 current.x > trueDistance - current.width  &&
@@ -1139,11 +1117,6 @@ function handleEnemy() {
                     baddiePositions[i.toString()]["inPos"] = true;
                     current.position = i.toString();
                     current.inPosition = true;
-
-                    // if (current.type == "bomber") {
-                    //     // current.renderBeam(cxt);
-                    //     current.beaming = true;
-                    // }
             }
 
             if (current.type == "crawl" && current.shooting && frame % 50) {
