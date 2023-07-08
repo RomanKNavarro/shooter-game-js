@@ -64,11 +64,12 @@ export default class Pickup {
 
         //  FIX THIS CRAP
         this.flammenOdds = 1;
+        // this introduced at round
         this.weapon = ["flammen", "grenade"][Math.floor(Math.random() * 2)];
         this.aid = ["health", "wall"][Math.floor(Math.random() * 2)];
 
         // type by default is ar
-        this.type = "grenade";
+        this.type = "ar";
     }
 
     // if not current respective weapon round, should default to aid pickup

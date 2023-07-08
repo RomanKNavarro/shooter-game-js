@@ -217,7 +217,7 @@ const wallText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "Too m
 
 // UI
 const enemyText = new Button(canvas.width / 2.45, 0, 100, enemiesLeft, false);
-const roundText = new Button(canvas.width / 3, 0, 100, currentRound, false);
+const roundText = new Button(canvas.width / 3, 0, 100, `${currentRound}/10`, false);
 const scoreText = new Button(canvas.width / 2, 0, 100, score, false);
 const ammoText = new Button(canvas.width - 100, 0, 100, shooter.specialAmmo, false);
 
@@ -231,7 +231,7 @@ const endText4 = new Button(canvas.width / 2.5, canvas.height / 1.9, 100, "KAVEM
 
 const naturalText = new Button(canvas.width / 2.5, canvas.height / 3, 100, "You're a natural born killer!", false);
 
-const goodText = new Button(canvas.width / 2.5, canvas.height / 4.5, 100, "Keep up the good work, Leuitenant.", false);
+const goodText = new Button(canvas.width / 2.5, canvas.height / 4.5, 100, "Excellent work, Leuitenant.", false);
 const soonText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "Help will arrive soon.", false);
 
 const aidText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "HELP HAS ARRIVED", false);
@@ -245,15 +245,11 @@ const quietText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "KILL
 const tt1 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "Press Space to shoot", false);
 const tt2 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "Use WASD to aim in different directions", false);
 const tt3 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "hold S to crouch", false);
-const tt4 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "crouch-shooting only inflicts", false);
-const tt4_2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "half the damage to enemies (not dogs)", false);
-const tt7 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "press E to throw a grenade", false);
-const tt8 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "press E twice in rapid succession", false);
-const tt8_2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "for a grenade barrage", false);
+const tt7 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "press E to throw a grenade.", false);
+const tt7_2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Press E twice quickly for a barrage", false);
 
 // rounds w/ tut text: 1-6
-
-let tutRounds = {1: [tt1], 2: [tt2], 3: [tt3], 4: [tt4, tt4_2],  5: [tt7], 6: [tt8, tt8_2]};
+let tutRounds = {1: [tt1], 2: [tt2], 3: [tt3], 4: [tt7, tt7_2]};
 
 const bossText = new TextWall(
 `Satellite imagery has exposed your horriffic atrocities in the city to the rest of the world,\n
@@ -863,7 +859,7 @@ function handleEnemyProjectiles(orc) {
     for (let i = 0; i < projes.length; i++) {
         let current = projes[i];
         
-        // what's bulletLimit? 
+        // what's bulletLimit? either the player or 0.
         if (current.x > orc.bulletLimit) {
         // if (current.x > 150) {
             current.update();
@@ -875,12 +871,12 @@ function handleEnemyProjectiles(orc) {
 
             // UNCOMMENT THIS:
             // if ((!shooter.duck) || (orc.type == "air" || orc.type == "bomber")) playerHealth.number--;
-            if ((!shooter.duck) || orc.type == "air") playerHealth.number--;
+            //if ((!shooter.duck) || orc.type == "air") playerHealth.number--;
         }
     }
 }
 
-// Idea: make shooter completely immune when ducking?
+// Idea: make shooter completely immune when ducking? nope
 // PASS IN ENEMY/TUT QUEUE
 function handleProjectile(arr) {
     let projectiles = shooter.projectiles;
@@ -891,9 +887,6 @@ function handleProjectile(arr) {
         // BUG HERE:
         // increase size of flammen "bullets"
         if (projectiles.length > 0 && current) {
-            // if (shooter.weapon == "pistol") {
-            //     current.speed = 7;
-            // }
 
             if (shooter.weapon == "flammen" && current.size <= 20) {
                 current.size += 2;
@@ -924,10 +917,10 @@ function handleProjectile(arr) {
                 projectiles.splice(i, 1);
                 i--;
 
-                if ((shooter.angle == "down" || shooter.angle == "down-back") && shooter.weapon != "flammen") {
+                if (((shooter.angle == "down" || shooter.angle == "down-back") && shooter.weapon != "flammen")
+                    || (currentEnemy.type == "bomber" || currentEnemy.type == "sheep")) {
                     currentEnemy.health -= 1;
-                } else currentEnemy.health -= 2;
-                
+                } else currentEnemy.health -= 2;    
 
                 if (currentEnemy.health <= 0) {
                     score += 10;
@@ -1040,8 +1033,9 @@ function handleEnemy() {
     for (let i = 0; i < enemyQueue.length; i++) {
         let current = enemyQueue[i];
 
-        if (current.type == "bomber" && current.inPosition == true) {
+        if (currentRound >= 6) current.pickupOdds = 1;
 
+        if (current.type == "bomber" && current.inPosition == true) {
             current.renderBeam(cxt);
             if (!current.dead && current.timer >= current.openFire) playSound(sfx.rayBeam);
             // else sfx.rayBeam.stop();
@@ -1054,7 +1048,7 @@ function handleEnemy() {
             else if (current.type == "air") current.bulletLimit = shooter.x + shooter.width / 2;
         }
 
-        if (current.type != "ground") current.health = 1;
+        // if (current.type != "ground") current.health = 1;
 
         // HERE'S HOW WE DISCRIMINATE CIVIES:
         if (current.speed < 0) current.isCivie = true;

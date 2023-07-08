@@ -55,12 +55,6 @@ export default class Enemy {
       this.openFire = 100;
       this.beamActive = false;
 
-      /* EVENTS:
-        round 3: pickups introduced (health, ar, grenade)
-        round 4
-      */
-
-
       // ODDS CRAP:
       // base enemies:
       // 6/10 chance to spawn ground, 4/10 ch. to spawn air, 2/10 to spawn dog
@@ -71,6 +65,19 @@ export default class Enemy {
       // initially, bombers don't spawn until round
       this.bomberOdds = 1;
       this.sheepOdds = 1;
+
+      /* EVENTS (TODO: dictate when pickupOdds changes from 0 to 1):
+        round 1: only ground enemies
+        round 2: only ground and air enemies
+        round 3: pickups and dogs introduced (health, ar, grenade), plus ducking
+        round 4: grenades introduced
+        round 5: Massacre. Natural text at end
+        round 6: good and soon text at beginning. Bombers introduced. pickupOdds increased.
+        round 7: flammen introduced. Should have same equality as grenade. AR becomes minority
+        round 8: second shooter introduced
+        round 9: crazy round
+        round 10: boss fight. Sheep introduced. More civies.
+      */
     }
 
     renderBeam(context) {
@@ -98,6 +105,7 @@ export default class Enemy {
         this.pickup = true   
       }
 
+      // THIS STUFF BELOW IS SIMPLY THE HEIRARCHY FOR SPAWNING ENEMIES:
       // spawn crawlies first, then airs
       // TEMPORARILY BOMBER FOR NOW:
       if (this.typeNum <= this.crawlOdds && this.round >= 1) {
@@ -110,6 +118,7 @@ export default class Enemy {
           this.fireRate = 15;
           this.width = 70;
           this.height = 70;
+          this.health == 2;
 
           if (!this.isCivie) this.speed = 4;
           else this.speed = -3;
@@ -118,15 +127,17 @@ export default class Enemy {
         this.type = "air";
         this.openFire = 150;
         this.fireRate = 150;
+        this.health == 1;
       }
       else if (this.typeNum == "sheep") {
         // this.speed = 
+        this.health == 2;
       }
 
       // in last round, crawlies and bombers have equal chance of spawning:
       // else if (this.typeNum <= this.crawlOdds && this.round >= 9) this.type = ["crawl", "bomber"][ Math.floor(Math.random() * 2)];
 
-      context.fillText(`${this.beamActive}, ${this.timer}`, this.x + (this.width / 2), this.y + (this.height / 2));
+      context.fillText(`${this.health}, ${this.type}`, this.x + (this.width / 2), this.y + (this.height / 2));
     } // projectiles
   
     update() {
