@@ -63,6 +63,7 @@ export default class Projectile {
           // the "loop" flag is false by default!
           loop: false,
         }), 
+        
 
       }
 
@@ -83,17 +84,6 @@ export default class Projectile {
       this.randomY_duck = [1.1, 1.2, 1.3, 1.4];
 
       this.bulletLimit;
-
-      this.pistol = new Audio();
-      this.ar = new Audio();
-      this.shotty = new Audio();
-      this.flammen = new Audio();
-
-      this.pistol.src = "src/assets/sounds/shots/pistol.wav";
-      this.ar.src = "src/assets/sounds/shots/cg1.wav";
-      this.flammen.src = "src/assets/sounds/laser.mp3";
-
-      this.shotty.src = "src/assets/sounds/shots/shotgun.wav";
 
       // HERE IS WHERE PROJECTILE'S Y GETS CHANGED:
       // place bullet's y low when shooting down:

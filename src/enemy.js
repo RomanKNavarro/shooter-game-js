@@ -57,16 +57,23 @@ export default class Enemy {
 
       // ODDS CRAP:
       // base enemies:
-      // 6/10 chance to spawn ground, 4/10 ch. to spawn air, 2/10 to spawn dog
+      // 6/10 chance to spawn ground, 4/10 ch. to spawn air, 2/10 to spawn spec (dog, bomber, sheep)
       this.groundOdds = 10;
       this.airOdds = 4;
-      this.crawlOdds = 2;
+      this.specOdds = 2;
 
       // initially, bombers don't spawn until round
       this.bomberOdds = 1;
       this.sheepOdds = 1;
 
-      /* EVENTS (TODO: dictate when pickupOdds changes from 0 to 1):
+      // sheep pushed on round 10:
+      this.specOrcLen = 1;
+      this.specOrc = ["crawl"][Math.floor(Math.random() * this.specOrc.length)];
+
+
+      // this.weapon = ["flammen", "grenade"][Math.floor(Math.random() * 2)];
+
+      /* EVENTS:
         round 1: only ground enemies
         round 2: only ground and air enemies
         round 3: pickups and dogs introduced (health, ar, grenade), plus ducking
@@ -101,27 +108,46 @@ export default class Enemy {
 
       if (this.isCivie) this.color = "gray";
 
+      // misc. events:
+      // introduce bomber:
+      if (this.round >= 6) this.pickupOdds = 1;
+      if (this.round >= 3) {
+        this.specOrc.push("bomber");
+        this.specOrcLen = 2;
+      }
+      if (this.round == 10) {
+        this.specOrc.push("sheep");
+        this.specOrcLen = 3;
+      }
       if (this.pickupNum <= this.pickupOdds && this.round <= 4) {
         this.pickup = true   
       }
 
-      // THIS STUFF BELOW IS SIMPLY THE HEIRARCHY FOR SPAWNING ENEMIES:
+      // THIS STUFF BELOW IS SIMPLY ASSIGNMENT OF PROPERTIES DEPENDING ON ENEMY TYPE:
       // spawn crawlies first, then airs
-      // TEMPORARILY BOMBER FOR NOW:
-      if (this.typeNum <= this.crawlOdds && this.round >= 1) {
-      // if (this.typeNum <= this.crawlOdds) {
-          // this.type = "crawl";
-          // this.width = 30;
-          // this.height = 30;
-          this.type = "bomber";
-          this.openFire = 200;
-          this.fireRate = 15;
-          this.width = 70;
-          this.height = 70;
-          this.health == 2;
 
-          if (!this.isCivie) this.speed = 4;
-          else this.speed = -3;
+      // if (this.typeNum <= this.crawlOdds && this.round >= 1) {
+        if (this.typeNum <= this.specOdds) {  
+          if (this.specOrc == "crawl" && this.round >= 3) {
+            this.type = "crawl";
+            this.width = 30;
+            this.height = 30;
+          }
+          else if (this.specOrc == "bomber") {
+            this.type = "bomber";
+            this.openFire = 200;
+            this.fireRate = 15;
+            this.width = 70;
+            this.height = 70;
+            this.health == 2;
+
+            if (!this.isCivie) this.speed = 4;
+            else this.speed = -3;
+          }
+      // if (this.typeNum <= this.crawlOdds) {
+
+
+
       }
       else if (this.typeNum <= this.airOdds && (this.round >= 2 && this.round != 3)) {
         this.type = "air";
@@ -129,6 +155,21 @@ export default class Enemy {
         this.fireRate = 150;
         this.health == 1;
       }
+      else if (this.typeNum <= this.crawlOdds && this.round >= 1) {
+        // if (this.typeNum <= this.crawlOdds) {
+            // this.type = "crawl";
+            // this.width = 30;
+            // this.height = 30;
+            this.type = "bomber";
+            this.openFire = 200;
+            this.fireRate = 15;
+            this.width = 70;
+            this.height = 70;
+            this.health == 2;
+  
+            if (!this.isCivie) this.speed = 4;
+            else this.speed = -3;
+        }
       else if (this.typeNum == "sheep") {
         // this.speed = 
         this.health == 2;

@@ -1033,8 +1033,6 @@ function handleEnemy() {
     for (let i = 0; i < enemyQueue.length; i++) {
         let current = enemyQueue[i];
 
-        if (currentRound >= 6) current.pickupOdds = 1;
-
         if (current.type == "bomber" && current.inPosition == true) {
             current.renderBeam(cxt);
             if (!current.dead && current.timer >= current.openFire) playSound(sfx.rayBeam);
