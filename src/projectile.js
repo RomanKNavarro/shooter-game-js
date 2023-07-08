@@ -63,7 +63,14 @@ export default class Projectile {
           // the "loop" flag is false by default!
           loop: false,
         }), 
-        
+        laser: new Howl({
+          src: [
+            "src/assets/sounds/laser-buzz.mp3",
+          ],
+          // the "loop" flag is false by default!
+          loop: false,
+        }), 
+
 
       }
 
@@ -124,9 +131,9 @@ export default class Projectile {
           this.speed = 12;
           break;
 
-        case "bomb-dropper":
-          this.playSound(this.sfx.bomber);
-          this.speed = 5;
+        case "laser-gun":
+          this.playSound(this.sfx.laser);
+          this.speed = 7;
           break;
       }
 

@@ -161,6 +161,7 @@ Uncaught TypeError: Cannot read properties of undefined (reading 'x')
 // TODO: add stupid sheep troop type
 // TODO: give bomber and sheep 2x health 
 // TODO: IF PLAYER DUCKS, SHEEP DUCKS TOO!
+// TODO: crawlies stop spawning after round three. Enemies stop dropping pickups after special.
 
 let roundCounts = [6, 10];
 
@@ -632,7 +633,7 @@ function handleState() {
 
             // special round cases:
             // let specRounds = {7: "RELIEF", 8: "SPECIAL", 9: "BOSS", 10: "END"};
-            let specRounds = {7: "RELIEF", 3: "SPECIAL", 4: "NATURAL", 9: "BOSS", 10: "END"};
+            let specRounds = {4: "SPECIAL", 5: "NATURAL", 7: "RELIEF", 9: "BOSS", 10: "END"};
 
             // let specRounds = {1: "BOSS", 10: "END"};
             if (Object.keys(specRounds).includes(currentRound.toString())) {

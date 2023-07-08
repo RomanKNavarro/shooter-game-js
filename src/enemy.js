@@ -67,8 +67,8 @@ export default class Enemy {
       this.sheepOdds = 1;
 
       // sheep pushed on round 10:
-      this.specOrcLen = 1;
-      this.specOrc = ["crawl"][Math.floor(Math.random() * this.specOrc.length)];
+      this.specOrcs = ["crawl"];
+      this.specOrc = this.specOrcs[Math.floor(Math.random() * this.specOrcs.length)];
 
 
       // this.weapon = ["flammen", "grenade"][Math.floor(Math.random() * 2)];
@@ -112,12 +112,10 @@ export default class Enemy {
       // introduce bomber:
       if (this.round >= 6) this.pickupOdds = 1;
       if (this.round >= 3) {
-        this.specOrc.push("bomber");
-        this.specOrcLen = 2;
+        this.specOrcs.push("bomber");
       }
       if (this.round == 10) {
-        this.specOrc.push("sheep");
-        this.specOrcLen = 3;
+        this.specOrcs.push("sheep");
       }
       if (this.pickupNum <= this.pickupOdds && this.round <= 4) {
         this.pickup = true   
@@ -125,36 +123,34 @@ export default class Enemy {
 
       // THIS STUFF BELOW IS SIMPLY ASSIGNMENT OF PROPERTIES DEPENDING ON ENEMY TYPE:
       // spawn crawlies first, then airs
-
-      // if (this.typeNum <= this.crawlOdds && this.round >= 1) {
-        if (this.typeNum <= this.specOdds) {  
-          if (this.specOrc == "crawl" && this.round >= 3) {
-            this.type = "crawl";
-            this.width = 30;
-            this.height = 30;
-          }
-          else if (this.specOrc == "bomber") {
-            this.type = "bomber";
-            this.openFire = 200;
-            this.fireRate = 15;
-            this.width = 70;
-            this.height = 70;
-            this.health == 2;
-
-            if (!this.isCivie) this.speed = 4;
-            else this.speed = -3;
-          }
-      // if (this.typeNum <= this.crawlOdds) {
-
-
-
-      }
-      else if (this.typeNum <= this.airOdds && (this.round >= 2 && this.round != 3)) {
+      if (this.typeNum <= this.airOdds && (this.round >= 2 && this.round != 3)) {
         this.type = "air";
         this.openFire = 150;
         this.fireRate = 150;
         this.health == 1;
       }
+      // if (this.typeNum <= this.crawlOdds && this.round >= 1) {
+      // 2
+      else if (this.typeNum <= this.specOdds) {  
+        if (this.specOrc == "crawl" && this.round >= 3) {
+          this.type = "crawl";
+          this.width = 30;
+          this.height = 30;
+
+          if (!this.isCivie) this.speed = 4;
+          else this.speed = -3;
+        }
+        else if (this.specOrc == "bomber" && this.round >= 6) {
+          this.type = "bomber";
+          this.openFire = 200;
+          this.fireRate = 15;
+          this.width = 70;
+          this.height = 70;
+          this.health == 2;
+        }
+      }
+      // if (this.typeNum <= this.crawlOdds) {
+      // 4
       else if (this.typeNum <= this.crawlOdds && this.round >= 1) {
         // if (this.typeNum <= this.crawlOdds) {
             // this.type = "crawl";
@@ -170,15 +166,15 @@ export default class Enemy {
             if (!this.isCivie) this.speed = 4;
             else this.speed = -3;
         }
-      else if (this.typeNum == "sheep") {
-        // this.speed = 
-        this.health == 2;
-      }
+      // else if (this.typeNum == "sheep") {
+      //   // this.speed = 
+      //   this.health == 2;
+      // }
 
       // in last round, crawlies and bombers have equal chance of spawning:
       // else if (this.typeNum <= this.crawlOdds && this.round >= 9) this.type = ["crawl", "bomber"][ Math.floor(Math.random() * 2)];
 
-      context.fillText(`${this.health}, ${this.type}`, this.x + (this.width / 2), this.y + (this.height / 2));
+      context.fillText(`${this.typeNum}`, this.x + (this.width / 2), this.y + (this.height / 2));
     } // projectiles
   
     update() {
@@ -198,7 +194,7 @@ export default class Enemy {
             this.sound = "shotty";
             break;
           case "sheep":
-            this.sound = "pew-pew";
+            this.sound = "laser-gun";
         }
 
         if (this.timer >= this.openFire && this.timer % this.fireRate === 0) {
@@ -208,4 +204,3 @@ export default class Enemy {
       }
     }
 }
-
