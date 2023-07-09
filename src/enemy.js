@@ -95,6 +95,9 @@ export default class Enemy {
       }
     }
 
+    /* diagnosis: all enemies assigned their proper number, including for specOdds.  
+    the spec orcs are spawning as air orcs  --DONE
+    bombers not spawning at all  */
     draw(context) {
       context.beginPath();
       context.fillStyle = this.color;
@@ -108,27 +111,22 @@ export default class Enemy {
 
       if (this.isCivie) this.color = "gray";
 
+      // THIS STUFF BELOW IS SIMPLY ASSIGNMENT OF PROPERTIES DEPENDING ON ENEMY TYPE:
+      // spawn crawlies first, then airs
+
       // misc. events:
       // introduce bomber:
       if (this.round >= 6) this.pickupOdds = 1;
 
       if (this.round >= 3) {
-        this.specOrcs.push("bomber");
+        // this.specOrcs.push("bomber");
+        this.specOrcs = ["crawl", "bomber"];
       }
       if (this.round == 10) {
-        this.specOrcs.push("sheep");
+        this.specOrcs = ["crawl", "bomber", "sheep"];
       }
       if (this.pickupNum <= this.pickupOdds && this.round <= 4) {
         this.pickup = true   
-      }
-
-      // THIS STUFF BELOW IS SIMPLY ASSIGNMENT OF PROPERTIES DEPENDING ON ENEMY TYPE:
-      // spawn crawlies first, then airs
-      if (this.typeNum <= this.airOdds && (this.round >= 2 && this.round != 3)) {
-        this.type = "air";
-        this.openFire = 150;
-        this.fireRate = 150;
-        this.health == 1;
       }
       // if (this.typeNum <= this.crawlOdds && this.round >= 1) {
       // what's specOdds again? 2
@@ -150,23 +148,12 @@ export default class Enemy {
           this.health == 2;
         }
       }
-      // if (this.typeNum <= this.crawlOdds) {
-      // 4
-      else if (this.typeNum <= this.crawlOdds && this.round >= 1) {
-        // if (this.typeNum <= this.crawlOdds) {
-            // this.type = "crawl";
-            // this.width = 30;
-            // this.height = 30;
-            this.type = "bomber";
-            this.openFire = 200;
-            this.fireRate = 15;
-            this.width = 70;
-            this.height = 70;
-            this.health == 2;
-  
-            if (!this.isCivie) this.speed = 4;
-            else this.speed = -3;
-        }
+      else if (this.typeNum <= this.airOdds && (this.round >= 2 && this.round != 3)) {
+        this.type = "air";
+        this.openFire = 150;
+        this.fireRate = 150;
+        this.health == 1;
+      }
       // else if (this.typeNum == "sheep") {
       //   // this.speed = 
       //   this.health == 2;

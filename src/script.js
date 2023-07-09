@@ -314,7 +314,8 @@ let baddiePositions = {
 };
 
 // ENEMY SPEED:
-let currentSpeed = 1.5;
+// let currentSpeed = 1.5;
+let currentSpeed = 5;
 
 // DROPPED PICKUPS:
 let snackQueue = [];
@@ -1114,7 +1115,6 @@ function handleEnemy() {
             }
 
             if (current.type == "crawl" && current.shooting && frame % 50) {
-
                 // UNCOMMENT THIS:
                 // sfx.growl.play();
                 playSound(sfx.growl);
