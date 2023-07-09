@@ -606,7 +606,8 @@ function handleState() {
                 }, 1000);
             }
 
-            if (currentRound >= 7) tutorial = false;
+            // when does tutorial end? 
+            if (currentRound > 4) tutorial = false;
 
             // reset after each round
             if (startRound) {

@@ -111,6 +111,7 @@ export default class Enemy {
       // misc. events:
       // introduce bomber:
       if (this.round >= 6) this.pickupOdds = 1;
+
       if (this.round >= 3) {
         this.specOrcs.push("bomber");
       }
@@ -130,7 +131,7 @@ export default class Enemy {
         this.health == 1;
       }
       // if (this.typeNum <= this.crawlOdds && this.round >= 1) {
-      // 2
+      // what's specOdds again? 2
       else if (this.typeNum <= this.specOdds) {  
         if (this.specOrc == "crawl" && this.round >= 3) {
           this.type = "crawl";
