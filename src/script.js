@@ -162,6 +162,7 @@ Uncaught TypeError: Cannot read properties of undefined (reading 'x')
 // TODO: give bomber and sheep 2x health 
 // TODO: IF PLAYER DUCKS, SHEEP DUCKS TOO!
 // TODO: crawlies stop spawning after round three. Enemies stop dropping pickups after special.
+// TODO: get civy dogs to spawn.
 
 let roundCounts = [6, 10];
 
@@ -1254,7 +1255,7 @@ function animate() {
     else frame = 0;
 
     // currentRound changes only after the "next round incoming" text
-    // console.log(tutorial);
+    // console.log(specOrcs);
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);

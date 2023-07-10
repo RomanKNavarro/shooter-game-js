@@ -67,9 +67,8 @@ export default class Enemy {
       this.sheepOdds = 1;
 
       // sheep pushed on round 10:
-      this.specOrcs = ["air"];
+      this.specOrcs = ["air", "crawl", "bomber"];
       this.specOrc = this.specOrcs[Math.floor(Math.random() * this.specOrcs.length)];
-
 
       // this.weapon = ["flammen", "grenade"][Math.floor(Math.random() * 2)];
 
@@ -119,16 +118,6 @@ export default class Enemy {
       // misc. events:
       // introduce bomber:
       if (this.round >= 6) this.pickupOdds = 1;
-
-      if (this.round >= 2) {
-        this.specOrcs = ["air"];
-      }
-      if (this.round >= 3) {
-        this.specOrcs = ["air", "crawl"];
-      }
-      if (this.round >= 6) {
-        this.specOrcs = ["air", "crawl", "bomber"];
-      }
       if (this.pickupNum <= this.pickupOdds && this.round <= 4) {
         this.pickup = true   
       }
@@ -162,7 +151,7 @@ export default class Enemy {
       // in last round, crawlies and bombers have equal chance of spawning:
       // else if (this.typeNum <= this.crawlOdds && this.round >= 9) this.type = ["crawl", "bomber"][ Math.floor(Math.random() * 2)];
 
-      context.fillText(`${this.typeNum}`, this.x + (this.width / 2), this.y + (this.height / 2));
+      context.fillText(`${this.type}`, this.x + (this.width / 2), this.y + (this.height / 2));
     } // projectiles
   
     update() {
