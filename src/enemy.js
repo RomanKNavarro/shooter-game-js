@@ -23,8 +23,6 @@ export default class Enemy {
       this.pickupOdds = 0;
       this.pickup = false;
 
-      this.typeNum = Math.floor(Math.random() * 10);
-
       this.isCivie = false;
       this.inNadeRange = false;
 
@@ -32,7 +30,6 @@ export default class Enemy {
 
       // ground, crawl, air, civie
       // this.type = "ground";
-      this.type = "ground";
       this.health = 2;
 
       // ENEMY GUN:
@@ -58,17 +55,23 @@ export default class Enemy {
       // ODDS CRAP:
       // base enemies:
       // 6/10 chance to spawn ground, 4/10 ch. to spawn air, 2/10 to spawn spec (dog, bomber, sheep)
-      this.groundOdds = 10;
-      this.airOdds = 4;
-      this.specOdds = 2;
+      
 
       // initially, bombers don't spawn until round
-      this.bomberOdds = 1;
-      this.sheepOdds = 1;
+
+      this.typeNum = Math.floor(Math.random() * 20);
+
+      this.groundOdds = 20; // 7
+      this.crawlOdds = 13;  // 5
+      this.airOdds = 8;     // 4
+      this.bossOdds = 4;    
 
       // sheep pushed on round 10:
-      this.specOrcs = ["air", "crawl", "bomber"];
-      this.specOrc = this.specOrcs[Math.floor(Math.random() * this.specOrcs.length)];
+      this.bossTypes = ["bomber", "sheep"];
+      // this.specOrc = this.specOrcs[Math.floor(Math.random() * this.specOrcs.length)];
+      // this.type = this.orcTypes[Math.floor(Math.random() * this.orcTypes.length)];
+      this.otherOdds = 5;
+      this.type = "ground";
 
       // this.weapon = ["flammen", "grenade"][Math.floor(Math.random() * 2)];
 
@@ -86,75 +89,45 @@ export default class Enemy {
       */
     }
 
-    renderBeam(context) {
-      if (this.timer >= this.openFire) {
-        context.beginPath();
-        context.fillStyle = "purple";
-        context.fillRect(this.x + (this.width * 0.5), this.y, 30, this.beamHeight);
-      }
-    }
-
     /* diagnosis: all enemies assigned their proper number, including for specOdds.  
     the spec orcs are spawning as air orcs  --DONE
     bombers not spawning at all  
     
     airs sometimes don't spawn in round 3*/
-    draw(context) {
-      context.beginPath();
-      context.fillStyle = this.color;
-      context.fillRect(this.x, this.y, this.width, this.height);
-
-      context.font = "20px serif";
-      context.fillStyle = "black";
-
-      context.textAlign = "center";
-      context.textBaseline = "middle";
-
-      if (this.isCivie) this.color = "gray";
-
-      // THIS STUFF BELOW IS SIMPLY ASSIGNMENT OF PROPERTIES DEPENDING ON ENEMY TYPE:
-      // spawn crawlies first, then airs
-
-      // misc. events:
-      // introduce bomber:
-      if (this.round >= 6) this.pickupOdds = 1;
-      if (this.pickupNum <= this.pickupOdds && this.round <= 4) {
-        this.pickup = true   
-      }
-      // what's specOdds again? 2
-      if (this.typeNum <= this.specOdds) {  
-        if (this.specOrc == "air" && this.round >= 2 && this.round != 3) {
-          this.type = "air";
+    update() {
+        // what's specOdds again? 2 
+        if (this.type == "air" && this.round >= 2 && this.round != 3) {
+          // this.type = "air";
           this.openFire = 150;
           this.fireRate = 150;
           this.health = 1;
         }
-        else if (this.specOrc == "crawl" && this.round >= 3) {
-          this.type = "crawl";
+        else if (this.type == "crawl" && this.round >= 3) {
+          // this.type = "crawl";
           this.width = 30;
           this.height = 30;
           this.health = 1;
 
-          if (!this.isCivie) this.speed = 4;
-          else this.speed = -3;
+          // if (!this.isCivie) this.speed = 4;
+          // else this.speed = -3;
         }
-        else if (this.specOrc == "bomber" && this.round >= 6) {
-          this.type = "bomber";
+        else if (this.type == "bomber" && this.round >= 6) {
+          // this.type = "bomber";
           this.openFire = 200;
           this.fireRate = 15;
           this.width = 70;
           this.height = 70;
           this.health = 2;
         }
-      }
-
-      // in last round, crawlies and bombers have equal chance of spawning:
-      // else if (this.typeNum <= this.crawlOdds && this.round >= 9) this.type = ["crawl", "bomber"][ Math.floor(Math.random() * 2)];
-
-      context.fillText(`${this.type}`, this.x + (this.width / 2), this.y + (this.height / 2));
-    } // projectiles
-  
-    update() {
+        else if (this.type == "sheep" && this.round == 9) {
+          // this.type = "sheep";
+          this.openFire = 200;
+          this.fireRate = 15;
+          this.width = 70;
+          this.height = 70;
+          this.health = 2;
+        }
+      
       // THIS WORKS
       if (!this.shooting) {
         this.x -= this.speed;
@@ -178,6 +151,42 @@ export default class Enemy {
           this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, this.sound, this.dead)); 
           if (this.type == "bomber") this.beamActive = true;
         } 
+      }
+
+      if (this.isCivie) this.color = "gray";
+
+      // THIS STUFF BELOW IS SIMPLY ASSIGNMENT OF PROPERTIES DEPENDING ON ENEMY TYPE:
+      // spawn crawlies first, then airs
+
+      // misc. events:
+      // introduce bomber:
+      if (this.round >= 6) this.pickupOdds = 1;
+      if (this.pickupNum <= this.pickupOdds && this.round <= 4) {
+        this.pickup = true   
+      }
+    }
+    draw(context) {
+      context.beginPath();
+      context.fillStyle = this.color;
+      context.fillRect(this.x, this.y, this.width, this.height);
+
+      context.font = "20px serif";
+      context.fillStyle = "black";
+
+      context.textAlign = "center";
+      context.textBaseline = "middle";
+
+      // in last round, crawlies and bombers have equal chance of spawning:
+      // else if (this.typeNum <= this.crawlOdds && this.round >= 9) this.type = ["crawl", "bomber"][ Math.floor(Math.random() * 2)];
+
+      context.fillText(`${this.type}, ${this.typeNum}`, this.x + (this.width / 2), this.y + (this.height / 2));
+    } // projectiles
+
+    renderBeam(context) {
+      if (this.timer >= this.openFire) {
+        context.beginPath();
+        context.fillStyle = "purple";
+        context.fillRect(this.x + (this.width * 0.5), this.y, 30, this.beamHeight);
       }
     }
 }
