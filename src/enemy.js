@@ -67,7 +67,7 @@ export default class Enemy {
       this.sheepOdds = 1;
 
       // sheep pushed on round 10:
-      this.specOrcs = ["crawl"];
+      this.specOrcs = ["air"];
       this.specOrc = this.specOrcs[Math.floor(Math.random() * this.specOrcs.length)];
 
 
@@ -97,7 +97,9 @@ export default class Enemy {
 
     /* diagnosis: all enemies assigned their proper number, including for specOdds.  
     the spec orcs are spawning as air orcs  --DONE
-    bombers not spawning at all  */
+    bombers not spawning at all  
+    
+    airs sometimes don't spawn in round 3*/
     draw(context) {
       context.beginPath();
       context.fillStyle = this.color;
@@ -118,23 +120,31 @@ export default class Enemy {
       // introduce bomber:
       if (this.round >= 6) this.pickupOdds = 1;
 
-      if (this.round >= 3) {
-        // this.specOrcs.push("bomber");
-        this.specOrcs = ["crawl", "bomber"];
+      if (this.round >= 2) {
+        this.specOrcs = ["air"];
       }
-      if (this.round == 10) {
-        this.specOrcs = ["crawl", "bomber", "sheep"];
+      if (this.round >= 3) {
+        this.specOrcs = ["air", "crawl"];
+      }
+      if (this.round >= 6) {
+        this.specOrcs = ["air", "crawl", "bomber"];
       }
       if (this.pickupNum <= this.pickupOdds && this.round <= 4) {
         this.pickup = true   
       }
-      // if (this.typeNum <= this.crawlOdds && this.round >= 1) {
       // what's specOdds again? 2
-      else if (this.typeNum <= this.specOdds) {  
-        if (this.specOrc == "crawl" && this.round >= 3) {
+      if (this.typeNum <= this.specOdds) {  
+        if (this.specOrc == "air" && this.round >= 2 && this.round != 3) {
+          this.type = "air";
+          this.openFire = 150;
+          this.fireRate = 150;
+          this.health = 1;
+        }
+        else if (this.specOrc == "crawl" && this.round >= 3) {
           this.type = "crawl";
           this.width = 30;
           this.height = 30;
+          this.health = 1;
 
           if (!this.isCivie) this.speed = 4;
           else this.speed = -3;
@@ -145,19 +155,9 @@ export default class Enemy {
           this.fireRate = 15;
           this.width = 70;
           this.height = 70;
-          this.health == 2;
+          this.health = 2;
         }
       }
-      else if (this.typeNum <= this.airOdds && (this.round >= 2 && this.round != 3)) {
-        this.type = "air";
-        this.openFire = 150;
-        this.fireRate = 150;
-        this.health == 1;
-      }
-      // else if (this.typeNum == "sheep") {
-      //   // this.speed = 
-      //   this.health == 2;
-      // }
 
       // in last round, crawlies and bombers have equal chance of spawning:
       // else if (this.typeNum <= this.crawlOdds && this.round >= 9) this.type = ["crawl", "bomber"][ Math.floor(Math.random() * 2)];
