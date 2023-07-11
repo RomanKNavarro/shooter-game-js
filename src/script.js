@@ -1045,6 +1045,24 @@ function handleEnemy() {
     for (let i = 0; i < enemyQueue.length; i++) {
         let current = enemyQueue[i];
 
+        // this.angle = "back";
+        if (current.type == "sheep" && current.inPosition == true && shooter.duck) {
+            current.duck = true;
+            current.angle = "down-back"
+        } else {
+            current.duck = false;
+            current.angle = "back";
+        }
+
+        // if (shooter.duck == true) {
+        //     current.duck = true;
+        // } else current.duck = false;
+        
+
+        if (current.type == "sheep" && current.inPosition == true && shooter.duck) {
+            current.duck == true;
+        }
+
         if (current.type == "bomber" && current.inPosition == true) {
             current.renderBeam(cxt);
             if (!current.dead && current.timer >= current.openFire) playSound(sfx.rayBeam);
@@ -1073,6 +1091,7 @@ function handleEnemy() {
         if (current.type == "ground" || current.type == "crawl" || current.type == "sheep") {
             current.y = flora.y - current.height;
             current.angle = "back";
+            if (current.type == "sheep" && current.duck == true) current.angle = "down-back";
         } else if (current.type == "air") {
             current.y = flora.y - 150;
             current.angle = "down-diagnal";
@@ -1149,8 +1168,8 @@ function pushEnemy() {
 
                 // SPAWN CIVIES IN LATTER PART OF FINAL ROUND:
                 if (finalRound && enemyCount % 3 == 0 && (enemyCount < 20 && enemyCount > 10)) {
-                    // enemyQueue.push(new Enemy(-50, -currentSpeed, currentRound));
-                    enemyQueue.push(new Enemy(canvas.width / 2, -currentSpeed, currentRound));
+                    enemyQueue.push(new Enemy(-50, -currentSpeed, currentRound));
+                    // enemyQueue.push(new Enemy(canvas.width / 2, -currentSpeed, currentRound));
                     enemyCount--; 
                 }
             }  
@@ -1159,8 +1178,8 @@ function pushEnemy() {
                 // DOESN'T ACTUALLY SPAWN CIVIES. Just normal enemies at coord -50 lol:
                 // REMEMBER: enemyCount only refers to num. of enemies to push to array :)
                 if (enemyCount > 0) {
-                    // enemyQueue.push(new Enemy(-50, -currentSpeed, currentRound));
-                    enemyQueue.push(new Enemy(canvas.width / 2, -currentSpeed, currentRound));
+                    enemyQueue.push(new Enemy(-50, -currentSpeed, currentRound));
+                    // enemyQueue.push(new Enemy(canvas.width / 2, -currentSpeed, currentRound));
                     enemyCount--; 
 
                     // if (enemyCount < 50 && enemyCount < 20) {
@@ -1267,7 +1286,7 @@ function animate() {
     else frame = 0;
 
     // currentRound changes only after the "next round incoming" text
-    // console.log(specOrcs);
+    // console.log(shooter.duck);
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);

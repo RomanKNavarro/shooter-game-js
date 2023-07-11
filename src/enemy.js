@@ -26,6 +26,7 @@ export default class Enemy {
       this.isCivie = false;
       this.inNadeRange = false;
 
+      this.duck = false;
       this.duckable = false;
 
       // ground, crawl, air, civie
@@ -161,8 +162,8 @@ export default class Enemy {
           this.sound = "laser-gun";
           this.openFire = 200;
           this.fireRate = 15;
-          this.width = 70;
-          this.height = 70;
+          this.width = 60;
+          this.height = 60;
           break;
       }
 
@@ -193,7 +194,20 @@ export default class Enemy {
     draw(context) {
       context.beginPath();
       context.fillStyle = this.color;
-      context.fillRect(this.x, this.y, this.width, this.height);
+      // context.fillRect(this.x, this.y, this.width, this.height);
+
+      // if (!this.duck) {
+      //     context.fillRect(this.x, this.y, this.width, this.height);
+      // } else {
+      //     context.fillRect(this.x, this.y + this.height / 2, this.width, this.height / 2);
+      // }
+
+      // if (this.duck && this.type == "sheep") {
+      if (this.duck) {
+        context.fillRect(this.x, this.y + this.height / 2, this.width, this.height / 2);
+      } else {
+        context.fillRect(this.x, this.y, this.width, this.height);
+      }
 
       context.font = "20px serif";
       context.fillStyle = "black";
@@ -205,7 +219,7 @@ export default class Enemy {
       // in last round, crawlies and bombers have equal chance of spawning:
       // else if (this.typeNum <= this.crawlOdds && this.round >= 9) this.type = ["crawl", "bomber"][ Math.floor(Math.random() * 2)];
 
-      context.fillText(`${this.health}`, this.x + (this.width / 2), this.y + (this.height / 2));
+      context.fillText(`${this.angle}`, this.x + (this.width / 2), this.y + (this.height / 2));
     } // projectiles
 
     renderBeam(context) {

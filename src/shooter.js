@@ -74,7 +74,7 @@ export default class Shooter {
         context.fillStyle = "black";
         context.textAlign = "center";
         context.textBaseline = "middle";
-        context.fillText(this.secondNade, this.x + (this.width / 2), this.y + (this.height / 2));
+        context.fillText(this.duck, this.x + (this.width / 2), this.y + (this.height / 2));
     }
 
     update() {

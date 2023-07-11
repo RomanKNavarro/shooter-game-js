@@ -76,6 +76,7 @@ export default class Pickup {
     update() {
         this.y += 10;
 
+        // NEEDS LOADS OF WORK DONE:
         // weaponOdds encompasses flammen, ar, and grenade
         // REMEMBER: typeNum is num 0-10
         if (this.typeNum <= this.weaponOdds) {
@@ -83,13 +84,13 @@ export default class Pickup {
                 if (this.round >= 3) {
                     this.type = "flammen";
                 }
-                this.type = "grenade";
+                // this.type = "grenade";
             }
             else if (this.weapon == "grenade") {
                 if (this.round >= 3) {
                     this.type = "grenade";
                 }
-                this.type = "ar";
+                // this.type = "ar";
             }
         }
         else if (this.typeNum <= this.aidOdds && this.typeNum > this.weaponOdds) this.type = this.aid;
