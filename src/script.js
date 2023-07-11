@@ -167,6 +167,8 @@ Uncaught TypeError: Cannot read properties of undefined (reading 'x')
 // TODO: GET FLAMMEN PICKUP TO SPAWN.
 // TODO: get bombers to spawn.          --DONE
 // TODO: fix damage to bombers          --DONE
+// TODO: amp up difficulty              --DONE
+// TODO: get fucking ar and health pickups to spawn
 
 let roundCounts = [6, 10];
 
@@ -477,11 +479,13 @@ function greatReset() {
     resetBaddies();
 
     snackQueue = [];
-    playerHealth.number = 10;
-    wallHealth.number = 3;
+    playerHealth.number = 4;
+    wallHealth.number = 4;
     showMenu = false;
-    grenades.number = 10;
+    grenades.number = 6;
     // grenades.number = 10;
+    showSpecialText = false;
+    
 }
 
 function endRound() {
@@ -881,7 +885,7 @@ function handleEnemyProjectiles(orc) {
             i--;
 
             // UNCOMMENT THIS:
-            // if ((!shooter.duck) || (orc.type == "air" || orc.type == "bomber")) playerHealth.number--;
+            if ((!shooter.duck) || (orc.type == "air" || orc.type == "bomber")) playerHealth.number--;
             //if ((!shooter.duck) || orc.type == "air") playerHealth.number--;
         }
     }
@@ -976,13 +980,13 @@ function handleProjectile(arr) {
                 projectiles.splice(i, 1);
                 i--;
 
-                if (snack.type == "health" && playerHealth.number < 10) {
+                if (snack.type == "health" && playerHealth.number < 6) {
                     playerHealth.number++;
                 }
-                else if (snack.type == "health" && playerHealth.number < 10) {
+                else if (snack.type == "health" && playerHealth.number < 6) {
                     playerHealth.number++;
                 }
-                else if (snack.type == "grenade" && grenades.number < 10) {
+                else if (snack.type == "grenade" && grenades.number < 6) {
                     grenades.number++;
                 }
 
@@ -1115,7 +1119,7 @@ function handleEnemy() {
             // enemiesLeft--;
             current.dead = true;
             // UNCOMMENT:
-            // if (!current.isCivie) wallHealth.number--;
+            if (!current.isCivie) wallHealth.number--;
         }
 
         if (current.dead) {
@@ -1164,6 +1168,7 @@ function pushEnemy() {
             if (!specialRound) {
                 // DO NOT REVERT. NEED TO MAKE WAY FOR DIFFERENT SPEEDS:
                 enemyQueue.push(new Enemy(canvas.width, currentSpeed, currentRound));
+                // enemyQueue.push(new Enemy(canvas.width / 2, currentSpeed, currentRound));
                 enemyCount--;  
 
                 // SPAWN CIVIES IN LATTER PART OF FINAL ROUND:

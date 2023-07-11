@@ -105,12 +105,12 @@ export default class Enemy {
       // if (this.typeNum <= this.bossOdds && this.round == 9) {
       // 0-2
       if (this.typeNum <= this.bossOdds) {
-        // if (this.round < 6) this.type = "ground";
-        // else if (this.round >= 6 && this.round < 10) this.type = "bomber";
-        // else this.type = this.bossType;   // <- if round 10
+        if (this.round < 6) this.type = "ground";
+        else if (this.round >= 6 && this.round < 10) this.type = "bomber";
+        else this.type = this.bossType;   // <- if round 10
 
         // this.type = "bomber";
-        this.type = "sheep";
+        // this.type = "sheep";
       }
       // else if (this.typeNum <= this.crawlOdds) {
       // 3-6
@@ -142,7 +142,7 @@ export default class Enemy {
 
         case "air":
           this.sound = "shotty";
-          this.openFire = 150;
+          // this.openFire = 150;
           this.fireRate = 150;
           this.health = 1;
 
@@ -151,8 +151,9 @@ export default class Enemy {
           else this.speed = 3.5;
           break;
         
+        // OPENFIRE BY DEFAULT IS 
         case "bomber":
-          this.openFire = 200;
+          this.openFire = 150;
           this.fireRate = 15;
           this.width = 70;
           this.height = 70;
@@ -160,7 +161,7 @@ export default class Enemy {
 
         case "sheep":
           this.sound = "laser-gun";
-          this.openFire = 200;
+          this.openFire = 150;
           this.fireRate = 15;
           this.width = 60;
           this.height = 60;
