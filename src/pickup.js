@@ -58,13 +58,13 @@ export default class Pickup {
         // equal chance to spawn aid and weapons?
         this.typeNum = Math.floor(Math.random() * 10);
 
+        // how many pickup types? IIIII ->  5
+
         this.nadeOdds = 10;  // 5
         this.aidOdds = 5;    // 4
         this.weaponOdds = 1; // 2
         
-
         //  FIX THIS CRAP
-        this.flammenOdds = 1;
         // this introduced at round
         this.weapon = ["flammen", "ar"][Math.floor(Math.random() * 2)];
         this.aid = ["health", "wall"][Math.floor(Math.random() * 2)];
@@ -81,20 +81,11 @@ export default class Pickup {
         // weaponOdds encompasses flammen, ar, and grenade
         // REMEMBER: typeNum is num 0-10
         if (this.typeNum <= this.weaponOdds) {
-            
-            if (this.weapon == "flammen") {
-                if (this.round >= 6) {
-                    this.type = "flammen";
-                }
-                else this.type = "ar";
-            }
-            else if (this.weapon == "grenade") {
-                if (this.round >= 3) {
-                    this.type = "grenade";
-                }
-            }
+            if (this.round <= 6) this.type = "ar";
+            else this.type = this.weapon;
         }
-        else if (this.typeNum <= this.aidOdds && this.typeNum > this.weaponOdds) this.type = this.aid;
+        else if (this.typeNum <= this.aidOdds) this.type = this.aid;
+        else if (this.typeNum <= this.nadeOdds) this.type = "grenade";
 
         //  SOUND TO PLAY WHEN PICKED UP:
         switch (this.type) {

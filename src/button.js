@@ -1,6 +1,5 @@
 export default class Button {
     constructor(x, y, width, text, clickable) {
-
         this.x = x;
         this.y = y;
         this.width = width;
@@ -29,7 +28,7 @@ export default class Button {
                 //context.closePath();
         
                 // button text:
-                context.font = "12px serif";
+                context.font = "12.5px serif";
         
                 context.fillStyle = "black";
                 //context.fillStyle = "rgba(255, 255, 255, " + this.alpha + ")";

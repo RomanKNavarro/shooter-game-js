@@ -150,17 +150,17 @@ Uncaught TypeError: Cannot read properties of undefined (reading 'x')
 // TODO: get mouse position read    --DONE
 // TODO: change air enemy shooting angle    --DONE
 // TODO: get 2nd shooter to duck    --DONE
-// TODO: MORE nade pickups
+// TODO: MORE nade pickups      --DONE
 // TODO: successfully implement bomber  --DONE
 // TODO: remove secondStream of bullets on gameOver.        --DONE
-// TODO: get "help will arrive soon" text to show after natural text.
+// TODO: get "help will arrive soon" text to show after natural text.   --DONE
 // TODO: ray beam should hurt when ducking too. --DONE
 // TODO: add flammen pickup again   --DONE
 // NO PICKUPS until round 3     --DONE
 // increase bomber altitude     --DONE
-// TODO: add stupid sheep troop type
-// TODO: give bomber and sheep 2x health 
-// TODO: IF PLAYER DUCKS, SHEEP DUCKS TOO!
+// TODO: add stupid sheep troop type            --DONE
+// TODO: give bomber and sheep 2x health        --DONE
+// TODO: IF PLAYER DUCKS, SHEEP DUCKS TOO!      --DONE  
 // TODO: crawlies stop spawning after round three. Enemies stop dropping pickups after special.     --DONE
 // TODO: get civy dogs to spawn.        --DONE
 // TODO: TOO MANY AR PICKUPS.           
@@ -202,7 +202,6 @@ new InputHandler(shooter, canvas);
 new InputHandler(shooter2, canvas);
 
 // BUTTONS AND TEXT. (x, y, width, text, clickable)
-const tutButton = new Button(canvas.width / 2.2, canvas.height / 3, 100, "Start Tutorial", true);
 // skip tut. button necessary -don't want to force players to kill POWS. 
 // const skipTutButton = new Button(canvas.width / 2.2, canvas.height / 3, 100, "Skip", true);
 const playButton = new Button(canvas2.width / 2.2, canvas2.height / 2.5, 100, "Play", true);
@@ -213,8 +212,10 @@ const noButton = new Button(canvas.width - 250 - 100, canvas.height / 1.2, 100, 
 const playAgainButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, "Play again?", true);
 const creditsButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, "READ ME", true);
 const disableButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, "Disable Tips", true);
-
 const playAgainButton2 = new Button(canvas.width / 2.5, canvas.height / 2, 100, "test test", true);
+
+const musicButton = new Button(canvas.width - 300, canvas.height / 1.15, 100, "Music: On", true);
+const musicButton2 = new Button(canvas.width / 2.5, canvas.height / 2, 100, "Music: Off", true);
 
 const winText = new Button(canvas.width / 2.5, canvas.height / 3, 100, "Round Complete", false);
 const nextText = new Button(canvas.width / 2.5, canvas.height / 3, 100, "Next round incoming...", false);
@@ -426,6 +427,14 @@ let showNatText = false;
 // music.dramatic.play();
 
 function handleStatus() {
+
+    //  GET THIS CRAP DONE:
+    musicButton.draw(cxt2);
+    mouseCollision(shooter.mouse, musicButton, () => {
+        tutorial = false;
+        disableButton.show = false;
+    });
+
     if (state == "RUNNING" || state == "WIN" || state == "QUIET" || state == "RELIEF" || state == "TUTORIAL") {
         roundText.text = currentRound;
         //enemyText.text = enemyCount;
@@ -433,13 +442,12 @@ function handleStatus() {
         enemyText.draw(cxt2);
         roundText.draw(cxt2);
         scoreText.draw(cxt2);
-
+       
         if (shooter.weapon != "pistol") {
             ammoText.draw(cxt2);
             ammoText.text = shooter.specialAmmo;
         }
 
-    
         playerHealth.draw(cxt2);
         wallHealth.draw(cxt2);
         grenades.draw(cxt2);
@@ -453,6 +461,7 @@ function resetBaddies() {
 }
 
 function greatReset() {
+    currentSpeed = 1.5;
     score = 0;
     scoreText.text = score;
     enemyCount = enemiesLeft = roundCounts[0];
@@ -1109,9 +1118,9 @@ function handleEnemy() {
         // delete enemies if they are off-canvas:
         // if ((current.x + current.width >= 0) && (current.x < canvas.width + 50)) {
         // REVISION: don't force player to kill civilians
-        if ((current.x + current.width >= 0) && (current.x < canvas.width + 50)) {    
-            current.update();
-            current.draw(cxt);
+        if ((current.x + current.width >= 0) && (current.x < canvas.width + 50)) {   
+            current.update(); 
+            if (state == "RUNNING" || state == "LOSE") current.draw(cxt);
         } else {
             // enemyQueue.splice(i, 1);
             // score += 10;
