@@ -215,7 +215,7 @@ const disableButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, 
 const playAgainButton2 = new Button(canvas.width / 2.5, canvas.height / 2, 100, "test test", true);
 
 const musicButton = new Button(canvas.width - 300, canvas.height / 1.15, 100, "Music: On", true);
-const musicButton2 = new Button(canvas.width / 2.5, canvas.height / 2, 100, "Music: Off", true);
+const musicButton2 = new Button(canvas.width - 300, canvas.height / 1.15, 100, "Music: Off", true);
 
 const winText = new Button(canvas.width / 2.5, canvas.height / 3, 100, "Round Complete", false);
 const nextText = new Button(canvas.width / 2.5, canvas.height / 3, 100, "Next round incoming...", false);
@@ -256,6 +256,7 @@ const tt2 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "Use WASD to 
 const tt3 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "hold S to crouch", false);
 const tt7 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "press E to throw a grenade.", false);
 const tt7_2 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Press E twice quickly for a barrage", false);
+const tt8 = new Button(canvas.width / 2.5, canvas.height / 2.5, 100, "Press Q to drop current weapon", false);
 
 // rounds w/ tut text: 1-6
 let tutRounds = {1: [tt1], 2: [tt2], 3: [tt3], 4: [tt7, tt7_2]};
@@ -426,15 +427,10 @@ let showNatText = false;
 // music1.play();
 // music.dramatic.play();
 
+let showOffButton = false;
+let showOnButton = true;
+
 function handleStatus() {
-
-    //  GET THIS CRAP DONE:
-    musicButton.draw(cxt2);
-    mouseCollision(shooter.mouse, musicButton, () => {
-        tutorial = false;
-        disableButton.show = false;
-    });
-
     if (state == "RUNNING" || state == "WIN" || state == "QUIET" || state == "RELIEF" || state == "TUTORIAL") {
         roundText.text = currentRound;
         //enemyText.text = enemyCount;
