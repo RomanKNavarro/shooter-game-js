@@ -166,7 +166,7 @@ Uncaught TypeError: Cannot read properties of undefined (reading 'x')
 // TODO: TOO MANY AR PICKUPS.           
 // TODO: GET FLAMMEN PICKUP TO SPAWN.
 // TODO: get bombers to spawn.          --DONE
-// TODO: fix damage to bombers
+// TODO: fix damage to bombers          --DONE
 
 let roundCounts = [6, 10];
 
@@ -314,9 +314,11 @@ let baddiePositions = {
     "3": {"inPos": false, "distance": 250, "type": "ground"},
     "4": {"inPos": false, "distance": 129, "type": "air"},
     "5": {"inPos": false, "distance": 0, "type": "crawl"},
-    //  THIS POS ONLY AVAILABLE IN BOSS ROUND:
+    //  THESE POS ONLY AVAILABLE IN BOSS ROUND:
     "6": {"inPos": false, "distance": -shooter.width, "type": "bomber"},
-    // "6": {"inPos": false, "distance": -shooter.width, "type": "air"},
+    // SHEEP:
+    "7": {"inPos": false, "distance": 100, "type": "sheep"},
+    "8": {"inPos": false, "distance": 200, "type": "sheep"},
 };
 
 // ENEMY SPEED:
@@ -478,7 +480,7 @@ function greatReset() {
     playerHealth.number = 10;
     wallHealth.number = 3;
     showMenu = false;
-    grenades.number = 3;
+    grenades.number = 10;
     // grenades.number = 10;
 }
 
@@ -927,8 +929,8 @@ function handleProjectile(arr) {
                 i--;
 
                 // FIX BOMBER HEALTH CRAP:
-                if (((shooter.angle == "down" || shooter.angle == "down-back") && shooter.weapon != "flammen")
-                    || (currentEnemy.type == "bomber" || currentEnemy.type == "sheep")) {
+                if (((shooter.angle == "down" || shooter.angle == "down-back" || currentEnemy.type == "bomber"
+                || currentEnemy.type == "sheep") && shooter.weapon != "flammen")) {
                     currentEnemy.health -= 1;
                 } else currentEnemy.health -= 2;    
 
@@ -1068,7 +1070,7 @@ function handleEnemy() {
         handleEnemyProjectiles(current);
 
         // DETERMINE ENEMY Y AXIS BASED ON THEIR TYPE
-        if (current.type == "ground" || current.type == "crawl") {
+        if (current.type == "ground" || current.type == "crawl" || current.type == "sheep") {
             current.y = flora.y - current.height;
             current.angle = "back";
         } else if (current.type == "air") {
@@ -1125,6 +1127,7 @@ function handleEnemy() {
             if (current.type == "crawl" && current.shooting && frame % 50) {
                 // UNCOMMENT THIS:
                 // sfx.growl.play();
+                // playSound(sfx.bloop);
                 playSound(sfx.growl);
             }
         }

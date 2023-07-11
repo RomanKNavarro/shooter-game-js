@@ -99,11 +99,6 @@ export default class Enemy {
       */
     }
 
-    /* diagnosis: all enemies assigned their proper number, including for specOdds.  
-    the spec orcs are spawning as air orcs  --DONE
-    bombers not spawning at all  
-    
-    airs sometimes don't spawn in round 3*/
     update() {
       // HEIRARCHY CRAP:
       // if (this.typeNum <= this.bossOdds && this.round == 9) {
@@ -111,9 +106,10 @@ export default class Enemy {
       if (this.typeNum <= this.bossOdds) {
         // if (this.round < 6) this.type = "ground";
         // else if (this.round >= 6 && this.round < 10) this.type = "bomber";
-        // else this.type = this.bossType;
+        // else this.type = this.bossType;   // <- if round 10
 
-        this.type = "bomber";
+        // this.type = "bomber";
+        this.type = "sheep";
       }
       // else if (this.typeNum <= this.crawlOdds) {
       // 3-6
@@ -153,17 +149,20 @@ export default class Enemy {
           if (this.isCivie) this.speed = -3.5;
           else this.speed = 3.5;
           break;
-
-        case "sheep":
-          this.sound = "laser-gun";
-          break;
         
         case "bomber":
           this.openFire = 200;
           this.fireRate = 15;
-          // this.width = 70;
-          // this.height = 70;
-          this.health = 1;
+          this.width = 70;
+          this.height = 70;
+          break;
+
+        case "sheep":
+          this.sound = "laser-gun";
+          this.openFire = 200;
+          this.fireRate = 15;
+          this.width = 70;
+          this.height = 70;
           break;
       }
 
@@ -206,7 +205,7 @@ export default class Enemy {
       // in last round, crawlies and bombers have equal chance of spawning:
       // else if (this.typeNum <= this.crawlOdds && this.round >= 9) this.type = ["crawl", "bomber"][ Math.floor(Math.random() * 2)];
 
-      context.fillText(`${this.typeNum}`, this.x + (this.width / 2), this.y + (this.height / 2));
+      context.fillText(`${this.health}`, this.x + (this.width / 2), this.y + (this.height / 2));
     } // projectiles
 
     renderBeam(context) {
