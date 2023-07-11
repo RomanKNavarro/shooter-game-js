@@ -162,10 +162,11 @@ Uncaught TypeError: Cannot read properties of undefined (reading 'x')
 // TODO: give bomber and sheep 2x health 
 // TODO: IF PLAYER DUCKS, SHEEP DUCKS TOO!
 // TODO: crawlies stop spawning after round three. Enemies stop dropping pickups after special.     --DONE
-// TODO: get civy dogs to spawn.
-// TODO: TOO MANY AR PICKUPS.
+// TODO: get civy dogs to spawn.        --DONE
+// TODO: TOO MANY AR PICKUPS.           
 // TODO: GET FLAMMEN PICKUP TO SPAWN.
-// TODO: get bombers to spawn.
+// TODO: get bombers to spawn.          --DONE
+// TODO: fix damage to bombers
 
 let roundCounts = [6, 10];
 
@@ -315,6 +316,7 @@ let baddiePositions = {
     "5": {"inPos": false, "distance": 0, "type": "crawl"},
     //  THIS POS ONLY AVAILABLE IN BOSS ROUND:
     "6": {"inPos": false, "distance": -shooter.width, "type": "bomber"},
+    // "6": {"inPos": false, "distance": -shooter.width, "type": "air"},
 };
 
 // ENEMY SPEED:
@@ -924,6 +926,7 @@ function handleProjectile(arr) {
                 projectiles.splice(i, 1);
                 i--;
 
+                // FIX BOMBER HEALTH CRAP:
                 if (((shooter.angle == "down" || shooter.angle == "down-back") && shooter.weapon != "flammen")
                     || (currentEnemy.type == "bomber" || currentEnemy.type == "sheep")) {
                     currentEnemy.health -= 1;
@@ -1056,6 +1059,7 @@ function handleEnemy() {
         // if (current.type != "ground") current.health = 1;
 
         // HERE'S HOW WE DISCRIMINATE CIVIES:
+        // if (current.speed < 0) current.isCivie = true;
         if (current.speed < 0) current.isCivie = true;
 
         // ALL enemies given civie status on specialRound
@@ -1142,7 +1146,8 @@ function pushEnemy() {
 
                 // SPAWN CIVIES IN LATTER PART OF FINAL ROUND:
                 if (finalRound && enemyCount % 3 == 0 && (enemyCount < 20 && enemyCount > 10)) {
-                    enemyQueue.push(new Enemy(-50, -currentSpeed, currentRound));
+                    // enemyQueue.push(new Enemy(-50, -currentSpeed, currentRound));
+                    enemyQueue.push(new Enemy(canvas.width / 2, -currentSpeed, currentRound));
                     enemyCount--; 
                 }
             }  
@@ -1151,8 +1156,8 @@ function pushEnemy() {
                 // DOESN'T ACTUALLY SPAWN CIVIES. Just normal enemies at coord -50 lol:
                 // REMEMBER: enemyCount only refers to num. of enemies to push to array :)
                 if (enemyCount > 0) {
-                    enemyQueue.push(new Enemy(-50, -currentSpeed, currentRound));
-                    // enemyQueue.push(new Enemy(canvas.width / 2, -currentSpeed, currentRound));
+                    // enemyQueue.push(new Enemy(-50, -currentSpeed, currentRound));
+                    enemyQueue.push(new Enemy(canvas.width / 2, -currentSpeed, currentRound));
                     enemyCount--; 
 
                     // if (enemyCount < 50 && enemyCount < 20) {

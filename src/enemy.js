@@ -80,7 +80,8 @@ export default class Enemy {
       // this.type = this.orcTypes[Math.floor(Math.random() * this.orcTypes.length)];
       this.otherOdds = 5;
       // this.type;
-      this.type = "ground";
+      // this.type = "ground";
+      this.type;
 
       // this.weapon = ["flammen", "grenade"][Math.floor(Math.random() * 2)];
 
@@ -104,26 +105,68 @@ export default class Enemy {
     
     airs sometimes don't spawn in round 3*/
     update() {
-      // what's specOdds again? 2 
       // HEIRARCHY CRAP:
       // if (this.typeNum <= this.bossOdds && this.round == 9) {
+      // 0-2
       if (this.typeNum <= this.bossOdds) {
-        if (this.round < 6) this.type = "ground";
-        else if (this.round >= 6 && this.round < 10) this.type = "bomber";
-        else this.type = this.bossType;
-      }
-      // if (this.typeNum <= this.crawlOdds && (this.round >= 3)) {
-      if (this.typeNum <= this.crawlOdds) {
-        this.type = "crawl";
+        // if (this.round < 6) this.type = "ground";
+        // else if (this.round >= 6 && this.round < 10) this.type = "bomber";
+        // else this.type = this.bossType;
 
-        if (this.isCivie) this.color = "pink";
+        this.type = "bomber";
+      }
+      // else if (this.typeNum <= this.crawlOdds) {
+      // 3-6
+      else if (this.typeNum <= this.crawlOdds && (this.round >= 3)) {
+        this.type = "crawl";
       }
       // if (this.typeNum <= this.airOdds && (this.round >= 2 && this.round != 3)) {
       // if (this.typeNum <= this.airOdds) {
-      if (this.typeNum <= this.airOdds && (this.round >= 2 && this.round != 3)) {
+      // 6-12
+      else if (this.typeNum <= this.airOdds && (this.round >= 2 && this.round != 3)) {
         this.type = "air";
       }
-      
+      else this.type = "ground";
+
+      switch(this.type) {
+        case "crawl":
+          this.sound = "growl";
+          this.width = 30;
+          this.height = 30;
+          this.health = 1;
+
+          if (this.isCivie) this.speed = -4;
+          else this.speed = 4;
+          break;
+
+        case "ground":
+          this.sound = "shotty";
+          break;
+
+        case "air":
+          this.sound = "shotty";
+          this.openFire = 150;
+          this.fireRate = 150;
+          this.health = 1;
+
+          // THIS IS IN REVERSE LOOOL BUT THAT'S THE WAY IT WORKS (HTMS)
+          if (this.isCivie) this.speed = -3.5;
+          else this.speed = 3.5;
+          break;
+
+        case "sheep":
+          this.sound = "laser-gun";
+          break;
+        
+        case "bomber":
+          this.openFire = 200;
+          this.fireRate = 15;
+          // this.width = 70;
+          // this.height = 70;
+          this.health = 1;
+          break;
+      }
+
       // THIS WORKS
       // THIS CRAP IS SOLEY FOR AUDIO LOOOL:
       if (!this.shooting) {
@@ -131,38 +174,6 @@ export default class Enemy {
       } else {
         this.speed = 0;
         this.timer++;
-
-        switch(this.type) {
-          case "crawl":
-            this.sound = "growl";
-            this.width = 30;
-            this.height = 30;
-            this.health = 1;
-            break;
-
-          case "ground":
-            this.sound = "shotty";
-            break;
-
-          case "air":
-            this.sound = "shotty";
-            this.openFire = 150;
-            this.fireRate = 150;
-            this.health = 1;
-            break;
-
-          case "sheep":
-            this.sound = "laser-gun";
-            break;
-          
-          case "bomber":
-            this.openFire = 200;
-            this.fireRate = 15;
-            this.width = 70;
-            this.height = 70;
-            this.health = 2;
-            break;
-        }
 
         if (this.timer >= this.openFire && this.timer % this.fireRate === 0) {
           this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, this.sound, this.dead)); 
@@ -195,7 +206,7 @@ export default class Enemy {
       // in last round, crawlies and bombers have equal chance of spawning:
       // else if (this.typeNum <= this.crawlOdds && this.round >= 9) this.type = ["crawl", "bomber"][ Math.floor(Math.random() * 2)];
 
-      context.fillText(`${this.pickupNum}`, this.x + (this.width / 2), this.y + (this.height / 2));
+      context.fillText(`${this.typeNum}`, this.x + (this.width / 2), this.y + (this.height / 2));
     } // projectiles
 
     renderBeam(context) {
