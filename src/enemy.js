@@ -19,8 +19,8 @@ export default class Enemy {
       this.color = "pink"
       this.dead = false;
 
-      this.pickupNum = Math.floor(Math.random() * 10);
-      this.pickupOdds = 1;
+      this.pickupNum = Math.floor(Math.random() * 15);
+      this.pickupOdds = 0;
       this.pickup = false;
 
       this.isCivie = false;
@@ -59,19 +59,20 @@ export default class Enemy {
 
       // initially, bombers don't spawn until round
 
-      this.typeNum = Math.floor(Math.random() * 10);
+      // this.typeNum = Math.floor(Math.random() * 10);
 
-      this.groundOdds = 10; // 6  
-      this.airOdds = 4;     // 3
-      this.crawlOdds = 1;   // 2
-      this.bomberOdds = 1;  // 2
-      this.sheepOdds = 2;
+      // this.groundOdds = 10; // 6  
+      // this.airOdds = 4;     // 3
+      // this.crawlOdds = 1;   // 2
+      // this.bomberOdds = 1;  // 2
+      // this.sheepOdds = 2;
 
-      // this.typeNum = Math.floor(Math.random() * 20);
-      // this.groundOdds = 20; // 7
-      // this.crawlOdds = 13;  // 5
-      // this.airOdds = 8;     // 4
-      // this.bossOdds = 4;    // 4
+      this.typeNum = Math.floor(Math.random() * 20);
+      this.groundOdds = 20; // 8
+      this.airOdds = 12;    // 6
+      this.crawlOdds = 6;   // 4
+      this.bossOdds = 2;    // 3  
+      // ^ if on rounds 7-9, spawn only bomber. If on boss round, spawn bomber and sheep
 
       // sheep pushed on round 10:
       this.bossType = ["bomber", "sheep"][Math.floor(Math.random() * 2)];
@@ -105,32 +106,26 @@ export default class Enemy {
     update() {
       // what's specOdds again? 2 
       // HEIRARCHY CRAP:
-      if (this.typeNum <= this.bossOdds && this.round == 9) {
-        this.type = this.bossType;
-        this.openFire = 200;
-        this.fireRate = 15;
-        this.width = 70;
-        this.height = 70;
-        this.health = 2;
+      // if (this.typeNum <= this.bossOdds && this.round == 9) {
+      if (this.typeNum <= this.bossOdds) {
+        if (this.round < 6) this.type = "ground";
+        else if (this.round >= 6 && this.round < 10) this.type = "bomber";
+        else this.type = this.bossType;
+      }
+      // if (this.typeNum <= this.crawlOdds && (this.round >= 3)) {
+      if (this.typeNum <= this.crawlOdds) {
+        this.type = "crawl";
+
+        if (this.isCivie) this.color = "pink";
       }
       // if (this.typeNum <= this.airOdds && (this.round >= 2 && this.round != 3)) {
       // if (this.typeNum <= this.airOdds) {
       if (this.typeNum <= this.airOdds && (this.round >= 2 && this.round != 3)) {
         this.type = "air";
-        this.openFire = 150;
-        this.fireRate = 150;
-        this.health = 1;
-      }
-      if (this.typeNum <= this.crawlOdds && (this.round >= 3)) {
-        this.type = "crawl";
-        this.width = 30;
-        this.height = 30;
-        this.health = 1;
-
-        if (this.isCivie) this.color = "pink";
       }
       
       // THIS WORKS
+      // THIS CRAP IS SOLEY FOR AUDIO LOOOL:
       if (!this.shooting) {
         this.x -= this.speed;
       } else {
@@ -140,13 +135,33 @@ export default class Enemy {
         switch(this.type) {
           case "crawl":
             this.sound = "growl";
+            this.width = 30;
+            this.height = 30;
+            this.health = 1;
             break;
+
           case "ground":
-          case "air":
             this.sound = "shotty";
             break;
+
+          case "air":
+            this.sound = "shotty";
+            this.openFire = 150;
+            this.fireRate = 150;
+            this.health = 1;
+            break;
+
           case "sheep":
             this.sound = "laser-gun";
+            break;
+          
+          case "bomber":
+            this.openFire = 200;
+            this.fireRate = 15;
+            this.width = 70;
+            this.height = 70;
+            this.health = 2;
+            break;
         }
 
         if (this.timer >= this.openFire && this.timer % this.fireRate === 0) {
@@ -180,7 +195,7 @@ export default class Enemy {
       // in last round, crawlies and bombers have equal chance of spawning:
       // else if (this.typeNum <= this.crawlOdds && this.round >= 9) this.type = ["crawl", "bomber"][ Math.floor(Math.random() * 2)];
 
-      context.fillText(`${this.type}, ${this.typeNum}`, this.x + (this.width / 2), this.y + (this.height / 2));
+      context.fillText(`${this.pickupNum}`, this.x + (this.width / 2), this.y + (this.height / 2));
     } // projectiles
 
     renderBeam(context) {

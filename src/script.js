@@ -161,8 +161,11 @@ Uncaught TypeError: Cannot read properties of undefined (reading 'x')
 // TODO: add stupid sheep troop type
 // TODO: give bomber and sheep 2x health 
 // TODO: IF PLAYER DUCKS, SHEEP DUCKS TOO!
-// TODO: crawlies stop spawning after round three. Enemies stop dropping pickups after special.     
+// TODO: crawlies stop spawning after round three. Enemies stop dropping pickups after special.     --DONE
 // TODO: get civy dogs to spawn.
+// TODO: TOO MANY AR PICKUPS.
+// TODO: GET FLAMMEN PICKUP TO SPAWN.
+// TODO: get bombers to spawn.
 
 let roundCounts = [6, 10];
 
@@ -315,8 +318,8 @@ let baddiePositions = {
 };
 
 // ENEMY SPEED:
-// let currentSpeed = 1.5;
-let currentSpeed = 5;
+let currentSpeed = 1.5;
+// let currentSpeed = 5;
 
 // DROPPED PICKUPS:
 let snackQueue = [];
