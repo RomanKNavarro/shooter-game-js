@@ -141,7 +141,7 @@ Uncaught TypeError: Cannot read properties of undefined (reading 'x')
 // TODO: baddiePositions last 2 positions stop working on round 10. Fix.    
 // TODO: add delay before enemies start shooting.       --DONE
 // TODO: add delay after last round before "coalition defeated" message. Add victory music.
-// TODO: option to turn off music in menu (plus ui icon!)
+// TODO: option to turn off music in menu (plus ui icon!)   --DONE (resolved)
 // TODO: tutorial state w/ multiple sections    --DONE (resolved)
 // TODO: try drawing projectiles on a seperate canvas (for optimization)    --DONE
 // TODO: use a multi-layered canvas (one for UI, another for static objects, other for enemies/bullets)    --DONE
@@ -163,20 +163,21 @@ Uncaught TypeError: Cannot read properties of undefined (reading 'x')
 // TODO: IF PLAYER DUCKS, SHEEP DUCKS TOO!      --DONE  
 // TODO: crawlies stop spawning after round three. Enemies stop dropping pickups after special.     --DONE
 // TODO: get civy dogs to spawn.        --DONE
-// TODO: TOO MANY AR PICKUPS.           
+// TODO: TOO MANY AR PICKUPS.           --DONE
 // TODO: GET FLAMMEN PICKUP TO SPAWN.   --DONE
 // TODO: get bombers to spawn.          --DONE
 // TODO: fix damage to bombers          --DONE
 // TODO: amp up difficulty              --DONE
 // TODO: get fucking ar and health pickups to spawn                 --DONE
-// TODO: second shooter stops working on second try. FIX.   
-/* TODO: way too many civies spawning on second try.                 
+// TODO: second shooter stops working on second try. FIX.           --DONE
+/* TODO: way too many civies spawning on second try.                --DONE         
 Diagnosis: when it hits 0, enemyCount resets to 26 (??) */
-// TODO: there should be a little more enemies on final round.      --DONE
-
-/* FREAKING CIVIES SPAWNING STARTING ON ROUND 3. They dont stop coming after that.
+// TODO: there should be a little more enemies on final round.                       --DONE (resolved)
+/* FREAKING CIVIES SPAWNING STARTING ON ROUND 3. They dont stop coming after that.   --DONE
 Diagnosis: only happens after losing boss round.
 */
+// TODO: what's up w/ neg. number on special?                       --DONE
+// TODO: re-incorporate second-shooter animation on later plays     --DONE  
 
 let roundCounts = [6, 10];
 
@@ -217,12 +218,12 @@ const startButton = new Button(canvas.width / 2.5, canvas.height / 3, 100, "Init
 const skipButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, "skip", true);
 const yesButton = new Button(250, canvas.height / 1.2, 100, '"Defend"', true);
 const noButton = new Button(canvas.width - 250 - 100, canvas.height / 1.2, 100, "Give up", true);
-const creditsButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, "READ ME", true);
 const disableButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, "Disable Tips", true);
 // this one for giveup and for final win:
 const playAgainButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, "Play again?", true);
 // this one for death
 const playAgainButton2 = new Button(canvas.width / 2.5, canvas.height / 2, 100, "Play again?", true);
+const creditsButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, "READ ME", true);
 
 const musicButton = new Button(canvas.width - 300, canvas.height / 1.15, 100, "Music: On", true);
 const musicButton2 = new Button(canvas.width - 300, canvas.height / 1.15, 100, "Music: Off", true);
@@ -273,7 +274,7 @@ let tutRounds = {1: [tt1], 2: [tt2], 3: [tt3], 4: [tt7, tt7_2]};
 
 const bossText = new TextWall(
 `Satellite imagery has exposed your horriffic atrocities in the city to the rest of the world,\n
-prompting international outcry and the formation of a Sheep-led coalition against you.\n
+prompting international outcry and the formation of a Sheep-led coalition against YOU.\n
 \n
 This is it! Destroy the coalition and the city is yours. Will you give up now and turn yourself\n
 in for war crimes, or will you defend the city to your last dying breath lest your efforts so far\n
@@ -283,7 +284,7 @@ be in vain?`, Math.floor(canvas.height / 5), canvas);
 const startText = new TextWall(
     `You are Lieutenant Warren Kilgore, the last remaining invader in Swinemanland. The very land of your\n
     eternal arch-nemesis. The armestice between the Sheep and the Swinemen had been signed days before,\n 
-    but you reject returning to the boring old civilian life at whatever cost. Even though all of your men\n 
+    but you reject returning to the corrupted civilian life at whatever cost. Even though all of your men\n 
     have deserted you, you refuse to give up the the strategic city of Vonn, the crown jewel of Swineman\n 
     "civilization".\n 
     It is now your undisputed domain, your very own kingdom, and everyone in it mere cattle. They are\n
@@ -296,7 +297,21 @@ const giveupText = new TextWall(
     \n
     The war crimes tribunal accuses you of innumerable atrocities, the charges of which are beyond the scope of this game.\n 
     \n
-    You are put to the firing squad and your ashes thrown into the dirty Googa river.`, Math.floor(canvas.height / 5), canvas);
+    You are put to the firing squad, necrophiled by 20 men, and your semen-glutted corpse thrown into the dirty Googa River.`, Math.floor(canvas.height / 5), canvas);
+
+const startText = new TextWall(
+    `*********Programming and Art**********
+                KavemanKorps
+
+     *******Music and Sound Effects********
+            Credits in description!
+
+     *************Backstory****************
+     I made this game during the summer of my Sophomore year in college -a brutal time in my life. 
+     Frustrated by all the coursework and lack of freedom, I got to work on Sheephunt Massacre! Maybe it doesn't
+     look like it, bu I poured my heart and soul into making this!
+     
+    `, Math.floor(canvas.height / 10), canvas);
 
 // const loadingText = new TextWall(`\n\n\n\n\nLoading`, canvas.height / 5);
 const loadingText = new TextWall(`Loading`, Math.floor(canvas.height / 3), canvas);
@@ -479,10 +494,12 @@ function greatReset() {
     shooter.fireRate = 0;
     shooter.specialAmmo = 0;
 
+    shooter.secondStream = false;
     secondShooter = false;
     shooter2.weapon = "pistol";
     shooter2.fireRate = 0;
     shooter2.specialAmmo = 0;
+    shooter2.x = 0 - shooter.width;
 
     roundCounts = [6, 10];
 
@@ -907,7 +924,7 @@ function handleEnemyProjectiles(orc) {
             i--;
 
             // UNCOMMENT THIS:
-            // if ((!shooter.duck) || (orc.type == "air" || orc.type == "bomber")) playerHealth.number--;
+            if ((!shooter.duck) || (orc.type == "air" || orc.type == "bomber")) playerHealth.number--;
         }
     }
 }
@@ -974,7 +991,7 @@ function handleProjectile(arr) {
                     // here is how the enemies get deleted:
                     arr.splice(j, 1);
                     j--;
-                    enemiesLeft--;
+                    if (enemiesLeft > 0) enemiesLeft--;
                 }
             }
 
@@ -1134,19 +1151,15 @@ function handleEnemy() {
             current.update(); 
             if (state == "RUNNING" || state == "LOSE") current.draw(cxt);
         } else {
-            // enemyQueue.splice(i, 1);
-            // score += 10;
-            // current.dead;
-            // enemiesLeft--;
             current.dead = true;
             // UNCOMMENT:
-            // if (!current.isCivie) wallHealth.number--;
+            if (!current.isCivie) wallHealth.number--;
         }
 
         if (current.dead) {
             enemyQueue.splice(i, 1);
             score += 10;
-            enemiesLeft--;
+            if (enemiesLeft > 0) enemiesLeft--;
         }
 
         // FIX THIS CRAP ASAP:  --DONE
@@ -1313,11 +1326,11 @@ function animate() {
     else frame = 0;
 
     // currentRound changes only after the "next round incoming" text
-    console.log(shooter.toggleMusic);
+    // console.log(shooter.toggleMusic);
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
 }
-  
+
 // animate();
 window.requestAnimationFrame(animate);
