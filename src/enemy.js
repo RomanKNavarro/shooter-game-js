@@ -97,6 +97,18 @@ export default class Enemy {
         round 8: second shooter introduced
         round 9: crazy round
         round 10: boss fight. Sheep introduced. More civies.
+
+        ENEMY COUNTS:
+        6
+        10
+        13
+        16
+        20    (CIVIES)
+        26
+        33
+        42
+        54
+        70
       */
     }
 

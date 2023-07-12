@@ -164,11 +164,16 @@ Uncaught TypeError: Cannot read properties of undefined (reading 'x')
 // TODO: crawlies stop spawning after round three. Enemies stop dropping pickups after special.     --DONE
 // TODO: get civy dogs to spawn.        --DONE
 // TODO: TOO MANY AR PICKUPS.           
-// TODO: GET FLAMMEN PICKUP TO SPAWN.
+// TODO: GET FLAMMEN PICKUP TO SPAWN.   --DONE
 // TODO: get bombers to spawn.          --DONE
 // TODO: fix damage to bombers          --DONE
 // TODO: amp up difficulty              --DONE
-// TODO: get fucking ar and health pickups to spawn
+// TODO: get fucking ar and health pickups to spawn                 --DONE
+// TODO: second shooter stops working on second try. FIX.   
+/* TODO: way too many civies spawning on second try.                 
+Diagnosis: when it hits 0, enemyCount resets to 26 (??) */
+// TODO: there should be a little more enemies on final round. 
+// FREAKING CIVIES SPAWNING STARTING ON ROUND 3. They dont stop coming after that.
 
 let roundCounts = [6, 10];
 
@@ -248,7 +253,7 @@ const quietText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "KILL
 
 
 // TUTORIAL CRAP:
-// BRUTAL IDEA: live captured enemies used as practice
+// BRUTAL IDEA: live captured enemies used as target practice
 // YES, player can take damage/die in tutorial
 // 3 static grounds
 const tt1 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "Press Space to shoot", false);
@@ -276,7 +281,7 @@ const startText = new TextWall(
     but you reject returning to the boring old civilian life at whatever cost. Even though all of your men\n 
     have deserted you, you refuse to give up the the strategic city of Vonn, the crown jewel of Swineman\n 
     "civilization".\n 
-    It is now your undisputed domain, your very own kingdom, and everyone in it mere flesh-logs. They are\n
+    It is now your undisputed domain, your very own kingdom, and everyone in it mere cattle. They are\n
     your servants, ready to satisfy your every depraved fantasy at any given moment. The city of Vonn took\n 
     months of gruesome house-to-house fighting and thousands of Sheep lives to completely conquer. Are you\n
     going to let it all slip now?`, Math.floor(canvas.height / 10), canvas);
@@ -490,6 +495,7 @@ function greatReset() {
     grenades.number = 6;
     // grenades.number = 10;
     showSpecialText = false;
+    showAidText = false;
     
 }
 
@@ -591,7 +597,6 @@ function handleState() {
 
         case "QUIET":
             quietText.draw(cxt);
-            // aidText.draw(cxt);
 
             setTimeout(() => {
                 startEnd = true
@@ -652,6 +657,7 @@ function handleState() {
 
             // special round cases:
             // let specRounds = {7: "RELIEF", 8: "SPECIAL", 9: "BOSS", 10: "END"};
+            // the key is the round BEFORE event occurs:
             let specRounds = {4: "SPECIAL", 5: "NATURAL", 7: "RELIEF", 9: "BOSS", 10: "END"};
 
             // let specRounds = {1: "BOSS", 10: "END"};
@@ -891,7 +897,6 @@ function handleEnemyProjectiles(orc) {
 
             // UNCOMMENT THIS:
             if ((!shooter.duck) || (orc.type == "air" || orc.type == "bomber")) playerHealth.number--;
-            //if ((!shooter.duck) || orc.type == "air") playerHealth.number--;
         }
     }
 }
@@ -1187,7 +1192,8 @@ function pushEnemy() {
                 // CIVIES SPAWNED HERE IN SPECIAL ROUND:
                 // DOESN'T ACTUALLY SPAWN CIVIES. Just normal enemies at coord -50 lol:
                 // REMEMBER: enemyCount only refers to num. of enemies to push to array :)
-                if (enemyCount > 0) {
+                // if (enemyCount > 0) {
+                if (enemiesLeft > 0) {
                     enemyQueue.push(new Enemy(-50, -currentSpeed, currentRound));
                     // enemyQueue.push(new Enemy(canvas.width / 2, -currentSpeed, currentRound));
                     enemyCount--; 
@@ -1296,7 +1302,7 @@ function animate() {
     else frame = 0;
 
     // currentRound changes only after the "next round incoming" text
-    // console.log(shooter.duck);
+    // console.log(roundCounts);
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
