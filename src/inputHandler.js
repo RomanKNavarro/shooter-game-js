@@ -54,7 +54,6 @@ export default class InputHandler {
 
         case 'e':
           entity.throwBoom = true;
-          
           // entity.throwBoom = true;
           break;
       }
@@ -112,7 +111,11 @@ export default class InputHandler {
           }
           break;
 
-        // i need nothing for case q
+        // TOGGLE MUSIC ON OR OFF:
+        case 'm':
+          // AYO: NEW DISCOVERY: here is how to perfectly toggle between true/false:
+          entity.toggleMusic = !(entity.toggleMusic);
+          break;
       }
     });
 

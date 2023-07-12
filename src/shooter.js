@@ -59,6 +59,8 @@ export default class Shooter {
 
         this.bloop = new Audio();
         this.bloop.src = "src/assets/sounds/q009/glauncher.ogg";
+
+        this.toggleMusic = false;
     }
     
     draw(context) {

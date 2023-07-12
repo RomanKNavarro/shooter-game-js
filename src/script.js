@@ -172,8 +172,11 @@ Uncaught TypeError: Cannot read properties of undefined (reading 'x')
 // TODO: second shooter stops working on second try. FIX.   
 /* TODO: way too many civies spawning on second try.                 
 Diagnosis: when it hits 0, enemyCount resets to 26 (??) */
-// TODO: there should be a little more enemies on final round. 
-// FREAKING CIVIES SPAWNING STARTING ON ROUND 3. They dont stop coming after that.
+// TODO: there should be a little more enemies on final round.      --DONE
+
+/* FREAKING CIVIES SPAWNING STARTING ON ROUND 3. They dont stop coming after that.
+Diagnosis: only happens after losing boss round.
+*/
 
 let roundCounts = [6, 10];
 
@@ -214,10 +217,12 @@ const startButton = new Button(canvas.width / 2.5, canvas.height / 3, 100, "Init
 const skipButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, "skip", true);
 const yesButton = new Button(250, canvas.height / 1.2, 100, '"Defend"', true);
 const noButton = new Button(canvas.width - 250 - 100, canvas.height / 1.2, 100, "Give up", true);
-const playAgainButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, "Play again?", true);
 const creditsButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, "READ ME", true);
 const disableButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, "Disable Tips", true);
-const playAgainButton2 = new Button(canvas.width / 2.5, canvas.height / 2, 100, "test test", true);
+// this one for giveup and for final win:
+const playAgainButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, "Play again?", true);
+// this one for death
+const playAgainButton2 = new Button(canvas.width / 2.5, canvas.height / 2, 100, "Play again?", true);
 
 const musicButton = new Button(canvas.width - 300, canvas.height / 1.15, 100, "Music: On", true);
 const musicButton2 = new Button(canvas.width - 300, canvas.height / 1.15, 100, "Music: Off", true);
@@ -338,7 +343,7 @@ let currentSpeed = 1.5;
 let snackQueue = [];
 let nadeQueue = [];
 
-let state = "MENU";
+let state = "LOADING";
 // let state = "RUNNING";
 
 let loadingTime = [2000, 3000][Math.floor(Math.random() * 3)];
@@ -413,7 +418,7 @@ var music = {
 function playSound(sound) {
     if (!sound.playing()) {
         sound.play();
-    }
+    } 
 }
 
 // stupid timer vars:
@@ -496,7 +501,8 @@ function greatReset() {
     // grenades.number = 10;
     showSpecialText = false;
     showAidText = false;
-    
+    specialRound = false;
+    finalRound = false;
 }
 
 function endRound() {
@@ -544,7 +550,7 @@ function handleState() {
 
         // GLITCH SOMEWHERE IN INTRO:
         case "INTRO":
-            playSound(music.dramatic);
+            if (shooter.toggleMusic == false) playSound(music.dramatic);
 
             startText.draw(cxt);
 
@@ -757,6 +763,11 @@ function handleState() {
             } else {
                 endText3.draw(cxt);
                 endText4.draw(cxt);
+                playAgainButton.draw(cxt);
+                mouseCollision(shooter.mouse, playAgainButton, () => {
+                    greatReset();
+                    state = "INTRO"
+                });
             }
             break;
 
@@ -896,7 +907,7 @@ function handleEnemyProjectiles(orc) {
             i--;
 
             // UNCOMMENT THIS:
-            if ((!shooter.duck) || (orc.type == "air" || orc.type == "bomber")) playerHealth.number--;
+            // if ((!shooter.duck) || (orc.type == "air" || orc.type == "bomber")) playerHealth.number--;
         }
     }
 }
@@ -1129,7 +1140,7 @@ function handleEnemy() {
             // enemiesLeft--;
             current.dead = true;
             // UNCOMMENT:
-            if (!current.isCivie) wallHealth.number--;
+            // if (!current.isCivie) wallHealth.number--;
         }
 
         if (current.dead) {
@@ -1302,7 +1313,7 @@ function animate() {
     else frame = 0;
 
     // currentRound changes only after the "next round incoming" text
-    // console.log(roundCounts);
+    console.log(shooter.toggleMusic);
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
