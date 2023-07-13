@@ -111,7 +111,7 @@ export default class InputHandler {
           }
           break;
 
-        // TOGGLE MUSIC ON OR OFF:
+        // TOGGLE MUSIC ON OR OFF (should only be possible during/after intro):
         case 'm':
           // AYO: NEW DISCOVERY: here is how to perfectly toggle between true/false:
           entity.toggleMusic = !(entity.toggleMusic);

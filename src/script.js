@@ -215,6 +215,8 @@ shooter2.isSecond = true;
 
 // const shooter = new Shooter(100, flora.y - 50);
 // BRILLIANT IDEA: inputHandler doesn't need to take in these args. Use the ones from shooter.
+
+
 new InputHandler(shooter, canvas);
 new InputHandler(shooter2, canvas);
 
@@ -374,7 +376,7 @@ let nadeQueue = [];
 let state = "LOADING";
 // let state = "RUNNING";
 
-let loadingTime = [2000, 3000][Math.floor(Math.random() * 3)];
+let loadingTime = [2000, 3000][Math.floor(Math.random() * 2)];
 
 let music1 = new Audio;
 music1.src = "/src/assets/music/prey's stand 2.mp3";
@@ -462,7 +464,11 @@ let showAidText = false;
 let showNatText = false;
 
 // music1.play();
-// music.dramatic.play();
+// if (state != "LOADING" || state != "PLAY") {
+// if (shooter.init == true) {
+//     // music.dramatic.play();
+//     playSound(music.dramatic);
+// }
 
 let showOffButton = false;
 let showOnButton = true;
@@ -584,8 +590,12 @@ function handleState() {
 
         // GLITCH SOMEWHERE IN INTRO:
         case "INTRO":
-            if (shooter.toggleMusic == false) playSound(music.dramatic);
 
+        // THIS ONLY WORKS IN INTRO STAGE:
+        if (!shooter.toggleMusic) {
+            playSound(music.dramatic);
+        } else music.dramatic.pause();
+        
             startText.draw(cxt);
 
             skipButton.draw(cxt);
@@ -604,6 +614,7 @@ function handleState() {
             
         // glitch: MENU -> RUNNING -> MENU
         case "MENU": 
+            shooter.init = true;
             shooter.disabled = false;
             // bossText.draw(cxt);
             startButton.draw(cxt);
@@ -839,6 +850,14 @@ function cremate() {
 function handleShooter() {
     shooter.draw(cxt2);
     if (secondShooter) shooter2.draw(cxt2);
+
+    // if (state != "LOADING" || state != "PLAY") {
+    //     if (shooter.toggleMusic == false) playSound(music.dramatic);
+    //     else music.dramatic.stop();
+    // };
+
+    // if (shooter.toggleMusic == false) playSound(music.dramatic);
+    // else music.dramatic.stop();
 
     // what states require shooter to be disabled?
     if (state == "RUNNING" || state == "WIN" || state == "QUIET" 
@@ -1344,7 +1363,7 @@ function animate() {
     else frame = 0;
 
     // currentRound changes only after the "next round incoming" text
-    console.log(enemyCount);
+    console.log(shooter.init, shooter.toggleMusic);
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);

@@ -7,6 +7,8 @@ export default class Shooter {
         this.height = 50;
         this.y = y;
 
+        this.init = false;
+
         this.x = x;
         this.secondX = 200;
 
