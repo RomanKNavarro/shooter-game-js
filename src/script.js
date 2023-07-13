@@ -187,6 +187,10 @@ Diagnosis: only happens after losing boss round.
 // make "Hit Back!" boss fight music.           
 // get music button working again!              --DONE
 // FIX THIS STUPID ROUND CRAP
+// CIVIES ACTING UP AGAIN!!!!
+// NATURAL TEXT SHOULD SHOW IMMMMMEEEDIATELY AFTER SPECIAL ROUND!!!!!!
+// stop musics from overlapping eachother
+// get quiet text showing again.
 
 let roundCounts = [6, 10];
 
@@ -572,7 +576,7 @@ function musicToggler() {
     // } else music.dramatic.pause();
 
     if (!shooter.toggleMusic) {
-        playSound(current);
+        if (!current.playing()) playSound(current);
     } else current.pause();
 }
 
@@ -628,7 +632,6 @@ function handleState() {
             
         // glitch: MENU -> RUNNING -> MENU
         case "MENU": 
-            musicToggler();
             shooter.init = true;
             shooter.disabled = false;
             // bossText.draw(cxt);
@@ -726,8 +729,10 @@ function handleState() {
 
             // special round cases:
             // the key is the round BEFORE event occurs:
+            // THIS THE ONE vv
+            // let specRounds = {4: "SPECIAL", 5: "NATURAL", 7: "RELIEF", 9: "BOSS", 10: "END"};
+            // let specRounds = {2: "SPECIAL", 5: "NATURAL", 7: "RELIEF", 9: "BOSS", 6: "END"};
             let specRounds = {4: "SPECIAL", 5: "NATURAL", 7: "RELIEF", 9: "BOSS", 10: "END"};
-            // let specRounds = {2: "SPECIAL", 5: "NATURAL", 7: "RELIEF", 9: "BOSS", 3: "END"};
 
             // let specRounds = {1: "BOSS", 10: "END"};
             if (Object.keys(specRounds).includes(currentRound.toString())) {
