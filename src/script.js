@@ -181,6 +181,7 @@ Diagnosis: only happens after losing boss round.
 // TODO: STOP orcs from spawning in specialRound
 // TODO: wth is up with inter-round text not showing at times????   
 // TODO: specialRound is acting stupid again.                       --DONE
+// TODO: THERE ARE 9 rounds instead of 10! Add 200 ORCS in last round.
 
 let roundCounts = [6, 10];
 
@@ -312,12 +313,12 @@ const credText = new TextWall(
      *************PLEASE READ****************
     First of all, I want to thank you the Player for making it this far! it shows my game is at least ok enough
     for you to play through the whole thing (at least, that's what I hope :) ). I made this game during Summer 
-    '23, my the Sophomore year in college. A most shitty time in my life. You can say this game is the byproduct 
-    of months worth of stored-up frustration, misery, and the sinking feeling of failure at every turn. I 
-    understand that this game will get backlash due to encouraging the player to mass murder innocent people 
-    -but please understand, this to me is art! No matter how negatively it is recieved, I hope to bring to you
-    more games in the future. If you think otherwise, no matter how corny it sounds, I hope you had as much fun 
-    playing this game as I had making it!
+    '23, my the Sophomore year in college. A most shitty time in my life (I hate school LOL). You can say this 
+    game is the byproduct of months of stored-up frustration, misery, and the sinking feeling of failure 
+    at every turn. I understand that this game will get backlash due to encouraging the player to mass murder 
+    civilians -but please understand, this to me is art! No matter how negatively it is recieved, I hope 
+    to bring to you more games in the future. If you think otherwise, no matter how cliche it sounds, I hope you 
+    had as much fun playing this game as I had making it!
         -Roman
     `, Math.floor(canvas.height / 10), canvas);
 
@@ -513,7 +514,8 @@ function greatReset() {
     // ALL ENEMY COUNTS ADDED HERE!:
     for (let i = 0; i <= 9; i++) {
         roundCounts.push(Math.floor(roundCounts[roundCounts.length -1] * 1.3));
-    }
+    };
+    roundCounts[roundCounts.length - 1] = 200;  // 200 ORCS IN LAST ROUND!
 
     resetBaddies();
 
@@ -527,7 +529,7 @@ function greatReset() {
     showAidText = false;
     specialRound = false;
     finalRound = false;
-}
+};
 
 function endRound() {
     if (!showNextRound) {
@@ -807,7 +809,7 @@ function handleState() {
 // increment stuff to make next round slightly harder:
 function cremate() {
     currentRound++;
-    currentSpeed += 0.3;
+    currentSpeed += 0.4;
     roundCounts.splice(0, 1);
     enemyCount = enemiesLeft = roundCounts[0];
     winningScore += enemyCount * 10;
@@ -1224,16 +1226,22 @@ function pushEnemy() {
                 // DOESN'T ACTUALLY SPAWN CIVIES. Just normal enemies at coord -50 lol:
                 // REMEMBER: enemyCount only refers to num. of enemies to push to array :)
                 // if (enemyCount > 0) {
-                if (enemiesLeft > 0) {
-                    enemyQueue.push(new Enemy(-50, -currentSpeed, currentRound));
-                    // enemyQueue.push(new Enemy(canvas.width / 2, -currentSpeed, currentRound));
-                    enemyCount--; 
 
-                    // if (enemyCount < 50 && enemyCount < 20) {
-                    //     civieQueue.push
-                    // }
-                }
-                else specialRound = false;
+                enemyQueue.push(new Enemy(-50, -currentSpeed, currentRound));
+                // enemyQueue.push(new Enemy(canvas.width / 2, -currentSpeed, currentRound));
+                enemyCount--; 
+
+
+                // if (enemiesLeft > 0) {
+                //     enemyQueue.push(new Enemy(-50, -currentSpeed, currentRound));
+                //     // enemyQueue.push(new Enemy(canvas.width / 2, -currentSpeed, currentRound));
+                //     enemyCount--; 
+
+                //     // if (enemyCount < 50 && enemyCount < 20) {
+                //     //     civieQueue.push
+                //     // }
+                // }
+                // else specialRound = false;
             }
         } 
 
@@ -1333,7 +1341,7 @@ function animate() {
     else frame = 0;
 
     // currentRound changes only after the "next round incoming" text
-    // console.log(specialRound);
+    console.log(roundCounts);
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
