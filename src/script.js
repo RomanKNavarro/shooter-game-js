@@ -183,9 +183,10 @@ Diagnosis: only happens after losing boss round.
 // TODO: specialRound is acting stupid again.                           --DONE  
 /* Diagnosis: only occurs if not all civies killed */
 // TODO: THERE ARE 9 rounds instead of 10! Add 200 ORCS in last round.  --DONE
-// TODO: add play again button in creditText
-// make "Hit Back!" boss fight music.
-// get music button working again!
+// TODO: add play again button in creditText    --DONE
+// make "Hit Back!" boss fight music.           
+// get music button working again!              --DONE
+// FIX THIS STUPID ROUND CRAP
 
 let roundCounts = [6, 10];
 
@@ -378,9 +379,6 @@ let state = "LOADING";
 
 let loadingTime = [2000, 3000][Math.floor(Math.random() * 2)];
 
-let music1 = new Audio;
-music1.src = "/src/assets/music/prey's stand 2.mp3";
-
 // FUNCTIONS:
 var sfx = {
     growl: new Howl({
@@ -441,7 +439,14 @@ var music = {
         ], 
         loop: true,
         volume: 5.5,
-    })
+    }),
+    hit_back: new Howl({
+        src: [
+        "src/assets/music/hit-back.mp3"
+        ], 
+        loop: true,
+        volume: 5.5,
+    }),
 };
 
 function playSound(sound) {
@@ -462,13 +467,6 @@ let finalRound = false;
 let startEnd = false;
 let showAidText = false;
 let showNatText = false;
-
-// music1.play();
-// if (state != "LOADING" || state != "PLAY") {
-// if (shooter.init == true) {
-//     // music.dramatic.play();
-//     playSound(music.dramatic);
-// }
 
 let showOffButton = false;
 let showOnButton = true;
@@ -563,6 +561,21 @@ function endRound() {
     }
 }
 
+// if (shooter.toggleMusic) {
+//     playSound(music.dramatic);
+// } else music.dramatic.stop();
+
+function musicToggler() {
+    let current = currentRound < 9 ? music.dramatic : music.hit_back;
+    // if (!shooter.toggleMusic) {
+    //     playSound(music.dramatic);
+    // } else music.dramatic.pause();
+
+    if (!shooter.toggleMusic) {
+        playSound(current);
+    } else current.pause();
+}
+
 function handleState() {
     switch(state) {
         // INITIAL BLACK SCREEN:
@@ -591,10 +604,11 @@ function handleState() {
         // GLITCH SOMEWHERE IN INTRO:
         case "INTRO":
 
-        // THIS ONLY WORKS IN INTRO STAGE:
-        if (!shooter.toggleMusic) {
-            playSound(music.dramatic);
-        } else music.dramatic.pause();
+            // THIS ONLY WORKS IN INTRO STAGE:
+            // if (!shooter.toggleMusic) {
+            //     playSound(music.dramatic);
+            // } else music.dramatic.pause();
+            musicToggler();
         
             startText.draw(cxt);
 
@@ -614,6 +628,7 @@ function handleState() {
             
         // glitch: MENU -> RUNNING -> MENU
         case "MENU": 
+            musicToggler();
             shooter.init = true;
             shooter.disabled = false;
             // bossText.draw(cxt);
@@ -631,6 +646,7 @@ function handleState() {
 
         // this state is only for the boss text:
         case "BOSS":
+            musicToggler();
             finalRound = true;
             bossText.draw(cxt);
             yesButton.draw(cxt);
@@ -647,6 +663,7 @@ function handleState() {
             break;
 
         case "QUIET":
+            musicToggler();
             quietText.draw(cxt);
 
             setTimeout(() => {
@@ -658,6 +675,7 @@ function handleState() {
             break;
     
         case "RUNNING":
+            musicToggler();
             // state = "RUNNING";
             shooter.disabled = false;
 
@@ -697,6 +715,7 @@ function handleState() {
             break;
         
         case "WIN": 
+            musicToggler();
             if (tutorial) disableButton.draw(cxt);
             mouseCollision(shooter.mouse, disableButton, () => {
                 tutorial = false;
@@ -707,8 +726,8 @@ function handleState() {
 
             // special round cases:
             // the key is the round BEFORE event occurs:
-            // let specRounds = {4: "SPECIAL", 5: "NATURAL", 7: "RELIEF", 9: "BOSS", 10: "END"};
-            let specRounds = {2: "SPECIAL", 5: "NATURAL", 7: "RELIEF", 9: "BOSS", 3: "END"};
+            let specRounds = {4: "SPECIAL", 5: "NATURAL", 7: "RELIEF", 9: "BOSS", 10: "END"};
+            // let specRounds = {2: "SPECIAL", 5: "NATURAL", 7: "RELIEF", 9: "BOSS", 3: "END"};
 
             // let specRounds = {1: "BOSS", 10: "END"};
             if (Object.keys(specRounds).includes(currentRound.toString())) {
@@ -718,6 +737,7 @@ function handleState() {
             break;
         
         case "LOSE":
+            musicToggler();
             shooter.disabled = true;
             shooter.secondStream = false;
             failText.draw(cxt);
@@ -732,6 +752,7 @@ function handleState() {
             break;
 
         case "SPECIAL":
+            musicToggler();
             specialRound = true;
     
             if (!showSpecialText) {
@@ -752,6 +773,7 @@ function handleState() {
 
         // where did I want to put this state again?
         case "NATURAL":
+            musicToggler();
             specialRound = false;
             if (!showNatText) {
                 naturalText.draw(cxt);
@@ -773,6 +795,7 @@ function handleState() {
 
         // AIDTEXT IS CONFLICTING WITH ROUNDTEXT
         case "RELIEF":
+            musicToggler();
             secondShooter = true;
             shooter2.duckable = false;
             // shooter.disabled = false;
@@ -796,6 +819,7 @@ function handleState() {
             break;
 
         case "END":
+            musicToggler();
             shooter.disabled = true;
     
             if (!showNextText) {
@@ -819,6 +843,7 @@ function handleState() {
             break;
 
         case "GIVEUP":
+            musicToggler();
             shooter.disabled = true;
             giveupText.draw(cxt);
             playAgainButton.draw(cxt);
@@ -826,6 +851,7 @@ function handleState() {
             break;
 
         case "CREDITS":
+            musicToggler();
             shooter.disabled = true;
             credText.draw(cxt);
             playAgainButton.draw(cxt);
@@ -850,14 +876,6 @@ function cremate() {
 function handleShooter() {
     shooter.draw(cxt2);
     if (secondShooter) shooter2.draw(cxt2);
-
-    // if (state != "LOADING" || state != "PLAY") {
-    //     if (shooter.toggleMusic == false) playSound(music.dramatic);
-    //     else music.dramatic.stop();
-    // };
-
-    // if (shooter.toggleMusic == false) playSound(music.dramatic);
-    // else music.dramatic.stop();
 
     // what states require shooter to be disabled?
     if (state == "RUNNING" || state == "WIN" || state == "QUIET" 
@@ -1363,7 +1381,7 @@ function animate() {
     else frame = 0;
 
     // currentRound changes only after the "next round incoming" text
-    console.log(shooter.init, shooter.toggleMusic);
+    // console.log(shooter.init, shooter.toggleMusic);
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
