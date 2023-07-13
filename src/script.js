@@ -569,15 +569,30 @@ function endRound() {
 //     playSound(music.dramatic);
 // } else music.dramatic.stop();
 
+let currentSong = music.dramatic;
+
+// function musicToggler() {
+//     if (state != "BOSS" && state != "QUIET" && currentRound < 3) {
+//         if (!shooter.toggleMusic) {
+//             playSound(music.dramatic);
+//         } else music.dramatic.pause();
+//     } else {
+//         music.dramatic.stop();
+//         playSound(music.hit_back);
+//     }
+// }
+
+// FIX THIS CRAP:
 function musicToggler() {
-    let current = currentRound < 9 ? music.dramatic : music.hit_back;
-    // if (!shooter.toggleMusic) {
-    //     playSound(music.dramatic);
-    // } else music.dramatic.pause();
+    if (state == "BOSS" && currentRound > 3) {
+        currentSong.stop();
+        currentSong = music.hit_back;
+    } else currentSong = music.dramatic;
 
     if (!shooter.toggleMusic) {
-        if (!current.playing()) playSound(current);
-    } else current.pause();
+        playSound(currentSong);
+    } else currentSong.pause();
+
 }
 
 function handleState() {
@@ -732,7 +747,7 @@ function handleState() {
             // THIS THE ONE vv
             // let specRounds = {4: "SPECIAL", 5: "NATURAL", 7: "RELIEF", 9: "BOSS", 10: "END"};
             // let specRounds = {2: "SPECIAL", 5: "NATURAL", 7: "RELIEF", 9: "BOSS", 6: "END"};
-            let specRounds = {4: "SPECIAL", 5: "NATURAL", 7: "RELIEF", 9: "BOSS", 10: "END"};
+            let specRounds = {4: "SPECIAL", 5: "NATURAL", 7: "RELIEF", 1: "BOSS", 10: "END"};
 
             // let specRounds = {1: "BOSS", 10: "END"};
             if (Object.keys(specRounds).includes(currentRound.toString())) {
@@ -874,6 +889,8 @@ function cremate() {
     winningScore += enemyCount * 10;
     frame = 0;
     resetBaddies();
+
+    // if (state != "BOSS" && state != "QUIET")
 }
 
 // NEED AN ALT TO NADEQUEUE
@@ -992,7 +1009,7 @@ function handleEnemyProjectiles(orc) {
             i--;
 
             // UNCOMMENT THIS:
-            if ((!shooter.duck) || (orc.type == "air" || orc.type == "bomber")) playerHealth.number--;
+            // if ((!shooter.duck) || (orc.type == "air" || orc.type == "bomber")) playerHealth.number--;
         }
     }
 }
@@ -1219,7 +1236,7 @@ function handleEnemy() {
         } else {
             current.dead = true;
             // UNCOMMENT:
-            if (!current.isCivie) wallHealth.number--;
+            // if (!current.isCivie) wallHealth.number--;
         }
 
         if (current.dead) {
