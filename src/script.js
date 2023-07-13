@@ -178,6 +178,9 @@ Diagnosis: only happens after losing boss round.
 */
 // TODO: what's up w/ neg. number on special?                       --DONE
 // TODO: re-incorporate second-shooter animation on later plays     --DONE  
+// TODO: STOP orcs from spawning in specialRound
+// TODO: wth is up with inter-round text not showing at times????   
+// TODO: specialRound is acting stupid again.                       --DONE
 
 let roundCounts = [6, 10];
 
@@ -299,18 +302,23 @@ const giveupText = new TextWall(
     \n
     You are put to the firing squad, necrophiled by 20 men, and your semen-glutted corpse thrown into the dirty Googa River.`, Math.floor(canvas.height / 5), canvas);
 
-const startText = new TextWall(
+const credText = new TextWall(
     `*********Programming and Art**********
-                KavemanKorps
+                Roman Penkotrov
 
      *******Music and Sound Effects********
             Credits in description!
 
-     *************Backstory****************
-     I made this game during the summer of my Sophomore year in college -a brutal time in my life. 
-     Frustrated by all the coursework and lack of freedom, I got to work on Sheephunt Massacre! Maybe it doesn't
-     look like it, bu I poured my heart and soul into making this!
-     
+     *************PLEASE READ****************
+    First of all, I want to thank you the Player for making it this far! it shows my game is at least ok enough
+    for you to play through the whole thing (at least, that's what I hope :) ). I made this game during Summer 
+    '23, my the Sophomore year in college. A most shitty time in my life. You can say this game is the byproduct 
+    of months worth of stored-up frustration, misery, and the sinking feeling of failure at every turn. I 
+    understand that this game will get backlash due to encouraging the player to mass murder innocent people 
+    -but please understand, this to me is art! No matter how negatively it is recieved, I hope to bring to you
+    more games in the future. If you think otherwise, no matter how corny it sounds, I hope you had as much fun 
+    playing this game as I had making it!
+        -Roman
     `, Math.floor(canvas.height / 10), canvas);
 
 // const loadingText = new TextWall(`\n\n\n\n\nLoading`, canvas.height / 5);
@@ -367,7 +375,6 @@ let music1 = new Audio;
 music1.src = "/src/assets/music/prey's stand 2.mp3";
 
 // FUNCTIONS:
-
 var sfx = {
     growl: new Howl({
       /* accepts multiple versions of the same audio! (automatically selects the best one for the 
@@ -669,7 +676,6 @@ function handleState() {
             break;
         
         case "WIN": 
-            specialRound = false;
             if (tutorial) disableButton.draw(cxt);
             mouseCollision(shooter.mouse, disableButton, () => {
                 tutorial = false;
@@ -701,7 +707,7 @@ function handleState() {
             }
 
             playAgainButton2.draw(cxt);
-            mouseCollision(shooter.mouse, playAgainButton2, () => state = "INTRO");  
+            mouseCollision(shooter.mouse, playAgainButton2, () => state = "MENU");  
             break;
 
         case "SPECIAL":
@@ -725,6 +731,7 @@ function handleState() {
 
             // where did I want to put this state again?
             case "NATURAL":
+                specialRound = false;
                 if (!showNatText) {
                     naturalText.draw(cxt);
                     setTimeout(() => {
@@ -1326,7 +1333,7 @@ function animate() {
     else frame = 0;
 
     // currentRound changes only after the "next round incoming" text
-    // console.log(shooter.toggleMusic);
+    // console.log(specialRound);
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
