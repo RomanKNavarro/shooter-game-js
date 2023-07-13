@@ -180,8 +180,12 @@ Diagnosis: only happens after losing boss round.
 // TODO: re-incorporate second-shooter animation on later plays     --DONE  
 // TODO: STOP orcs from spawning in specialRound
 // TODO: wth is up with inter-round text not showing at times????   
-// TODO: specialRound is acting stupid again.                       --DONE
-// TODO: THERE ARE 9 rounds instead of 10! Add 200 ORCS in last round.
+// TODO: specialRound is acting stupid again.                           --DONE  
+/* Diagnosis: only occurs if not all civies killed */
+// TODO: THERE ARE 9 rounds instead of 10! Add 200 ORCS in last round.  --DONE
+// TODO: add play again button in creditText
+// make "Hit Back!" boss fight music.
+// get music button working again!
 
 let roundCounts = [6, 10];
 
@@ -223,11 +227,11 @@ const skipButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, "sk
 const yesButton = new Button(250, canvas.height / 1.2, 100, '"Defend"', true);
 const noButton = new Button(canvas.width - 250 - 100, canvas.height / 1.2, 100, "Give up", true);
 const disableButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, "Disable Tips", true);
-// this one for giveup and for final win:
+// this one for giveup, final win, and credits (bottom right):
 const playAgainButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, "Play again?", true);
-// this one for death
+// this one for death (center)
 const playAgainButton2 = new Button(canvas.width / 2.5, canvas.height / 2, 100, "Play again?", true);
-const creditsButton = new Button(canvas.width - 110, canvas.height / 1.15, 100, "READ ME", true);
+const credButton = new Button(canvas.width / 2.5, canvas.height / 1.15, 100, "READ ME", true);
 
 const musicButton = new Button(canvas.width - 300, canvas.height / 1.15, 100, "Music: On", true);
 const musicButton2 = new Button(canvas.width - 300, canvas.height / 1.15, 100, "Music: Off", true);
@@ -304,11 +308,11 @@ const giveupText = new TextWall(
     You are put to the firing squad, necrophiled by 20 men, and your semen-glutted corpse thrown into the dirty Googa River.`, Math.floor(canvas.height / 5), canvas);
 
 const credText = new TextWall(
-    `*********Programming and Art**********
-                Roman Penkotrov
+    `**********Programming and Art**********
+Roman Penkotrov
 
-     *******Music and Sound Effects********
-            Credits in description!
+     ********Music and Sound Effects*******
+    Credits in description!
 
      *************PLEASE READ****************
     First of all, I want to thank you the Player for making it this far! it shows my game is at least ok enough
@@ -316,9 +320,9 @@ const credText = new TextWall(
     '23, my the Sophomore year in college. A most shitty time in my life (I hate school LOL). You can say this 
     game is the byproduct of months of stored-up frustration, misery, and the sinking feeling of failure 
     at every turn. I understand that this game will get backlash due to encouraging the player to mass murder 
-    civilians -but please understand, this to me is art! No matter how negatively it is recieved, I hope 
-    to bring to you more games in the future. If you think otherwise, no matter how cliche it sounds, I hope you 
-    had as much fun playing this game as I had making it!
+    civilians -but please understand, this to me is art! I hope to bring to you more games in the future, no 
+    matter how negatively this one might be recieved. If you think otherwise, cliche as it sounds, I hope you 
+    enjoyed playing this game as much as I had making it!
         -Roman
     `, Math.floor(canvas.height / 10), canvas);
 
@@ -512,10 +516,14 @@ function greatReset() {
     roundCounts = [6, 10];
 
     // ALL ENEMY COUNTS ADDED HERE!:
-    for (let i = 0; i <= 9; i++) {
+    for (let i = 0; i <= 7; i++) {
         roundCounts.push(Math.floor(roundCounts[roundCounts.length -1] * 1.3));
     };
     roundCounts[roundCounts.length - 1] = 200;  // 200 ORCS IN LAST ROUND!
+
+    // for (let i = 0; i <= 9; i++) {
+    //     roundCounts.push(Math.floor(roundCounts[roundCounts.length -1] * 1.3));
+    // };
 
     resetBaddies();
 
@@ -687,9 +695,9 @@ function handleState() {
             resetBaddies();
 
             // special round cases:
-            // let specRounds = {7: "RELIEF", 8: "SPECIAL", 9: "BOSS", 10: "END"};
             // the key is the round BEFORE event occurs:
-            let specRounds = {4: "SPECIAL", 5: "NATURAL", 7: "RELIEF", 9: "BOSS", 10: "END"};
+            // let specRounds = {4: "SPECIAL", 5: "NATURAL", 7: "RELIEF", 9: "BOSS", 10: "END"};
+            let specRounds = {2: "SPECIAL", 5: "NATURAL", 7: "RELIEF", 9: "BOSS", 3: "END"};
 
             // let specRounds = {1: "BOSS", 10: "END"};
             if (Object.keys(specRounds).includes(currentRound.toString())) {
@@ -731,50 +739,50 @@ function handleState() {
             }
             break;
 
-            // where did I want to put this state again?
-            case "NATURAL":
-                specialRound = false;
-                if (!showNatText) {
-                    naturalText.draw(cxt);
-                    setTimeout(() => {
-                        showNatText = true;
-                    }, 2000);
-                }
-                else {
-                    goodText.draw(cxt);
-                    soonText.draw(cxt);
-                    setTimeout(() => {
-                        state = "RUNNING";
-                        if (score >= winningScore) {
-                            cremate();
-                        }
-                    }, 3000);
-                };
-                break;
-   
-            // AIDTEXT IS CONFLICTING WITH ROUNDTEXT
-            case "RELIEF":
-                secondShooter = true;
-                shooter2.duckable = false;
-                // shooter.disabled = false;
-                shooter2.initSecond = true;
-                if (!showAidText) {
-                    aidText.draw(cxt);
-                    setTimeout(() => {
-                        shooter.secondStream = true;
-                        showAidText = true;
-                    }, 2000);
-                } else {
-                    nextText.draw(cxt);
-                    setTimeout(() => {
-                        state = "RUNNING";
-                        if (score >= winningScore) {
-                            cremate();
-                            shooter2.duckable = true;
-                        }
-                    }, 1000);
-                };
-                break;
+        // where did I want to put this state again?
+        case "NATURAL":
+            specialRound = false;
+            if (!showNatText) {
+                naturalText.draw(cxt);
+                setTimeout(() => {
+                    showNatText = true;
+                }, 2000);
+            }
+            else {
+                goodText.draw(cxt);
+                soonText.draw(cxt);
+                setTimeout(() => {
+                    state = "RUNNING";
+                    if (score >= winningScore) {
+                        cremate();
+                    }
+                }, 3000);
+            };
+            break;
+
+        // AIDTEXT IS CONFLICTING WITH ROUNDTEXT
+        case "RELIEF":
+            secondShooter = true;
+            shooter2.duckable = false;
+            // shooter.disabled = false;
+            shooter2.initSecond = true;
+            if (!showAidText) {
+                aidText.draw(cxt);
+                setTimeout(() => {
+                    shooter.secondStream = true;
+                    showAidText = true;
+                }, 2000);
+            } else {
+                nextText.draw(cxt);
+                setTimeout(() => {
+                    state = "RUNNING";
+                    if (score >= winningScore) {
+                        cremate();
+                        shooter2.duckable = true;
+                    }
+                }, 1000);
+            };
+            break;
 
         case "END":
             shooter.disabled = true;
@@ -790,16 +798,25 @@ function handleState() {
                 endText3.draw(cxt);
                 endText4.draw(cxt);
                 playAgainButton.draw(cxt);
+                credButton.draw(cxt);
                 mouseCollision(shooter.mouse, playAgainButton, () => {
                     greatReset();
-                    state = "INTRO"
+                    state = "INTRO";
                 });
+                mouseCollision(shooter.mouse, credButton, () => state = "CREDITS");
             }
             break;
 
         case "GIVEUP":
             shooter.disabled = true;
             giveupText.draw(cxt);
+            playAgainButton.draw(cxt);
+            mouseCollision(shooter.mouse, playAgainButton, () => state = "MENU");
+            break;
+
+        case "CREDITS":
+            shooter.disabled = true;
+            credText.draw(cxt);
             playAgainButton.draw(cxt);
             mouseCollision(shooter.mouse, playAgainButton, () => state = "MENU");
             break;
@@ -1055,8 +1072,6 @@ function handleProjectile(arr) {
                     shooter.fireRate = 10;
                     shooter.specialAmmo = 45;
                 }
-
-
                 snackQueue.splice(l, 1);
                 l--;
             }
@@ -1230,22 +1245,10 @@ function pushEnemy() {
                 enemyQueue.push(new Enemy(-50, -currentSpeed, currentRound));
                 // enemyQueue.push(new Enemy(canvas.width / 2, -currentSpeed, currentRound));
                 enemyCount--; 
-
-
-                // if (enemiesLeft > 0) {
-                //     enemyQueue.push(new Enemy(-50, -currentSpeed, currentRound));
-                //     // enemyQueue.push(new Enemy(canvas.width / 2, -currentSpeed, currentRound));
-                //     enemyCount--; 
-
-                //     // if (enemyCount < 50 && enemyCount < 20) {
-                //     //     civieQueue.push
-                //     // }
-                // }
-                // else specialRound = false;
             }
         } 
-
-        else if (enemyQueue.length == 0) {
+        else if (enemiesLeft <= 0) {
+            specialRound = false;
             state = "WIN";
         }
     }
@@ -1341,7 +1344,7 @@ function animate() {
     else frame = 0;
 
     // currentRound changes only after the "next round incoming" text
-    console.log(roundCounts);
+    console.log(enemyCount);
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
