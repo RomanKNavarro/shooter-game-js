@@ -178,23 +178,24 @@ Diagnosis: only happens after losing boss round.
 */
 // TODO: what's up w/ neg. number on special?                       --DONE
 // TODO: re-incorporate second-shooter animation on later plays     --DONE  
-// TODO: STOP orcs from spawning in specialRound
-// TODO: wth is up with inter-round text not showing at times????   
+// TODO: STOP orcs from spawning in specialRound                    --DONE
+// TODO: wth is up with inter-round text not showing at times????       --DONE
 // TODO: specialRound is acting stupid again.                           --DONE  
 /* Diagnosis: only occurs if not all civies killed */
 // TODO: THERE ARE 10 rounds (not 9!). Add 200 ORCS in last round.  --DONE
 // TODO: add play again button in creditText    --DONE
-// make "Hit Back!" boss fight music.           
+// make "Hit Back!" boss fight music.           --DONE  
 // get music button working again!              --DONE
-// FIX THIS STUPID ROUND CRAP
-// CIVIES ACTING UP AGAIN!!!!
+// FIX THIS STUPID ROUND CRAP                   --DONE
+// CIVIES ACTING UP AGAIN!!!!                   --DONE (I hope)
 // NATURAL TEXT SHOULD SHOW IMMMMMEEEDIATELY AFTER SPECIAL ROUND!!!!!!      --DONE
 // stop musics from overlapping eachother                                   --DONE
 // get quiet text showing again.                --DONE
-// get old music playing on reset
-// gradually increase speed on round 10.
-// FUCKING CIVIES
+// get old music playing on reset               --DONE
+// gradually increase speed on round 10.        --DONE
+// FUCKING CIVIES                               
 /* Diagnosis: gets incremented to 23 ONLY if the last civy isn't killed */
+// FUCKING AUDIO crashed in last round.
 
 let roundCounts = [6, 10];
 
@@ -530,10 +531,6 @@ function greatReset() {
     };
     roundCounts[roundCounts.length - 1] = 200;  // 200 ORCS IN LAST ROUND!
 
-    // for (let i = 0; i <= 9; i++) {
-    //     roundCounts.push(Math.floor(roundCounts[roundCounts.length -1] * 1.3));
-    // };
-
     resetBaddies();
 
     snackQueue = [];
@@ -546,6 +543,10 @@ function greatReset() {
     showAidText = false;
     specialRound = false;
     finalRound = false;
+
+    // RESET MUSIC:
+    music.hit_back.stop();
+    playSound(music.dramatic);
 };
 
 function endRound() {
@@ -572,11 +573,14 @@ function endRound() {
 
 function musicToggler() {
     // 10
-    if (state != "BOSS" && state != "QUIET" && currentRound < 10) {
+    // if (state != "BOSS" && state != "QUIET" && currentRound < 2) {
+    // if ((state != "BOSS" && state != "QUIET") || finalRound == true) {
+        if (!finalRound) {
         if (!shooter.toggleMusic) {
             playSound(music.dramatic);
         } else music.dramatic.pause();
-    } else {
+    } 
+    else {
         music.dramatic.stop();
         // playSound(music.hit_back);
         if (!shooter.toggleMusic) {
@@ -686,7 +690,7 @@ function handleState() {
             // state = "RUNNING";
             shooter.disabled = false;
 
-            if (finalRound == true && enemiesLeft <= 150) currentSpeed = 4.5;
+            if (finalRound == true && enemiesLeft <= 150) currentSpeed = 6;
 
             if (Object.keys(tutRounds).includes(currentRound.toString()) && tutorial === true) {
                 disableButton.draw(cxt);
@@ -737,10 +741,11 @@ function handleState() {
             // the key is the round BEFORE event occurs:
             // THIS THE ONE vv
             // SPEC ROUND SHOULD BE 5. 
+            // enemy speed on final round is 5.1.
             let specRounds = {4: "SPECIAL", 5: "NATURAL", 7: "RELIEF", 9: "BOSS", 10: "END"};
             // let specRounds = {2: "SPECIAL", 5: "NATURAL", 7: "RELIEF", 9: "BOSS", 6: "END"};
 
-            // let specRounds = {4: "SPECIAL", 5: "NATURAL", 7: "RELIEF", 1: "BOSS", 10: "END"};
+            // let specRounds = {2: "BOSS", 3: "END"};
 
             // let specRounds = {1: "BOSS", 10: "END"};
             if (Object.keys(specRounds).includes(currentRound.toString())) {
@@ -876,7 +881,7 @@ function handleState() {
 // increment stuff to make next round slightly harder:
 function cremate() {
     // really hope this fixes civy glitch
-    if (enemiesLeft == 0 || enemiesLeft > 10) {
+    if (enemiesLeft <= 0 || enemiesLeft > 10) {
         currentRound++;
         currentSpeed += 0.4;
         roundCounts.splice(0, 1);
@@ -1012,7 +1017,7 @@ function handleEnemyProjectiles(orc) {
             i--;
 
             // UNCOMMENT THIS:
-            // if ((!shooter.duck) || (orc.type == "air" || orc.type == "bomber")) playerHealth.number--;
+            if ((!shooter.duck) || (orc.type == "air" || orc.type == "bomber")) playerHealth.number--;
         }
     }
 }
@@ -1239,7 +1244,7 @@ function handleEnemy() {
         } else {
             current.dead = true;
             // UNCOMMENT:
-            // if (!current.isCivie) wallHealth.number--;
+            if (!current.isCivie) wallHealth.number--;
         }
 
         if (current.dead) {
