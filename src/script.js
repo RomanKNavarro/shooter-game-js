@@ -182,15 +182,16 @@ Diagnosis: only happens after losing boss round.
 // TODO: wth is up with inter-round text not showing at times????   
 // TODO: specialRound is acting stupid again.                           --DONE  
 /* Diagnosis: only occurs if not all civies killed */
-// TODO: THERE ARE 9 rounds instead of 10! Add 200 ORCS in last round.  --DONE
+// TODO: THERE ARE 10 rounds (not 9!). Add 200 ORCS in last round.  --DONE
 // TODO: add play again button in creditText    --DONE
 // make "Hit Back!" boss fight music.           
 // get music button working again!              --DONE
 // FIX THIS STUPID ROUND CRAP
 // CIVIES ACTING UP AGAIN!!!!
-// NATURAL TEXT SHOULD SHOW IMMMMMEEEDIATELY AFTER SPECIAL ROUND!!!!!!
-// stop musics from overlapping eachother
-// get quiet text showing again.
+// NATURAL TEXT SHOULD SHOW IMMMMMEEEDIATELY AFTER SPECIAL ROUND!!!!!!      --DONE
+// stop musics from overlapping eachother                                   --DONE
+// get quiet text showing again.                --DONE
+// get old music playing on reset
 
 let roundCounts = [6, 10];
 
@@ -239,9 +240,6 @@ const playAgainButton = new Button(canvas.width - 110, canvas.height / 1.15, 100
 // this one for death (center)
 const playAgainButton2 = new Button(canvas.width / 2.5, canvas.height / 2, 100, "Play again?", true);
 const credButton = new Button(canvas.width / 2.5, canvas.height / 1.15, 100, "READ ME", true);
-
-const musicButton = new Button(canvas.width - 300, canvas.height / 1.15, 100, "Music: On", true);
-const musicButton2 = new Button(canvas.width - 300, canvas.height / 1.15, 100, "Music: Off", true);
 
 const winText = new Button(canvas.width / 2.5, canvas.height / 3, 100, "Round Complete", false);
 const nextText = new Button(canvas.width / 2.5, canvas.height / 3, 100, "Next round incoming...", false);
@@ -571,28 +569,19 @@ function endRound() {
 
 let currentSong = music.dramatic;
 
-// function musicToggler() {
-//     if (state != "BOSS" && state != "QUIET" && currentRound < 3) {
-//         if (!shooter.toggleMusic) {
-//             playSound(music.dramatic);
-//         } else music.dramatic.pause();
-//     } else {
-//         music.dramatic.stop();
-//         playSound(music.hit_back);
-//     }
-// }
-
-// FIX THIS CRAP:
 function musicToggler() {
-    if (state == "BOSS" && currentRound > 3) {
-        currentSong.stop();
-        currentSong = music.hit_back;
-    } else currentSong = music.dramatic;
-
-    if (!shooter.toggleMusic) {
-        playSound(currentSong);
-    } else currentSong.pause();
-
+    // 10
+    if (state != "BOSS" && state != "QUIET" && currentRound < 3) {
+        if (!shooter.toggleMusic) {
+            playSound(music.dramatic);
+        } else music.dramatic.pause();
+    } else {
+        music.dramatic.stop();
+        // playSound(music.hit_back);
+        if (!shooter.toggleMusic) {
+            playSound(music.hit_back);
+        } else music.hit_back.pause();
+    }
 }
 
 function handleState() {
@@ -745,9 +734,10 @@ function handleState() {
             // special round cases:
             // the key is the round BEFORE event occurs:
             // THIS THE ONE vv
-            // let specRounds = {4: "SPECIAL", 5: "NATURAL", 7: "RELIEF", 9: "BOSS", 10: "END"};
+            let specRounds = {4: "SPECIAL", 5: "NATURAL", 7: "RELIEF", 9: "BOSS", 10: "END"};
             // let specRounds = {2: "SPECIAL", 5: "NATURAL", 7: "RELIEF", 9: "BOSS", 6: "END"};
-            let specRounds = {4: "SPECIAL", 5: "NATURAL", 7: "RELIEF", 1: "BOSS", 10: "END"};
+
+            // let specRounds = {4: "SPECIAL", 5: "NATURAL", 7: "RELIEF", 1: "BOSS", 10: "END"};
 
             // let specRounds = {1: "BOSS", 10: "END"};
             if (Object.keys(specRounds).includes(currentRound.toString())) {
@@ -1403,7 +1393,7 @@ function animate() {
     else frame = 0;
 
     // currentRound changes only after the "next round incoming" text
-    // console.log(shooter.init, shooter.toggleMusic);
+    // console.log(roundCounts);
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
