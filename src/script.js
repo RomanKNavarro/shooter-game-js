@@ -193,8 +193,9 @@ Diagnosis: only happens after losing boss round.
 // get quiet text showing again.                --DONE
 // get old music playing on reset               --DONE
 // gradually increase speed on round 10.        --DONE
-// FUCKING CIVIES                               
-/* Diagnosis: gets incremented to 23 ONLY if the last civy isn't killed */
+// FUCKING CIVIES                               --DONE (i hope)
+/* Diagnosis: gets incremented to 23 ONLY if the last civy isn't killed.
+What is causing enemiesLeft to decrement for no reason? */
 // FUCKING AUDIO crashed in last round.
 
 let roundCounts = [6, 10];
@@ -434,6 +435,12 @@ var sfx = {
         ],
         loop: false,
     }),
+    squeal: new Howl({
+        src: [
+            "src/assets/sounds/pig-squeal.mp3",
+        ], 
+        loop: false,
+    }),
 };
 
 /* there is a stupid security measure in some browsers where no sound is allowed to play unless the 
@@ -450,7 +457,7 @@ var music = {
         src: [
         "src/assets/music/hit-back.mp3"
         ], 
-        loop: true,
+        loop: false,
         volume: 5.5,
     }),
 };
@@ -690,7 +697,11 @@ function handleState() {
             // state = "RUNNING";
             shooter.disabled = false;
 
-            if (finalRound == true && enemiesLeft <= 150) currentSpeed = 6;
+            if (finalRound == true) {
+                if (enemiesLeft <= 150) currentSpeed = 6;
+                if (enemiesLeft <= 100) currentSpeed = 7;
+                if (enemiesLeft <= 50) currentSpeed = 8;
+            }
 
             if (Object.keys(tutRounds).includes(currentRound.toString()) && tutorial === true) {
                 disableButton.draw(cxt);
@@ -1238,11 +1249,17 @@ function handleEnemy() {
         // delete enemies if they are off-canvas:
         // if ((current.x + current.width >= 0) && (current.x < canvas.width + 50)) {
         // REVISION: don't force player to kill civilians
-        if ((current.x + current.width >= 0) && (current.x < canvas.width + 50)) {   
-            current.update(); 
-            if (state == "RUNNING" || state == "LOSE") current.draw(cxt);
+        if ((current.x + current.width >= -50) && (current.x < canvas.width + 50)) {   
+            // current.update(); 
+            // if (state == "RUNNING" || state == "LOSE") current.draw(cxt);
+            if (state == "RUNNING" || state == "LOSE") {
+                current.draw(cxt);
+                current.update(); 
+            }
+
         } else {
             current.dead = true;
+            playSound(sfx.squeal);
             // UNCOMMENT:
             if (!current.isCivie) wallHealth.number--;
         }
