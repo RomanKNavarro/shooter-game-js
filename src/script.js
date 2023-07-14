@@ -192,6 +192,9 @@ Diagnosis: only happens after losing boss round.
 // stop musics from overlapping eachother                                   --DONE
 // get quiet text showing again.                --DONE
 // get old music playing on reset
+// gradually increase speed on round 10.
+// FUCKING CIVIES
+/* Diagnosis: gets incremented to 23 ONLY if the last civy isn't killed */
 
 let roundCounts = [6, 10];
 
@@ -322,7 +325,7 @@ Roman Penkotrov
      *************PLEASE READ****************
     First of all, I want to thank you the Player for making it this far! it shows my game is at least ok enough
     for you to play through the whole thing (at least, that's what I hope :) ). I made this game during Summer 
-    '23, my the Sophomore year in college. A most shitty time in my life (I hate school LOL). You can say this 
+    '23, my Sophomore year in college. A most shitty time in my life (I hate school LOL). You can say this 
     game is the byproduct of months of stored-up frustration, misery, and the sinking feeling of failure 
     at every turn. I understand that this game will get backlash due to encouraging the player to mass murder 
     civilians -but please understand, this to me is art! I hope to bring to you more games in the future, no 
@@ -567,11 +570,9 @@ function endRound() {
 //     playSound(music.dramatic);
 // } else music.dramatic.stop();
 
-let currentSong = music.dramatic;
-
 function musicToggler() {
     // 10
-    if (state != "BOSS" && state != "QUIET" && currentRound < 3) {
+    if (state != "BOSS" && state != "QUIET" && currentRound < 10) {
         if (!shooter.toggleMusic) {
             playSound(music.dramatic);
         } else music.dramatic.pause();
@@ -661,9 +662,8 @@ function handleState() {
     
             if (score >= winningScore) {
                 cremate();
-
             }
-    
+
             // mouseCollision(shooter.mouse, yesButton, "RUNNING");
             mouseCollision(shooter.mouse, yesButton, () => state = "QUIET");
             mouseCollision(shooter.mouse, noButton, () => state = "GIVEUP");
@@ -685,6 +685,8 @@ function handleState() {
             musicToggler();
             // state = "RUNNING";
             shooter.disabled = false;
+
+            if (finalRound == true && enemiesLeft <= 150) currentSpeed = 4.5;
 
             if (Object.keys(tutRounds).includes(currentRound.toString()) && tutorial === true) {
                 disableButton.draw(cxt);
@@ -734,6 +736,7 @@ function handleState() {
             // special round cases:
             // the key is the round BEFORE event occurs:
             // THIS THE ONE vv
+            // SPEC ROUND SHOULD BE 5. 
             let specRounds = {4: "SPECIAL", 5: "NATURAL", 7: "RELIEF", 9: "BOSS", 10: "END"};
             // let specRounds = {2: "SPECIAL", 5: "NATURAL", 7: "RELIEF", 9: "BOSS", 6: "END"};
 
@@ -764,7 +767,6 @@ function handleState() {
         case "SPECIAL":
             musicToggler();
             specialRound = true;
-    
             if (!showSpecialText) {
                 specialText.draw(cxt);
                 setTimeout(() => {
@@ -775,6 +777,7 @@ function handleState() {
                 setTimeout(() => {
                     state = "RUNNING";
                     if (score >= winningScore) {
+                        // if (state != "RUNNING") 
                         cremate();
                     }
                 }, 1000);
@@ -872,14 +875,24 @@ function handleState() {
 
 // increment stuff to make next round slightly harder:
 function cremate() {
-    currentRound++;
-    currentSpeed += 0.4;
-    roundCounts.splice(0, 1);
-    enemyCount = enemiesLeft = roundCounts[0];
-    winningScore += enemyCount * 10;
-    frame = 0;
-    resetBaddies();
-
+    // really hope this fixes civy glitch
+    if (enemiesLeft == 0 || enemiesLeft > 10) {
+        currentRound++;
+        currentSpeed += 0.4;
+        roundCounts.splice(0, 1);
+        enemyCount = enemiesLeft = roundCounts[0];
+        winningScore += enemyCount * 10;
+        frame = 0;
+        resetBaddies();
+    }
+    // currentRound++;
+    // currentSpeed += 0.4;
+    // roundCounts.splice(0, 1);
+    // enemyCount = enemiesLeft = roundCounts[0];
+    // winningScore += enemyCount * 10;
+    // frame = 0;
+    // resetBaddies();
+    
     // if (state != "BOSS" && state != "QUIET")
 }
 
@@ -1393,7 +1406,7 @@ function animate() {
     else frame = 0;
 
     // currentRound changes only after the "next round incoming" text
-    // console.log(roundCounts);
+    console.log(currentSpeed);
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
