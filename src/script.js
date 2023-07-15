@@ -193,9 +193,11 @@ Diagnosis: only happens after losing boss round.
 // get quiet text showing again.                --DONE
 // get old music playing on reset               --DONE
 // gradually increase speed on round 10.        --DONE
-// FUCKING CIVIES                               --DONE (i hope)
+// FUCKING CIVIES                               
 /* Diagnosis: gets incremented to 23 ONLY if the last civy isn't killed.
-What is causing enemiesLeft to decrement for no reason? */
+What is causing enemiesLeft to decrement for no reason? 
+THEORY: it must be natural state causing this, as it does not run when offending bug occurs. 
+*/
 // FUCKING AUDIO crashed in last round.
 
 let roundCounts = [6, 10];
@@ -490,6 +492,8 @@ let showNatText = false;
 let showOffButton = false;
 let showOnButton = true;
 
+let specialRoundEnd = false;
+
 function handleStatus() {
     if (state == "RUNNING" || state == "WIN" || state == "QUIET" || state == "RELIEF" || state == "TUTORIAL") {
         roundText.text = currentRound;
@@ -709,7 +713,10 @@ function handleState() {
                 if (enemiesLeft <= 50) currentSpeed = 8;
             }
 
-            if (specialRound == true) playSound(sfx.crowd);
+            if (specialRound == true) {
+                playSound(sfx.crowd);
+                if (enemyCount <= 5) specialRoundEnd = true;
+            };
 
             if (Object.keys(tutRounds).includes(currentRound.toString()) && tutorial === true) {
                 disableButton.draw(cxt);
@@ -799,11 +806,12 @@ function handleState() {
             } else { 
                 specialText2.draw(cxt);
                 setTimeout(() => {
-                    state = "RUNNING";
+                    // state = "RUNNING";
                     if (score >= winningScore) {
                         // if (state != "RUNNING") 
                         cremate();
                     }
+                    state = "RUNNING";
                 }, 1000);
             }
             break;
@@ -822,10 +830,11 @@ function handleState() {
                 goodText.draw(cxt);
                 soonText.draw(cxt);
                 setTimeout(() => {
-                    state = "RUNNING";
+                    // state = "RUNNING";
                     if (score >= winningScore) {
                         cremate();
                     }
+                    state = "RUNNING";
                 }, 3000);
             };
             break;
@@ -1436,7 +1445,7 @@ function animate() {
     else frame = 0;
 
     // currentRound changes only after the "next round incoming" text
-    console.log(currentSpeed);
+    console.log(enemyCount);
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
