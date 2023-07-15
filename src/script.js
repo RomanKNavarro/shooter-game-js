@@ -75,10 +75,10 @@ var cxt2 = canvas2.getContext("2d");
 // TODO: add second "special" round
 // TODO: make flammen hurt crawlies too --DONE
 // TODO: FIX THIS STUPID MENU GLITCH    --DONE
-// TODO: get stats and player weapon to reset on game over
+// TODO: get stats and player weapon to reset on game over  --DONE
 // TODO: get sick font
 // TODO: brief delay before spawning round 1 enemies.   --DONE
-// TODO: frontal player/enemy collision game over.
+// TODO: frontal player/enemy collision game over.      --DONE
 /* TODO: Make enemies shoot at player once they reach a certain distance. 3 enemies can shoot at you   --DONE
          at any given time. The rest pass by.       
 */
@@ -193,14 +193,15 @@ Diagnosis: only happens after losing boss round.
 // get quiet text showing again.                --DONE
 // get old music playing on reset               --DONE
 // gradually increase speed on round 10.        --DONE
-// FUCKING CIVIES                               
+// FUCKING CIVIES                               --DONE (I hope)
 /* Diagnosis: gets incremented to 23 ONLY if the last civy isn't killed.
 What is causing enemiesLeft to decrement for no reason? 
 THEORY: it must be natural state causing this, as it does not run when offending bug occurs. 
 */
 // FUCKING AUDIO crashed in last round.
+// TODO: let player know he can drop his weapon with Q! --DONE (resolved)
 
-let roundCounts = [6, 10];
+let roundCounts = [6, 10]; 
 
 // single, triple, two shooters, ar hoarde (grounds and a few airs), grenade hoarde, civies (pows)
 
@@ -445,9 +446,10 @@ var sfx = {
     }),
     crowd: new Howl({
         src: [
-            "src/assets/sounds/crowd.mp3",
+            "src/assets/sounds/crowd2.mp3",
         ], 
         loop: false,
+        volume: 3,
     }),
 };
 
@@ -491,8 +493,6 @@ let showNatText = false;
 
 let showOffButton = false;
 let showOnButton = true;
-
-let specialRoundEnd = false;
 
 function handleStatus() {
     if (state == "RUNNING" || state == "WIN" || state == "QUIET" || state == "RELIEF" || state == "TUTORIAL") {
@@ -715,7 +715,6 @@ function handleState() {
 
             if (specialRound == true) {
                 playSound(sfx.crowd);
-                if (enemyCount <= 5) specialRoundEnd = true;
             };
 
             if (Object.keys(tutRounds).includes(currentRound.toString()) && tutorial === true) {
@@ -1322,6 +1321,11 @@ function pushEnemy() {
 
     // RANDOMFRAMES determines distances between enemies
     if (frame % randomFrames[Math.floor(Math.random() * randomFrames.length)] === 0) {
+
+        if (specialRound == true && enemiesLeft <= 0) {
+            specialRound = false;
+            state = "NATURAL";
+        }
         
         if (enemyCount > 0) {   
             if (!specialRound) {
@@ -1342,16 +1346,19 @@ function pushEnemy() {
                 // DOESN'T ACTUALLY SPAWN CIVIES. Just normal enemies at coord -50 lol:
                 // REMEMBER: enemyCount only refers to num. of enemies to push to array :)
                 // if (enemyCount > 0) {
-
                 enemyQueue.push(new Enemy(-50, -currentSpeed, currentRound));
                 // enemyQueue.push(new Enemy(canvas.width / 2, -currentSpeed, currentRound));
                 enemyCount--; 
             }
         } 
+
         else if (enemiesLeft <= 0) {
             specialRound = false;
             state = "WIN";
         }
+
+        // attempt to stop win breaks from not showing up:
+        else if ([1, 2, 3].includes(currentRound) && enemiesLeft <= 0) state = "WIN";
     }
 }
 
@@ -1445,7 +1452,7 @@ function animate() {
     else frame = 0;
 
     // currentRound changes only after the "next round incoming" text
-    console.log(enemyCount);
+    // console.log();
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
