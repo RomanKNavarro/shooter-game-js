@@ -173,7 +173,7 @@ Uncaught TypeError: Cannot read properties of undefined (reading 'x')
 /* TODO: way too many civies spawning on second try.                --DONE         
 Diagnosis: when it hits 0, enemyCount resets to 26 (??) */
 // TODO: there should be a little more enemies on final round.                       --DONE (resolved)
-/* FREAKING CIVIES SPAWNING STARTING ON ROUND 3. They dont stop coming after that.   --DONE
+/* CIVIES SPAWNING STARTING ON ROUND 3. They dont stop coming after that.   --DONE
 Diagnosis: only happens after losing boss round.
 */
 // TODO: what's up w/ neg. number on special?                       --DONE
@@ -441,6 +441,12 @@ var sfx = {
         ], 
         loop: false,
     }),
+    crowd: new Howl({
+        src: [
+            "src/assets/sounds/crowd.mp3",
+        ], 
+        loop: false,
+    }),
 };
 
 /* there is a stupid security measure in some browsers where no sound is allowed to play unless the 
@@ -702,6 +708,8 @@ function handleState() {
                 if (enemiesLeft <= 100) currentSpeed = 7;
                 if (enemiesLeft <= 50) currentSpeed = 8;
             }
+
+            if (specialRound == true) playSound(sfx.crowd);
 
             if (Object.keys(tutRounds).includes(currentRound.toString()) && tutorial === true) {
                 disableButton.draw(cxt);
@@ -1259,7 +1267,7 @@ function handleEnemy() {
 
         } else {
             current.dead = true;
-            playSound(sfx.squeal);
+            // playSound(sfx.squeal);
             // UNCOMMENT:
             if (!current.isCivie) wallHealth.number--;
         }
