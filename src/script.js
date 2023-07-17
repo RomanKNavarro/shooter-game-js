@@ -193,7 +193,7 @@ Diagnosis: only happens after losing boss round.
 // get quiet text showing again.                --DONE
 // get old music playing on reset               --DONE
 // gradually increase speed on round 10.        --DONE
-// FUCKING CIVIES                               --DONE (I hope)
+// FUCKING CIVIES                              
 /* Diagnosis: gets incremented to 23 ONLY if the last civy isn't killed.
 What is causing enemiesLeft to decrement for no reason? 
 THEORY: it must be natural state causing this, as it does not run when offending bug occurs. 
