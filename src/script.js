@@ -273,7 +273,7 @@ const endText4 = new Button(canvas.width / 2.5, canvas.height / 1.9, 100, "KAVEM
 const naturalText = new Button(canvas.width / 2.5, canvas.height / 3, 100, "You're a natural born killer!", false);
 
 const goodText = new Button(canvas.width / 2.5, canvas.height / 4.5, 100, "Excellent work, Leuitenant.", false);
-const soonText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "Help will arrive soon.", false);
+const soonText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "Help is arriving...", false);
 
 const aidText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "HELP HAS ARRIVED", false);
 const quietText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "KILL KILL KILL KILL", false);
@@ -767,7 +767,7 @@ function handleState() {
             // THIS THE ONE vv
             // SPEC ROUND SHOULD BE 5. 
             // enemy speed on final round is 5.1.
-            let specRounds = {4: "SPECIAL", 5: "NATURAL", 7: "RELIEF", 9: "BOSS", 10: "END"};
+            let specRounds = {4: "SPECIAL", 6: "NATURAL", 7: "RELIEF", 9: "BOSS", 10: "END"};
             // let specRounds = {2: "SPECIAL", 5: "NATURAL", 7: "RELIEF", 9: "BOSS", 6: "END"};
 
             // let specRounds = {2: "BOSS", 3: "END"};
@@ -1044,7 +1044,7 @@ function handleEnemyProjectiles(orc) {
             i--;
 
             // UNCOMMENT THIS:
-            if ((!shooter.duck) || (orc.type == "air" || orc.type == "bomber")) playerHealth.number--;
+            // if ((!shooter.duck) || (orc.type == "air" || orc.type == "bomber")) playerHealth.number--;
         }
     }
 }
@@ -1277,7 +1277,7 @@ function handleEnemy() {
             current.dead = true;
             // playSound(sfx.squeal);
             // UNCOMMENT:
-            if (!current.isCivie) wallHealth.number--;
+            // if (!current.isCivie) wallHealth.number--;
         }
 
         if (current.dead) {
@@ -1324,7 +1324,7 @@ function pushEnemy() {
 
         if (specialRound == true && enemiesLeft <= 0) {
             specialRound = false;
-            state = "NATURAL";
+            // state = "NATURAL";
         }
         
         if (enemyCount > 0) {   
