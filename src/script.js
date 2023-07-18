@@ -278,7 +278,6 @@ const soonText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "Help 
 const aidText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "HELP HAS ARRIVED", false);
 const quietText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "KILL KILL KILL KILL", false);
 
-
 // TUTORIAL CRAP:
 // BRUTAL IDEA: live captured enemies used as target practice
 // YES, player can take damage/die in tutorial
@@ -494,6 +493,8 @@ let showNatText = false;
 let showOffButton = false;
 let showOnButton = true;
 
+let endSpecRound = false;
+
 function handleStatus() {
     if (state == "RUNNING" || state == "WIN" || state == "QUIET" || state == "RELIEF" || state == "TUTORIAL") {
         roundText.text = currentRound;
@@ -577,7 +578,8 @@ function endRound() {
         nextText.draw(cxt);
         setTimeout(() => {
             state = "RUNNING";
-            if (score >= winningScore) {
+            // if (score >= winningScore) {
+            if (enemiesLeft <= 0) { 
                 cremate();
             }
         }, 1000);
@@ -1263,9 +1265,9 @@ function handleEnemy() {
 
         // FIX THIS CRAP --DONE. Takes into account both regular and special rounds:
         // delete enemies if they are off-canvas:
-        // if ((current.x + current.width >= 0) && (current.x < canvas.width + 50)) {
+        if ((current.x + current.width >= 0) && (current.x <= canvas.width + 50)) {
         // REVISION: don't force player to kill civilians
-        if ((current.x + current.width >= -50) && (current.x < canvas.width + 50)) {   
+        // if ((current.x + current.width >= -50) && (current.x < canvas.width + 50)) {   
             // current.update(); 
             // if (state == "RUNNING" || state == "LOSE") current.draw(cxt);
             if (state == "RUNNING" || state == "LOSE") {
@@ -1324,6 +1326,7 @@ function pushEnemy() {
 
         if (specialRound == true && enemiesLeft <= 0) {
             specialRound = false;
+            endSpecRound = true;
             // state = "NATURAL";
         }
         
@@ -1346,9 +1349,11 @@ function pushEnemy() {
                 // DOESN'T ACTUALLY SPAWN CIVIES. Just normal enemies at coord -50 lol:
                 // REMEMBER: enemyCount only refers to num. of enemies to push to array :)
                 // if (enemyCount > 0) {
-                enemyQueue.push(new Enemy(-50, -currentSpeed, currentRound));
-                // enemyQueue.push(new Enemy(canvas.width / 2, -currentSpeed, currentRound));
-                enemyCount--; 
+                if (!endSpecRound) {
+                    enemyQueue.push(new Enemy(-50, -currentSpeed, currentRound));
+                    // enemyQueue.push(new Enemy(canvas.width / 2, -currentSpeed, currentRound));
+                    enemyCount--; 
+                }
             }
         } 
 
@@ -1452,7 +1457,7 @@ function animate() {
     else frame = 0;
 
     // currentRound changes only after the "next round incoming" text
-    // console.log();
+    console.log(endSpecRound);
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
