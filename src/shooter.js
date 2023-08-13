@@ -3,9 +3,12 @@ import Projectile from "./projectile.js";
 // why is mouse stuff here? so that it can be used as "entity.mouse" in inputHandler.js
 export default class Shooter {
     constructor(x, y) { 
-        this.width = 50;
-        this.height = 50;
+        this.width = 44;
+        this.height = 34;
         this.y = y;
+
+        this.image = new Image();
+        this.image.src = "src/assets/images/sheep-pistol-clear.png";
 
         this.init = false;
 
@@ -23,7 +26,7 @@ export default class Shooter {
         this.health = 3;
         this.delete = false;
 
-        /* HOW PROJECTILES WORK: whenever user shoots, new projectile added to array. As he not shoots,
+        /* HOW PROJECTILES WORK: whenever user shoots, new projectile added to array. As he not-shoots,
         it automatically decrements until it is empty :) */
         this.projectiles = [];
         this.shooting = false;
@@ -66,13 +69,14 @@ export default class Shooter {
     }
     
     draw(context) {
-        context.beginPath();
-        context.fillStyle = "yellow";
-        if (!this.duck) {
-            context.fillRect(this.x, this.y, this.width, this.height);
-        } else {
-            context.fillRect(this.x, this.y + this.height / 2, this.width, this.height / 2);
-        }
+        // context.beginPath();
+        // context.fillStyle = "yellow";
+        // if (!this.duck) {
+        //     context.fillRect(this.x, this.y, this.width, this.height);
+        // } else {
+        //     context.fillRect(this.x, this.y + this.height / 2, this.width, this.height / 2);
+        // }
+        context.drawImage(this.image, this.x, this.y, this.width, this.height);
 
         context.font = "20px serif";
         context.fillStyle = "black";

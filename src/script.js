@@ -200,6 +200,7 @@ THEORY: it must be natural state causing this, as it does not run when offending
 */
 // FUCKING AUDIO crashed in last round.
 // TODO: let player know he can drop his weapon with Q! --DONE (resolved)
+// TODO: download the fonts I need for offline use. 
 
 let roundCounts = [6, 10]; 
 
@@ -220,11 +221,11 @@ let secondShooter = false;
 
 // objects
 const flora = new Floor(canvas);
-const shooter = new Shooter(100, flora.y - 50);
+const shooter = new Shooter(100, flora.y - 34);
 
 //  NEEDS TO START OFF SCREEN, then walk over to position 200:
 // const shooter2 = new Shooter(200, flora.y - 50);
-const shooter2 = new Shooter(0 - shooter.width, flora.y - 50);
+const shooter2 = new Shooter(0 - shooter.width, flora.y - 34);
 shooter2.isSecond = true;
 
 // const shooter = new Shooter(100, flora.y - 50);
@@ -1046,7 +1047,7 @@ function handleEnemyProjectiles(orc) {
             i--;
 
             // UNCOMMENT THIS:
-            // if ((!shooter.duck) || (orc.type == "air" || orc.type == "bomber")) playerHealth.number--;
+            if ((!shooter.duck) || (orc.type == "air" || orc.type == "bomber")) playerHealth.number--;
         }
     }
 }
