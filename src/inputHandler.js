@@ -35,11 +35,12 @@ export default class InputHandler {
           break;
 
         case 's':
+          // what's duckable?
+          entity.image = entity.pistol_crouch;
           if (entity.duckable) {
             entity.angle = "down";
             entity.duck = true;
           }
-          
           break;
         
         case 'a':

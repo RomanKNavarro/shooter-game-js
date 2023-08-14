@@ -70,25 +70,57 @@ export default class Shooter {
         this.toggleMusic = false;
 
         // IMAGES:
+        // FIX THIS CRAP:
+        // 44x34
         this.pistol_stand = new Image();
-        this.pistol_stand.src = "src/assets/images/sheep-pistol-clear.png";
+        this.pistol_stand.src = "src/assets/images/CLEARS/pistol/sheep-pistol-clear.png";
 
+        // 43x36
         this.pistol_stand_up = new Image();
-        this.pistol_stand_up.src = "src/assets/images/CLEARS/sheep-pistol-lookup-clear.png";
+        this.pistol_stand_up.src = "src/assets/images/CLEARS/pistol/sheep-pistol-lookup-clear.png";
 
+        // 44x36
         this.pistol_stand_top = new Image();
-        this.pistol_stand_top.src = "src/assets/images/CLEARS/sheep-pistol-top-clear.png";
+        this.pistol_stand_top.src = "src/assets/images/CLEARS/pistol/sheep-pistol-top-clear.png";
 
+        // 50x28
         this.pistol_crouch = new Image();
-        this.pistol_crouch.src = "src/assets/images/sheep-pistol-crouch-clear.png";
+        this.pistol_crouch.src = "src/assets/images/CLEARS/pistol/sheep-pistol-crouch-clear.png";
 
+        // 49x30
         this.pistol_crouch_up = new Image();
-        this.pistol_crouch_up.src = "src/assets/images/CLEARS/sheep-pistol-lookup-crouch-clear.png";
+        this.pistol_crouch_up.src = "src/assets/images/CLEARS/pistol/sheep-pistol-lookup-crouch-clear.png";
 
+        // 50x30
         this.pistol_crouch_top = new Image();
-        this.pistol_crouch_top.src = "src/assets/images/CLEARS/sheep-pistol-crouch-top-clear.png";
+        this.pistol_crouch_top.src = "src/assets/images/CLEARS/pistol/sheep-pistol-crouch-top-clear.png";
 
         //rifle:
+        // 44x40
+        this.rifle_stand = new Image();
+        this.rifle_stand.src = "src/assets/images/CLEARS/rifle/sheep-rifle-clear.png";
+
+        // 43x38
+        this.rifle_stand_up = new Image();
+        this.rifle_stand_up.src = "src/assets/images/CLEARS/rifle/sheep-rifle-up-clear.png";
+
+        // 44x37
+        this.rifle_stand_top = new Image();
+        this.rifle_stand_top.src = "src/assets/images/CLEARS/rifle/sheep-rifle-top-clear.png";
+
+        // 50x34
+        this.rifle_crouch = new Image();
+        this.rifle_crouch.src = "src/assets/images/CLEARS/rifle/sheep-rifle-crouch-clear.png";
+
+        // 49x32
+        this.rifle_crouch_up = new Image();
+        this.rifle_crouch_up.src = "src/assets/images/CLEARS/rifle/sheep-rifle-up-crouch-clear.png";
+
+        // 50x31
+        this.rifle_crouch_top = new Image();
+        this.rifle_crouch_top.src = "src/assets/images/CLEARS/rifle/sheep-rifle-top-crouch-clear.png";
+
+        this.image = this.pistol_stand;
 
         // SPRITESHEETS:
 
@@ -101,23 +133,30 @@ export default class Shooter {
         context.fillStyle = "yellow";
         if (!this.duck) {
             //context.fillRect(this.x, this.y, this.width, this.height);
-            // context.drawImage(this.image, this.x, this.y, this.width, this.height);
+            // context.drawImage(this.image, this.x, this.y, this.width, this.height);\
+            // for standard:
             this.width = 44;
             this.height = 34;
-            context.drawImage(this.pistol_stand, this.x, this.y, this.width, this.height);
+
+
+
+            // context.drawImage(this.pistol_stand, this.x, this.y, this.width, this.height);
+
         } else {
             // context.fillRect(this.x, this.y + this.height / 2, this.width, this.height / 2);
             this.height = 28;
             this.width = 50;
-            context.drawImage(this.pistol_crouch, this.x, this.y, this.width, this.height);
+            // context.drawImage(this.pistol_crouch, this.x, this.y, this.width, this.height);
         }
         // context.drawImage(this.image, this.x, this.y, this.width, this.height);
+
+        context.drawImage(this.image, this.x, this.y, this.width, this.height);
 
         context.font = "20px serif";
         context.fillStyle = "black";
         context.textAlign = "center";
         context.textBaseline = "middle";
-        context.fillText(this.duck, this.x + (this.width / 2), this.y + (this.height / 2));
+        context.fillText(this.angle, this.x + (this.width / 2), this.y + (this.height / 2));
     }
 
     update() {
