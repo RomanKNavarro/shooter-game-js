@@ -221,7 +221,8 @@ let secondShooter = false;
 
 // objects
 const flora = new Floor(canvas);
-const shooter = new Shooter(100, flora.y - 34);
+// const shooter = new Shooter(100, flora.y - 34);
+const shooter = new Shooter(100, flora.y - 50);
 
 //  NEEDS TO START OFF SCREEN, then walk over to position 200:
 // const shooter2 = new Shooter(200, flora.y - 50);
@@ -384,8 +385,8 @@ let currentSpeed = 1.5;
 let snackQueue = [];
 let nadeQueue = [];
 
-let state = "LOADING";
-// let state = "RUNNING";
+// let state = "LOADING";
+let state = "MENU";
 
 let loadingTime = [2000, 3000][Math.floor(Math.random() * 2)];
 

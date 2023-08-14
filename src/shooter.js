@@ -5,10 +5,12 @@ export default class Shooter {
     constructor(x, y) { 
         this.width = 44;
         this.height = 34;
+        // this.width = 50;
+        // this.height = 50;
         this.y = y;
 
-        this.image = new Image();
-        this.image.src = "src/assets/images/sheep-pistol-clear.png";
+        // this.image = new Image();
+        // this.image.src = "src/assets/images/sheep-pistol-clear.png";
 
         this.init = false;
 
@@ -66,17 +68,29 @@ export default class Shooter {
         this.bloop.src = "src/assets/sounds/q009/glauncher.ogg";
 
         this.toggleMusic = false;
+
+        // IMAGES:
+        this.pistol_stand = new Image();
+        this.pistol_stand.src = "src/assets/images/sheep-pistol-clear.png";
+
+        this.pistol_crouch = new Image();
+        this.pistol_crouch.src = "src/assets/images/sheep-pistol-crouch-clear.png";
+    
     }
     
     draw(context) {
-        // context.beginPath();
-        // context.fillStyle = "yellow";
-        // if (!this.duck) {
-        //     context.fillRect(this.x, this.y, this.width, this.height);
-        // } else {
-        //     context.fillRect(this.x, this.y + this.height / 2, this.width, this.height / 2);
-        // }
-        context.drawImage(this.image, this.x, this.y, this.width, this.height);
+        // SHOOTER HEIGHT CHANGED HERE:
+        context.beginPath();
+        context.fillStyle = "yellow";
+        if (!this.duck) {
+            //context.fillRect(this.x, this.y, this.width, this.height);
+            // context.drawImage(this.image, this.x, this.y, this.width, this.height);
+            context.drawImage(this.pistol_stand, this.x, this.y, this.width, this.height);
+        } else {
+            // context.fillRect(this.x, this.y + this.height / 2, this.width, this.height / 2);
+            context.drawImage(this.pistol_crouch, this.x, this.y, this.width, this.height);
+        }
+        // context.drawImage(this.image, this.x, this.y, this.width, this.height);
 
         context.font = "20px serif";
         context.fillStyle = "black";
