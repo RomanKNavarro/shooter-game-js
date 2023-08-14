@@ -202,6 +202,9 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // TODO: let player know he can drop his weapon with Q! --DONE (resolved)
 // TODO: download the fonts I need for offline use. 
 
+// IMAGE STUFF:
+// TODO: FIND OUT WHY CROUCH IS 50PX TALL!  --DONE. Not tall. It's LONG.
+
 let roundCounts = [6, 10]; 
 
 // single, triple, two shooters, ar hoarde (grounds and a few airs), grenade hoarde, civies (pows)
@@ -219,10 +222,13 @@ let enemyCount = roundCounts[0];
 let enemiesLeft = roundCounts[0];
 let secondShooter = false;
 
+let shooterHeight
+
 // objects
 const flora = new Floor(canvas);
-// const shooter = new Shooter(100, flora.y - 34);
-const shooter = new Shooter(100, flora.y - 50);
+const shooter = new Shooter(100, flora.y - 34);
+// const shooter = new Shooter(100, flora.y - 50);
+
 
 //  NEEDS TO START OFF SCREEN, then walk over to position 200:
 // const shooter2 = new Shooter(200, flora.y - 50);
@@ -937,6 +943,9 @@ function cremate() {
 function handleShooter() {
     shooter.draw(cxt2);
     if (secondShooter) shooter2.draw(cxt2);
+
+    if (shooter.duck) shooter.y = flora.y - 28;
+    else shooter.y = flora.y - 34;
 
     // what states require shooter to be disabled?
     if (state == "RUNNING" || state == "WIN" || state == "QUIET" 

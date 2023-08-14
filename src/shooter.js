@@ -73,8 +73,25 @@ export default class Shooter {
         this.pistol_stand = new Image();
         this.pistol_stand.src = "src/assets/images/sheep-pistol-clear.png";
 
+        this.pistol_stand_up = new Image();
+        this.pistol_stand_up.src = "src/assets/images/CLEARS/sheep-pistol-lookup-clear.png";
+
+        this.pistol_stand_top = new Image();
+        this.pistol_stand_top.src = "src/assets/images/CLEARS/sheep-pistol-top-clear.png";
+
         this.pistol_crouch = new Image();
         this.pistol_crouch.src = "src/assets/images/sheep-pistol-crouch-clear.png";
+
+        this.pistol_crouch_up = new Image();
+        this.pistol_crouch_up.src = "src/assets/images/CLEARS/sheep-pistol-lookup-crouch-clear.png";
+
+        this.pistol_crouch_top = new Image();
+        this.pistol_crouch_top.src = "src/assets/images/CLEARS/sheep-pistol-crouch-top-clear.png";
+
+        //rifle:
+
+        // SPRITESHEETS:
+
     
     }
     
@@ -85,9 +102,13 @@ export default class Shooter {
         if (!this.duck) {
             //context.fillRect(this.x, this.y, this.width, this.height);
             // context.drawImage(this.image, this.x, this.y, this.width, this.height);
+            this.width = 44;
+            this.height = 34;
             context.drawImage(this.pistol_stand, this.x, this.y, this.width, this.height);
         } else {
             // context.fillRect(this.x, this.y + this.height / 2, this.width, this.height / 2);
+            this.height = 28;
+            this.width = 50;
             context.drawImage(this.pistol_crouch, this.x, this.y, this.width, this.height);
         }
         // context.drawImage(this.image, this.x, this.y, this.width, this.height);
