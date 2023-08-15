@@ -63,7 +63,7 @@ export default class InputHandler {
         if (entity.duck) entity.angle = "diagnal-duck";
         else entity.angle = "diagnal";
       }
-      else if (keys["w"] && keys["s"]) entity.angle = "down-up";
+      // else if (keys["s"] && keys["w"]) entity.angle = "down-up";
       else if (keys["a"] && keys["s"]) entity.angle = "down-back";   
       else if (keys["a"] && keys["w"]) entity.angle = "diagnal-back";
     });
@@ -105,6 +105,7 @@ export default class InputHandler {
 
         case 'w':
           if (entity.angle == "diagnal-back") entity.angle = "back";
+          // else if (entity.angle == "down-up") entity.angle = "down";
           // else if (entity.angle == "diagnal" || entity.angle == "up") entity.angle = "straight";
           else if (entity.angle == "diagnal" || entity.angle == "up" || entity.angle == "diagnal-duck") {
             if (entity.duck) entity.angle = "down";

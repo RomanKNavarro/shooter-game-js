@@ -204,6 +204,7 @@ THEORY: it must be natural state causing this, as it does not run when offending
 
 // IMAGE STUFF:
 // TODO: FIND OUT WHY CROUCH IS 50PX TALL!  --DONE. Not tall. It's LONG.
+// TODO: get bullet placement right.
 
 let roundCounts = [6, 10]; 
 
@@ -1468,7 +1469,7 @@ function animate() {
     else frame = 0;
 
     // currentRound changes only after the "next round incoming" text
-    console.log(endSpecRound);
+    // if (shooter.projectiles) console.log(shooter.projectiles[0]);
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
