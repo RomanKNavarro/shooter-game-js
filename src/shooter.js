@@ -71,11 +71,12 @@ export default class Shooter {
 
         // IMAGES:
         // FIX THIS CRAP:
+        // too much crap in input handler. Making exclusive case handler here:
         // 44x34
         this.pistol_stand = new Image();
         this.pistol_stand.src = "src/assets/images/CLEARS/pistol/sheep-pistol-clear.png";
 
-        // 43x36
+        // 43x36, diagnal
         this.pistol_stand_up = new Image();
         this.pistol_stand_up.src = "src/assets/images/CLEARS/pistol/sheep-pistol-lookup-clear.png";
 
@@ -122,8 +123,15 @@ export default class Shooter {
 
         this.image = this.pistol_stand;
 
-        // SPRITESHEETS:
+        this.pistol_images = {"straight": this.pistol_stand, "diagnal": this.pistol_stand_up, 
+        "down": this.pistol_crouch, "up": this.pistol_stand_top, "diagnal-duck": this.pistol_crouch_up};
 
+        this.rifle_images = {"straight": this.rifle_stand, "diagnal": this.rifle_stand_up, 
+        "down": this.rifle_crouch, "up": this.rifle_stand_top, "diagnal-duck": this.rifle_crouch_up};
+
+        this.images = this.pistol_images;
+
+        // SPRITESHEETS:
     
     }
     
@@ -131,26 +139,82 @@ export default class Shooter {
         // SHOOTER HEIGHT CHANGED HERE:
         context.beginPath();
         context.fillStyle = "yellow";
-        if (!this.duck) {
-            //context.fillRect(this.x, this.y, this.width, this.height);
-            // context.drawImage(this.image, this.x, this.y, this.width, this.height);\
-            // for standard:
-            this.width = 44;
-            this.height = 34;
 
-
-
-            // context.drawImage(this.pistol_stand, this.x, this.y, this.width, this.height);
-
-        } else {
-            // context.fillRect(this.x, this.y + this.height / 2, this.width, this.height / 2);
-            this.height = 28;
-            this.width = 50;
-            // context.drawImage(this.pistol_crouch, this.x, this.y, this.width, this.height);
+        switch (this.angle) {
+            case "straight":
+                this.width = 44;
+                this.height = 34;
+                // this.image = this.pistol_stand;
+                this.image = this.images["straight"];
+                break;
+            case "diagnal":
+                // 43x36
+                this.width = 43;
+                this.height = 36;
+                //this.image = this.pistol_stand_up;
+                this.image = this.images["diagnal"];
+                break;
+            case "up":
+                // 44x36
+                if (!this.duck) {
+                    this.width = 44;
+                    this.height = 36;
+                    this.image = this.pistol_stand_top;
+                } else {
+                    // 50x30
+                    this.width = 50;
+                    this.height = 30;
+                    this.image = this.pistol_crouch_top;
+                }
+                break;
+            case "down":
+                // 50x28
+                this.width = 50;
+                this.height = 28;
+                // this.image = this.pistol_crouch;
+                this.image = this.images["down"];
+                break;
+            case "diagnal-duck":
+                // 49x30
+                this.width = 49;
+                this.height = 30;
+                // this.image = this.pistol_crouch_up;
+                this.image = this.images["diagnal-duck"];
+                break;
         }
-        // context.drawImage(this.image, this.x, this.y, this.width, this.height);
-
         context.drawImage(this.image, this.x, this.y, this.width, this.height);
+
+        // if (!this.duck) {
+        //     //context.fillRect(this.x, this.y, this.width, this.height);
+        //     // context.drawImage(this.image, this.x, this.y, this.width, this.height);\
+        //     // for standard:
+        //     this.width = 44;
+        //     this.height = 34;
+
+        //     switch (this.angle) {
+        //         case "straight":
+        //             this.image = this.pistol_stand;
+        //             break;
+        //         case "diagnal":
+        //             this.image = this.pistol_stand_up;
+        //             break;
+        //         // case "down":
+        //         //     this.image = this.pistol_crouch;
+        //         //     break;
+        //         // case "down":
+        //         //     this.image = this.pistol_crouch;
+        //         //     break;
+        //     }
+
+        //     // context.drawImage(this.pistol_stand, this.x, this.y, this.width, this.height);
+
+        // } else {
+        //     // context.fillRect(this.x, this.y + this.height / 2, this.width, this.height / 2);
+        //     this.height = 28;
+        //     this.width = 50;
+        //     // context.drawImage(this.pistol_crouch, this.x, this.y, this.width, this.height);
+        // }
+        // context.drawImage(this.image, this.x, this.y, this.width, this.height);
 
         context.font = "20px serif";
         context.fillStyle = "black";

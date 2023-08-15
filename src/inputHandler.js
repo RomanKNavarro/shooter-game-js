@@ -36,7 +36,6 @@ export default class InputHandler {
 
         case 's':
           // what's duckable?
-          entity.image = entity.pistol_crouch;
           if (entity.duckable) {
             entity.angle = "down";
             entity.duck = true;
@@ -59,12 +58,13 @@ export default class InputHandler {
           break;
       }
 
-      // if (keys["d"] && keys["w"]) entity.angle = "diagnal";
+      // diagnal stand
       if (keys["d"] && keys["w"]) {
         if (entity.duck) entity.angle = "diagnal-duck";
         else entity.angle = "diagnal";
       }
-      else if (keys["a"] && keys["s"]) entity.angle = "down-back";
+      else if (keys["w"] && keys["s"]) entity.angle = "down-up";
+      else if (keys["a"] && keys["s"]) entity.angle = "down-back";   
       else if (keys["a"] && keys["w"]) entity.angle = "diagnal-back";
     });
 
