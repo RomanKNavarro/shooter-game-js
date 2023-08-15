@@ -227,8 +227,10 @@ let shooterHeight
 
 // objects
 const flora = new Floor(canvas);
-const shooter = new Shooter(100, flora.y - 34);
+// const shooter = new Shooter(100, flora.y - 34);
 // const shooter = new Shooter(100, flora.y - 50);
+const shooter = new Shooter(100);
+shooter.y = flora.y - shooter.height;
 
 
 //  NEEDS TO START OFF SCREEN, then walk over to position 200:
@@ -945,8 +947,11 @@ function handleShooter() {
     shooter.draw(cxt2);
     if (secondShooter) shooter2.draw(cxt2);
 
-    if (shooter.duck) shooter.y = flora.y - 28;
-    else shooter.y = flora.y - 34;
+    // if (shooter.duck) shooter.y = flora.y - 28;
+    // else shooter.y = flora.y - 34;
+
+    // if (shooter.duck) shooter.y = flora.y - shooter.y;
+    // else shooter.y = flora.y - shooter.y;
 
     // what states require shooter to be disabled?
     if (state == "RUNNING" || state == "WIN" || state == "QUIET" 

@@ -1,13 +1,17 @@
+// would be super useful if I can import "flora" in here.
+
 import Projectile from "./projectile.js";
 
 // why is mouse stuff here? so that it can be used as "entity.mouse" in inputHandler.js
 export default class Shooter {
-    constructor(x, y) { 
+    constructor(x) { 
         this.width = 44;
         this.height = 34;
         // this.width = 50;
         // this.height = 50;
-        this.y = y;
+        // this.width;
+        // this.height;
+        this.y;
 
         // this.image = new Image();
         // this.image.src = "src/assets/images/sheep-pistol-clear.png";
@@ -143,6 +147,13 @@ export default class Shooter {
         context.beginPath();
         context.fillStyle = "yellow";
 
+        // if (!this.duck) {   
+        //     context.fillRect(this.x, this.y, this.width, this.height);
+        // } else {
+        //     context.fillRect(this.x, this.y + this.height / 2, this.width, this.height / 2);
+        //     // context.drawImage(this.pistol_crouch, this.x, this.y, this.width, this.height);
+        // }
+
         switch (this.angle) {
             case "straight":
                 this.width = 44;
@@ -150,29 +161,7 @@ export default class Shooter {
                 // this.image = this.pistol_stand;
                 this.image = this.images[this.weapon]["straight"];
                 break;
-            case "diagnal":
-                // 43x36
-                this.width = 43;
-                this.height = 36;
-                //this.image = this.pistol_stand_up;
-                this.image = this.images[this.weapon]["diagnal"];
-                break;
-            case "up":
-                // 44x36
-                // this.width = 44;
-                // this.height = 36;
-                // this.image = this.pistol_stand_top;
-                if (!this.duck) {
-                    this.width = 44;
-                    this.height = 36;
-                    this.image = this.pistol_stand_top;
-                } else {
-                    // 50x30
-                    this.width = 50;
-                    this.height = 30;
-                    this.image = this.pistol_crouch_top;
-                }
-                break;
+
             case "down":
                 // 50x28
                 this.width = 50;
@@ -180,54 +169,66 @@ export default class Shooter {
                 // this.image = this.pistol_crouch;
                 this.image = this.images[this.weapon]["down"];
                 break;
-            case "diagnal-duck":
-                // 49x30
-                this.width = 49;
-                this.height = 30;
-                // this.image = this.pistol_crouch_up;
-                this.image = this.images[this.weapon]["diagnal-duck"];
-                break;
-            case "down-up":
-                // 50x30
-                this.width = 50;
-                this.height = 30;
-                // this.image = this.pistol_crouch_up;
-                this.image = this.images[this.weapon]["down-up"];
-                break;
         }
-        context.drawImage(this.image, this.x, this.y, this.width, this.height);
 
-        // if (!this.duck) {
-        //     //context.fillRect(this.x, this.y, this.width, this.height);
-        //     // context.drawImage(this.image, this.x, this.y, this.width, this.height);\
-        //     // for standard:
-        //     this.width = 44;
-        //     this.height = 34;
-
-        //     switch (this.angle) {
-        //         case "straight":
-        //             this.image = this.pistol_stand;
-        //             break;
-        //         case "diagnal":
-        //             this.image = this.pistol_stand_up;
-        //             break;
-        //         // case "down":
-        //         //     this.image = this.pistol_crouch;
-        //         //     break;
-        //         // case "down":
-        //         //     this.image = this.pistol_crouch;
-        //         //     break;
-        //     }
-
-        //     // context.drawImage(this.pistol_stand, this.x, this.y, this.width, this.height);
-
-        // } else {
-        //     // context.fillRect(this.x, this.y + this.height / 2, this.width, this.height / 2);
-        //     this.height = 28;
-        //     this.width = 50;
-        //     // context.drawImage(this.pistol_crouch, this.x, this.y, this.width, this.height);
+        // switch (this.angle) {
+        //     case "straight":
+        //         this.width = 44;
+        //         this.height = 34;
+        //         // this.image = this.pistol_stand;
+        //         this.image = this.images[this.weapon]["straight"];
+        //         break;
+        //     case "diagnal":
+        //         // 43x36
+        //         this.width = 43;
+        //         this.height = 36;
+        //         //this.image = this.pistol_stand_up;
+        //         this.image = this.images[this.weapon]["diagnal"];
+        //         break;
+        //     case "up":
+        //         // 44x36
+        //         // this.width = 44;
+        //         // this.height = 36;
+        //         // this.image = this.pistol_stand_top;
+        //         if (!this.duck) {
+        //             this.width = 44;
+        //             this.height = 36;
+        //             this.image = this.pistol_stand_top;
+        //         } else {
+        //             // 50x30
+        //             this.width = 50;
+        //             this.height = 30;
+        //             this.image = this.pistol_crouch_top;
+        //         }
+        //         break;
+        //     case "down":
+        //         // 50x28
+        //         this.width = 50;
+        //         this.height = 28;
+        //         // this.image = this.pistol_crouch;
+        //         this.image = this.images[this.weapon]["down"];
+        //         break;
+        //     case "diagnal-duck":
+        //         // 49x30
+        //         this.width = 49;
+        //         this.height = 30;
+        //         // this.image = this.pistol_crouch_up;
+        //         this.image = this.images[this.weapon]["diagnal-duck"];
+        //         break;
+        //     case "down-up":
+        //         // 50x30
+        //         this.width = 50;
+        //         this.height = 30;
+        //         // this.image = this.pistol_crouch_up;
+        //         this.image = this.images[this.weapon]["down-up"];
+        //         break;
         // }
         // context.drawImage(this.image, this.x, this.y, this.width, this.height);
+        if (!this.duck) context.drawImage(this.image, this.x, this.y);
+        else {
+            this.height = 28;   
+            context.drawImage(this.image, this.x, this.y, 50, 28);
+        }
 
         context.font = "20px serif";
         context.fillStyle = "black";
@@ -253,7 +254,7 @@ export default class Shooter {
             // 232 down
             
             if (this.timer % this.fireRate === 0  || this.timer == 1) {
-                this.projectiles.push(new Projectile(this.x + this.width - 20, this.y, this.angle, this.weapon, this.delete));
+                this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, this.weapon, this.delete));
 
                 // this.projectiles.push(new Projectile(this.secondX, this.y + 10, this.angle, this.weapon, this.delete));
                 if (this.secondStream == true) {
