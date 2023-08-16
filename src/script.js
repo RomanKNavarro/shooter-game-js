@@ -1334,7 +1334,6 @@ function handleEnemy() {
     }
 }
 
-// IDEA TO DETERMINE IF ENEMY IS A CIVIE: IF IT'S SPEED IS NEGATIVE
 function pushEnemy() {
     // so, if frame == 50 and I get randomFrames[0] (50), enemy gets pushed to queue.
 
@@ -1441,14 +1440,6 @@ function mouseCollision(first, second, callback) {
 
 // FUNCTION TO GET ALL OUR OBJECTS UP AND RUNNING
 function animate() {
-    // cxt.clearRect(0, 0, canvas.width, canvas.height);
-    // cxt.fillStyle = "white";
-    // cxt.fillRect(0, 0, canvas.width, canvas.height);
-
-    // dynamic_layer_cxt.fillRect(0, 0, canvas.width, canvas.height);
-    // dynamic_layer_cxt.clearRect(0, 0, canvas.width, canvas.height);
-    //dynamic_layer_cxt.fillStyle = "white";
-    
     cxt.clearRect(0, 0, canvas.width, canvas.height);
     cxt.fillStyle = "transparent";
     cxt.fillRect(0, 0, canvas.width, canvas.height);
@@ -1475,6 +1466,8 @@ function animate() {
 
     // currentRound changes only after the "next round incoming" text
     // if (shooter.projectiles) console.log(shooter.projectiles[0]);
+
+    console.log(shooter.projectiles);
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
