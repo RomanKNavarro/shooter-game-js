@@ -38,7 +38,6 @@ var cxt2 = canvas2.getContext("2d");
     3. recycle objects instead of deleting them
     4. no TEXT
 */
-
 // TODO: DELETE bullets once they reach end of screen. Log array of bullets. --DONE
 // TODO: reset bullet.x after hitting enemy.    --DONE
 // TODO: GET bullets to travel up when "w" is pressed.  --DONE
@@ -201,12 +200,6 @@ THEORY: it must be natural state causing this, as it does not run when offending
 */
 // FUCKING AUDIO crashed in last round.
 // TODO: let player know he can drop his weapon with Q! --DONE (resolved)
-// TODO: download the fonts I need for offline use. 
-
-// IMAGE STUFF:
-// TODO: FIND OUT WHY CROUCH IS 50PX TALL!  --DONE. Not tall. It's LONG.
-// TODO: get bullet placement right.
-// TODO: find out how to zoom in on canvas
 
 let roundCounts = [6, 10]; 
 
@@ -225,20 +218,13 @@ let enemyCount = roundCounts[0];
 let enemiesLeft = roundCounts[0];
 let secondShooter = false;
 
-let shooterHeight
-
 // objects
 const flora = new Floor(canvas);
-// const shooter = new Shooter(100, flora.y - 34);
-// const shooter = new Shooter(100, flora.y - 50);
-const shooter = new Shooter(100);
-// shooter.y = flora.y - shooter.height;
-shooter.y = flora.y - 50;
-
+const shooter = new Shooter(100, flora.y - 50);
 
 //  NEEDS TO START OFF SCREEN, then walk over to position 200:
 // const shooter2 = new Shooter(200, flora.y - 50);
-const shooter2 = new Shooter(0 - shooter.width, flora.y - 34);
+const shooter2 = new Shooter(0 - shooter.width, flora.y - 50);
 shooter2.isSecond = true;
 
 // const shooter = new Shooter(100, flora.y - 50);
@@ -397,8 +383,8 @@ let currentSpeed = 1.5;
 let snackQueue = [];
 let nadeQueue = [];
 
-// let state = "LOADING";
 let state = "MENU";
+// let state = "RUNNING";
 
 let loadingTime = [2000, 3000][Math.floor(Math.random() * 2)];
 
@@ -950,12 +936,6 @@ function handleShooter() {
     shooter.draw(cxt2);
     if (secondShooter) shooter2.draw(cxt2);
 
-    // if (shooter.duck) shooter.y = flora.y - 28;
-    // else shooter.y = flora.y - 34;
-
-    // if (shooter.duck) shooter.y = flora.y - shooter.y;
-    // else shooter.y = flora.y - shooter.y;
-
     // what states require shooter to be disabled?
     if (state == "RUNNING" || state == "WIN" || state == "QUIET" 
     || state == "RELIEF" || state == "TUTORIAL" || state == "MENU") {
@@ -1066,7 +1046,7 @@ function handleEnemyProjectiles(orc) {
             i--;
 
             // UNCOMMENT THIS:
-            if ((!shooter.duck) || (orc.type == "air" || orc.type == "bomber")) playerHealth.number--;
+            // if ((!shooter.duck) || (orc.type == "air" || orc.type == "bomber")) playerHealth.number--;
         }
     }
 }
@@ -1078,19 +1058,6 @@ function handleProjectile(arr) {
 
     for (let i = 0; i < shooter.projectiles.length; i++) {
         let current = projectiles[i];
-
-        if (shooter.angle == "down") current.y = 203;
-        else current.y = 195;
-
-        // bullet_cxt.font = "20px serif";
-        // bullet_cxt.fillStyle = "black";
-        // bullet_cxt.textAlign = "center";
-        // bullet_cxt.textBaseline = "middle";
-
-        // // TEXT:
-        // bullet_cxt.fillText(current.y, current.x + (current.size / 2), current.y - 100);
-
-        console.log(current.y);
 
         // BUG HERE:
         // increase size of flammen "bullets"
@@ -1248,10 +1215,6 @@ function handleEnemy() {
             current.duck = false;
             current.angle = "back";
         }
-
-        // if (shooter.duck == true) {
-        //     current.duck = true;
-        // } else current.duck = false;
         
 
         if (current.type == "sheep" && current.inPosition == true && shooter.duck) {
@@ -1350,6 +1313,7 @@ function handleEnemy() {
     }
 }
 
+// IDEA TO DETERMINE IF ENEMY IS A CIVIE: IF IT'S SPEED IS NEGATIVE
 function pushEnemy() {
     // so, if frame == 50 and I get randomFrames[0] (50), enemy gets pushed to queue.
 
@@ -1456,6 +1420,14 @@ function mouseCollision(first, second, callback) {
 
 // FUNCTION TO GET ALL OUR OBJECTS UP AND RUNNING
 function animate() {
+    // cxt.clearRect(0, 0, canvas.width, canvas.height);
+    // cxt.fillStyle = "white";
+    // cxt.fillRect(0, 0, canvas.width, canvas.height);
+
+    // dynamic_layer_cxt.fillRect(0, 0, canvas.width, canvas.height);
+    // dynamic_layer_cxt.clearRect(0, 0, canvas.width, canvas.height);
+    //dynamic_layer_cxt.fillStyle = "white";
+    
     cxt.clearRect(0, 0, canvas.width, canvas.height);
     cxt.fillStyle = "transparent";
     cxt.fillRect(0, 0, canvas.width, canvas.height);
@@ -1481,9 +1453,7 @@ function animate() {
     else frame = 0;
 
     // currentRound changes only after the "next round incoming" text
-    // if (shooter.projectiles) console.log(shooter.projectiles[0]);
-
-    // console.log(shooter.y);
+    console.log(endSpecRound);
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);

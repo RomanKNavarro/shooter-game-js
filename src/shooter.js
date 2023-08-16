@@ -6,12 +6,12 @@ var canvas = document.getElementById("canvas1");
 // why is mouse stuff here? so that it can be used as "entity.mouse" in inputHandler.js
 export default class Shooter {
     constructor(x) { 
-        this.width = 44;
-        this.height = 34;
-        // this.width = 50;
+        // this.width = 44;
+        // this.height = 34;
+        // this.width = 100;
         // this.height = 50;
-        // this.width;
-        // this.height;
+        this.width;
+        this.height;
         this.y;
 
         // this.image = new Image();
@@ -21,6 +21,8 @@ export default class Shooter {
 
         this.x = x;
         this.secondX = 200;
+
+        this.bulletY = 191;
 
         this.isSecond = false;
         this.initSecond = false;
@@ -154,56 +156,59 @@ export default class Shooter {
             context.fillRect(this.x, this.y + this.height / 2, this.width, this.height / 2);
         }
 
-        // switch (this.angle) {
-        //     case "straight":
-        //         this.width = 44;
-        //         this.height = 34;
-        //         this.y = canvas.height - (canvas.height * (1/4)) - 34;
-        //         this.image = this.images[this.weapon]["straight"];
-        //         break;
+        switch (this.angle) {
+            case "straight":
+                this.width = 44;
+                this.height = 34;
+                this.y = canvas.height - (canvas.height * (1/4)) - 34;
+                this.image = this.images[this.weapon]["straight"];
+                break;
 
-        //     case "diagnal":
-        //         // 43x36
-        //         this.width = 43;
-        //         this.height = 36;
-        //         this.y = canvas.height - (canvas.height * (1/4)) - 36;
-        //         this.image = this.images[this.weapon]["diagnal"];
-        //         break;
+            case "diagnal":
+                // 43x36
+                this.width = 43;
+                this.height = 36;
+                this.y = canvas.height - (canvas.height * (1/4)) - 36;
+                this.image = this.images[this.weapon]["diagnal"];
+                break;
 
-        //     case "up":
-        //         this.width = 44;
-        //         this.height = 36;
-        //         this.y = canvas.height - (canvas.height * (1/4)) - 36;
-        //         this.image = this.images[this.weapon]["up"];
-        //         break;
+            case "up":
+                this.width = 44;
+                this.height = 36;
+                this.y = canvas.height - (canvas.height * (1/4)) - 36;
+                this.image = this.images[this.weapon]["up"];
+                break;
 
-        //     case "down-up":
-        //         this.width = 50;
-        //         this.height = 30;
-        //         this.y = canvas.height - (canvas.height * (1/4)) - 30;
-        //         this.image = this.images[this.weapon]["down-up"];
-        //         break;
+            case "down-up":
+                this.bulletY = 197;
+                this.width = 50;
+                this.height = 30;
+                this.y = canvas.height - (canvas.height * (1/4)) - 30;
+                this.image = this.images[this.weapon]["down-up"];
+                break;
 
-        //     case "down":
-        //         // 50x28
-        //         this.width = 50;
-        //         this.height = 28;
-        //         this.y = canvas.height - (canvas.height * (1/4)) - 28;
-        //         // this.image = this.pistol_crouch;
-        //         this.image = this.images[this.weapon]["down"];
-        //         break;
+            case "down":
+                this.bulletY = 197;
+                // 50x28
+                this.width = 50;
+                this.height = 28;
+                this.y = canvas.height - (canvas.height * (1/4)) - 28;
+                // this.image = this.pistol_crouch;
+                this.image = this.images[this.weapon]["down"];
+                break;
 
-        //     case "diagnal-duck":
-        //         // 49x30
-        //         this.width = 49;
-        //         this.height = 30;
-        //         // this.image = this.pistol_crouch_up;
-        //         this.y = canvas.height - (canvas.height * (1/4)) - 30;
-        //         this.image = this.images[this.weapon]["diagnal-duck"];
-        //         break;
-        // }
+            case "diagnal-duck":
+                this.bulletY = 197;
+                // 49x30
+                this.width = 49;
+                this.height = 30;
+                // this.image = this.pistol_crouch_up;
+                this.y = canvas.height - (canvas.height * (1/4)) - 30;
+                this.image = this.images[this.weapon]["diagnal-duck"];
+                break;
+        }
 
-        // context.drawImage(this.image, this.x, this.y);
+        context.drawImage(this.image, this.x, this.y);
 
         context.font = "20px serif";
         context.fillStyle = "black";
@@ -211,8 +216,8 @@ export default class Shooter {
         context.textBaseline = "middle";
 
         // TEXT:
-        context.fillText(this.height, this.x + (this.width / 2), this.y - 100);
-        context.fillText(this.width, this.x + (this.width / 2), this.y - 50);
+        context.fillText(this.y, this.x + (this.width / 2), this.y - 100);
+        // context.fillText(this.width, this.x + (this.width / 2), this.y - 50);
     }
 
     update() {
@@ -232,7 +237,7 @@ export default class Shooter {
             // 232 down
             
             if (this.timer % this.fireRate === 0  || this.timer == 1) {
-                this.projectiles.push(new Projectile(this.x + this.width - 20, this.y - 10, this.angle, this.weapon, this.delete));
+                this.projectiles.push(new Projectile(this.x + this.width - 20, this.bulletY, this.angle, this.weapon, this.delete));
 
                 // this.projectiles.push(new Projectile(this.secondX, this.y + 10, this.angle, this.weapon, this.delete));
                 if (this.secondStream == true) {

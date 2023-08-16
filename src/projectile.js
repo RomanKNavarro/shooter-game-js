@@ -145,6 +145,7 @@ export default class Projectile {
           break
 
         case "up":
+        case "down-up":
           this.x += 0;
           this.y -= this.speed;
           break;
