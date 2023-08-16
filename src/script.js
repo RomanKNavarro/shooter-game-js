@@ -1079,8 +1079,8 @@ function handleProjectile(arr) {
     for (let i = 0; i < shooter.projectiles.length; i++) {
         let current = projectiles[i];
 
-        if (shooter.angle == "down") current.y = 203;
-        else current.y = 195;
+        if (shooter.angle == "down" || shooter.angle == "down-back") current.y = 203;
+        // else current.y = 195;
 
         // bullet_cxt.font = "20px serif";
         // bullet_cxt.fillStyle = "black";
@@ -1090,7 +1090,7 @@ function handleProjectile(arr) {
         // // TEXT:
         // bullet_cxt.fillText(current.y, current.x + (current.size / 2), current.y - 100);
 
-        console.log(current.y);
+        // console.log(current.y);
 
         // BUG HERE:
         // increase size of flammen "bullets"

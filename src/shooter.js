@@ -141,7 +141,17 @@ export default class Shooter {
         // this.images = this.pistol_images;
         this.images = {"pistol": this.pistol_images, "rifle": this.rifle_images};
 
-        // SPRITESHEETS:
+        // SPRITESHEET CRAP:
+        this.pistol_frames = "src/assets/images/sprites/rifle/sheep-rifle-clear.png";
+
+        this.frameX = 0;
+        this.frameY = 0;
+        this.spriteWidth = 302;
+        this.spriteHeight = 300;
+        this.minFrame = 0;
+        this.maxFrame = 3;
+
+        this.frames = pistol_frames;
     
     }
     
@@ -150,14 +160,15 @@ export default class Shooter {
         context.beginPath();
         context.fillStyle = "yellow";
 
-        if (!this.duck) {
-            context.fillRect(this.x, this.y, this.width, this.height);
-        } else {
-            context.fillRect(this.x, this.y + this.height / 2, this.width, this.height / 2);
-        }
+        // if (!this.duck) {
+        //     context.fillRect(this.x, this.y, this.width, this.height);
+        // } else {
+        //     context.fillRect(this.x, this.y + this.height / 2, this.width, this.height / 2);
+        // }
 
         switch (this.angle) {
             case "straight":
+            case "back":
                 this.width = 44;
                 this.height = 34;
                 this.y = canvas.height - (canvas.height * (1/4)) - 34;
@@ -165,6 +176,7 @@ export default class Shooter {
                 break;
 
             case "diagnal":
+            case "diagnal-back":
                 // 43x36
                 this.width = 43;
                 this.height = 36;
@@ -188,6 +200,7 @@ export default class Shooter {
                 break;
 
             case "down":
+            case "down-back":
                 this.bulletY = 197;
                 // 50x28
                 this.width = 50;
@@ -206,9 +219,30 @@ export default class Shooter {
                 this.y = canvas.height - (canvas.height * (1/4)) - 30;
                 this.image = this.images[this.weapon]["diagnal-duck"];
                 break;
+
+            // BACKWARDS:
+            // case "back":
+            //     break;
+            // case "down-back":
+            //     this.bulletY = 197;
+            //     break;
+            // case "diagnal-back":
+            //     this.bulletY = 197;
+            //     break;
+
+
         }
 
-        context.drawImage(this.image, this.x, this.y);
+        if (["straight", "down", "diagnal-duck", "down-up", "diagnal", "up"].includes(this.angle)) {
+            context.drawImage(this.image, this.x, this.y);
+        } else {
+            context.save();
+            context.translate(this.x + this.width, this.y);
+            context.scale(-1,1);
+            // context.drawImage(this.image, canvas.width * -50, this.y);
+            context.drawImage(this.image, 0, 0);
+            context.restore();
+        }
 
         context.font = "20px serif";
         context.fillStyle = "black";
@@ -216,7 +250,7 @@ export default class Shooter {
         context.textBaseline = "middle";
 
         // TEXT:
-        context.fillText(this.y, this.x + (this.width / 2), this.y - 100);
+        context.fillText(this.angle, this.x + (this.width / 2), this.y - 100);
         // context.fillText(this.width, this.x + (this.width / 2), this.y - 50);
     }
 
