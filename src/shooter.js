@@ -143,7 +143,7 @@ export default class Shooter {
 
         // SPRITESHEET CRAP:
         this.frame = 0;
-        this.frameRate = 15; 
+        this.frameRate = 10; 
 
         // these sprites have DEAD SPACE
         this.pistol_frames = new Image();
@@ -154,12 +154,15 @@ export default class Shooter {
 
         this.frameX = 0;
         this.frameY = 0;
-        this.spriteWidth = 60;
+        this.spriteWidth = 50;
         this.spriteHeight = 34;
         this.minFrame = 0;
-        this.maxFrame = 3;
+        this.maxFrame = 2;
 
         this.frames = this.pistol_frames;
+
+        this.animation = false;
+        this.animationTime = 0.5
     
     }
     
@@ -181,17 +184,6 @@ export default class Shooter {
             else this.frameX = this.minFrame;
         }
 
-          context.drawImage(
-            this.framework,
-            this.frameX * this.spriteWidth,
-            0,
-            this.spriteWidth,
-            this.spriteHeight,
-            this.x + 200,
-            this.y,
-            this.width,
-            this.height
-          );
 
         // if (!this.duck) {
         //     context.fillRect(this.x, this.y, this.width, this.height);
@@ -202,7 +194,8 @@ export default class Shooter {
         switch (this.angle) {
             case "straight":
             case "back":
-                this.width = 44;
+                // this.width = 44;
+                this.width = 50;
                 this.height = 34;
                 this.y = canvas.height - (canvas.height * (1/4)) - 34;
                 this.image = this.images[this.weapon]["straight"];
@@ -275,6 +268,20 @@ export default class Shooter {
             // context.drawImage(this.image, canvas.width * -50, this.y);
             context.drawImage(this.image, 0, 0);
             context.restore();
+        }
+
+        if (this.shooting) {
+            context.drawImage(
+                this.framework,
+                this.frameX * this.spriteWidth,
+                0,
+                this.spriteWidth,
+                this.spriteHeight,
+                this.x,
+                this.y,
+                this.width,
+                this.height
+            );
         }
 
         context.font = "20px serif";
