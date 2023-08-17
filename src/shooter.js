@@ -142,16 +142,24 @@ export default class Shooter {
         this.images = {"pistol": this.pistol_images, "rifle": this.rifle_images};
 
         // SPRITESHEET CRAP:
-        this.pistol_frames = "src/assets/images/sprites/rifle/sheep-rifle-clear.png";
+        this.frame = 0;
+        this.frameRate = 15; 
+
+        // these sprites have DEAD SPACE
+        this.pistol_frames = new Image();
+        this.pistol_frames.src = "src/assets/images/sprites/stand-pistol.png";
+        // this.pistol_frames = "src/assets/images/sprites/.png";
+
+        this.framework = this.pistol_frames;
 
         this.frameX = 0;
         this.frameY = 0;
-        this.spriteWidth = 302;
-        this.spriteHeight = 300;
+        this.spriteWidth = 60;
+        this.spriteHeight = 34;
         this.minFrame = 0;
         this.maxFrame = 3;
 
-        this.frames = pistol_frames;
+        this.frames = this.pistol_frames;
     
     }
     
@@ -159,6 +167,31 @@ export default class Shooter {
         // SHOOTER HEIGHT CHANGED HERE:
         context.beginPath();
         context.fillStyle = "yellow";
+
+        if (this.frame < 100) {
+            this.frame++;
+        }
+        else this.frame = 0;
+
+        // FRAME CRAP:
+        if (this.frame % this.frameRate === 0) {
+            if (this.frameX < this.maxFrame)
+              //&& this.framework !== blackFramework)
+              this.frameX++;
+            else this.frameX = this.minFrame;
+        }
+
+          context.drawImage(
+            this.framework,
+            this.frameX * this.spriteWidth,
+            0,
+            this.spriteWidth,
+            this.spriteHeight,
+            this.x + 200,
+            this.y,
+            this.width,
+            this.height
+          );
 
         // if (!this.duck) {
         //     context.fillRect(this.x, this.y, this.width, this.height);
@@ -254,7 +287,8 @@ export default class Shooter {
         // context.fillText(this.width, this.x + (this.width / 2), this.y - 50);
     }
 
-    update() {
+    update() { 
+
         // if (this.isSecond == true && this.x <= 200 && this.initSecond == true) {
         if (this.isSecond == true && this.initSecond == true) {
             if (this.x <= 200) this.x += 5;
