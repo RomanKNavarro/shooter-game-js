@@ -205,8 +205,10 @@ THEORY: it must be natural state causing this, as it does not run when offending
 
 // IMAGE STUFF:
 // TODO: FIND OUT WHY CROUCH IS 50PX TALL!  --DONE. Not tall. It's LONG.
-// TODO: get bullet placement right.
+// TODO: get bullet placement right.        --DONE
 // TODO: find out how to zoom in on canvas
+
+// TODO: the images used in the  sprites are not uniform in height, which'll cause problems.
 
 let roundCounts = [6, 10]; 
 
@@ -224,8 +226,6 @@ let enemyCount = roundCounts[0];
 // used to show current enemies remaining:
 let enemiesLeft = roundCounts[0];
 let secondShooter = false;
-
-let shooterHeight
 
 // objects
 const flora = new Floor(canvas);
@@ -578,7 +578,8 @@ function greatReset() {
 
     // RESET MUSIC:
     music.hit_back.stop();
-    playSound(music.dramatic);
+    // UNCOMMENT:
+    // playSound(music.dramatic);
 };
 
 function endRound() {
