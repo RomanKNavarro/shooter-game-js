@@ -209,7 +209,14 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // TODO: find out how to zoom in on canvas
 
 // TODO: the images used in the  sprites are not uniform in height, which'll cause problems.
+// TODO: for optimization, draw a single sheep image for idle/fire.
+// TODO: fix this stupid bullet from stopping on duck.
 
+// TODO: FIX THIS FUCKING BULLET GLITCH ASAP   
+// projectile.js good.
+// shooter.js good.
+// inputHandler good.
+// bug found in script line 1059
 let roundCounts = [6, 10]; 
 
 // single, triple, two shooters, ar hoarde (grounds and a few airs), grenade hoarde, civies (pows)
@@ -230,10 +237,10 @@ let secondShooter = false;
 // objects
 const flora = new Floor(canvas);
 // const shooter = new Shooter(100, flora.y - 34);
-// const shooter = new Shooter(100, flora.y - 50);
-const shooter = new Shooter(100);
-// shooter.y = flora.y - shooter.height;
-shooter.y = flora.y - 50;
+const shooter = new Shooter(100, flora.y - 50);
+
+// const shooter = new Shooter(100);
+// shooter.y = flora.y - 50;
 
 
 //  NEEDS TO START OFF SCREEN, then walk over to position 200:
@@ -282,7 +289,7 @@ const specialText2 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "MAS
 const endText = new Button(canvas.width / 2.5, canvas.height / 3, 100, "Coalition defeated. City aquired.", false);
 const endText2 = new Button(canvas.width / 2.5, canvas.height / 1.7, 100, "Thanks for playing!!!", false);
 const endText3 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "Made with ❤️ by", false);
-const endText4 = new Button(canvas.width / 2.5, canvas.height / 1.9, 100, "KAVEMANKORPS", false);
+const endText4 = new Button(canvas.width / 2.5, canvas.height / 1.9, 100, "ROMAN PENKOTROV", false);
 
 const naturalText = new Button(canvas.width / 2.5, canvas.height / 3, 100, "You're a natural born killer!", false);
 
@@ -1080,18 +1087,9 @@ function handleProjectile(arr) {
     for (let i = 0; i < shooter.projectiles.length; i++) {
         let current = projectiles[i];
 
-        if (shooter.angle == "down" || shooter.angle == "down-back") current.y = 203;
+        // HERE'S THE CULPRIT:
+        // if (shooter.angle == "down" || shooter.angle == "down-back") current.y = 203;
         // else current.y = 195;
-
-        // bullet_cxt.font = "20px serif";
-        // bullet_cxt.fillStyle = "black";
-        // bullet_cxt.textAlign = "center";
-        // bullet_cxt.textBaseline = "middle";
-
-        // // TEXT:
-        // bullet_cxt.fillText(current.y, current.x + (current.size / 2), current.y - 100);
-
-        // console.log(current.y);
 
         // BUG HERE:
         // increase size of flammen "bullets"
@@ -1484,7 +1482,7 @@ function animate() {
     // currentRound changes only after the "next round incoming" text
     // if (shooter.projectiles) console.log(shooter.projectiles[0]);
 
-    // console.log(shooter.y);
+    console.log(shooter.projectiles);
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);

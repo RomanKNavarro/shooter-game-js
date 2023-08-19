@@ -24,14 +24,16 @@ export default class InputHandler {
             entity.shooting = true;
             break;
 
-          case 'd':
-            // entity.angle = "down";
-            if (entity.duck) entity.angle = "down";
-            else entity.angle = "straight";
-            break;
+        case 'd':
+          // entity.angle = "down";
+          if (entity.duck) entity.angle = "down";
+          else entity.angle = "straight";
+          break;
 
         case 'w':
-          entity.angle = "up";          
+          // if (entity.duck) entity.angle = "down-up";
+          // else entity.angle = "up"; 
+          entity.angle = "up";         
           break;
 
         case 's':
@@ -63,7 +65,7 @@ export default class InputHandler {
         if (entity.duck) entity.angle = "diagnal-duck";
         else entity.angle = "diagnal";
       }
-      else if (keys["s"] && keys["w"]) entity.angle = "down-up";
+
       else if (keys["a"] && keys["s"]) entity.angle = "down-back";   
       else if (keys["a"] && keys["w"]) entity.angle = "diagnal-back";
     });
@@ -85,8 +87,8 @@ export default class InputHandler {
         case 's':
           entity.duck = false;
           if (entity.angle == "down-back") entity.angle = "back";
-          if (entity.angle == "down-up") entity.angle = "up";
-          if (entity.angle == "diagnal-duck") entity.angle = "diagnal";
+          // if (entity.angle == "down-up") entity.angle = "up";
+          // if (entity.angle == "diagnal-duck") entity.angle = "diagnal";
           else entity.angle = "straight";
           break;
 
@@ -97,8 +99,8 @@ export default class InputHandler {
           break
 
         case 'd':    
-        if (entity.angle == "diagnal-duck" || entity.angle == "diagnal") entity.angle = "up";
-        else if (!entity.duck) entity.angle = "straight";
+          if (entity.angle == "diagnal-duck" || entity.angle == "diagnal") entity.angle = "up";
+          else if (!entity.duck) entity.angle = "straight";
           break;
 
         case 'e':
@@ -107,7 +109,7 @@ export default class InputHandler {
 
         case 'w':
           if (entity.angle == "diagnal-back") entity.angle = "back";
-          else if (entity.angle == "down-up") entity.angle = "down";
+          // else if (entity.angle == "down-up") entity.angle = "down";
           // else if (entity.angle == "diagnal" || entity.angle == "up") entity.angle = "straight";
           else if (entity.angle == "diagnal" || entity.angle == "up" || entity.angle == "diagnal-duck") {
             if (entity.duck) entity.angle = "down";
