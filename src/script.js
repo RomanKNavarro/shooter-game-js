@@ -211,6 +211,7 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // TODO: the images used in the  sprites are not uniform in height, which'll cause problems.
 // TODO: for optimization, draw a single sheep image for idle/fire.
 // TODO: fix this stupid bullet from stopping on duck.
+// TODO: figured out how to solve fire image problem. Fix it tomorrow.
 
 // TODO: FIX THIS FUCKING BULLET GLITCH ASAP   
 // projectile.js good.
@@ -1482,7 +1483,7 @@ function animate() {
     // currentRound changes only after the "next round incoming" text
     // if (shooter.projectiles) console.log(shooter.projectiles[0]);
 
-    console.log(shooter.projectiles);
+    // console.log(shooter.projectiles);
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
