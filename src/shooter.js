@@ -91,6 +91,7 @@ export default class Shooter {
         this.pistol_stand_up.src = "src/assets/images/CLEARS/pistol/sheep-pistol-lookup-clear.png";
 
         // 44x36
+        // FIRE: 44x36
         this.pistol_stand_top = new Image();
         this.pistol_stand_top.src = "src/assets/images/CLEARS/pistol/sheep-pistol-top-clear.png";
 
@@ -100,6 +101,7 @@ export default class Shooter {
         this.pistol_crouch.src = "src/assets/images/CLEARS/pistol/sheep-pistol-crouch-clear.png";
 
         // 49x30
+        // FIRE: 49x34
         this.pistol_crouch_up = new Image();
         this.pistol_crouch_up.src = "src/assets/images/CLEARS/pistol/sheep-pistol-lookup-crouch-clear.png";
 
@@ -233,6 +235,8 @@ export default class Shooter {
         // REVELATION: no need to call "this.images" over and over again. I can just do it once.
         
         switch (this.angle) {
+            // 44x34
+            // FIRE: 44×34
             case "straight":
             case "back":
                 this.width = 50;
@@ -240,24 +244,28 @@ export default class Shooter {
                 this.y = canvas.height - (canvas.height * (1/4)) - 34;
                 break;
 
+            // 43x36
             // FIRE: 43×40
             case "diagnal":
             case "diagnal-back":
-                // 43x36
                 this.width = 43;
                 this.height = 36;
                 this.y = canvas.height - (canvas.height * (1/4)) - 36;
 
                 // SO CLOSE TO FIXING THIS CRAP:
-                // this.y = canvas.height - (canvas.height * (1/4)) - 40;
                 break;
 
+
+            // 43x36, diagnal
+            // FIRE: 43×40
             case "up":
                 this.width = 44;
                 this.height = 36;
                 this.y = canvas.height - (canvas.height * (1/4)) - 36;
                 break;
 
+            // 50x30
+            // FIRE: 50×33
             case "down-up":
                 this.bulletY = 197;
                 this.width = 50;
@@ -265,16 +273,20 @@ export default class Shooter {
                 this.y = canvas.height - (canvas.height * (1/4)) - 30;
                 break;
 
+            // 50x28
+            // FIRE: 50×28
             case "down":
             case "down-back":
                 this.bulletY = 197;
                 // 50x28
                 this.width = 50;
                 this.height = 28;
-                this.y = canvas.height - (canvas.height * (1/4)) - 28;
                 // this.image = this.pistol_crouch;
+                this.y = canvas.height - (canvas.height * (1/4)) - 28;
                 break;
 
+            // 49x30
+            // FIRE: 49x34
             case "diagnal-duck":
                 this.bulletY = 197;
                 // 49x30
@@ -287,6 +299,7 @@ export default class Shooter {
 
        if (["straight", "down", "diagnal-duck", "down-up", "diagnal", "up"].includes(this.angle)) {
             context.drawImage(this.image, this.x, this.y);
+            // context.drawImage(this.image, this.x, canvas.height - (canvas.height * (1/4)) - this.height);
         } else {
             context.save();
             context.translate(this.x + this.width, this.y);
