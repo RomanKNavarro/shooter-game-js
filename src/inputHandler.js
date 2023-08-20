@@ -88,7 +88,7 @@ export default class InputHandler {
         case 's':
           entity.duck = false;
           if (entity.angle == "down-back") entity.angle = "back";
-          if (entity.angle == "down-up") entity.angle = "up";
+          else if (entity.angle == "down-up") entity.angle = "up";
           // if (entity.angle == "diagnal-duck") entity.angle = "diagnal";
           else entity.angle = "straight";
           break;

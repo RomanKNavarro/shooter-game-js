@@ -553,7 +553,8 @@ function greatReset() {
 
     winningScore = 30;
     currentRound = 1;
-    shooter.weapon = "pistol";
+    // shooter.weapon = "pistol";
+    shooter.weapon = "rifle";
     shooter.fireRate = 0;
     shooter.specialAmmo = 0;
 
@@ -1026,7 +1027,6 @@ function handleNade(arr) {
         // current.ready = true;
         if (current.ready) {
             current.draw(cxt);
-            current.update();
 
             current.sound.play();
             // playSound(sfx.boom);

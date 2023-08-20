@@ -15,6 +15,7 @@ export default class Grenade {
 
         this.entity = entity;
         this.dudY = this.entity.y;
+        this.dudX = this.entity.x;
         this.dudSize = 5;
 
         this.size = 10;
@@ -27,15 +28,14 @@ export default class Grenade {
         this.bloop.src = "src/assets/sounds/q009/glauncher.ogg";
     }
 
+    // draws the explosion
     draw(context) {
         context.arc(this.x, this.y, this.size, 0, Math.PI * 2, true);
         // cxt.rect(this.x, this.y, this.size, this.size);
         context.stroke();
     }
-    update() {
-        this.thrown = true;
-    }
 
+    // draws the nade itself
     drawDud(context) {
         context.arc(this.entity.x + this.entity.width / 2, this.dudY, this.dudSize, 0, Math.PI * 2, true);
         context.fill();
@@ -43,6 +43,7 @@ export default class Grenade {
     updateDud() {
         if (this.dudY > 0) {
             this.dudY -= 10;
+            this.dudX -= 10;
         }
     }
 }

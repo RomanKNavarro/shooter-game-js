@@ -47,13 +47,13 @@ export default class Shooter {
         this.angle = "straight";
 
         // pistol, ar, and flamethrower
-        this.weapon = "pistol";
-        this.fireRate = 0;
-        this.specialAmmo = 0;
+        // this.weapon = "pistol";
+        // this.fireRate = 0;
+        // this.specialAmmo = 0;
 
-        // this.weapon = "flammen";
-        // this.fireRate = 10;
-        // this.specialAmmo = 100;
+        this.weapon = "rifle";
+        this.fireRate = 10;
+        this.specialAmmo = 100;
 
         this.throwBoom = false; 
         this.secondNade = false;
@@ -76,13 +76,11 @@ export default class Shooter {
         this.toggleMusic = false;
 
         // IMAGES:
+        // 44×40
         this.grenade_stand = new Image();
         this.grenade_stand.src = "src/assets/images/CLEARS/nade/nade_stand.png";
 
         // FIX THIS CRAP:
-        // too much crap in input handler. Making exclusive case handler here:
-        // 44x34
-        // FIRE: 44×34
         this.pistol_stand = new Image();
         this.pistol_stand.src = "src/assets/images/CLEARS/pistol/sheep-pistol-clear.png";
 
@@ -161,6 +159,26 @@ export default class Shooter {
         this.pistol_crouch_top_fire = new Image();
         this.pistol_crouch_top_fire.src = "src/assets/images/fires/pistol/pistol-crouch-top3.png";
 
+        // RIFLE FIRE IMAGES:
+        this.rifle_fire = new Image();
+        this.rifle_fire.src = "src/assets/images/fires/rifle/rifle-stand-fire.png";
+
+        this.rifle_up_fire = new Image();
+        this.rifle_up_fire.src = "src/assets/images/fires/rifle/sheep-rifle-lookup3.png";
+
+        this.rifle_top_fire = new Image();
+        this.rifle_top_fire.src = "src/assets/images/fires/rifle/sheep-rifle-top3.png";
+
+        this.rifle_crouch_fire = new Image();
+        this.rifle_crouch_fire.src = "src/assets/images/fires/rifle/sheep-rifle-crouch3.png";
+
+        this.rifle_crouch_up_fire = new Image();
+        this.rifle_crouch_up_fire.src = "src/assets/images/fires/rifle/sheep-rifle-lookup-crouch3.png";
+
+        this.rifle_crouch_top_fire = new Image();
+        this.rifle_crouch_top_fire.src = "src/assets/images/fires/rifle/rifle-crouch-top3.png";
+
+
         // GET THESE FIRE IMAGES UP AND RUNNING:
         this.pistol_images = {
             "straight": {"idle": this.pistol_stand, "fire": this.pistol_fire}, 
@@ -174,9 +192,17 @@ export default class Shooter {
             "diagnal-back": {"idle": this.pistol_stand_up, "fire": this.pistol_up_fire}
         };
 
-        // this.rifle_images = {"straight": this.rifle_stand, "diagnal": this.rifle_stand_up, 
-        // "down": this.rifle_crouch, "up": this.rifle_stand_top, "diagnal-duck": this.rifle_crouch_up,
-        // "down-up": this.rifle_crouch_top};
+        this.rifle_images = {
+            "straight": {"idle": this.rifle_stand, "fire": this.rifle_fire}, 
+            "diagnal": {"idle": this.rifle_stand_up, "fire": this.rifle_up_fire}, 
+            "up": {"idle": this.rifle_stand_top, "fire": this.rifle_top_fire},
+            "down": {"idle": this.rifle_crouch, "fire": this.rifle_crouch_fire},  
+            "diagnal-duck": {"idle": this.rifle_crouch_up, "fire": this.rifle_crouch_up_fire},
+            "down-up": {"idle": this.rifle_crouch_top, "fire": this.rifle_crouch_top_fire},
+            "down-back": {"idle": this.rifle_crouch, "fire": this.rifle_crouch},
+            "back": {"idle": this.rifle_stand, "fire": this.rifle_fire},
+            "diagnal-back": {"idle": this.rifle_stand_up, "fire": this.rifle_up_fire}
+        };
 
         // this.pistol_images = {"straight": this.pistol_stand, "diagnal": this.pistol_stand_up, 
         // "down": this.pistol_crouch, "up": this.pistol_stand_top, "diagnal-duck": this.pistol_crouch_up,
@@ -297,7 +323,10 @@ s
             if (this.shooting && this.animation) {
                 context.drawImage(this.images[this.weapon][this.angle]["fire"], this.x, this.y);
             } 
-            // else if (this.throwBoom)  
+            else if (this.throwBoom) {
+                this.y = canvas.height - (canvas.height * (1/4)) - 40;
+                context.drawImage(this.grenade_stand, this.x, this.y);
+            }
             else context.drawImage(this.image, this.x, this.y);
             // context.drawImage(this.image, this.x, canvas.height - (canvas.height * (1/4)) - this.height);
         } else {
@@ -321,7 +350,7 @@ s
         context.textBaseline = "middle";
 
         // TEXT:
-        context.fillText(`${this.throwBoom}, ${this.spriteWidth}`, this.x + (this.width / 2), this.y - 100);
+        context.fillText(`${this.angle}, ${this.spriteWidth}`, this.x + (this.width / 2), this.y - 100);
         // context.fillText(this.duck, this.x + (this.width / 2), this.y + (this.height / 2));
         // context.fillText(this.width, this.x + (this.width / 2), this.y - 50);
     }
