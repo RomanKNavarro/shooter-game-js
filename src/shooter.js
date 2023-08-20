@@ -250,14 +250,12 @@ export default class Shooter {
             case "diagnal-back":
                 this.width = 43;
                 this.height = 36;
+                // if (!this.animation) this.y = canvas.height - (canvas.height * (1/4)) - 40;
                 this.y = canvas.height - (canvas.height * (1/4)) - 36;
-
-                // SO CLOSE TO FIXING THIS CRAP:
                 break;
 
-
-            // 43x36, diagnal
-            // FIRE: 43×40
+            // 44×36
+            // FIRE: 44x39
             case "up":
                 this.width = 44;
                 this.height = 36;
@@ -272,7 +270,7 @@ export default class Shooter {
                 this.height = 30;
                 this.y = canvas.height - (canvas.height * (1/4)) - 30;
                 break;
-
+s
             // 50x28
             // FIRE: 50×28
             case "down":
@@ -286,19 +284,41 @@ export default class Shooter {
                 break;
 
             // 49x30
-            // FIRE: 49x34
+            // FIRE: 49×34
             case "diagnal-duck":
                 this.bulletY = 197;
                 // 49x30
                 this.width = 49;
                 this.height = 30;
                 // this.image = this.pistol_crouch_up;
-                this.y = canvas.height - (canvas.height * (1/4)) - 20;
+                this.y = canvas.height - (canvas.height * (1/4)) - 30;
                 break;
         }
 
-       if (["straight", "down", "diagnal-duck", "down-up", "diagnal", "up"].includes(this.angle)) {
-            context.drawImage(this.image, this.x, this.y);
+    //    if (["straight", "down", "diagnal-duck", "down-up", "diagnal", "up"].includes(this.angle)) {
+    //         context.drawImage(this.image, this.x, this.y);
+    //         // context.drawImage(this.image, this.x, canvas.height - (canvas.height * (1/4)) - this.height);
+    //     } else {
+    //         context.save();
+    //         context.translate(this.x + this.width, this.y);
+    //         context.scale(-1,1);
+    //         // context.drawImage(this.image, canvas.width * -50, this.y);
+    //         context.drawImage(this.image, 0, 0);
+            
+    //         context.restore();
+    //     }
+
+    //     if (this.shooting && this.animation) {
+    //         // context.drawImage(this.fire, this.x, this.y);
+    //         this.image = this.images[this.weapon][this.angle]["fire"];
+    //         context.drawImage(this.images[this.weapon][this.angle]["fire"], this.x, this.y);
+    //     } 
+
+        
+        if (["straight", "down", "diagnal-duck", "down-up", "diagnal", "up"].includes(this.angle)) {
+            if (this.shooting && this.animation) {
+                context.drawImage(this.images[this.weapon][this.angle]["fire"], this.x, this.y);
+            } else context.drawImage(this.image, this.x, this.y);
             // context.drawImage(this.image, this.x, canvas.height - (canvas.height * (1/4)) - this.height);
         } else {
             context.save();
@@ -306,15 +326,14 @@ export default class Shooter {
             context.scale(-1,1);
             // context.drawImage(this.image, canvas.width * -50, this.y);
             context.drawImage(this.image, 0, 0);
+
+            if (this.shooting && this.animation) {
+                context.drawImage(this.images[this.weapon][this.angle]["fire"], 0, 0);
+            } else context.drawImage(this.image, 0, 0);
             
             context.restore();
         }
 
-        if (this.shooting && this.animation) {
-            // context.drawImage(this.fire, this.x, this.y);
-            this.image = this.images[this.weapon][this.angle]["fire"];
-            context.drawImage(this.images[this.weapon][this.angle]["fire"], this.x, this.y);
-        } 
 
         context.font = "20px serif";
         context.fillStyle = "black";
@@ -322,7 +341,7 @@ export default class Shooter {
         context.textBaseline = "middle";
 
         // TEXT:
-        context.fillText(`${this.y}, ${this.spriteWidth}`, this.x + (this.width / 2), this.y - 100);
+        context.fillText(`${this.animation}, ${this.spriteWidth}`, this.x + (this.width / 2), this.y - 100);
         // context.fillText(this.duck, this.x + (this.width / 2), this.y + (this.height / 2));
         // context.fillText(this.width, this.x + (this.width / 2), this.y - 50);
     }
@@ -340,7 +359,8 @@ export default class Shooter {
             // setTimeout(() => {
             //     showNextRound = true;
             // }, 1000);
-        } else this.animation = true;
+        } 
+        else this.animation = true;
 
         // if (this.isSecond == true && this.x <= 200 && this.initSecond == true) {
         if (this.isSecond == true && this.initSecond == true) {
