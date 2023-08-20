@@ -208,16 +208,17 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // TODO: get bullet placement right.        --DONE
 // TODO: find out how to zoom in on canvas
 
-// TODO: the images used in the  sprites are not uniform in height, which'll cause problems.
-// TODO: for optimization, draw a single sheep image for idle/fire.
-// TODO: fix this stupid bullet from stopping on duck.
-// TODO: figured out how to solve fire image problem. Fix it tomorrow.
-
-// TODO: FIX THIS FUCKING BULLET GLITCH ASAP   
+// TODO: the images used in the  sprites are not uniform in height, which'll cause problems.    --DONE
+// TODO: for optimization, draw a single sheep image for idle/fire.     --DONE
+// TODO: fix this stupid bullet from stopping on duck.                  --DONE
+// TODO: figured out how to solve fire image problem. Fix it tomorrow.  --DONE
+// TODO: FIX THIS FUCKING BULLET GLITCH ASAP   --DONE
 // projectile.js good.
 // shooter.js good.
 // inputHandler good.
 // bug found in script line 1059
+// TODO: add grenade images
+
 let roundCounts = [6, 10]; 
 
 // single, triple, two shooters, ar hoarde (grounds and a few airs), grenade hoarde, civies (pows)

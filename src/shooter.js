@@ -23,8 +23,6 @@ export default class Shooter {
         this.x = x;
         this.secondX = 200;
 
-        this.bulletY = 191;
-
         this.isSecond = false;
         this.initSecond = false;
         this.secondReady = false;
@@ -78,6 +76,9 @@ export default class Shooter {
         this.toggleMusic = false;
 
         // IMAGES:
+        this.grenade_stand = new Image();
+        this.grenade_stand.src = "src/assets/images/CLEARS/nade/nade_stand.png";
+
         // FIX THIS CRAP:
         // too much crap in input handler. Making exclusive case handler here:
         // 44x34
@@ -265,7 +266,6 @@ export default class Shooter {
             // 50x30
             // FIRE: 50×33
             case "down-up":
-                this.bulletY = 197;
                 this.width = 50;
                 this.height = 30;
                 this.y = canvas.height - (canvas.height * (1/4)) - 30;
@@ -275,7 +275,6 @@ s
             // FIRE: 50×28
             case "down":
             case "down-back":
-                this.bulletY = 197;
                 // 50x28
                 this.width = 50;
                 this.height = 28;
@@ -286,7 +285,6 @@ s
             // 49x30
             // FIRE: 49×34
             case "diagnal-duck":
-                this.bulletY = 197;
                 // 49x30
                 this.width = 49;
                 this.height = 30;
@@ -294,31 +292,13 @@ s
                 this.y = canvas.height - (canvas.height * (1/4)) - 30;
                 break;
         }
-
-    //    if (["straight", "down", "diagnal-duck", "down-up", "diagnal", "up"].includes(this.angle)) {
-    //         context.drawImage(this.image, this.x, this.y);
-    //         // context.drawImage(this.image, this.x, canvas.height - (canvas.height * (1/4)) - this.height);
-    //     } else {
-    //         context.save();
-    //         context.translate(this.x + this.width, this.y);
-    //         context.scale(-1,1);
-    //         // context.drawImage(this.image, canvas.width * -50, this.y);
-    //         context.drawImage(this.image, 0, 0);
-            
-    //         context.restore();
-    //     }
-
-    //     if (this.shooting && this.animation) {
-    //         // context.drawImage(this.fire, this.x, this.y);
-    //         this.image = this.images[this.weapon][this.angle]["fire"];
-    //         context.drawImage(this.images[this.weapon][this.angle]["fire"], this.x, this.y);
-    //     } 
-
         
         if (["straight", "down", "diagnal-duck", "down-up", "diagnal", "up"].includes(this.angle)) {
             if (this.shooting && this.animation) {
                 context.drawImage(this.images[this.weapon][this.angle]["fire"], this.x, this.y);
-            } else context.drawImage(this.image, this.x, this.y);
+            } 
+            // else if (this.throwBoom)  
+            else context.drawImage(this.image, this.x, this.y);
             // context.drawImage(this.image, this.x, canvas.height - (canvas.height * (1/4)) - this.height);
         } else {
             context.save();
@@ -341,7 +321,7 @@ s
         context.textBaseline = "middle";
 
         // TEXT:
-        context.fillText(`${this.animation}, ${this.spriteWidth}`, this.x + (this.width / 2), this.y - 100);
+        context.fillText(`${this.throwBoom}, ${this.spriteWidth}`, this.x + (this.width / 2), this.y - 100);
         // context.fillText(this.duck, this.x + (this.width / 2), this.y + (this.height / 2));
         // context.fillText(this.width, this.x + (this.width / 2), this.y - 50);
     }
@@ -378,10 +358,7 @@ s
             // 232 down
             
             if (this.timer % this.fireRate === 0  || this.timer == 1) {
-                this.projectiles.push(new Projectile(this.x + this.width - 20, this.bulletY, this.angle, this.weapon, this.delete));
-
-                // this.projectiles.push(new Projectile(this.secondX, this.y + 10, this.angle, this.weapon, this.delete));
-                // this.projectiles.push(new Projectile(this.secondX, this.y, this.angle, this.weapon, this.delete));
+                this.projectiles.push(new Projectile(this.x + 19, this.y + 5, this.angle, this.weapon, this.delete));
                 if (this.secondStream == true) {
                     this.projectiles.push(new Projectile(this.secondX, this.y + 10, this.angle, this.weapon, this.delete));
                 }

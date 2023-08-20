@@ -94,9 +94,9 @@ export default class Projectile {
 
       // HERE IS WHERE PROJECTILE'S Y GETS CHANGED:
       // place bullet's y low when shooting down:
-      if (this.direction == "down" || this.direction == "down-back" || this.direction == "diagnal-duck") {
-        this.y = this.y + 25;
-      }
+      // if (this.direction == "down" || this.direction == "down-back" || this.direction == "diagnal-duck") {
+      //   this.y = this.y + 25;
+      // }
     }
 
     playSound(sound) {
