@@ -553,8 +553,8 @@ function greatReset() {
 
     winningScore = 30;
     currentRound = 1;
-    shooter.weapon = "pistol";
-    // shooter.weapon = "rifle";
+    // shooter.weapon = "pistol";
+    shooter.weapon = "rifle";
     shooter.fireRate = 0;
     shooter.specialAmmo = 0;
 
