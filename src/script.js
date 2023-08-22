@@ -217,7 +217,7 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // shooter.js good.
 // inputHandler good.
 // bug found in script line 1059
-// TODO: add grenade images
+// TODO: add grenade images         --DONE
 
 let roundCounts = [6, 10]; 
 

@@ -160,22 +160,26 @@ export default class Shooter {
 
         // RIFLE FIRE IMAGES:
         this.rifle_fire = new Image();
-        this.rifle_fire.src = "src/assets/images/fires/rifle/rifle-stand-fire.png";
+        this.rifle_fire.src = "src/assets/images/fires/rifle/rifle-stand3.png";
 
         this.rifle_up_fire = new Image();
-        this.rifle_up_fire.src = "src/assets/images/fires/rifle/sheep-rifle-lookup3.png";
+        this.rifle_up_fire.src = "src/assets/images/fires/rifle/rifle-stand-up.png";
 
+        // done
         this.rifle_top_fire = new Image();
-        this.rifle_top_fire.src = "src/assets/images/fires/rifle/sheep-rifle-top3.png";
+        this.rifle_top_fire.src = "src/assets/images/fires/rifle/rifle-stand-top.png";
 
+        // done
         this.rifle_crouch_fire = new Image();
-        this.rifle_crouch_fire.src = "src/assets/images/fires/rifle/sheep-rifle-crouch3.png";
+        this.rifle_crouch_fire.src = "src/assets/images/fires/rifle/rifle-crouch3.png";
 
+        // done
         this.rifle_crouch_up_fire = new Image();
-        this.rifle_crouch_up_fire.src = "src/assets/images/fires/rifle/sheep-rifle-lookup-crouch3.png";
+        this.rifle_crouch_up_fire.src = "src/assets/images/fires/rifle/rifle-crouch-lookup3.png";
 
+        // done
         this.rifle_crouch_top_fire = new Image();
-        this.rifle_crouch_top_fire.src = "src/assets/images/fires/rifle/rifle-crouch-top3.png";
+        this.rifle_crouch_top_fire.src = "src/assets/images/fires/rifle/rifle-crouch-top2.png";
 
         // this.width = this.images[this.angle][this.weapon]["width"];
         // this.height = this.images[this.angle][this.weapon]["height"];
@@ -251,6 +255,7 @@ export default class Shooter {
                     "height": 32
                 }
             },
+            // 50x31
             "down-up": {
                 pistol: {
                     "idle": this.pistol_crouch_top, 
@@ -261,7 +266,7 @@ export default class Shooter {
                     "idle": this.rifle_crouch_top, 
                     "fire": this.rifle_crouch_top_fire,
                     "width": 44,
-                    "height": 34
+                    "height": 31
                 }
             },
             "down-back": {
