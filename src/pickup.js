@@ -62,7 +62,8 @@ export default class Pickup {
 
         this.nadeOdds = 10;  // 5
         this.aidOdds = 5;    // 4
-        this.weaponOdds = 1; // 2
+        // this.weaponOdds = 1; // 2
+        this.weaponOdds = 4;
         
         //  FIX THIS CRAP
         // this introduced at round

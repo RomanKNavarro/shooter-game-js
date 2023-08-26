@@ -7,13 +7,13 @@ var canvas = document.getElementById("canvas1");
 export default class Shooter {
     // constructor(x) { 
     constructor(x, y) { 
-        // this.width = 44;
-        // this.height = 34;
+        this.width = 44;
+        this.height = 34;
         // this.width = 50;
         // this.height = 50;
 
-        this.width;
-        this.height;
+        // this.width;
+        // this.height;
 
         // this.y;
         this.y = y;
@@ -47,13 +47,13 @@ export default class Shooter {
         this.angle = "straight";
 
         // pistol, ar, and flamethrower
-        // this.weapon = "pistol";
-        // this.fireRate = 0;
-        // this.specialAmmo = 0;
+        this.weapon = "pistol";
+        this.fireRate = 0;
+        this.specialAmmo = 0;
 
-        this.weapon = "rifle";
-        this.fireRate = 10;
-        this.specialAmmo = 100;
+        // this.weapon = "rifle";
+        // this.fireRate = 10;
+        // this.specialAmmo = 100;
 
         this.throwBoom = false; 
         this.secondNade = false;
@@ -79,6 +79,9 @@ export default class Shooter {
         // 44×40
         this.grenade_stand = new Image();
         this.grenade_stand.src = "src/assets/images/CLEARS/nade/nade_stand.png";
+
+        this.grenade_crouch = new Image();
+        this.grenade_crouch.src = "src/assets/images/CLEARS/nade/sheep-nade-crouch.png";
 
         // FIX THIS CRAP:
         // 
@@ -183,16 +186,15 @@ export default class Shooter {
 
         // this.width = this.images[this.angle][this.weapon]["width"];
         // this.height = this.images[this.angle][this.weapon]["height"];
-
         this.images = {
             "straight": {
-                pistol: {
+                "pistol": {
                     "idle": this.pistol_stand, 
                     "fire": this.pistol_fire, 
                     "width": 44,
                     "height": 34
                 },
-                rifle: {
+                "ar": {
                     "idle": this.rifle_stand, 
                     "fire": this.rifle_fire,
                     "width": 44,
@@ -200,28 +202,27 @@ export default class Shooter {
                 }
             }, 
             "diagnal": {
-                pistol: {
+                "pistol": {
                     "idle": this.pistol_stand_up, 
                     "fire": this.pistol_up_fire, 
                     "width": 43,
                     "height": 36,
                 }, 
-                rifle: {
+                "ar": {
                     "idle": this.rifle_stand_up, 
                     "fire": this.rifle_up_fire,
                     "width": 43,
                     "height": 38
                 }
-
             }, 
             "up": {
-                pistol: {
+                "pistol": {
                     "idle": this.pistol_stand_top, 
                    "fire": this.pistol_top_fire, 
                    "width": 44,
                    "height": 36,
                 }, 
-                rifle: {
+                "ar": {
                     "idle": this.rifle_stand_top, 
                     "fire": this.rifle_top_fire,
                     "width": 44,
@@ -229,13 +230,13 @@ export default class Shooter {
                 }
             },
             "down": {
-                pistol: {
+                "pistol": {
                     "idle": this.pistol_crouch, 
                     "fire": this.pistol_crouch_fire, 
                     "width": 50,
                     "height": 28,
                 },
-                rifle: {
+                "ar": {
                     "idle": this.rifle_crouch, 
                     "fire": this.rifle_crouch_fire,
                     "width": 50,
@@ -243,12 +244,12 @@ export default class Shooter {
                 }
             },  
             "diagnal-duck": {
-                pistol: { 
+                "pistol": { 
                     "idle": this.pistol_crouch_up, 
                     "fire": this.pistol_crouch_up_fire, 
                     "width": 49,
                     "height": 30  
-                }, rifle: {
+                }, "ar": {
                     "idle": this.rifle_crouch_up, 
                     "fire": this.rifle_crouch_up_fire,
                     "width": 49,
@@ -257,12 +258,12 @@ export default class Shooter {
             },
             // 50x31
             "down-up": {
-                pistol: {
+                "pistol": {
                     "idle": this.pistol_crouch_top, 
                     "fire": this.pistol_crouch_top_fire, 
                     "width": 50,
                     "height": 30 
-                }, rifle: {
+                }, "ar": {
                     "idle": this.rifle_crouch_top, 
                     "fire": this.rifle_crouch_top_fire,
                     "width": 44,
@@ -270,15 +271,15 @@ export default class Shooter {
                 }
             },
             "down-back": {
-                pistol: {
+                "pistol": {
                     "idle": this.pistol_crouch, 
-                    "fire": this.pistol_crouch_top, 
+                    "fire": this.pistol_crouch_fire, 
                     // "width": 50,
                     // "height": 28  
                     "width": 50,
                     "height": 28,
                 },
-                rifle: {
+                "ar": {
                     "idle": this.rifle_crouch, 
                     "fire": this.rifle_crouch,
                     // "width": 50,
@@ -294,7 +295,7 @@ export default class Shooter {
                      "width": 44,
                      "height": 34 
                 }, 
-                rifle: {
+                "ar": {
                     "idle": this.rifle_stand, 
                     "fire": this.rifle_fire,
                     "width": 44,
@@ -308,7 +309,7 @@ export default class Shooter {
                     "width": 43,
                     "height": 36,
                 },
-                rifle: {
+                "ar": {
                     "idle": this.rifle_stand_up, 
                     "fire": this.rifle_up_fire,
                     "width": 43,
@@ -316,7 +317,6 @@ export default class Shooter {
                 }
             }
         };
-        // this.images[this.angle][this.weapon]["fire"]
 
         // UNCOMMENT FOR PREVIOUS 
         // this.images = {"pistol": this.pistol_images, "rifle": this.rifle_images};
@@ -356,6 +356,7 @@ export default class Shooter {
         // this.width = this.images[this.weapon][this.angle]["width"];
         // this.height = this.images[this.weapon][this.angle]["height"];
 
+        // WEAPON is undefined. 
         this.width = this.images[this.angle][this.weapon]["width"];
         this.height = this.images[this.angle][this.weapon]["height"];
 
@@ -429,8 +430,14 @@ s
                 // this.width = this.images[this.angle][this.weapon]["width"];
             } 
             else if (this.throwBoom) {
-                this.y = canvas.height - (canvas.height * (1/4)) - 40;
-                context.drawImage(this.grenade_stand, this.x, this.y);
+                if (!this.duck) {
+                    this.y = canvas.height - (canvas.height * (1/4)) - 40;
+                    context.drawImage(this.grenade_stand, this.x, this.y);
+                } else {
+                    this.y = canvas.height - (canvas.height * (1/4)) - 34;
+                    context.drawImage(this.grenade_crouch, this.x, this.y);
+                }
+
             }
             else context.drawImage(this.image, this.x, this.y);
             // context.drawImage(this.image, this.x, canvas.height - (canvas.height * (1/4)) - this.height);
@@ -457,8 +464,6 @@ s
 
         // TEXT:
         context.fillText(`${this.y}, ${this.spriteWidth}`, this.x + (this.width / 2), this.y - 100);
-        // context.fillText(this.duck, this.x + (this.width / 2), this.y + (this.height / 2));
-        // context.fillText(this.width, this.x + (this.width / 2), this.y - 50);
     }
 
     update() { 

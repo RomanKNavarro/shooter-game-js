@@ -218,6 +218,7 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // inputHandler good.
 // bug found in script line 1059
 // TODO: add grenade images         --DONE
+// TODO: fix down-back fire image   --DONE
 
 let roundCounts = [6, 10]; 
 
@@ -407,7 +408,7 @@ let snackQueue = [];
 let nadeQueue = [];
 
 // let state = "LOADING";
-let state = "MENU";
+let state = "LOADING";
 
 let loadingTime = [2000, 3000][Math.floor(Math.random() * 2)];
 
@@ -553,8 +554,8 @@ function greatReset() {
 
     winningScore = 30;
     currentRound = 1;
-    // shooter.weapon = "pistol";
-    shooter.weapon = "rifle";
+    shooter.weapon = "pistol";
+    // shooter.weapon = "rifle";
     shooter.fireRate = 0;
     shooter.specialAmmo = 0;
 
