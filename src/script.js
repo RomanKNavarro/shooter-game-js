@@ -219,6 +219,8 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // bug found in script line 1059
 // TODO: add grenade images         --DONE
 // TODO: fix down-back fire image   --DONE
+// TODO: player shouldn't move on game over two-player (EXCEPT ON VICTORY)
+// 
 
 let roundCounts = [6, 10]; 
 
@@ -1077,7 +1079,7 @@ function handleEnemyProjectiles(orc) {
             i--;
 
             // UNCOMMENT THIS:
-            if ((!shooter.duck) || (orc.type == "air" || orc.type == "bomber")) playerHealth.number--;
+            // if ((!shooter.duck) || (orc.type == "air" || orc.type == "bomber")) playerHealth.number--;
         }
     }
 }
