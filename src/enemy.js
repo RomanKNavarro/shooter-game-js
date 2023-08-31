@@ -144,6 +144,7 @@ export default class Enemy {
           this.height = 30;
           this.health = 1;
 
+          // wtf is this???
           if (this.isCivie) this.speed = -4;
           else this.speed = 4;
           break;

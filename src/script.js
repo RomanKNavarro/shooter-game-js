@@ -220,7 +220,11 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // TODO: add grenade images         --DONE
 // TODO: fix down-back fire image   --DONE
 // TODO: player shouldn't move on game over two-player (EXCEPT ON VICTORY)
-// 
+// TODO: fix flammen image height crap.     --DONE
+// TODO: bullet should be drawn in front of player, not back.
+// TODO: FUCKING CIVIES STOP SPAWNING AFTER GAME OVER. Both with 1- and 2-player    --DONE
+// TODO: determine how civies get their X axis.     --DONE
+// TODO: if waited full 40 secs, round interventions fucking suck, and massacre round is skipped.   --DONE
 
 let roundCounts = [6, 10]; 
 
@@ -409,7 +413,7 @@ let currentSpeed = 1.5;
 let snackQueue = [];
 let nadeQueue = [];
 
-// let state = "LOADING";
+// let state = "MENU";
 let state = "LOADING";
 
 let loadingTime = [2000, 3000][Math.floor(Math.random() * 2)];
@@ -548,6 +552,7 @@ function resetBaddies() {
 }
 
 function greatReset() {
+    endSpecRound = false;
     currentSpeed = 1.5;
     score = 0;
     scoreText.text = score;
@@ -557,6 +562,7 @@ function greatReset() {
     winningScore = 30;
     currentRound = 1;
     shooter.weapon = "pistol";
+    // shooter.weapon = "flammen";
     // shooter.weapon = "rifle";
     shooter.fireRate = 0;
     shooter.specialAmmo = 0;
@@ -678,9 +684,9 @@ function handleState() {
             setTimeout(() => {
                 // what's up with this again?
                 showMenu = true;
-                if (score >= winningScore) {
-                    cremate();
-                }
+                // if (score >= winningScore) {
+                //     cremate();
+                // }
             }, 30000);
 
             if (showMenu) state = "MENU";
@@ -964,17 +970,19 @@ function handleShooter() {
     shooter.draw(cxt2);
     if (secondShooter) shooter2.draw(cxt2);
 
-    // if (shooter.duck) shooter.y = flora.y - 28;
-    // else shooter.y = flora.y - 34;
-
-    // if (shooter.duck) shooter.y = flora.y - shooter.y;
-    // else shooter.y = flora.y - shooter.y;
-
     // what states require shooter to be disabled?
-    if (state == "RUNNING" || state == "WIN" || state == "QUIET" 
-    || state == "RELIEF" || state == "TUTORIAL" || state == "MENU") {
-        shooter.update();
-        if (secondShooter) shooter2.update();
+    // if (state == "RUNNING" || state == "WIN" || state == "QUIET" 
+    // || state == "RELIEF" || state == "TUTORIAL" || state == "MENU") {
+    //     shooter.update();
+    //     if (secondShooter) shooter2.update();
+    // }
+
+    if (state != "MENU" || state != "LOSE") {
+        shooter.update(cxt2);
+        if (secondShooter) {
+            shooter2.update(cxt2);
+        }
+
     }
 
     // GRENADE FUNCTIONALITY:
@@ -1079,7 +1087,7 @@ function handleEnemyProjectiles(orc) {
             i--;
 
             // UNCOMMENT THIS:
-            // if ((!shooter.duck) || (orc.type == "air" || orc.type == "bomber")) playerHealth.number--;
+            if ((!shooter.duck) || (orc.type == "air" || orc.type == "bomber")) playerHealth.number--;
         }
     }
 }
@@ -1278,7 +1286,6 @@ function handleEnemy() {
         // if (current.type != "ground") current.health = 1;
 
         // HERE'S HOW WE DISCRIMINATE CIVIES:
-        // if (current.speed < 0) current.isCivie = true;
         if (current.speed < 0) current.isCivie = true;
 
         // ALL enemies given civie status on specialRound
@@ -1460,6 +1467,10 @@ function mouseCollision(first, second, callback) {
 
 // FUNCTION TO GET ALL OUR OBJECTS UP AND RUNNING
 function animate() {
+    bullet_cxt.clearRect(0, 0, bullet_canvas.width, bullet_canvas.height);
+    bullet_cxt.fillStyle = "transparent";
+    bullet_cxt.fillRect(0, 0, bullet_canvas.width, bullet_canvas.height);
+
     cxt.clearRect(0, 0, canvas.width, canvas.height);
     cxt.fillStyle = "transparent";
     cxt.fillRect(0, 0, canvas.width, canvas.height);
@@ -1467,10 +1478,6 @@ function animate() {
     cxt2.clearRect(0, 0, canvas2.width, canvas2.height);
     cxt2.fillStyle = "transparent";
     cxt2.fillRect(0, 0, canvas2.width, canvas2.height);
-
-    bullet_cxt.clearRect(0, 0, bullet_canvas.width, bullet_canvas.height);
-    bullet_cxt.fillStyle = "transparent";
-    bullet_cxt.fillRect(0, 0, bullet_canvas.width, bullet_canvas.height);
 
     // dont want it redrawing the floor over and over again
     flora.draw(cxt2);
@@ -1487,7 +1494,7 @@ function animate() {
     // currentRound changes only after the "next round incoming" text
     // if (shooter.projectiles) console.log(shooter.projectiles[0]);
 
-    // console.log(shooter.projectiles);
+    console.log(endSpecRound);
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);

@@ -84,6 +84,7 @@ export default class Projectile {
       this.size = 3;
 
       this.speed = 10;
+      // this.speed = 1;
       // this.speed =5;
       this.delete = false;
       this.randomY = [1.7, 2, 2.2, 2.4, 2.6, 2.8, 3];
@@ -128,7 +129,8 @@ export default class Projectile {
 
         case "flammen":
           this.playSound(this.sfx.flammen);
-          this.speed = 12;
+          // this.speed = 12;
+          this.speed = 11;
           break;
 
         case "laser-gun":

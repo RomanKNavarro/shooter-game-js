@@ -51,7 +51,7 @@ export default class Shooter {
         this.fireRate = 0;
         this.specialAmmo = 0;
 
-        // this.weapon = "rifle";
+        // this.weapon = "flammen";
         // this.fireRate = 10;
         // this.specialAmmo = 100;
 
@@ -139,17 +139,29 @@ export default class Shooter {
         this.rifle_crouch_top.src = "src/assets/images/CLEARS/rifle/sheep-rifle-top-crouch-clear.png";
 
         //flammen
+        // 44x39
         this.flammen_stand = new Image();
         this.flammen_stand.src = "src/assets/images/CLEARS/flammen/flammen-stand.png";
 
+        // 43x40
         this.flammen_stand_up = new Image();
         this.flammen_stand_up.src = "src/assets/images/CLEARS/flammen/flammen-stand-up.png";
 
+        // 50x33
         this.flammen_crouch = new Image();
         this.flammen_crouch.src = "src/assets/images/CLEARS/flammen/flammen-crouch.png";
 
+        // 49x34
         this.flammen_crouch_up = new Image();
         this.flammen_crouch_up.src = "src/assets/images/CLEARS/flammen/flammen-crouch-up.png";
+
+        // 44x39
+        this.flammen_top = new Image();
+        this.flammen_top.src = "src/assets/images/CLEARS/flammen/flammen-top.png";
+
+        // 50x33
+        this.flammen_crouch_top = new Image();
+        this.flammen_crouch_top.src = "src/assets/images/CLEARS/flammen/flammen-crouch-top.png";
 
         // SPRITESHEET CRAP:
         this.frame = 0;
@@ -199,6 +211,24 @@ export default class Shooter {
 
         // this.width = this.images[this.angle][this.weapon]["width"];
         // this.height = this.images[this.angle][this.weapon]["height"];
+
+
+                // // 44x39
+                // this.flammen_stand = new Image();
+                // this.flammen_stand.src = "src/assets/images/CLEARS/flammen/flammen-stand.png";
+        
+                // // 43x40
+                // this.flammen_stand_up = new Image();
+                // this.flammen_stand_up.src = "src/assets/images/CLEARS/flammen/flammen-stand-up.png";
+        
+                // // 50x33
+                // this.flammen_crouch = new Image();
+                // this.flammen_crouch.src = "src/assets/images/CLEARS/flammen/flammen-crouch.png";
+        
+                // // 49x34
+                // this.flammen_crouch_up = new Image();
+                // this.flammen_crouch_up.src = "src/assets/images/CLEARS/flammen/flammen-crouch-up.png";
+        
         this.images = {
             "straight": {
                 "pistol": {
@@ -215,9 +245,9 @@ export default class Shooter {
                 },
                 "flammen": {
                     "idle": this.flammen_stand, 
-                    "fire": this.pistol_fire, 
+                    "fire": this.flammen_stand, 
                     "width": 44,
-                    "height": 34
+                    "height": 39
                 },
             }, 
             "diagnal": {
@@ -235,9 +265,9 @@ export default class Shooter {
                 },
                 "flammen": {
                     "idle": this.flammen_stand_up, 
-                    "fire": this.pistol_fire, 
-                    "width": 44,
-                    "height": 34
+                    "fire": this.flammen_stand_up, 
+                    "width": 43,
+                    "height": 40
                 },
             }, 
             "up": {
@@ -254,10 +284,10 @@ export default class Shooter {
                     "height": 37
                 },
                 "flammen": {
-                    "idle": this.pistol_stand, 
-                    "fire": this.pistol_fire, 
+                    "idle": this.flammen_top, 
+                    "fire": this.flammen_top, 
                     "width": 44,
-                    "height": 34
+                    "height": 39
                 },
             },
             "down": {
@@ -275,9 +305,9 @@ export default class Shooter {
                 },
                 "flammen": {
                     "idle": this.flammen_crouch, 
-                    "fire": this.pistol_fire, 
-                    "width": 44,
-                    "height": 34
+                    "fire": this.flammen_crouch, 
+                    "width": 50,
+                    "height": 33
                 },
             },  
             "diagnal-duck": {
@@ -294,7 +324,7 @@ export default class Shooter {
                 },
                 "flammen": {
                     "idle": this.flammen_crouch_up, 
-                    "fire": this.pistol_fire, 
+                    "fire": this.flammen_crouch_up, 
                     "width": 44,
                     "height": 34
                 },
@@ -313,10 +343,10 @@ export default class Shooter {
                     "height": 31
                 },
                 "flammen": {
-                    "idle": this.pistol_stand, 
-                    "fire": this.pistol_fire, 
-                    "width": 44,
-                    "height": 34
+                    "idle": this.flammen_crouch_top, 
+                    "fire": this.flammen_crouch_top, 
+                    "width": 50,
+                    "height": 33
                 },
             },
             "down-back": {
@@ -338,9 +368,9 @@ export default class Shooter {
                 },
                 "flammen": {
                     "idle": this.flammen_crouch, 
-                    "fire": this.pistol_fire, 
+                    "fire": this.flammen_crouch, 
                     "width": 44,
-                    "height": 34
+                    "height": 33
                 },
             },
             "back": {
@@ -358,9 +388,9 @@ export default class Shooter {
                 },
                 "flammen": {
                     "idle": this.flammen_stand, 
-                    "fire": this.pistol_fire, 
+                    "fire": this.flammen_stand, 
                     "width": 44,
-                    "height": 34
+                    "height": 39
                 },
             },
             "diagnal-back": {
@@ -377,10 +407,10 @@ export default class Shooter {
                     "height": 38
                 },
                 "flammen": {
-                    "idle": this.flammen_crouch_up, 
-                    "fire": this.pistol_fire, 
+                    "idle": this.flammen_stand_up, 
+                    "fire": this.flammen_stand_up, 
                     "width": 44,
-                    "height": 34
+                    "height": 40
                 },
             }
         };
@@ -443,7 +473,19 @@ export default class Shooter {
         else this.frame = 0;
 
         // REVELATION: no need to call "this.images" over and over again. I can just do it once.
-        
+
+        context.font = "20px serif";
+        context.fillStyle = "black";
+        context.textAlign = "center";
+        context.textBaseline = "middle";
+
+        // TEXT:
+        context.fillText(`${this.y}, ${this.spriteWidth}`, this.x + (this.width / 2), this.y - 100);
+    }
+
+    update(context) { 
+        // if (this.shooting) this.animation = true;
+
         switch (this.angle) {
             // 44x34
             // FIRE: 44×34
@@ -521,19 +563,6 @@ s
             
             context.restore();
         }
-
-
-        context.font = "20px serif";
-        context.fillStyle = "black";
-        context.textAlign = "center";
-        context.textBaseline = "middle";
-
-        // TEXT:
-        context.fillText(`${this.y}, ${this.spriteWidth}`, this.x + (this.width / 2), this.y - 100);
-    }
-
-    update() { 
-        // if (this.shooting) this.animation = true;
 
         // UNCOMMENT AND REPLACE: 
         if (this.shooting) {
