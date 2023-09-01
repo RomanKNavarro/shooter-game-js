@@ -221,10 +221,13 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // TODO: fix down-back fire image   --DONE
 // TODO: player shouldn't move on game over two-player (EXCEPT ON VICTORY)
 // TODO: fix flammen image height crap.     --DONE
-// TODO: bullet should be drawn in front of player, not back.
+// TODO: bullet should be drawn in front of player, not back.   --DONE
 // TODO: FUCKING CIVIES STOP SPAWNING AFTER GAME OVER. Both with 1- and 2-player    --DONE
 // TODO: determine how civies get their X axis.     --DONE
 // TODO: if waited full 40 secs, round interventions fucking suck, and massacre round is skipped.   --DONE
+// TODO: lower gun on crouch. --DONE
+// TODO: adjust shooter projectile y
+// TODO: player 2 should have same gun as player 1.
 
 let roundCounts = [6, 10]; 
 
@@ -248,19 +251,15 @@ const flora = new Floor(canvas);
 // const shooter = new Shooter(100, flora.y - 34);
 const shooter = new Shooter(100, flora.y - 50);
 
-// const shooter = new Shooter(100);
-// shooter.y = flora.y - 50;
-
 
 //  NEEDS TO START OFF SCREEN, then walk over to position 200:
 // const shooter2 = new Shooter(200, flora.y - 50);
 const shooter2 = new Shooter(0 - shooter.width, flora.y - 34);
 shooter2.isSecond = true;
+shooter2.weapon = shooter.weapon;
 
 // const shooter = new Shooter(100, flora.y - 50);
 // BRILLIANT IDEA: inputHandler doesn't need to take in these args. Use the ones from shooter.
-
-
 new InputHandler(shooter, canvas);
 new InputHandler(shooter2, canvas);
 
@@ -563,7 +562,7 @@ function greatReset() {
     currentRound = 1;
     shooter.weapon = "pistol";
     // shooter.weapon = "flammen";
-    // shooter.weapon = "rifle";
+    // shooter.weapon = "ar";
     shooter.fireRate = 0;
     shooter.specialAmmo = 0;
 
@@ -1494,7 +1493,7 @@ function animate() {
     // currentRound changes only after the "next round incoming" text
     // if (shooter.projectiles) console.log(shooter.projectiles[0]);
 
-    console.log(endSpecRound);
+    // console.log(shooter.width, shooter.height);
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);

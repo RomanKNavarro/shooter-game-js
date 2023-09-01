@@ -190,7 +190,7 @@ export default class Enemy {
         this.timer++;
 
         if (this.timer >= this.openFire && this.timer % this.fireRate === 0) {
-          this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, this.sound, this.dead)); 
+          this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, this.sound, this.dead, "ar")); 
           if (this.type == "bomber") this.beamActive = true;
         } 
       }

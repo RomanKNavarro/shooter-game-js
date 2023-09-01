@@ -18,6 +18,8 @@ export default class Shooter {
         // this.y;
         this.y = y;
 
+        this.bulletY;   // this to be added to the y. Standing: 5, Duck: 10
+
         this.init = false;
 
         this.x = x;
@@ -51,6 +53,7 @@ export default class Shooter {
         this.fireRate = 0;
         this.specialAmmo = 0;
 
+        // this.weapon = "ar";
         // this.weapon = "flammen";
         // this.fireRate = 10;
         // this.specialAmmo = 100;
@@ -101,7 +104,7 @@ export default class Shooter {
         // 50x28
         // FIRE: 50×28
         this.pistol_crouch = new Image();
-        this.pistol_crouch.src = "src/assets/images/CLEARS/pistol/sheep-pistol-crouch-clear.png";
+        this.pistol_crouch.src = "src/assets/images/CLEARS/pistol/sheep-pistol-crouch-clear-new.png";
 
         // 49x30
         // FIRE: 49x34
@@ -178,7 +181,7 @@ export default class Shooter {
         this.pistol_top_fire.src = "src/assets/images/fires/pistol/sheep-pistol-top3.png";
 
         this.pistol_crouch_fire = new Image();
-        this.pistol_crouch_fire.src = "src/assets/images/fires/pistol/sheep-pistol-crouch3.png";
+        this.pistol_crouch_fire.src = "src/assets/images/fires/pistol/sheep-pistol-crouch-new.png";
 
         this.pistol_crouch_up_fire = new Image();
         this.pistol_crouch_up_fire.src = "src/assets/images/fires/pistol/sheep-pistol-lookup-crouch3.png";
@@ -199,7 +202,7 @@ export default class Shooter {
 
         // done
         this.rifle_crouch_fire = new Image();
-        this.rifle_crouch_fire.src = "src/assets/images/fires/rifle/rifle-crouch3.png";
+        this.rifle_crouch_fire.src = "src/assets/images/fires/rifle/rifle-crouch-new.png";
 
         // done
         this.rifle_crouch_up_fire = new Image();
@@ -208,26 +211,6 @@ export default class Shooter {
         // done
         this.rifle_crouch_top_fire = new Image();
         this.rifle_crouch_top_fire.src = "src/assets/images/fires/rifle/rifle-crouch-top2.png";
-
-        // this.width = this.images[this.angle][this.weapon]["width"];
-        // this.height = this.images[this.angle][this.weapon]["height"];
-
-
-                // // 44x39
-                // this.flammen_stand = new Image();
-                // this.flammen_stand.src = "src/assets/images/CLEARS/flammen/flammen-stand.png";
-        
-                // // 43x40
-                // this.flammen_stand_up = new Image();
-                // this.flammen_stand_up.src = "src/assets/images/CLEARS/flammen/flammen-stand-up.png";
-        
-                // // 50x33
-                // this.flammen_crouch = new Image();
-                // this.flammen_crouch.src = "src/assets/images/CLEARS/flammen/flammen-crouch.png";
-        
-                // // 49x34
-                // this.flammen_crouch_up = new Image();
-                // this.flammen_crouch_up.src = "src/assets/images/CLEARS/flammen/flammen-crouch-up.png";
         
         this.images = {
             "straight": {
@@ -298,10 +281,10 @@ export default class Shooter {
                     "height": 28,
                 },
                 "ar": {
-                    "idle": this.rifle_crouch, 
+                    "idle": this.rifle_crouch,          // 50x29
                     "fire": this.rifle_crouch_fire,
                     "width": 50,
-                    "height": 34
+                    "height": 29
                 },
                 "flammen": {
                     "idle": this.flammen_crouch, 
@@ -364,7 +347,7 @@ export default class Shooter {
                     // "width": 50,
                     // "height": 31
                     "width": 50,
-                    "height": 34
+                    "height": 29
                 },
                 "flammen": {
                     "idle": this.flammen_crouch, 
@@ -480,39 +463,40 @@ export default class Shooter {
         context.textBaseline = "middle";
 
         // TEXT:
-        context.fillText(`${this.y}, ${this.spriteWidth}`, this.x + (this.width / 2), this.y - 100);
+        context.fillText(`${this.width}, ${this.height}`, this.x + (this.width / 2), this.y - 100);
     }
 
     update(context) { 
-        // if (this.shooting) this.animation = true;
+        this.y = canvas.height - (canvas.height * (1/4)) - this.height;
 
         switch (this.angle) {
             // 44x34
             // FIRE: 44×34
             case "straight":
             case "back":
-                // this.width = this.images[this.weapon][this.angle]["width"];
-                // this.height = this.images[this.weapon][this.angle]["height"];
-                this.y = canvas.height - (canvas.height * (1/4)) - this.height;
+                if (this.weapon == "flammen") this.bulletY = 12;
+                else this.bulletY = 5;
                 break;
 
             // 43x36
             case "diagnal":
             case "diagnal-back":
                 // if (!this.animation) this.y = canvas.height - (canvas.height * (1/4)) - this.height;
-                this.y = canvas.height - (canvas.height * (1/4)) - this.height;
+                // this.y = canvas.height - (canvas.height * (1/4)) - this.height;
+                if (this.weapon == "flammen") this.bulletY = 5;
+                else this.bulletY = 5;
                 break;
 
             // 44×36
             // FIRE: 44x39
             case "up":
-                this.y = canvas.height - (canvas.height * (1/4)) - this.height;
+                // this.y = canvas.height - (canvas.height * (1/4)) - this.height;
                 break;
 
             // 50x30
             // FIRE: 50×33
             case "down-up":
-                this.y = canvas.height - (canvas.height * (1/4)) - this.height;
+                // this.y = canvas.height - (canvas.height * (1/4)) - this.height;
                 break;
 s
             // 50x28
@@ -521,7 +505,8 @@ s
             case "down-back":
                 // 50x28
                 // this.image = this.pistol_crouch;
-                this.y = canvas.height - (canvas.height * (1/4)) - this.height;
+                // this.y = canvas.height - (canvas.height * (1/4)) - this.height;
+                this.bulletY = 11;
                 break;
 
             // 49x30
@@ -529,7 +514,7 @@ s
             case "diagnal-duck":
                 // 49x30
                 // this.image = this.pistol_crouch_up;
-                this.y = canvas.height - (canvas.height * (1/4)) - this.height;
+                // this.y = canvas.height - (canvas.height * (1/4)) - this.height;
                 break;
         }
         
@@ -566,14 +551,9 @@ s
 
         // UNCOMMENT AND REPLACE: 
         if (this.shooting) {
-            // this.animation = true;
             setTimeout(() => {
                 this.animation = false;
             }, 50);
-
-            // setTimeout(() => {
-            //     showNextRound = true;
-            // }, 1000);
         } 
         else this.animation = true;
 
@@ -593,9 +573,9 @@ s
             // 232 down
             
             if (this.timer % this.fireRate === 0  || this.timer == 1) {
-                this.projectiles.push(new Projectile(this.x + 19, this.y + 5, this.angle, this.weapon, this.delete));
+                this.projectiles.push(new Projectile(this.x + 19, this.y + this.bulletY, this.angle, this.weapon, this.delete, this.weapon));
                 if (this.secondStream == true) {
-                    this.projectiles.push(new Projectile(this.secondX, this.y + 10, this.angle, this.weapon, this.delete));
+                    this.projectiles.push(new Projectile(this.secondX, this.y + 10, this.angle, this.weapon, this.delete, this.weapon));
                 }
                 
                 if (this.specialAmmo > 0) {

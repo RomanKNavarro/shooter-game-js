@@ -193,9 +193,17 @@ export default class Projectile {
     }
     
     draw(context) {
-      context.fillStyle = "black";
-      context.beginPath();
-      context.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-      context.fill();
-    }
+      if (this.weapon == "flammen") {
+        context.strokeStyle = "green";
+        context.beginPath();
+        context.lineWidth = 3;
+        context.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        context.stroke();
+      } else {
+        context.fillStyle = "black";
+        context.beginPath();
+        context.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        context.fill();
+      }
+    } 
 }
