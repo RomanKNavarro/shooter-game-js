@@ -81,7 +81,7 @@ export default class Projectile {
       this.weapon = weapon;
       this.dead = dead;
 
-      this.size = 3;
+      this.size = 2;
 
       this.speed = 10;
       // this.speed = 1;

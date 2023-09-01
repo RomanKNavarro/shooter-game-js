@@ -463,7 +463,7 @@ export default class Shooter {
         context.textBaseline = "middle";
 
         // TEXT:
-        context.fillText(`${this.width}, ${this.height}`, this.x + (this.width / 2), this.y - 100);
+        context.fillText(`${this.animation}, ${this.height}`, this.x + (this.width / 2), this.y - 100);
     }
 
     update(context) { 
@@ -475,7 +475,7 @@ export default class Shooter {
             case "straight":
             case "back":
                 if (this.weapon == "flammen") this.bulletY = 12;
-                else this.bulletY = 5;
+                else this.bulletY = 1;
                 break;
 
             // 43x36

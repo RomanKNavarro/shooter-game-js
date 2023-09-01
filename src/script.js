@@ -226,8 +226,9 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // TODO: determine how civies get their X axis.     --DONE
 // TODO: if waited full 40 secs, round interventions fucking suck, and massacre round is skipped.   --DONE
 // TODO: lower gun on crouch. --DONE
-// TODO: adjust shooter projectile y
+// TODO: adjust shooter projectile y    --DONE
 // TODO: player 2 should have same gun as player 1.
+// If rifle, have shooting image always while firing. 
 
 let roundCounts = [6, 10]; 
 
@@ -412,8 +413,8 @@ let currentSpeed = 1.5;
 let snackQueue = [];
 let nadeQueue = [];
 
-// let state = "MENU";
-let state = "LOADING";
+let state = "MENU";
+// let state = "LOADING";
 
 let loadingTime = [2000, 3000][Math.floor(Math.random() * 2)];
 
