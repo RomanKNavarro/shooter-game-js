@@ -87,10 +87,9 @@ export default class Shooter {
         this.grenade_crouch.src = "src/assets/images/CLEARS/nade/sheep-nade-crouch.png";
 
         // FIX THIS CRAP:
-        // 
         this.pistol_stand = new Image();
-        this.pistol_stand.src = "src/assets/images/CLEARS/pistol/sheep-pistol-clear.png";
-
+        this.pistol_stand.src = "src/assets/images/CLEARS/pistol/sheep-pistol-clear-elevate.png";
+        
         // 43x36, diagnal
         // FIRE: 43×40
         this.pistol_stand_up = new Image();
@@ -172,7 +171,7 @@ export default class Shooter {
 
         // PISTOL FIRE IMAGES:  
         this.pistol_fire = new Image();
-        this.pistol_fire.src = "src/assets/images/fires/pistol/pistol-stand-fire.png";
+        this.pistol_fire.src = "src/assets/images/fires/pistol/sheep-pistol-clear-elevate-fire.png";
 
         this.pistol_up_fire = new Image();
         this.pistol_up_fire.src = "src/assets/images/fires/pistol/sheep-pistol-lookup3.png";
@@ -336,8 +335,6 @@ export default class Shooter {
                 "pistol": {
                     "idle": this.pistol_crouch, 
                     "fire": this.pistol_crouch_fire, 
-                    // "width": 50,
-                    // "height": 28  
                     "width": 50,
                     "height": 28,
                 },
@@ -475,6 +472,7 @@ export default class Shooter {
             case "straight":
             case "back":
                 if (this.weapon == "flammen") this.bulletY = 12;
+                else if (this.weapon == "ar") this.bulletY = 10;
                 else this.bulletY = 1;
                 break;
 

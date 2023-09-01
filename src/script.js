@@ -227,8 +227,11 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // TODO: if waited full 40 secs, round interventions fucking suck, and massacre round is skipped.   --DONE
 // TODO: lower gun on crouch. --DONE
 // TODO: adjust shooter projectile y    --DONE
-// TODO: player 2 should have same gun as player 1.
-// If rifle, have shooting image always while firing. 
+// TODO: player 2 should have same gun as player 1. UNDERSTOOD: can have the same "this.weapon", but ALSO needs
+// to have the same sprite.     
+// TODO: If rifle, have shooting image always while firing. 
+// TODO: fix rifle bullet y.    --DONE
+// TODO: back-down firing not showing.
 
 let roundCounts = [6, 10]; 
 
@@ -569,7 +572,8 @@ function greatReset() {
 
     shooter.secondStream = false;
     secondShooter = false;
-    shooter2.weapon = "pistol";
+    // shooter2.weapon = "pistol";
+    shooter2.weapon = shooter.weapon;
     shooter2.fireRate = 0;
     shooter2.specialAmmo = 0;
     shooter2.x = 0 - shooter.width;
@@ -1323,7 +1327,7 @@ function handleEnemy() {
             current.dead = true;
             // playSound(sfx.squeal);
             // UNCOMMENT:
-            // if (!current.isCivie) wallHealth.number--;
+            if (!current.isCivie) wallHealth.number--;
         }
 
         if (current.dead) {

@@ -121,7 +121,7 @@ export default class Projectile {
           } 
           break;
         case "ar":
-          this.size = 5;
+          this.size = 3;
           this.speed = 12;
           // this.ar.play();
           this.playSound(this.sfx.ar);
