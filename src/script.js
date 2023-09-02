@@ -231,7 +231,9 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // to have the same sprite.     
 // TODO: If rifle, have shooting image always while firing. 
 // TODO: fix rifle bullet y.    --DONE
-// TODO: back-down firing not showing.
+// TODO: back-down firing not showing on rifle. 
+// TODO: change bullet X on crouch for all weapons  --DONE
+// TODO: ASSHOLE WONT SHOOT UNLESS HE CROUCHES FIRST.
 
 let roundCounts = [6, 10]; 
 
@@ -261,6 +263,7 @@ const shooter = new Shooter(100, flora.y - 50);
 const shooter2 = new Shooter(0 - shooter.width, flora.y - 34);
 shooter2.isSecond = true;
 shooter2.weapon = shooter.weapon;
+shooter2.image = shooter.image;
 
 // const shooter = new Shooter(100, flora.y - 50);
 // BRILLIANT IDEA: inputHandler doesn't need to take in these args. Use the ones from shooter.
@@ -564,11 +567,16 @@ function greatReset() {
 
     winningScore = 30;
     currentRound = 1;
-    shooter.weapon = "pistol";
+    // shooter.weapon = "pistol";
+    // shooter.fireRate = 0;
+    // shooter.specialAmmo = 0;
+    
     // shooter.weapon = "flammen";
-    // shooter.weapon = "ar";
-    shooter.fireRate = 0;
-    shooter.specialAmmo = 0;
+    shooter.weapon = "ar";
+     shooter.fireRate = 10;
+    shooter.specialAmmo = 100;
+    
+
 
     shooter.secondStream = false;
     secondShooter = false;

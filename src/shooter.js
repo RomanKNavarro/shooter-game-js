@@ -19,6 +19,7 @@ export default class Shooter {
         this.y = y;
 
         this.bulletY;   // this to be added to the y. Standing: 5, Duck: 10
+        this.bulletX;
 
         this.init = false;
 
@@ -49,14 +50,14 @@ export default class Shooter {
         this.angle = "straight";
 
         // pistol, ar, and flamethrower
-        this.weapon = "pistol";
-        this.fireRate = 0;
-        this.specialAmmo = 0;
+        // this.weapon = "pistol";
+        // this.fireRate = 0;
+        // this.specialAmmo = 0;
 
-        // this.weapon = "ar";
+        this.weapon = "ar";
         // this.weapon = "flammen";
-        // this.fireRate = 10;
-        // this.specialAmmo = 100;
+        this.fireRate = 10;
+        this.specialAmmo = 100;
 
         this.throwBoom = false; 
         this.secondNade = false;
@@ -118,7 +119,7 @@ export default class Shooter {
         //rifle:
         // 44x40
         this.rifle_stand = new Image();
-        this.rifle_stand.src = "src/assets/images/CLEARS/rifle/sheep-rifle-clear.png";
+        this.rifle_stand.src = "src/assets/images/CLEARS/rifle/sheep-rifle-clear-elevate.png";
 
         // 43x38
         this.rifle_stand_up = new Image();
@@ -190,7 +191,7 @@ export default class Shooter {
 
         // RIFLE FIRE IMAGES:
         this.rifle_fire = new Image();
-        this.rifle_fire.src = "src/assets/images/fires/rifle/rifle-stand3.png";
+        this.rifle_fire.src = "src/assets/images/fires/rifle/rifle-stand3-elevate.png";
 
         this.rifle_up_fire = new Image();
         this.rifle_up_fire.src = "src/assets/images/fires/rifle/rifle-stand-up.png";
@@ -422,7 +423,6 @@ export default class Shooter {
         this.animationTime = 0.5
 
         this.distFromFloor;
-    
     }
     
     draw(context) {
@@ -445,7 +445,6 @@ export default class Shooter {
 
         // this.image = this.images[this.weapon][this.angle]["idle"];
         this.image = this.images[this.angle][this.weapon]["idle"];
-        
 
         if (this.frame < 100) {
             this.frame++;
@@ -460,7 +459,7 @@ export default class Shooter {
         context.textBaseline = "middle";
 
         // TEXT:
-        context.fillText(`${this.animation}, ${this.height}`, this.x + (this.width / 2), this.y - 100);
+        context.fillText(`${this.bulletX}, ${this.angle}, ${this.shooting}`, this.x + (this.width / 2), this.y - 100);
     }
 
     update(context) { 
@@ -472,15 +471,13 @@ export default class Shooter {
             case "straight":
             case "back":
                 if (this.weapon == "flammen") this.bulletY = 12;
-                else if (this.weapon == "ar") this.bulletY = 10;
+                else if (this.weapon == "ar") this.bulletY = 7;
                 else this.bulletY = 1;
-                break;
+                break; 
 
             // 43x36
             case "diagnal":
             case "diagnal-back":
-                // if (!this.animation) this.y = canvas.height - (canvas.height * (1/4)) - this.height;
-                // this.y = canvas.height - (canvas.height * (1/4)) - this.height;
                 if (this.weapon == "flammen") this.bulletY = 5;
                 else this.bulletY = 5;
                 break;
@@ -489,11 +486,13 @@ export default class Shooter {
             // FIRE: 44x39
             case "up":
                 // this.y = canvas.height - (canvas.height * (1/4)) - this.height;
+                this.bulletX = 19;
                 break;
 
             // 50x30
             // FIRE: 50×33
             case "down-up":
+                this.bulletX = 23;
                 // this.y = canvas.height - (canvas.height * (1/4)) - this.height;
                 break;
 s
@@ -505,6 +504,7 @@ s
                 // this.image = this.pistol_crouch;
                 // this.y = canvas.height - (canvas.height * (1/4)) - this.height;
                 this.bulletY = 11;
+                this.bulletX = 23;
                 break;
 
             // 49x30
@@ -539,10 +539,15 @@ s
             // context.drawImage(this.image, canvas.width * -50, this.y);
             context.drawImage(this.image, 0, 0);
 
-            if (this.shooting && this.animation) {
-                // context.drawImage(this.images[this.weapon][this.angle]["fire"], 0, 0);
+            // this.animation is necessary for pistol, not not ar:
+            if (this.shooting && this.weapon == "ar") {
                 context.drawImage(this.images[this.angle][this.weapon]["fire"], 0, 0);
-            } else context.drawImage(this.image, 0, 0);
+            }
+            // else if (this.shooting && this.animation && this.weapon == "pistol") {
+            //     // context.drawImage(this.images[this.weapon][this.angle]["fire"], 0, 0);
+            //     context.drawImage(this.images[this.angle][this.weapon]["fire"], 0, 0);
+            // } 
+            else context.drawImage(this.image, 0, 0);
             
             context.restore();
         }
@@ -571,7 +576,7 @@ s
             // 232 down
             
             if (this.timer % this.fireRate === 0  || this.timer == 1) {
-                this.projectiles.push(new Projectile(this.x + 19, this.y + this.bulletY, this.angle, this.weapon, this.delete, this.weapon));
+                this.projectiles.push(new Projectile(this.x + this.bulletX, this.y + this.bulletY, this.angle, this.weapon, this.delete, this.weapon));
                 if (this.secondStream == true) {
                     this.projectiles.push(new Projectile(this.secondX, this.y + 10, this.angle, this.weapon, this.delete, this.weapon));
                 }

@@ -121,7 +121,7 @@ export default class Projectile {
           } 
           break;
         case "ar":
-          this.size = 3;
+          this.size = 2;
           this.speed = 12;
           // this.ar.play();
           this.playSound(this.sfx.ar);
@@ -191,7 +191,6 @@ export default class Projectile {
           break;  
       }
     }
-    
     draw(context) {
       if (this.weapon == "flammen") {
         context.strokeStyle = "green";
@@ -199,7 +198,18 @@ export default class Projectile {
         context.lineWidth = 3;
         context.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         context.stroke();
-      } else {
+      } 
+      else if (this.weapon == "ar") {
+        context.save(); 
+        context.fillStyle = "black";
+        context.beginPath();
+        // ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle)
+        context.ellipse(this.x, this.y, this.size + 1, this.size + 1, 0, Math.PI / 4, Math.PI * 2);
+        // context.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        context.fill();
+        context.restore();
+      } 
+      else {
         context.fillStyle = "black";
         context.beginPath();
         context.arc(this.x, this.y, this.size, 0, Math.PI * 2);
