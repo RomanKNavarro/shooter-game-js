@@ -229,11 +229,12 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // TODO: adjust shooter projectile y    --DONE
 // TODO: player 2 should have same gun as player 1. UNDERSTOOD: can have the same "this.weapon", but ALSO needs
 // to have the same sprite.     
-// TODO: If rifle, have shooting image always while firing. 
+// TODO: If rifle, have shooting image always while firing.     --DONE 
 // TODO: fix rifle bullet y.    --DONE
-// TODO: back-down firing not showing on rifle. 
+// TODO: back-down firing not showing on rifle.     --DONE
 // TODO: change bullet X on crouch for all weapons  --DONE
-// TODO: ASSHOLE WONT SHOOT UNLESS HE CROUCHES FIRST.
+// TODO: ASSHOLE WONT SHOOT UNLESS HE CROUCHES FIRST.   --DONE
+// no fire on back-shots    --DONE
 
 let roundCounts = [6, 10]; 
 
@@ -567,17 +568,16 @@ function greatReset() {
 
     winningScore = 30;
     currentRound = 1;
+
     // shooter.weapon = "pistol";
     // shooter.fireRate = 0;
     // shooter.specialAmmo = 0;
     
-    // shooter.weapon = "flammen";
-    shooter.weapon = "ar";
-     shooter.fireRate = 10;
+    shooter.weapon = "flammen";
+    // shooter.weapon = "ar";
+     shooter.fireRate = 5;
     shooter.specialAmmo = 100;
     
-
-
     shooter.secondStream = false;
     secondShooter = false;
     // shooter2.weapon = "pistol";
@@ -1506,7 +1506,7 @@ function animate() {
     // currentRound changes only after the "next round incoming" text
     // if (shooter.projectiles) console.log(shooter.projectiles[0]);
 
-    // console.log(shooter.width, shooter.height);
+    // console.log(shooter.projectiles);
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);

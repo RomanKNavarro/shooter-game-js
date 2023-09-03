@@ -19,7 +19,7 @@ export default class Shooter {
         this.y = y;
 
         this.bulletY;   // this to be added to the y. Standing: 5, Duck: 10
-        this.bulletX;
+        this.bulletX = 19;
 
         this.init = false;
 
@@ -54,8 +54,8 @@ export default class Shooter {
         // this.fireRate = 0;
         // this.specialAmmo = 0;
 
-        this.weapon = "ar";
-        // this.weapon = "flammen";
+        this.weapon = "flammen";
+        // this.weapon = "ar";
         this.fireRate = 10;
         this.specialAmmo = 100;
 
@@ -341,7 +341,7 @@ export default class Shooter {
                 },
                 "ar": {
                     "idle": this.rifle_crouch, 
-                    "fire": this.rifle_crouch,
+                    "fire": this.rifle_crouch_fire,
                     // "width": 50,
                     // "height": 31
                     "width": 50,
@@ -471,7 +471,10 @@ export default class Shooter {
             case "straight":
             case "back":
                 if (this.weapon == "flammen") this.bulletY = 12;
-                else if (this.weapon == "ar") this.bulletY = 7;
+                else if (this.weapon == "ar") {
+                    this.bulletX = this.width - 15;
+                    this.bulletY = 7;
+                }
                 else this.bulletY = 1;
                 break; 
 
@@ -479,6 +482,10 @@ export default class Shooter {
             case "diagnal":
             case "diagnal-back":
                 if (this.weapon == "flammen") this.bulletY = 5;
+                else if (this.weapon == "ar") {
+                    this.bulletY = 10;
+                    this.bulletX = 19;
+                }
                 else this.bulletY = 5;
                 break;
 
@@ -540,7 +547,8 @@ s
             context.drawImage(this.image, 0, 0);
 
             // this.animation is necessary for pistol, not not ar:
-            if (this.shooting && this.weapon == "ar") {
+            // if (this.shooting && this.weapon == "ar") {
+            if (this.shooting) {
                 context.drawImage(this.images[this.angle][this.weapon]["fire"], 0, 0);
             }
             // else if (this.shooting && this.animation && this.weapon == "pistol") {
@@ -552,8 +560,12 @@ s
             context.restore();
         }
 
+        // if (this.shooting) {
+
+        // }
+
         // UNCOMMENT AND REPLACE: 
-        if (this.shooting) {
+        if (this.shooting && this.weapon == "pistol") {
             setTimeout(() => {
                 this.animation = false;
             }, 50);
@@ -579,7 +591,7 @@ s
                 this.projectiles.push(new Projectile(this.x + this.bulletX, this.y + this.bulletY, this.angle, this.weapon, this.delete, this.weapon));
                 if (this.secondStream == true) {
                     this.projectiles.push(new Projectile(this.secondX, this.y + 10, this.angle, this.weapon, this.delete, this.weapon));
-                }
+                }   
                 
                 if (this.specialAmmo > 0) {
                     this.specialAmmo--;

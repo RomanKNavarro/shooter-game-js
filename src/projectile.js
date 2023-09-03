@@ -173,7 +173,7 @@ export default class Projectile {
           break;
         
         case "diagnal-back":
-          this.x -= this.speed;
+          this.x -= this.speed + 1;
           this.y -= this.speed * 2  
           break;
 
