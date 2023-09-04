@@ -3,11 +3,14 @@ import Projectile from "./projectile.js";
 // OVERHAUL SPEED FUNCTIONALITY:
 export default class Enemy {
     // what's the speed parameter for again? to increase speed globally as rounds progress :)
-    constructor(x, speed, round) {
+    // TO PASS IN NEW FRAMA ARGUMENT GLOBALLY:
+    constructor(x, speed, round, frama) {
       // cxt
       // FASTER SPEED ON CRAWLIES
-      this.width = 50;
-      this.height = 50;
+      this.width = 42;
+      this.height = 36;
+
+      this.frama = frama;
 
       this.speed = speed;
 
@@ -30,7 +33,6 @@ export default class Enemy {
       this.duckable = false;
 
       // ground, crawl, air, civie
-      // this.type = "ground";
       this.health = 2;
 
       // ENEMY GUN:
@@ -45,7 +47,6 @@ export default class Enemy {
       // POSITION CRAP:
       this.inPosition = false;
       this.position = 0;
-
       this.dead = false;
 
       this.beaming = false;
@@ -56,17 +57,10 @@ export default class Enemy {
       // ODDS CRAP:
       // base enemies:
       // 6/10 chance to spawn ground, 4/10 ch. to spawn air, 2/10 to spawn spec (dog, bomber, sheep)
-      
 
       // initially, bombers don't spawn until round
 
       // this.typeNum = Math.floor(Math.random() * 10);
-
-      // this.groundOdds = 10; // 6  
-      // this.airOdds = 4;     // 3
-      // this.crawlOdds = 1;   // 2
-      // this.bomberOdds = 1;  // 2
-      // this.sheepOdds = 2;
 
       this.typeNum = Math.floor(Math.random() * 20);
       this.groundOdds = 20; // 8
@@ -83,8 +77,6 @@ export default class Enemy {
       // this.type;
       // this.type = "ground";
       this.type;
-
-      // this.weapon = ["flammen", "grenade"][Math.floor(Math.random() * 2)];
 
       /* EVENTS:
         round 1: only ground enemies
@@ -110,9 +102,31 @@ export default class Enemy {
         54
         70
       */
+
+      // SPRITE CRAP:
+      this.pigFramework = new Image();
+      this.pigFramework.src = "src/assets/images/assault-pig/pig-walk-clear/pigFrames.png";
+
+      // first 3 images in sprite are 42x35, second 3 are 42x36
+      this.frameX = 0;
+      this.frameY = 0;
+      this.spriteWidth = 42;
+      this.spriteHeight = 35;
+      this.minFrame = 0;
+      this.maxFrame = 5;
+      this.pigFrame = 50;   // to increase as rounds progress.
+      this.image = this.pigFramework;
     }
 
     update() {
+      if (this.frama % this.pigFrame === 0 && this.pigFrame > 0) {
+        if (this.frameX < this.maxFrame)
+          //&& this.framework !== blackFramework)
+          this.frameX++;
+        else this.frameX = this.minFrame;
+      }
+
+
       // HEIRARCHY CRAP:
       // if (this.typeNum <= this.bossOdds && this.round == 9) {
       // 0-2
@@ -178,7 +192,7 @@ export default class Enemy {
           this.fireRate = 15;
           this.width = 60;
           this.height = 60;
-          break;
+          break;  
       }
 
       // THIS WORKS
@@ -208,20 +222,25 @@ export default class Enemy {
     draw(context) {
       context.beginPath();
       context.fillStyle = this.color;
-      // context.fillRect(this.x, this.y, this.width, this.height);
 
-      // if (!this.duck) {
-      //     context.fillRect(this.x, this.y, this.width, this.height);
+      // DO NOT FUCKING REMOVE. FOR DUCKING ENEMY PURPOSES:
+      // if (this.duck) {
+      //   context.fillRect(this.x, this.y + this.height / 2, this.width, this.height / 2);
       // } else {
-      //     context.fillRect(this.x, this.y + this.height / 2, this.width, this.height / 2);
+      //   context.fillRect(this.x, this.y, this.width, this.height);
       // }
 
-      // if (this.duck && this.type == "sheep") {
-      if (this.duck) {
-        context.fillRect(this.x, this.y + this.height / 2, this.width, this.height / 2);
-      } else {
-        context.fillRect(this.x, this.y, this.width, this.height);
-      }
+      context.drawImage(
+        this.image,
+        this.frameX * this.spriteWidth,
+        0,
+        this.spriteWidth,
+        this.spriteHeight,
+        this.x,
+        this.y,
+        this.width,
+        this.height
+      );
 
       context.font = "20px serif";
       context.fillStyle = "black";

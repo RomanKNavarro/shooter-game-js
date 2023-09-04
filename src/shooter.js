@@ -166,10 +166,6 @@ export default class Shooter {
         this.flammen_crouch_top = new Image();
         this.flammen_crouch_top.src = "src/assets/images/CLEARS/flammen/flammen-crouch-top.png";
 
-        // SPRITESHEET CRAP:
-        this.frame = 0;
-        this.frameRate = 10; 
-
         // PISTOL FIRE IMAGES:  
         this.pistol_fire = new Image();
         this.pistol_fire.src = "src/assets/images/fires/pistol/sheep-pistol-clear-elevate-fire.png";
@@ -446,13 +442,7 @@ export default class Shooter {
         // this.image = this.images[this.weapon][this.angle]["idle"];
         this.image = this.images[this.angle][this.weapon]["idle"];
 
-        if (this.frame < 100) {
-            this.frame++;
-        }
-        else this.frame = 0;
-
         // REVELATION: no need to call "this.images" over and over again. I can just do it once.
-
         context.font = "20px serif";
         context.fillStyle = "black";
         context.textAlign = "center";
