@@ -235,6 +235,7 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // TODO: change bullet X on crouch for all weapons  --DONE
 // TODO: ASSHOLE WONT SHOOT UNLESS HE CROUCHES FIRST.   --DONE
 // no fire on back-shots    --DONE
+// TODO: make nades not connect to other shit.
 
 let roundCounts = [6, 10]; 
 
