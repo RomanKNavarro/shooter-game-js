@@ -236,6 +236,12 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // TODO: ASSHOLE WONT SHOOT UNLESS HE CROUCHES FIRST.   --DONE
 // no fire on back-shots    --DONE
 // TODO: make nades not connect to other shit.
+// TODO: fix these blury ass images.    --DONE
+// TODO: civies aint spawning again.
+// change plane x (little farther from player)
+// TODO: fix enemy bullet size and y.       --DONE
+// TODO: enemy fire image.
+// TODO: only GROUND enemies should have image
 
 let roundCounts = [6, 10]; 
 
@@ -391,8 +397,7 @@ let frame = 0;
 // let randomFrames = [50, 80, 110, 150];
 let randomFrames = [10, 30, 50, 80, 110,];
 
-let bulletLimitX;
-let bulletLimitY = shooter.y;
+let enemySpeed = 15;
 let enemyQueue = [];
 
 let tutorial = true;
@@ -957,7 +962,9 @@ function handleState() {
 // increment stuff to make next round slightly harder:
 function cremate() {
     // really hope this fixes civy glitch
+
     if (enemiesLeft <= 0 || enemiesLeft > 10) {
+        enemySpeed--;
         currentRound++;
         currentSpeed += 0.4;
         roundCounts.splice(0, 1);
@@ -966,13 +973,6 @@ function cremate() {
         frame = 0;
         resetBaddies();
     }
-    // currentRound++;
-    // currentSpeed += 0.4;
-    // roundCounts.splice(0, 1);
-    // enemyCount = enemiesLeft = roundCounts[0];
-    // winningScore += enemyCount * 10;
-    // frame = 0;
-    // resetBaddies();
     
     // if (state != "BOSS" && state != "QUIET")
 }
@@ -1100,7 +1100,7 @@ function handleEnemyProjectiles(orc) {
             i--;
 
             // UNCOMMENT THIS:
-            if ((!shooter.duck) || (orc.type == "air" || orc.type == "bomber")) playerHealth.number--;
+            // if ((!shooter.duck) || (orc.type == "air" || orc.type == "bomber")) playerHealth.number--;
         }
     }
 }
@@ -1336,7 +1336,7 @@ function handleEnemy() {
             current.dead = true;
             // playSound(sfx.squeal);
             // UNCOMMENT:
-            if (!current.isCivie) wallHealth.number--;
+            // if (!current.isCivie) wallHealth.number--;
         }
 
         if (current.dead) {
@@ -1389,12 +1389,12 @@ function pushEnemy() {
         if (enemyCount > 0) {   
             if (!specialRound) {
                 // DO NOT REVERT. NEED TO MAKE WAY FOR DIFFERENT SPEEDS:
-                enemyQueue.push(new Enemy(canvas.width, currentSpeed, currentRound, frame));
+                enemyQueue.push(new Enemy(canvas.width, currentSpeed, currentRound, enemySpeed));
                 enemyCount--;  
 
                 // SPAWN CIVIES IN LATTER PART OF FINAL ROUND:
                 if (finalRound && enemyCount % 3 == 0 && (enemyCount < 20 && enemyCount > 10)) {
-                    enemyQueue.push(new Enemy(-50, -currentSpeed, currentRound, frame));
+                    enemyQueue.push(new Enemy(-50, -currentSpeed, currentRound, enemySpeed));
                     enemyCount--; 
                 }
             }  
@@ -1404,7 +1404,7 @@ function pushEnemy() {
                 // REMEMBER: enemyCount only refers to num. of enemies to push to array :)
                 // if (enemyCount > 0) {
                 if (!endSpecRound) {
-                    enemyQueue.push(new Enemy(-50, -currentSpeed, currentRound, frame));
+                    enemyQueue.push(new Enemy(-50, -currentSpeed, currentRound, enemySpeed));
                     enemyCount--; 
                 }
             }
@@ -1498,13 +1498,14 @@ function animate() {
     handleProjectile(enemyQueue);
     handleNade(enemyQueue);
 
-    if (state == "RUNNING" && frame <= 100) frame++;
-    else frame = 0;
+    // if (state == "RUNNING" && frame <= 100) frame++;
+    // else frame = 0;
+    frame++;
 
     // currentRound changes only after the "next round incoming" text
     // if (shooter.projectiles) console.log(shooter.projectiles[0]);
 
-    // console.log(shooter.projectiles);
+    // console.log(frame);
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);

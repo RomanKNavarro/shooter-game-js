@@ -3,14 +3,10 @@ import Projectile from "./projectile.js";
 // OVERHAUL SPEED FUNCTIONALITY:
 export default class Enemy {
     // what's the speed parameter for again? to increase speed globally as rounds progress :)
-    // TO PASS IN NEW FRAMA ARGUMENT GLOBALLY:
-    constructor(x, speed, round, frama) {
+    // TO PASS IN NEW FRAMA ARGUMENT GLOBALLY: -CANT DO THAT, IT DOESN'T UPDATE.
+    constructor(x, speed, round, frameSpeed) {
       // cxt
-      // FASTER SPEED ON CRAWLIES
-      this.width = 42;
-      this.height = 36;
-
-      this.frama = frama;
+      this.frama = 0;
 
       this.speed = speed;
 
@@ -107,25 +103,34 @@ export default class Enemy {
       this.pigFramework = new Image();
       this.pigFramework.src = "src/assets/images/assault-pig/pig-walk-clear/pigFrames.png";
 
+      this.pigStatic = new Image();
+      this.pigStatic.src = "src/assets/images/assault-pig/pig-stand-clear.png";
+
       // first 3 images in sprite are 42x35, second 3 are 42x36
+      this.width = 42;
+      this.height = 35;
+
       this.frameX = 0;
       this.frameY = 0;
       this.spriteWidth = 42;
       this.spriteHeight = 35;
       this.minFrame = 0;
       this.maxFrame = 5;
-      this.pigFrame = 50;   // to increase as rounds progress.
-      this.image = this.pigFramework;
+      this.pigFrame = frameSpeed;   // to increase as rounds progress.
+      // this.image = this.pigFramework;
+      this.image;
     }
 
     update() {
+      if (this.frama <= 100) this.frama++;
+      else this.frama = 0;
+
       if (this.frama % this.pigFrame === 0 && this.pigFrame > 0) {
         if (this.frameX < this.maxFrame)
           //&& this.framework !== blackFramework)
           this.frameX++;
         else this.frameX = this.minFrame;
       }
-
 
       // HEIRARCHY CRAP:
       // if (this.typeNum <= this.bossOdds && this.round == 9) {
@@ -134,17 +139,11 @@ export default class Enemy {
         if (this.round < 6) this.type = "ground";
         else if (this.round >= 6 && this.round < 10) this.type = "bomber";
         else this.type = this.bossType;   // <- if round 10
-
-        // this.type = "bomber";
-        // this.type = "sheep";
       }
-      // else if (this.typeNum <= this.crawlOdds) {
       // 3-6
       else if (this.typeNum <= this.crawlOdds && (this.round >= 3)) {
         this.type = "crawl";
       }
-      // if (this.typeNum <= this.airOdds && (this.round >= 2 && this.round != 3)) {
-      // if (this.typeNum <= this.airOdds) {
       // 6-12
       else if (this.typeNum <= this.airOdds && (this.round >= 2 && this.round != 3)) {
         this.type = "air";
@@ -204,7 +203,8 @@ export default class Enemy {
         this.timer++;
 
         if (this.timer >= this.openFire && this.timer % this.fireRate === 0) {
-          this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, this.sound, this.dead, "ar")); 
+          // this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 7, this.angle, this.sound, this.dead, "ar")); 
+          this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 5, this.angle, this.sound, this.dead, "shotty"));
           if (this.type == "bomber") this.beamActive = true;
         } 
       }
@@ -220,8 +220,7 @@ export default class Enemy {
       }
     }
     draw(context) {
-      context.beginPath();
-      context.fillStyle = this.color;
+      context.imageSmoothingEnabled = false;
 
       // DO NOT FUCKING REMOVE. FOR DUCKING ENEMY PURPOSES:
       // if (this.duck) {
@@ -230,17 +229,23 @@ export default class Enemy {
       //   context.fillRect(this.x, this.y, this.width, this.height);
       // }
 
-      context.drawImage(
-        this.image,
-        this.frameX * this.spriteWidth,
-        0,
-        this.spriteWidth,
-        this.spriteHeight,
-        this.x,
-        this.y,
-        this.width,
-        this.height
-      );
+      if (this.inPosition == true) {
+        context.drawImage(this.pigStatic, this.x, this.y);
+      }
+        else {
+          context.drawImage(
+            // this.image,
+            this.pigFramework,
+            this.frameX * this.spriteWidth,
+            0,
+            this.spriteWidth,
+            this.spriteHeight,
+            this.x,
+            this.y,
+            this.width,
+            this.height
+          );
+        }
 
       context.font = "20px serif";
       context.fillStyle = "black";
@@ -252,7 +257,7 @@ export default class Enemy {
       // in last round, crawlies and bombers have equal chance of spawning:
       // else if (this.typeNum <= this.crawlOdds && this.round >= 9) this.type = ["crawl", "bomber"][ Math.floor(Math.random() * 2)];
 
-      context.fillText(`${this.angle}`, this.x + (this.width / 2), this.y + (this.height / 2));
+      context.fillText(`${this.pigFrame}`, this.x + (this.width / 2), this.y - 100);
     } // projectiles
 
     renderBeam(context) {

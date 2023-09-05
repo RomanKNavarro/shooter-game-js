@@ -112,7 +112,7 @@ export default class Projectile {
           this.playSound(this.sfx.pistol);
           break;
         case "shotty":
-          this.size = 5;
+          this.size = 3;
           if (!this.dead) {
             // this.shotty.play();
             this.playSound(this.sfx.shotty);
