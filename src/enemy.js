@@ -7,11 +7,13 @@ export default class Enemy {
     constructor(x, speed, round, frameSpeed) {
       // cxt
       this.frama = 0;
-
       this.speed = speed;
 
       this.x = x;
       this.y;
+
+      this.bulletX;
+      this.bulletY;
 
       this.round = round;
 
@@ -99,12 +101,23 @@ export default class Enemy {
         70
       */
 
-      // SPRITE CRAP:
-      this.pigFramework = new Image();
-      this.pigFramework.src = "src/assets/images/assault-pig/pig-walk-clear/pigFrames.png";
+      this.static = new Image;
+      this.framework = new Image;
 
-      this.pigStatic = new Image();
-      this.pigStatic.src = "src/assets/images/assault-pig/pig-stand-clear.png";
+      // ground troop
+      // this.assFW = new Image();
+      // this.assFW.src = "src/assets/images/assault-pig/pig-walk-clear/pigFrames.png";
+
+      // this.assStatic = new Image();
+      // this.assStatic.src = "src/assets/images/assault-pig/pig-stand-clear.png";
+
+      // // plane
+      // this.planeStat = new Image();
+      // this.planeStat.src = "src/assets/images/pig-plane-clear.png";
+
+      // SPRITE CRAP:
+
+      // this.pigFramework.src = "src/assets/images/assault-pig/pig-walk-clear/pigFrames.png";
 
       // first 3 images in sprite are 42x35, second 3 are 42x36
       this.width = 42;
@@ -117,8 +130,8 @@ export default class Enemy {
       this.minFrame = 0;
       this.maxFrame = 5;
       this.pigFrame = frameSpeed;   // to increase as rounds progress.
+      this.statica = false          // determine if enemy is static throughout (like plane)
       // this.image = this.pigFramework;
-      this.image;
     }
 
     update() {
@@ -162,19 +175,46 @@ export default class Enemy {
           else this.speed = 4;
           break;
 
+          // this.static;
+          // this.framework;
+    
+          // // ground troop
+          // this.assFW = new Image();
+          // this.assFW.src = "src/assets/images/assault-pig/pig-walk-clear/pigFrames.png";
+    
+          // this.assStatic = new Image();
+          // this.assStatic.src = "src/assets/images/assault-pig/pig-stand-clear.png";
+    
+          // // plane
+          // this.planeStat = new Image();
+          // this.planeStat.src = "src/assets/images/pig-plane-clear.png";
+
         case "ground":
+
+          // this.x + this.width - 20, this.y + 5
+          this.bulletX = this.width - 20;
+          this.bulletY = 5; 
           this.sound = "shotty";
+          this.framework.src = "src/assets/images/assault-pig/pig-walk-clear/pigFrames.png";
+          this.static.src = "src/assets/images/assault-pig/pig-stand-clear.png";
           break;
 
         case "air":
+          this.bulletX = 26;
+          this.bulletY = this.height - 23; 
+          this.statica = true;
           this.sound = "shotty";
-          // this.openFire = 150;
+          this.static.src = "src/assets/images/pig-plane-clear.png";
+          // framework.src not given shit here.
+
           this.fireRate = 150;
           this.health = 1;
+          this.width = 70;
+          this.height = 70;
 
           // THIS IS IN REVERSE LOOOL BUT THAT'S THE WAY IT WORKS (HTMS)
-          if (this.isCivie) this.speed = -3.5;
-          else this.speed = 3.5;
+          if (this.isCivie) this.speed = -3;
+          else this.speed = 3;
           break;
         
         // OPENFIRE BY DEFAULT IS 
@@ -202,9 +242,9 @@ export default class Enemy {
         this.speed = 0;
         this.timer++;
 
-        if (this.timer >= this.openFire && this.timer % this.fireRate === 0) {
-          // this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 7, this.angle, this.sound, this.dead, "ar")); 
-          this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 5, this.angle, this.sound, this.dead, "shotty"));
+        if (this.timer >= this.openFire && this.timer % this.fireRate === 0) { 
+          // this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 5, this.angle, this.sound, this.dead, "shotty"));
+          this.projectiles.push(new Projectile(this.x + this.bulletX, this.y + this.bulletY, this.angle, this.sound, this.dead, "shotty"));
           if (this.type == "bomber") this.beamActive = true;
         } 
       }
@@ -229,13 +269,14 @@ export default class Enemy {
       //   context.fillRect(this.x, this.y, this.width, this.height);
       // }
 
-      if (this.inPosition == true) {
-        context.drawImage(this.pigStatic, this.x, this.y);
-      }
-        else {
+      if (this.statica == false) {
+        if (this.inPosition == true) {
+          context.drawImage(this.static, this.x, this.y);
+        }
+        else if (!this.statica) {
           context.drawImage(
             // this.image,
-            this.pigFramework,
+            this.framework,
             this.frameX * this.spriteWidth,
             0,
             this.spriteWidth,
@@ -246,6 +287,7 @@ export default class Enemy {
             this.height
           );
         }
+      } else context.drawImage(this.static, this.x, this.y);
 
       context.font = "20px serif";
       context.fillStyle = "black";

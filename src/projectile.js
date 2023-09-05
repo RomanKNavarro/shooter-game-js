@@ -179,10 +179,10 @@ export default class Projectile {
 
         // THIS IS FOR AIR ENEMIES:
         case "down-diagnal":
-          // this.x -= this.speed;
+          // this.x -= this.speed / 1.3;
           // this.y += this.speed / 2;
           this.x -= this.speed / 1.3;
-          this.y += this.speed / 2;
+          this.y += this.speed / 3;
           break;
 
         // FOR BOMBERS:
@@ -209,6 +209,11 @@ export default class Projectile {
         context.fill();
         context.restore();
       } 
+      else if (this.direction == "down-diagnal") {
+        context.beginPath();
+        context.ellipse(this.x, this.y, 5, 15, Math.PI / 3, 0, 2 * Math.PI);
+        context.stroke();
+      }
       else {
         context.fillStyle = "black";
         context.beginPath();
