@@ -4,11 +4,6 @@ export default class Grenade {
     constructor(x, entity, canvas) {
         this.canvas = canvas;
         this.x = x;
-        // this.x = canvas.width / 2;
-        // this.x1 = canvas.width / 2;
-        // this.x2 = canvas.width / 1.2;
-        // this.defaultX = this.x1;
-        // this.y = -20; 
 
         this.ready = false;
         this.y = this.canvas.height / 2; 
@@ -26,6 +21,20 @@ export default class Grenade {
         this.bloopPlayed = false;
         this.bloop = new Audio();
         this.bloop.src = "src/assets/sounds/q009/glauncher.ogg";
+
+        this.image = new Image();
+        this.image.src = "src/assets/images/sprites/exp2FirstFramesPixel.png";
+
+        // EXPLOSION ANIMATION CRAP:
+        this.frama = 0;
+        this.boomFrameX = 0;
+        this.boomMaxFrame = 3;
+        this.boomSpriteHeight = 64;
+        this.boomSpriteWidth = 64;
+        // this.boomHeight = this.boomSpriteHeight * 4;
+        // this.boomWidth = this.boomSpriteWidth * 2;
+        this.boomHeight = this.boomSpriteHeight;
+        this.boomWidth = this.boomSpriteWidth;
     }
 
     // draws the explosion
@@ -33,6 +42,31 @@ export default class Grenade {
         context.arc(this.x, this.y, this.size, 0, Math.PI * 2, true);
         // cxt.rect(this.x, this.y, this.size, this.size);
         context.stroke();
+
+        context.drawImage(
+            this.image,
+            this.boomFrameX * this.boomSpriteWidth,
+            0,
+            this.boomSpriteWidth,
+            this.boomSpriteHeight,
+            this.x,
+            this.y,
+            this.boomWidth * 4,
+            this.boomHeight * 4
+        );
+    }
+
+    update() {
+        if (this.frama <= 100) this.frama++;
+        else this.frama = 0;
+
+        if (this.frama % 15 === 0) {
+            if (this.boomFrameX < this.boomMaxFrame) {
+            this.boomFrameX++;
+            this.boomAnimation += 1;
+            } else this.boomFrameX = this.minFrame;
+        }
+        // only updates the frames you shithead 
     }
 
     // draws the nade itself

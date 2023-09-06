@@ -238,10 +238,11 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // TODO: make nades not connect to other shit.
 // TODO: fix these blury ass images.    --DONE
 // TODO: civies aint spawning again.
-// change plane x (little farther from player)
+// change plane x (little farther from player)  --DONE
 // TODO: fix enemy bullet size and y.       --DONE
-// TODO: enemy fire image.
-// TODO: only GROUND enemies should have image
+// TODO: enemy fire image.                  --DONE
+// TODO: only GROUND enemies should have image  --DONE 
+// TODO: cooler grenade animation
 
 let roundCounts = [6, 10]; 
 
@@ -1051,6 +1052,7 @@ function handleNade(arr) {
         // current.ready = true;
         if (current.ready) {
             current.draw(cxt);
+            current.update();
 
             current.sound.play();
             // playSound(sfx.boom);
@@ -1084,10 +1086,14 @@ function handleNade(arr) {
 };
 
 function handleEnemyProjectiles(orc) {
+    // this NEVER exceeds more than one object.
     let projes = orc.projectiles;
 
     for (let i = 0; i < projes.length; i++) {
         let current = projes[i];
+
+        if (current.x > orc.x - 50) orc.animation = true;
+        else orc.animation = false;
         
         // what's bulletLimit? either the player or 0.
         if (current.x > orc.bulletLimit) {

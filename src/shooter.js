@@ -536,15 +536,10 @@ s
             // context.drawImage(this.image, canvas.width * -50, this.y);
             context.drawImage(this.image, 0, 0);
 
-            // this.animation is necessary for pistol, not not ar:
-            // if (this.shooting && this.weapon == "ar") {
+            // this.animation is necessary for pistol, not ar:
             if (this.shooting) {
                 context.drawImage(this.images[this.angle][this.weapon]["fire"], 0, 0);
             }
-            // else if (this.shooting && this.animation && this.weapon == "pistol") {
-            //     // context.drawImage(this.images[this.weapon][this.angle]["fire"], 0, 0);
-            //     context.drawImage(this.images[this.angle][this.weapon]["fire"], 0, 0);
-            // } 
             else context.drawImage(this.image, 0, 0);
             
             context.restore();

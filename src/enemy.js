@@ -131,7 +131,7 @@ export default class Enemy {
       this.maxFrame = 5;
       this.pigFrame = frameSpeed;   // to increase as rounds progress.
       this.statica = false          // determine if enemy is static throughout (like plane)
-      // this.image = this.pigFramework;
+      this.animation = false;
     }
 
     update() {
@@ -175,20 +175,6 @@ export default class Enemy {
           else this.speed = 4;
           break;
 
-          // this.static;
-          // this.framework;
-    
-          // // ground troop
-          // this.assFW = new Image();
-          // this.assFW.src = "src/assets/images/assault-pig/pig-walk-clear/pigFrames.png";
-    
-          // this.assStatic = new Image();
-          // this.assStatic.src = "src/assets/images/assault-pig/pig-stand-clear.png";
-    
-          // // plane
-          // this.planeStat = new Image();
-          // this.planeStat.src = "src/assets/images/pig-plane-clear.png";
-
         case "ground":
 
           // this.x + this.width - 20, this.y + 5
@@ -196,7 +182,9 @@ export default class Enemy {
           this.bulletY = 5; 
           this.sound = "shotty";
           this.framework.src = "src/assets/images/assault-pig/pig-walk-clear/pigFrames.png";
-          this.static.src = "src/assets/images/assault-pig/pig-stand-clear.png";
+
+          if (!this.animation) this.static.src = "src/assets/images/assault-pig/pig-stand-clear.png";
+          else this.static.src = "src/assets/images/assault-pig/pig-stand-fire.png";
           break;
 
         case "air":
@@ -275,7 +263,6 @@ export default class Enemy {
         }
         else if (!this.statica) {
           context.drawImage(
-            // this.image,
             this.framework,
             this.frameX * this.spriteWidth,
             0,
@@ -299,7 +286,7 @@ export default class Enemy {
       // in last round, crawlies and bombers have equal chance of spawning:
       // else if (this.typeNum <= this.crawlOdds && this.round >= 9) this.type = ["crawl", "bomber"][ Math.floor(Math.random() * 2)];
 
-      context.fillText(`${this.pigFrame}`, this.x + (this.width / 2), this.y - 100);
+      context.fillText(`${this.animation}`, this.x + (this.width / 2), this.y - 100);
     } // projectiles
 
     renderBeam(context) {
