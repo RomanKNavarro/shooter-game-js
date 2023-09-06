@@ -76,7 +76,7 @@ export default class Pickup {
 
     // if not current respective weapon round, should default to aid pickup
     update() {
-        this.y += 10;
+        this.y += 5;
 
         // NEEDS LOADS OF WORK DONE:
         // weaponOdds encompasses flammen, ar, and grenade

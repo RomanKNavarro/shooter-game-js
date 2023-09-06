@@ -1353,7 +1353,7 @@ function handleEnemy() {
         }
 
         // FIX THIS CRAP ASAP:  --DONE
-        // FIX THIS STUPID GLITCH:
+        // FIX THIS STUPID GLITCH   --DONEW
         for (let i = 1; i <= Object.keys(baddiePositions).length; i++) {   
             // this is the distance applicable to enemy (50, 150, 250, 180 (aerial))
             let trueDistance = shooter.x + shooter.width + baddiePositions[i.toString()]["distance"];
