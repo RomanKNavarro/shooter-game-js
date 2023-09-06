@@ -242,7 +242,8 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // TODO: fix enemy bullet size and y.       --DONE
 // TODO: enemy fire image.                  --DONE
 // TODO: only GROUND enemies should have image  --DONE 
-// TODO: cooler grenade animation
+// TODO: cooler grenade animation   --DONE
+// TODO: pickup icons
 
 let roundCounts = [6, 10]; 
 
@@ -1261,7 +1262,7 @@ function handleSnack() {
         snack.draw(cxt);
 
         // drop until it touches the floor
-        if (snack.y + snack.height < flora.y - 5) {
+        if (snack.y + snack.height < flora.y) {
             snack.update();
         }
     }

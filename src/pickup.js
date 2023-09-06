@@ -1,7 +1,7 @@
 export default class Pickup {
     constructor(x, y, round) {
 
-        this.width = this.height = 20;
+        this.width = this.height = 25;
 
         this.x = x;
         this.y = y;
