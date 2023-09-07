@@ -575,7 +575,7 @@ s
             if (this.timer % this.fireRate === 0  || this.timer == 1) {
                 this.projectiles.push(new Projectile(this.x + this.bulletX, this.y + this.bulletY, this.angle, this.weapon, this.delete, this.weapon));
                 if (this.secondStream == true) {
-                    this.projectiles.push(new Projectile(this.secondX, this.y + 10, this.angle, this.weapon, this.delete, this.weapon));
+                    this.projectiles.push(new Projectile(this.secondX, this.y + this.bulletY, this.angle, this.weapon, this.delete, this.weapon));
                 }   
                 
                 if (this.specialAmmo > 0) {

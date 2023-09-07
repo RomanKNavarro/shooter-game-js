@@ -243,7 +243,9 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // TODO: enemy fire image.                  --DONE
 // TODO: only GROUND enemies should have image  --DONE 
 // TODO: cooler grenade animation   --DONE
-// TODO: pickup icons
+// TODO: pickup icons   
+// TODO: fix player 2 bullet y.     --DONE
+// TODO: get rid of this wierd ass grenade glitch.
 
 let roundCounts = [6, 10]; 
 
@@ -1168,7 +1170,7 @@ function handleProjectile(arr) {
                     scoreText.text = score;
 
                     if (currentEnemy.pickup && currentRound >= 3) {
-                        snackQueue.push(new Pickup(currentEnemy.x, currentEnemy.y - 100, currentRound));
+                        snackQueue.push(new Pickup(currentEnemy.x, currentEnemy.y + currentEnemy.height, currentRound));
                     }
 
                     if (Object.keys(baddiePositions).includes(currentEnemy.position)) {

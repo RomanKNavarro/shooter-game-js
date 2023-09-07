@@ -72,6 +72,8 @@ export default class Pickup {
 
         // type by default is ar
         this.type;
+
+        this.image = new Image;
     }
 
     // if not current respective weapon round, should default to aid pickup
@@ -93,36 +95,43 @@ export default class Pickup {
             case "flammen":
                 // this.sound = this.flammenReload;
                 this.sound = this.sfx.flammenReload;
+                this.image.src = "src/assets/images/pickups/clears/flammen copy.png";
                 break;
             case "ar":
                 this.sound = this.sfx.arReload;
+                this.image.src = "src/assets/images/pickups/clears/rifle copy.png";
                 break;
             case "grenade":
                 this.sound = this.sfx.nadePin;
+                this.image.src = "src/assets/images/pickups/clears/grenade copy.png";
                 break;
             case "health":
                 this.sound = this.sfx.health;
+                this.image.src = "src/assets/images/pickups/clears/aidConcept copy.png";
                 break;
             case "wall":
                 this.sound = this.sfx.wall;
+                this.image.src = "src/assets/images/pickups/clears/wall copy.png";
                 break;
         }
     }
 
     draw(context) {
         if (!this.delete) {
-            context.beginPath();
-            context.fillStyle = "purple";
+            // context.beginPath();
+            // context.fillStyle = "purple";
 
-            context.fillRect(this.x, this.y, this.width, this.height);
-            // context.fillRect(299, this.y, this.width, this.height);
+            // context.fillRect(this.x, this.y, this.width, this.height);
+            // // context.fillRect(299, this.y, this.width, this.height);
 
-            context.font = "20px serif";
-            context.fillStyle = "black";
-            context.textAlign = "center";
-            context.textBaseline = "middle";
+            // context.font = "20px serif";
+            // context.fillStyle = "black";
+            // context.textAlign = "center";
+            // context.textBaseline = "middle";
 
-            context.fillText(`${this.type}`, this.x + (this.width / 2), this.y + (this.height / 2));
+            // context.fillText(`${this.type}`, this.x + (this.width / 2), this.y + (this.height / 2));
+
+            context.drawImage(this.image, this.x, this.y);
         };        
     }
 }
