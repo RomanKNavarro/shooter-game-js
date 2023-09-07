@@ -400,13 +400,6 @@ export default class Shooter {
 
         this.frameX = 0;
         this.frameY = 0;
-        // DIMENSIONS FOR STAND IMAGE:
-        // 44x34
-        // this.spriteWidth = 50;
-        // this.spriteHeight = 34;
-
-        // FOR CROUCH: 
-        // 50x28
 
         this.spriteWidth = 50;
         this.spriteHeight = 28;
@@ -423,8 +416,6 @@ export default class Shooter {
     
     draw(context) {
         // SHOOTER HEIGHT CHANGED HERE:
-        context.beginPath();
-        context.fillStyle = "yellow";
 
         // this.width = this.images[this.weapon][this.angle]["width"];
         // this.height = this.images[this.weapon][this.angle]["height"];
@@ -498,8 +489,6 @@ s
             case "down":
             case "down-back":
                 // 50x28
-                // this.image = this.pistol_crouch;
-                // this.y = canvas.height - (canvas.height * (1/4)) - this.height;
                 this.bulletY = 11;
                 this.bulletX = 23;
                 break;
@@ -508,11 +497,10 @@ s
             // FIRE: 49×34
             case "diagnal-duck":
                 // 49x30
-                // this.image = this.pistol_crouch_up;
-                // this.y = canvas.height - (canvas.height * (1/4)) - this.height;
                 break;
         }
         
+        // FEEL LIKE I CAN SOLVE SECOND SHOOTER IMAGE CRAP HERE:
         if (["straight", "down", "diagnal-duck", "down-up", "diagnal", "up"].includes(this.angle)) {
             if (this.shooting && this.animation) {
                 context.drawImage(this.images[this.angle][this.weapon]["fire"], this.x, this.y);

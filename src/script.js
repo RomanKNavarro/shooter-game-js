@@ -226,16 +226,13 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // TODO: determine how civies get their X axis.     --DONE
 // TODO: if waited full 40 secs, round interventions fucking suck, and massacre round is skipped.   --DONE
 // TODO: lower gun on crouch. --DONE
-// TODO: adjust shooter projectile y    --DONE
-// TODO: player 2 should have same gun as player 1. UNDERSTOOD: can have the same "this.weapon", but ALSO needs
-// to have the same sprite.     
+// TODO: adjust shooter projectile y    --DONE 
 // TODO: If rifle, have shooting image always while firing.     --DONE 
 // TODO: fix rifle bullet y.    --DONE
 // TODO: back-down firing not showing on rifle.     --DONE
 // TODO: change bullet X on crouch for all weapons  --DONE
 // TODO: ASSHOLE WONT SHOOT UNLESS HE CROUCHES FIRST.   --DONE
 // no fire on back-shots    --DONE
-// TODO: make nades not connect to other shit.
 // TODO: fix these blury ass images.    --DONE
 // TODO: civies aint spawning again.
 // change plane x (little farther from player)  --DONE
@@ -243,9 +240,14 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // TODO: enemy fire image.                  --DONE
 // TODO: only GROUND enemies should have image  --DONE 
 // TODO: cooler grenade animation   --DONE
-// TODO: pickup icons   
+// TODO: pickup icons               --DONE
 // TODO: fix player 2 bullet y.     --DONE
+
+// TODO: make nades not connect to other shit.
 // TODO: get rid of this wierd ass grenade glitch.
+// TODO: player 2 should have same gun as player 1. UNDERSTOOD: can have the same "this.weapon", but ALSO needs
+// to have the same sprite.   
+// TODO: fix first aid y on floor
 
 let roundCounts = [6, 10]; 
 
@@ -579,19 +581,20 @@ function greatReset() {
     winningScore = 30;
     currentRound = 1;
 
-    // shooter.weapon = "pistol";
-    // shooter.fireRate = 0;
-    // shooter.specialAmmo = 0;
+    // second shooter gets this hard-coded crap:
+    shooter.weapon = "pistol";
+    shooter.fireRate = 0;
+    shooter.specialAmmo = 0;
     
-    shooter.weapon = "flammen";
-    // shooter.weapon = "ar";
-     shooter.fireRate = 5;
-    shooter.specialAmmo = 100;
+    // shooter.weapon = "flammen";
+    // // shooter.weapon = "ar";
+    //  shooter.fireRate = 5;
+    // shooter.specialAmmo = 100;
     
     shooter.secondStream = false;
     secondShooter = false;
-    // shooter2.weapon = "pistol";
     shooter2.weapon = shooter.weapon;
+    shooter2.image = shooter.image;
     shooter2.fireRate = 0;
     shooter2.specialAmmo = 0;
     shooter2.x = 0 - shooter.width;
@@ -999,7 +1002,6 @@ function handleShooter() {
         if (secondShooter) {
             shooter2.update(cxt2);
         }
-
     }
 
     // GRENADE FUNCTIONALITY:
