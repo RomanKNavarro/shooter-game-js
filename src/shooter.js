@@ -50,14 +50,14 @@ export default class Shooter {
         this.angle = "straight";
 
         // pistol, ar, and flamethrower
-        // this.weapon = "pistol";
-        // this.fireRate = 0;
-        // this.specialAmmo = 0;
+        this.weapon = "pistol";
+        this.fireRate = 0;
+        this.specialAmmo = 0;
 
-        this.weapon = "flammen";
-        // this.weapon = "ar";
-        this.fireRate = 10;
-        this.specialAmmo = 100;
+        // this.weapon = "flammen";
+        // // this.weapon = "ar";
+        // this.fireRate = 10;
+        // this.specialAmmo = 100;
 
         this.throwBoom = false; 
         this.secondNade = false;

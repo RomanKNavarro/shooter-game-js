@@ -21,7 +21,7 @@ export default class Enemy {
       this.dead = false;
 
       this.pickupNum = Math.floor(Math.random() * 15);
-      this.pickupOdds = 0;
+      this.pickupOdds = 1;
       this.pickup = false;
 
       this.isCivie = false;
@@ -242,7 +242,7 @@ export default class Enemy {
 
       // misc. events:
       // introduce bomber:
-      if (this.round >= 6) this.pickupOdds = 1;
+      if (this.round >= 6) this.pickupOdds = 2;
       if (this.pickupNum <= this.pickupOdds && this.round >= 3) {
         this.pickup = true   
       }

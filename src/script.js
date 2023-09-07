@@ -248,6 +248,8 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // TODO: player 2 should have same gun as player 1. UNDERSTOOD: can have the same "this.weapon", but ALSO needs
 // to have the same sprite.   
 // TODO: fix first aid y on floor
+// TODO: fix random ass flammen glitch. Appears on 2-player. Occurs when flammen is picked up.
+// TODO: MORE AR PICKUPS.
 
 let roundCounts = [6, 10]; 
 
@@ -582,14 +584,14 @@ function greatReset() {
     currentRound = 1;
 
     // second shooter gets this hard-coded crap:
-    shooter.weapon = "pistol";
-    shooter.fireRate = 0;
-    shooter.specialAmmo = 0;
+    // shooter.weapon = "pistol";
+    // shooter.fireRate = 0;
+    // shooter.specialAmmo = 0;
     
-    // shooter.weapon = "flammen";
-    // // shooter.weapon = "ar";
-    //  shooter.fireRate = 5;
-    // shooter.specialAmmo = 100;
+    shooter.weapon = "flammen";
+    // shooter.weapon = "ar";
+     shooter.fireRate = 5;
+    shooter.specialAmmo = 100;
     
     shooter.secondStream = false;
     secondShooter = false;
@@ -1516,7 +1518,7 @@ function animate() {
     // currentRound changes only after the "next round incoming" text
     // if (shooter.projectiles) console.log(shooter.projectiles[0]);
 
-    // console.log(frame);
+    console.log(shooter2.weapon);
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
