@@ -1,7 +1,8 @@
 export default class Pickup {
     constructor(x, y, round) {
 
-        this.width = this.height = 25;
+        // this.width = this.height = 25;
+        this.width = this.height = 20;
 
         this.x = x;
         this.y = y;
@@ -11,32 +12,23 @@ export default class Pickup {
         this.sound;
         this.round = round;
 
-        this.rifleReload = new Audio();
-        this.rifleReload.src = "src/assets/sounds/rifleReload.mp3";
-        // this.rifle.src = 
-        this.flammenReload = new Audio();
-        this.flammenReload.src = "src/assets/sounds/futureReload.mp3";
-
-        this.nadePin = new Audio(); 
-        this.nadePin.src;
-
         this.sfx = {
             // PICKUP SFX:
             arReload: new Howl({
                 src: [
-                    "src/assets/sounds/rifleReload.mp3",
+                    "src/assets/sounds/rifleReload.mp3",    // good
                 ],
                 volume: 5,
             }),
             nadePin: new Howl({
                 src: [
-                    "src/assets/sounds/grenadePin.mp3",
+                    "src/assets/sounds/grenadePin.mp3",     // good
                 ],
                 volume: 5,
             }),
             flammenReload: new Howl({
                 src: [
-                    "src/assets/sounds/futureReload.mp3",
+                    "src/assets/sounds/futureReload.mp3",   // good
                 ],
                 volume: 5,
             }),
@@ -73,18 +65,20 @@ export default class Pickup {
         // type by default is ar
         this.type;
 
-        this.image = new Image;
+        this.image = new Image();
     }
 
     // if not current respective weapon round, should default to aid pickup
     update() {
-        this.y += 5;
+       //this.y += 5;
+       this.y += 10;
 
         // NEEDS LOADS OF WORK DONE:
         // weaponOdds encompasses flammen, ar, and grenade
         // REMEMBER: typeNum is num 0-10
         if (this.typeNum <= this.weaponOdds) {
             if (this.round <= 6) this.type = "ar";
+            // if (this.round <= 1) this.type = "ar";
             else this.type = this.weapon;
         }
         else if (this.typeNum <= this.aidOdds) this.type = this.aid;
@@ -118,19 +112,6 @@ export default class Pickup {
 
     draw(context) {
         if (!this.delete) {
-            // context.beginPath();
-            // context.fillStyle = "purple";
-
-            // context.fillRect(this.x, this.y, this.width, this.height);
-            // // context.fillRect(299, this.y, this.width, this.height);
-
-            // context.font = "20px serif";
-            // context.fillStyle = "black";
-            // context.textAlign = "center";
-            // context.textBaseline = "middle";
-
-            // context.fillText(`${this.type}`, this.x + (this.width / 2), this.y + (this.height / 2));
-
             context.drawImage(this.image, this.x, this.y);
         };        
     }

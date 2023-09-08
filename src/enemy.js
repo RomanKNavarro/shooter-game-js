@@ -122,6 +122,7 @@ export default class Enemy {
       // first 3 images in sprite are 42x35, second 3 are 42x36
       this.width = 42;
       this.height = 35;
+      this.pickupY= 50;
 
       this.frameX = 0;
       this.frameY = 0;

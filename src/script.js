@@ -247,9 +247,11 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // TODO: get rid of this wierd ass grenade glitch.
 // TODO: player 2 should have same gun as player 1. UNDERSTOOD: can have the same "this.weapon", but ALSO needs
 // to have the same sprite.   
-// TODO: fix first aid y on floor
 // TODO: fix random ass flammen glitch. Appears on 2-player. Occurs when flammen is picked up.
+// diagnosis: snack.sound.play(); won't work for flammen. 1211. Sound plays ok.
 // TODO: MORE AR PICKUPS.
+// TODO: fix pickup y on floor
+// diagnosis: this is dependent on enemy's height, which is uneven.
 
 let roundCounts = [6, 10]; 
 
@@ -584,14 +586,14 @@ function greatReset() {
     currentRound = 1;
 
     // second shooter gets this hard-coded crap:
-    // shooter.weapon = "pistol";
-    // shooter.fireRate = 0;
-    // shooter.specialAmmo = 0;
+    shooter.weapon = "pistol";
+    shooter.fireRate = 0;
+    shooter.specialAmmo = 0;
     
-    shooter.weapon = "flammen";
-    // shooter.weapon = "ar";
-     shooter.fireRate = 5;
-    shooter.specialAmmo = 100;
+    // shooter.weapon = "flammen";
+    // // shooter.weapon = "ar";
+    //  shooter.fireRate = 5;
+    // shooter.specialAmmo = 100;
     
     shooter.secondStream = false;
     secondShooter = false;
@@ -1174,7 +1176,12 @@ function handleProjectile(arr) {
                     scoreText.text = score;
 
                     if (currentEnemy.pickup && currentRound >= 3) {
-                        snackQueue.push(new Pickup(currentEnemy.x, currentEnemy.y + currentEnemy.height, currentRound));
+                        // snackQueue.push(new Pickup(currentEnemy.x, currentEnemy.y + currentEnemy.height, currentRound));
+                        // snackQueue.push(new Pickup(currentEnemy.x, currentEnemy.pickupY - 100, currentRound));
+                        snackQueue.push(new Pickup(currentEnemy.x, flora.y - 150, currentRound));
+
+                        // snackQueue.push(new Pickup(currentEnemy.x, (Math.ceil(currentEnemy.y / 10) * 10) - 100, currentRound));
+                        // Math.ceil(11 / 10) * 10
                     }
 
                     if (Object.keys(baddiePositions).includes(currentEnemy.position)) {
@@ -1187,17 +1194,6 @@ function handleProjectile(arr) {
                     if (enemiesLeft > 0) enemiesLeft--;
                 }
             }
-
-            //FLAMMEN KILLS BULLETS
-            let orcProjes = currentEnemy.projectiles;
-            // for (let p = 0; p < orcProjes.length; p++) {
-            //     if (shooter.weapon == "flammen" && orcProjes.length > 0 && collision(current, orcProjes[p])) {
-            //         projectiles.splice(i, 1);
-            //         i--;
-            //         orcProjes.splice(p, 1);
-            //         p--;
-            //     }
-            // }
         }
 
         // PICKUP HANDLING CRAP:
@@ -1205,8 +1201,6 @@ function handleProjectile(arr) {
             let snack = snackQueue[l];
             if (currentRound >= 5) snack.flammenReady == true;
             if (snack && projectiles[i] && collision(projectiles[i], snack)) {
-
-                // snack.sound.play();
                 snack.sound.play();
                 projectiles.splice(i, 1);
                 i--;
@@ -1259,7 +1253,6 @@ function handleProjectile(arr) {
         }
     }
 }
-
 
 // SNACK HANDLING
 function handleSnack() {
@@ -1518,7 +1511,7 @@ function animate() {
     // currentRound changes only after the "next round incoming" text
     // if (shooter.projectiles) console.log(shooter.projectiles[0]);
 
-    console.log(shooter2.weapon);
+    // console.log(shooter2.weapon);
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);

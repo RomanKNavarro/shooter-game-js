@@ -53,7 +53,7 @@ export default class Shooter {
         this.weapon = "pistol";
         this.fireRate = 0;
         this.specialAmmo = 0;
-
+        
         // this.weapon = "flammen";
         // // this.weapon = "ar";
         // this.fireRate = 10;
