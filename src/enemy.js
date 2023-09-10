@@ -48,7 +48,7 @@ export default class Enemy {
       this.dead = false;
 
       this.beaming = false;
-      this.beamHeight = 140;
+      this.beamHeight = 150;
       this.openFire = 100;
       this.beamActive = false;
 
@@ -103,21 +103,6 @@ export default class Enemy {
 
       this.static = new Image;
       this.framework = new Image;
-
-      // ground troop
-      // this.assFW = new Image();
-      // this.assFW.src = "src/assets/images/assault-pig/pig-walk-clear/pigFrames.png";
-
-      // this.assStatic = new Image();
-      // this.assStatic.src = "src/assets/images/assault-pig/pig-stand-clear.png";
-
-      // // plane
-      // this.planeStat = new Image();
-      // this.planeStat.src = "src/assets/images/pig-plane-clear.png";
-
-      // SPRITE CRAP:
-
-      // this.pigFramework.src = "src/assets/images/assault-pig/pig-walk-clear/pigFrames.png";
 
       // first 3 images in sprite are 42x35, second 3 are 42x36
       this.width = 42;
@@ -301,8 +286,9 @@ export default class Enemy {
     renderBeam(context) {
       if (this.timer >= this.openFire) {
         context.beginPath();
-        context.fillStyle = "purple";
-        context.fillRect(this.x + 30, this.y + 40, 15, this.beamHeight);
+        // context.fillStyle = "red";
+        context.fillStyle = "rgba(255, 0, 0, 0.5)";
+        context.fillRect(this.x + 28, this.y + 45, 15, this.beamHeight);
       }
     }
 }

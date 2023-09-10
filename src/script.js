@@ -245,8 +245,8 @@ THEORY: it must be natural state causing this, as it does not run when offending
 
 // TODO: make nades not connect to other shit.
 // TODO: get rid of this wierd ass grenade glitch.
-// TODO: player 2 should have same gun as player 1. UNDERSTOOD: can have the same "this.weapon", but ALSO needs
-// to have the same sprite.   
+// TODO: player 2 should have same gun as player 1.             --DONE
+// UNDERSTOOD: can have the same "this.weapon", but ALSO needs to have the same sprite.   
 // TODO: fix random ass flammen glitch. Appears on 2-player. Occurs when flammen is picked up.      --DONE
 // diagnosis: snack.sound.play(); won't work for flammen. 1211. Sound plays ok.                    
 // TODO: MORE AR PICKUPS.
@@ -254,6 +254,7 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // diagnosis: this is dependent on enemy's height, which is uneven.
 // TODO: add pickup icons on top-left       --DONE
 // TODO: move maggot closer to player. Fix it's disapear coords.
+// TODO: WAY too many flammens in latter rounds.
 
 let roundCounts = [6, 10]; 
 
@@ -282,8 +283,7 @@ const shooter = new Shooter(100, flora.y - 50);
 // const shooter2 = new Shooter(200, flora.y - 50);
 const shooter2 = new Shooter(0 - shooter.width, flora.y - 34);
 shooter2.isSecond = true;
-shooter2.weapon = shooter.weapon;
-shooter2.image = shooter.image;
+//shooter2.weapon = shooter.weapon;
 
 // const shooter = new Shooter(100, flora.y - 50);
 // BRILLIANT IDEA: inputHandler doesn't need to take in these args. Use the ones from shooter.
@@ -609,7 +609,7 @@ function greatReset() {
     
     shooter.secondStream = false;
     secondShooter = false;
-    shooter2.weapon = shooter.weapon;
+    // shooter2.weapon = shooter.weapon;
     shooter2.image = shooter.image;
     shooter2.fireRate = 0;
     shooter2.specialAmmo = 0;
@@ -836,12 +836,11 @@ function handleState() {
             // THIS THE ONE vv
             // SPEC ROUND SHOULD BE 5. 
             // enemy speed on final round is 5.1.
-            let specRounds = {4: "SPECIAL", 6: "NATURAL", 7: "RELIEF", 9: "BOSS", 10: "END"};
-            // let specRounds = {2: "SPECIAL", 5: "NATURAL", 7: "RELIEF", 9: "BOSS", 6: "END"};
 
-            // let specRounds = {2: "BOSS", 3: "END"};
+            // let specRounds = {4: "SPECIAL", 6: "NATURAL", 7: "RELIEF", 9: "BOSS", 10: "END"};
+            let specRounds = {2: "NATURAL", 3: "RELIEF", 8: "BOSS", 10: "END"};
 
-            // let specRounds = {1: "BOSS", 10: "END"};
+
             if (Object.keys(specRounds).includes(currentRound.toString())) {
                 state = specRounds[currentRound];
             }
@@ -996,6 +995,8 @@ function cremate() {
 // TODO: GET THIS FUCKING SHIT RUNNING LIKE HOW IT DID EARLIER  --DONE
 function handleShooter() {
     shooter.draw(cxt2);
+    shooter2.image = shooter.image;
+    shooter2.weapon = shooter.weapon;
     if (secondShooter) shooter2.draw(cxt2);
 
     // what states require shooter to be disabled?
@@ -1275,30 +1276,6 @@ function handleEnemy() {
     for (let i = 0; i < enemyQueue.length; i++) {
         let current = enemyQueue[i];
 
-        // this.angle = "back";
-        if (current.type == "sheep" && current.inPosition == true && shooter.duck) {
-            current.duck = true;
-            current.angle = "down-back"
-        } else {
-            current.duck = false;
-            current.angle = "back";
-        }
-
-        // if (shooter.duck == true) {
-        //     current.duck = true;
-        // } else current.duck = false;
-        
-
-        if (current.type == "sheep" && current.inPosition == true && shooter.duck) {
-            current.duck == true;
-        }
-
-        if (current.type == "bomber" && current.inPosition == true) {
-            current.renderBeam(cxt);
-            if (!current.dead && current.timer >= current.openFire) playSound(sfx.rayBeam);
-            // else sfx.rayBeam.stop();
-        };
-
         if (!shooter.duck) current.bulletLimit = shooter.x + shooter.width;
         else {
             // WHEN DUCKING:
@@ -1353,6 +1330,30 @@ function handleEnemy() {
             score += 10;
             if (enemiesLeft > 0) enemiesLeft--;
         }
+
+        // this.angle = "back";
+        if (current.type == "sheep" && current.inPosition == true && shooter.duck) {
+            current.duck = true;
+            current.angle = "down-back"
+        } else {
+            current.duck = false;
+            current.angle = "back";
+        }
+
+        // if (shooter.duck == true) {
+        //     current.duck = true;
+        // } else current.duck = false;
+        
+
+        // if (current.type == "sheep" && current.inPosition == true && shooter.duck) {
+        //     current.duck == true;
+        // }
+
+        if (current.type == "bomber" && current.inPosition == true) {
+            current.renderBeam(cxt);
+            if (!current.dead && current.timer >= current.openFire) playSound(sfx.rayBeam);
+            // else sfx.rayBeam.stop();
+        };
 
         // FIX THIS CRAP ASAP:  --DONE
         // FIX THIS STUPID GLITCH   --DONEW

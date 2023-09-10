@@ -406,8 +406,6 @@ export default class Shooter {
         this.minFrame = 0;
         this.maxFrame = 2;
 
-        this.frames = this.pistol_frames;
-
         this.animation = true;
         this.animationTime = 0.5
 
@@ -430,7 +428,6 @@ export default class Shooter {
         //     context.fillRect(this.x, this.y + this.height / 2, this.width, this.height / 2);
         // }
 
-        // this.image = this.images[this.weapon][this.angle]["idle"];
         this.image = this.images[this.angle][this.weapon]["idle"];
 
         // REVELATION: no need to call "this.images" over and over again. I can just do it once.
@@ -440,7 +437,7 @@ export default class Shooter {
         context.textBaseline = "middle";
 
         // TEXT:
-        // context.fillText(`${this.bulletX}, ${this.angle}, ${this.shooting}`, this.x + (this.width / 2), this.y - 100);
+        context.fillText(`${this.weapon}`, this.x + (this.width / 2), this.y - 100);
     }
 
     update(context) { 
@@ -504,7 +501,6 @@ s
         if (["straight", "down", "diagnal-duck", "down-up", "diagnal", "up"].includes(this.angle)) {
             if (this.shooting && this.animation) {
                 context.drawImage(this.images[this.angle][this.weapon]["fire"], this.x, this.y);
-                // this.width = this.images[this.angle][this.weapon]["width"];
             } 
             else if (this.throwBoom) {
                 if (!this.duck) {
@@ -545,8 +541,9 @@ s
         } 
         else this.animation = true;
 
-        // if (this.isSecond == true && this.x <= 200 && this.initSecond == true) {
         if (this.isSecond == true && this.initSecond == true) {
+            // this.weapon = weapon;
+            // this.image = image;
             if (this.x <= 200) this.x += 5;
             else this.secondReady = true;
         }  

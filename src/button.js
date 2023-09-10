@@ -39,9 +39,9 @@ export default class Button {
                 context.fillText(this.text, Math.floor(this.x + (this.width / 2)), Math.floor(this.y + (this.height / 2)));
             }
             else {
+                context.beginPath();
                 context.fillStyle = "rgba(0, 0, 0, " + this.alpha + ")";
                 context.font = "25px Tourney";
-                // context.fillText(this.text, Math.floor(this.x + (this.width / 2)), Math.floor(this.y + (this.height / 2)));
         
                 context.textAlign = "center";
                 context.textBaseline = "middle";
