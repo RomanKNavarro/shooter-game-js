@@ -32,5 +32,14 @@ export default class Health {
             context.drawImage(this.image, i * 30, this.y);
         }     
     }
+
+    // draw(context) {
+    //     context.beginPath();
+    //     context.fillStyle = "green";
+
+    //     for (let i = 0; i < this.number; i++) {
+    //         context.fillRect(i * 30, this.y, 20, 20);
+    //     }     
+    // }
 }
 

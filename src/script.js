@@ -504,6 +504,14 @@ var sfx = {
         loop: false,
         volume: 3,
     }),
+    // shit squish:
+    asshole: new Howl({
+        src: [
+            "src/assets/sounds/squelch.mp3",
+        ], 
+        loop: false,
+        volume: 3,
+    }),
 };
 
 /* there is a stupid security measure in some browsers where no sound is allowed to play unless the 
@@ -543,9 +551,7 @@ let finalRound = false;
 let startEnd = false;
 let showAidText = false;
 let showNatText = false;
-
-let showOffButton = false;
-let showOnButton = true;
+let playAss = true;
 
 let endSpecRound = false;
 
@@ -585,7 +591,7 @@ function greatReset() {
 
     playerHealth.number = 4;
     wallHealth.number = 4;
-    grenades.number = 6;
+    grenades.number = 4;
 
     winningScore = 30;
     currentRound = 1;
@@ -651,10 +657,6 @@ function endRound() {
     }
 }
 
-// if (shooter.toggleMusic) {
-//     playSound(music.dramatic);
-// } else music.dramatic.stop();
-
 function musicToggler() {
     // 10
     // if (state != "BOSS" && state != "QUIET" && currentRound < 2) {
@@ -666,7 +668,6 @@ function musicToggler() {
     } 
     else {
         music.dramatic.stop();
-        // playSound(music.hit_back);
         if (!shooter.toggleMusic) {
             playSound(music.hit_back);
         } else music.hit_back.pause();
@@ -1117,7 +1118,7 @@ function handleEnemyProjectiles(orc) {
             i--;
 
             // UNCOMMENT THIS:
-            if ((!shooter.duck) || (orc.type == "air" || orc.type == "bomber")) playerHealth.number--;
+            // if ((!shooter.duck) || (orc.type == "air" || orc.type == "bomber")) playerHealth.number--;
         }
     }
 }
@@ -1292,6 +1293,9 @@ function handleEnemy() {
         }
 
         if (current.type == "bomber" && current.inPosition == true) {
+            // this.playSound(this.sfx.pistol);
+            // playSound(music.hit_back);
+            if (!current.openFire) playSound(sfx.asshole);
             current.renderBeam(cxt);
             if (!current.dead && current.timer >= current.openFire) playSound(sfx.rayBeam);
             // else sfx.rayBeam.stop();
@@ -1343,7 +1347,7 @@ function handleEnemy() {
         } else {
             current.dead = true;
             // UNCOMMENT:
-            if (!current.isCivie) wallHealth.number--;
+            // if (!current.isCivie) wallHealth.number--;
         }
 
         if (current.dead) {

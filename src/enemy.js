@@ -21,7 +21,7 @@ export default class Enemy {
       this.dead = false;
 
       this.pickupNum = Math.floor(Math.random() * 15);
-      this.pickupOdds = 2;
+      this.pickupOdds = 1;
       this.pickup = false;
 
       this.isCivie = false;
@@ -209,8 +209,11 @@ export default class Enemy {
         case "bomber":
           this.openFire = 150;
           this.fireRate = 15;
-          this.width = 70;
-          this.height = 70;
+          this.width = 90;
+          this.height = 90;
+          this.statica = true;
+          if (!this.inPosition) this.static.src = "src/assets/images/bomber/bomber-clear.png";
+          else this.static.src = "src/assets/images/bomber/bomber-fire.png";
           break;
 
         case "sheep":
@@ -233,7 +236,9 @@ export default class Enemy {
         if (this.timer >= this.openFire && this.timer % this.fireRate === 0) { 
           // this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 5, this.angle, this.sound, this.dead, "shotty"));
           this.projectiles.push(new Projectile(this.x + this.bulletX, this.y + this.bulletY, this.angle, this.sound, this.dead, "shotty"));
-          if (this.type == "bomber") this.beamActive = true;
+          if (this.type == "bomber") {
+            this.beamActive = true;
+          }
         } 
       }
 

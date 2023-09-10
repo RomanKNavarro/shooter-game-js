@@ -16,6 +16,7 @@ export default class Button {
     draw(context) {
         if (this.show) {
             if (this.clickable) {
+                context.beginPath();
                 context.rect(this.x, this.y, this.width, this.height); 
                 context.fillStyle = 'gray'; 
                 context.fill();
