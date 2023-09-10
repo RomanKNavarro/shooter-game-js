@@ -440,7 +440,7 @@ export default class Shooter {
         context.textBaseline = "middle";
 
         // TEXT:
-        context.fillText(`${this.bulletX}, ${this.angle}, ${this.shooting}`, this.x + (this.width / 2), this.y - 100);
+        // context.fillText(`${this.bulletX}, ${this.angle}, ${this.shooting}`, this.x + (this.width / 2), this.y - 100);
     }
 
     update(context) { 

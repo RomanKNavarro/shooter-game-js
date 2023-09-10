@@ -247,11 +247,12 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // TODO: get rid of this wierd ass grenade glitch.
 // TODO: player 2 should have same gun as player 1. UNDERSTOOD: can have the same "this.weapon", but ALSO needs
 // to have the same sprite.   
-// TODO: fix random ass flammen glitch. Appears on 2-player. Occurs when flammen is picked up.
-// diagnosis: snack.sound.play(); won't work for flammen. 1211. Sound plays ok.
+// TODO: fix random ass flammen glitch. Appears on 2-player. Occurs when flammen is picked up.      --DONE
+// diagnosis: snack.sound.play(); won't work for flammen. 1211. Sound plays ok.                    
 // TODO: MORE AR PICKUPS.
-// TODO: fix pickup y on floor
+// TODO: fix pickup y on floor      --DONE (resolved)
 // diagnosis: this is dependent on enemy's height, which is uneven.
+// TODO: add pickup icons on top-left       --DONE
 
 let roundCounts = [6, 10]; 
 
@@ -398,9 +399,9 @@ const loadingText = new TextWall(`Loading`, Math.floor(canvas.height / 3), canva
 const playText = new TextWall(``, Math.floor(canvas.height / 5), canvas);
 
 // HEALTH:
-let playerHealth = new Health(30);
-let wallHealth = new Health(60);
-let grenades = new Health(90);
+let playerHealth = new Health(30, "health");
+let wallHealth = new Health(60, "wall");
+let grenades = new Health(90, "nade");
 
 // variables
 let frame = 0;
@@ -582,6 +583,10 @@ function greatReset() {
     enemyCount = enemiesLeft = roundCounts[0];
     enemyQueue = [];
 
+    playerHealth.number = 4;
+    wallHealth.number = 4;
+    grenades.number = 6;
+
     winningScore = 30;
     currentRound = 1;
 
@@ -614,10 +619,7 @@ function greatReset() {
     resetBaddies();
 
     snackQueue = [];
-    playerHealth.number = 4;
-    wallHealth.number = 4;
     showMenu = false;
-    grenades.number = 6;
     // grenades.number = 10;
     showSpecialText = false;
     showAidText = false;
@@ -1115,7 +1117,7 @@ function handleEnemyProjectiles(orc) {
             i--;
 
             // UNCOMMENT THIS:
-            // if ((!shooter.duck) || (orc.type == "air" || orc.type == "bomber")) playerHealth.number--;
+            if ((!shooter.duck) || (orc.type == "air" || orc.type == "bomber")) playerHealth.number--;
         }
     }
 }
@@ -1340,9 +1342,8 @@ function handleEnemy() {
 
         } else {
             current.dead = true;
-            // playSound(sfx.squeal);
             // UNCOMMENT:
-            // if (!current.isCivie) wallHealth.number--;
+            if (!current.isCivie) wallHealth.number--;
         }
 
         if (current.dead) {

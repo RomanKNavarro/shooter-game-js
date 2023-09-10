@@ -21,7 +21,7 @@ export default class Enemy {
       this.dead = false;
 
       this.pickupNum = Math.floor(Math.random() * 15);
-      this.pickupOdds = 1;
+      this.pickupOdds = 2;
       this.pickup = false;
 
       this.isCivie = false;
@@ -141,7 +141,6 @@ export default class Enemy {
 
       if (this.frama % this.pigFrame === 0 && this.pigFrame > 0) {
         if (this.frameX < this.maxFrame)
-          //&& this.framework !== blackFramework)
           this.frameX++;
         else this.frameX = this.minFrame;
       }
