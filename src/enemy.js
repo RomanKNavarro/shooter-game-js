@@ -48,7 +48,7 @@ export default class Enemy {
       this.dead = false;
 
       this.beaming = false;
-      this.beamHeight = 180;
+      this.beamHeight = 140;
       this.openFire = 100;
       this.beamActive = false;
 
@@ -171,8 +171,12 @@ export default class Enemy {
           this.health = 1;
 
           // wtf is this???
-          if (this.isCivie) this.speed = -4;
-          else this.speed = 4;
+          // if (this.isCivie) this.speed = -4;
+          // else this.speed = 4;
+
+          this.statica = true;
+          if (!this.inPosition) this.static.src = "src/assets/images/maggot/maggot-default.png";
+          else this.static.src = "src/assets/images/maggot/maggot-default.png";
           break;
 
         case "ground":
@@ -298,7 +302,7 @@ export default class Enemy {
       if (this.timer >= this.openFire) {
         context.beginPath();
         context.fillStyle = "purple";
-        context.fillRect(this.x + (this.width * 0.5), this.y, 30, this.beamHeight);
+        context.fillRect(this.x + 30, this.y + 40, 15, this.beamHeight);
       }
     }
 }

@@ -253,6 +253,7 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // TODO: fix pickup y on floor      --DONE (resolved)
 // diagnosis: this is dependent on enemy's height, which is uneven.
 // TODO: add pickup icons on top-left       --DONE
+// TODO: move maggot closer to player. Fix it's disapear coords.
 
 let roundCounts = [6, 10]; 
 
@@ -323,7 +324,7 @@ const specialText2 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "MAS
 const endText = new Button(canvas.width / 2.5, canvas.height / 3, 100, "Coalition defeated. City aquired.", false);
 const endText2 = new Button(canvas.width / 2.5, canvas.height / 1.7, 100, "Thanks for playing!!!", false);
 const endText3 = new Button(canvas.width / 2.5, canvas.height / 3, 100, "Made with ❤️ by", false);
-const endText4 = new Button(canvas.width / 2.5, canvas.height / 1.9, 100, "ROMAN PENKOTROV", false);
+const endText4 = new Button(canvas.width / 2.5, canvas.height / 1.9, 100, "KAVEMANKORPS", false);
 
 const naturalText = new Button(canvas.width / 2.5, canvas.height / 3, 100, "You're a natural born killer!", false);
 
@@ -376,7 +377,7 @@ const giveupText = new TextWall(
 
 const credText = new TextWall(
     `**********Programming and Art**********
-Roman Penkotrov
+        KavemanKorps
 
      ********Music and Sound Effects*******
     Credits in description!
@@ -390,7 +391,7 @@ Roman Penkotrov
     civilians -but please understand, this to me is art! I hope to bring to you more games in the future, no 
     matter how negatively this one might be recieved. If you think otherwise, cliche as it sounds, I hope you 
     enjoyed playing this game as much as I had making it!
-        -Roman
+        -Kaveman
     `, Math.floor(canvas.height / 10), canvas);
 
 // const loadingText = new TextWall(`\n\n\n\n\nLoading`, canvas.height / 5);
@@ -1293,9 +1294,6 @@ function handleEnemy() {
         }
 
         if (current.type == "bomber" && current.inPosition == true) {
-            // this.playSound(this.sfx.pistol);
-            // playSound(music.hit_back);
-            if (!current.openFire) playSound(sfx.asshole);
             current.renderBeam(cxt);
             if (!current.dead && current.timer >= current.openFire) playSound(sfx.rayBeam);
             // else sfx.rayBeam.stop();
