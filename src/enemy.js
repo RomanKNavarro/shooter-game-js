@@ -21,7 +21,7 @@ export default class Enemy {
       this.dead = false;
 
       this.pickupNum = Math.floor(Math.random() * 15);
-      this.pickupOdds = 1;
+      this.pickupOdds = 0;
       this.pickup = false;
 
       this.isCivie = false;
@@ -151,17 +151,23 @@ export default class Enemy {
       switch(this.type) {
         case "crawl":
           this.sound = "growl";
-          this.width = 30;
+          this.width = 60;
           this.height = 30;
           this.health = 1;
+
+          this.spriteWidth = 60;
+          this.spriteHeight = 30;
+          this.maxFrame = 3;
 
           // wtf is this???
           // if (this.isCivie) this.speed = -4;
           // else this.speed = 4;
 
-          this.statica = true;
-          if (!this.inPosition) this.static.src = "src/assets/images/maggot/maggot-default.png";
-          else this.static.src = "src/assets/images/maggot/maggot-default.png";
+          this.framework.src = "src/assets/images/maggot/spritesheet/maggotsheet.png";
+
+          // this.statica = true;
+          // if (!this.inPosition) this.static.src = "src/assets/images/maggot/maggot-default.png";
+          // else this.static.src = "src/assets/images/maggot/maggot-default.png";
           break;
 
         case "ground":
@@ -190,8 +196,8 @@ export default class Enemy {
           this.height = 70;
 
           // THIS IS IN REVERSE LOOOL BUT THAT'S THE WAY IT WORKS (HTMS)
-          if (this.isCivie) this.speed = -3;
-          else this.speed = 3;
+          // if (this.isCivie) this.speed = -3;
+          // else this.speed = 3;
           break;
         
         // OPENFIRE BY DEFAULT IS 
@@ -236,7 +242,7 @@ export default class Enemy {
 
       // misc. events:
       // introduce bomber:
-      if (this.round >= 6) this.pickupOdds = 2;
+      // if (this.round >= 6) this.pickupOdds = 1;
       if (this.pickupNum <= this.pickupOdds && this.round >= 3) {
         this.pickup = true   
       }
@@ -252,7 +258,7 @@ export default class Enemy {
       // }
 
       if (this.statica == false) {
-        if (this.inPosition == true) {
+        if (this.inPosition == true && this.type != "crawl") {
           context.drawImage(this.static, this.x, this.y);
         }
         else if (!this.statica) {

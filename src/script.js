@@ -253,8 +253,10 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // TODO: fix pickup y on floor      --DONE (resolved)
 // diagnosis: this is dependent on enemy's height, which is uneven.
 // TODO: add pickup icons on top-left       --DONE
-// TODO: move maggot closer to player. Fix it's disapear coords.
-// TODO: WAY too many flammens in latter rounds.
+// TODO: move maggot closer to player. Fix it's disapear coords.    --DONE
+// TODO: WAY too many flammens in latter rounds.        --DONE
+// TODO: increase fly speed over time.      --DONE
+// TODO: create civy images/sprites (majority female)
 
 let roundCounts = [6, 10]; 
 
@@ -422,7 +424,7 @@ let baddiePositions = {
     "2": {"inPos": false, "distance": 150, "type": "ground"}, 
     "3": {"inPos": false, "distance": 250, "type": "ground"},
     "4": {"inPos": false, "distance": 129, "type": "air"},
-    "5": {"inPos": false, "distance": 0, "type": "crawl"},
+    "5": {"inPos": false, "distance": -5, "type": "crawl"},
     //  THESE POS ONLY AVAILABLE IN BOSS ROUND:
     "6": {"inPos": false, "distance": -shooter.width, "type": "bomber"},
     // SHEEP:
@@ -837,8 +839,8 @@ function handleState() {
             // SPEC ROUND SHOULD BE 5. 
             // enemy speed on final round is 5.1.
 
-            // let specRounds = {4: "SPECIAL", 6: "NATURAL", 7: "RELIEF", 9: "BOSS", 10: "END"};
-            let specRounds = {2: "NATURAL", 3: "RELIEF", 8: "BOSS", 10: "END"};
+            let specRounds = {4: "SPECIAL", 6: "NATURAL", 7: "RELIEF", 9: "BOSS", 10: "END"};
+            // let specRounds = {2: "NATURAL", 3: "RELIEF", 8: "BOSS", 10: "END"};
 
 
             if (Object.keys(specRounds).includes(currentRound.toString())) {
@@ -1120,7 +1122,7 @@ function handleEnemyProjectiles(orc) {
             i--;
 
             // UNCOMMENT THIS:
-            // if ((!shooter.duck) || (orc.type == "air" || orc.type == "bomber")) playerHealth.number--;
+            if ((!shooter.duck) || (["air", "bomber", "crawl"].includes(orc.type))) playerHealth.number--;
         }
     }
 }
