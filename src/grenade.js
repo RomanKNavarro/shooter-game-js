@@ -70,8 +70,10 @@ export default class Grenade {
 
     // draws the nade itself
     drawDud(context) {
+        context.beginPath();
         context.arc(this.entity.x + this.entity.width / 2, this.dudY, this.dudSize, 0, Math.PI * 2, true);
         context.fill();
+        context.closePath();
     }
     updateDud() {
         if (this.dudY > 0) {

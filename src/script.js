@@ -248,14 +248,15 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // TODO: player 2 should have same gun as player 1.             --DONE
 // UNDERSTOOD: can have the same "this.weapon", but ALSO needs to have the same sprite.   
 // TODO: fix random ass flammen glitch. Appears on 2-player. Occurs when flammen is picked up.      --DONE
-// diagnosis: snack.sound.play(); won't work for flammen. 1211. Sound plays ok.                    
-// TODO: MORE AR PICKUPS.
+// diagnosis: snack.sound.play(); won't work for flammen. 1211. Sound plays ok.     --DONE               
+// TODO: MORE AR PICKUPS.           --DONE
 // TODO: fix pickup y on floor      --DONE (resolved)
 // diagnosis: this is dependent on enemy's height, which is uneven.
 // TODO: add pickup icons on top-left       --DONE
 // TODO: move maggot closer to player. Fix it's disapear coords.    --DONE
 // TODO: WAY too many flammens in latter rounds.        --DONE
 // TODO: increase fly speed over time.      --DONE
+// TODO: grenade keeps connecting to "initiate bloodbath" button. Maybe try drawing nade image instead? --DONE (resolved)
 // TODO: create civy images/sprites (majority female)
 
 let roundCounts = [6, 10]; 
@@ -1324,7 +1325,7 @@ function handleEnemy() {
         } else {
             current.dead = true;
             // UNCOMMENT:
-            // if (!current.isCivie) wallHealth.number--;
+            if (!current.isCivie) wallHealth.number--;
         }
 
         if (current.dead) {
