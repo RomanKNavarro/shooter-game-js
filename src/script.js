@@ -297,6 +297,8 @@ shooter2.isSecond = true;
 new InputHandler(shooter, canvas);
 new InputHandler(shooter2, canvas);
 
+
+
 // BUTTONS AND TEXT. (x, y, width, text, clickable)
 // skip tut. button necessary -don't want to force players to kill POWS. 
 // const skipTutButton = new Button(canvas.width / 2.2, canvas.height / 3, 100, "Skip", true);
@@ -589,6 +591,7 @@ function resetBaddies() {
 }
 
 function greatReset() {
+    shooter.dead = false;
     endSpecRound = false;
     currentSpeed = 1.5;
     score = 0;
@@ -860,6 +863,7 @@ function handleState() {
             failText.draw(cxt);
             if (playerHealth.number <= 0) {
                 healthText.draw(cxt);
+                shooter.dead = true;
             } else {
                 wallText.draw(cxt);
             }
@@ -1015,7 +1019,7 @@ function handleShooter() {
     //     if (secondShooter) shooter2.update();
     // }
 
-    if (state != "MENU" || state != "LOSE") {
+    if ((state != "MENU" || state != "LOSE")) {
         shooter.update(cxt2);
         if (secondShooter) {
             shooter2.update(cxt2);
@@ -1023,7 +1027,7 @@ function handleShooter() {
     }
 
     // GRENADE FUNCTIONALITY:
-    if (shooter.throwBoom && grenades.number > 0 && state != "MENU") {
+    if (shooter.throwBoom && grenades.number > 0 && state != "MENU" && !shooter.disabled) {
         if (nadeQueue.length < 1) {
             shooter.secondNade = false;
         } else {
@@ -1507,6 +1511,7 @@ function animate() {
     handleState();
     handleStatus();
     handleProjectile(enemyQueue);
+    // if (!shooter.dead) handleNade(enemyQueue);
     handleNade(enemyQueue);
 
     if ((state == "RUNNING" || state == "LOSE") && frame <= 100) frame++;
@@ -1517,7 +1522,7 @@ function animate() {
     // currentRound changes only after the "next round incoming" text
     // if (shooter.projectiles) console.log(shooter.projectiles[0]);
 
-    console.log(frame);
+    // console.log(shooter.dead);
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);

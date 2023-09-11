@@ -36,6 +36,7 @@ export default class Shooter {
         this.disabled = true;
         this.health = 3;
         this.delete = false;
+        this.dead = false;
 
         /* HOW PROJECTILES WORK: whenever user shoots, new projectile added to array. As he not-shoots,
         it automatically decrements until it is empty :) */
@@ -86,6 +87,9 @@ export default class Shooter {
 
         this.grenade_crouch = new Image();
         this.grenade_crouch.src = "src/assets/images/CLEARS/nade/sheep-nade-crouch.png";
+
+        this.dead_warren = new Image();
+        this.dead_warren.src = "src/assets/images/CLEARS/dead-warren/dead-warren-clear.png";
 
         // FIX THIS CRAP:
         this.pistol_stand = new Image();
@@ -498,35 +502,37 @@ s
         }
         
         // FEEL LIKE I CAN SOLVE SECOND SHOOTER IMAGE CRAP HERE:
-        if (["straight", "down", "diagnal-duck", "down-up", "diagnal", "up"].includes(this.angle)) {
-            if (this.shooting && this.animation) {
-                context.drawImage(this.images[this.angle][this.weapon]["fire"], this.x, this.y);
-            } 
-            else if (this.throwBoom) {
-                if (!this.duck) {
-                    this.y = canvas.height - (canvas.height * (1/4)) - 40;
-                    context.drawImage(this.grenade_stand, this.x, this.y);
-                } else {
-                    this.y = canvas.height - (canvas.height * (1/4)) - 34;
-                    context.drawImage(this.grenade_crouch, this.x, this.y);
-                }
-            }
-            else context.drawImage(this.image, this.x, this.y);
-            // context.drawImage(this.image, this.x, canvas.height - (canvas.height * (1/4)) - this.height);
+        if (this.dead) {
+            context.drawImage(this.dead_warren, this.x, this.y + 1);
         } else {
-            context.save();
-            context.translate(this.x + this.width, this.y);
-            context.scale(-1,1);
-            // context.drawImage(this.image, canvas.width * -50, this.y);
-            context.drawImage(this.image, 0, 0);
-
-            // this.animation is necessary for pistol, not ar:
-            if (this.shooting) {
-                context.drawImage(this.images[this.angle][this.weapon]["fire"], 0, 0);
+            if (["straight", "down", "diagnal-duck", "down-up", "diagnal", "up"].includes(this.angle)) {
+                if (this.shooting && this.animation) {
+                    context.drawImage(this.images[this.angle][this.weapon]["fire"], this.x, this.y);
+                } 
+                else if (this.throwBoom) {
+                    if (!this.duck) {
+                        this.y = canvas.height - (canvas.height * (1/4)) - 40;
+                        context.drawImage(this.grenade_stand, this.x, this.y);
+                    } else {
+                        this.y = canvas.height - (canvas.height * (1/4)) - 34;
+                        context.drawImage(this.grenade_crouch, this.x, this.y);
+                    }
+                }
+                else context.drawImage(this.image, this.x, this.y);
+            } else {
+                context.save();
+                context.translate(this.x + this.width, this.y);
+                context.scale(-1,1);
+                context.drawImage(this.image, 0, 0);
+    
+                // this.animation is necessary for pistol, not ar:
+                if (this.shooting) {
+                    context.drawImage(this.images[this.angle][this.weapon]["fire"], 0, 0);
+                }
+                else context.drawImage(this.image, 0, 0);
+                
+                context.restore();
             }
-            else context.drawImage(this.image, 0, 0);
-            
-            context.restore();
         }
 
         // if (this.shooting) {

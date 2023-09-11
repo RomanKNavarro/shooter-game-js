@@ -14,7 +14,7 @@ export default class InputHandler {
     
     document.addEventListener("keydown", (event) => {
       // TODO: try using if statements instead.
-
+      if (!entity.disabled) {
       // what this do? sets respective keys value to true. "key" is a built-in property of "event" lol
       keys[event.key] = true;
       
@@ -68,11 +68,13 @@ export default class InputHandler {
 
       else if (keys["a"] && keys["s"]) entity.angle = "down-back";   
       else if (keys["a"] && keys["w"]) entity.angle = "diagnal-back";
-      else if (keys["w"] && keys["s"]) entity.angle = "down-up"; 
+      else if (keys["w"] && keys["s"]) entity.angle = "down-up";
+    }
     });
 
     document.addEventListener("keyup", (event) => {
 
+      if (!entity.dead) {
       keys[event.key] = false;
 
       switch (event.key) {
@@ -125,6 +127,7 @@ export default class InputHandler {
           entity.toggleMusic = !(entity.toggleMusic);
           break;
       }
+    }
     });
 
     // MOUSE INPUT: 
