@@ -437,7 +437,7 @@ export default class Shooter {
         context.textBaseline = "middle";
 
         // TEXT:
-        context.fillText(`${this.weapon}`, this.x + (this.width / 2), this.y - 100);
+        // context.fillText(`${this.weapon}`, this.x + (this.width / 2), this.y - 100);
     }
 
     update(context) { 

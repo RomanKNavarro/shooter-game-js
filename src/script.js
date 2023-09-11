@@ -258,6 +258,10 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // TODO: increase fly speed over time.      --DONE
 // TODO: grenade keeps connecting to "initiate bloodbath" button. Maybe try drawing nade image instead? --DONE (resolved)
 // TODO: create civy images/sprites (majority female)
+// TODO: sheep image & spritesheet.
+// TODO: draw/update enemies on LOSE. So far, player and pickups remain drawn. --YES THIS ABSOLUTELY NEEDS TO BE DONE.
+// --could be b/c the frames stop running? Frame is running throughout ALL the states.
+// Enemies and snacks drawn on "cxt". Shooter drawn on "cxt2".
 
 let roundCounts = [6, 10]; 
 
@@ -555,7 +559,6 @@ let finalRound = false;
 let startEnd = false;
 let showAidText = false;
 let showNatText = false;
-let playAss = true;
 
 let endSpecRound = false;
 
@@ -860,6 +863,9 @@ function handleState() {
             } else {
                 wallText.draw(cxt);
             }
+
+            handleEnemy();
+            pushEnemy();
 
             playAgainButton2.draw(cxt);
             mouseCollision(shooter.mouse, playAgainButton2, () => state = "MENU");  
@@ -1294,7 +1300,7 @@ function handleEnemy() {
         // ALL enemies given civie status on specialRound
         if (specialRound) current.isCivie = true;
 
-        handleEnemyProjectiles(current);
+        if (state != "LOSE") handleEnemyProjectiles(current);
 
         // DETERMINE ENEMY Y AXIS BASED ON THEIR TYPE
         if (current.type == "ground" || current.type == "crawl" || current.type == "sheep") {
@@ -1315,12 +1321,13 @@ function handleEnemy() {
         if ((current.x + current.width >= 0) && (current.x <= canvas.width + 50)) {
         // REVISION: don't force player to kill civilians
         // if ((current.x + current.width >= -50) && (current.x < canvas.width + 50)) {   
-            // current.update(); 
-            // if (state == "RUNNING" || state == "LOSE") current.draw(cxt);
-            if (state == "RUNNING" || state == "LOSE") {
-                current.draw(cxt);
-                current.update(); 
-            }
+
+            // if (state == "RUNNING" || state == "LOSE") {
+            //     current.draw(cxt);
+            //     current.update(); 
+            // }
+            current.draw(cxt);
+            current.update(); 
 
         } else {
             current.dead = true;
@@ -1343,15 +1350,6 @@ function handleEnemy() {
             current.angle = "back";
         }
 
-        // if (shooter.duck == true) {
-        //     current.duck = true;
-        // } else current.duck = false;
-        
-
-        // if (current.type == "sheep" && current.inPosition == true && shooter.duck) {
-        //     current.duck == true;
-        // }
-
         if (current.type == "bomber" && current.inPosition == true) {
             current.renderBeam(cxt);
             if (!current.dead && current.timer >= current.openFire) playSound(sfx.rayBeam);
@@ -1359,7 +1357,7 @@ function handleEnemy() {
         };
 
         // FIX THIS CRAP ASAP:  --DONE
-        // FIX THIS STUPID GLITCH   --DONEW
+        // FIX THIS STUPID GLITCH   --DONE
         for (let i = 1; i <= Object.keys(baddiePositions).length; i++) {   
             // this is the distance applicable to enemy (50, 150, 250, 180 (aerial))
             let trueDistance = shooter.x + shooter.width + baddiePositions[i.toString()]["distance"];
@@ -1511,14 +1509,15 @@ function animate() {
     handleProjectile(enemyQueue);
     handleNade(enemyQueue);
 
-    // if (state == "RUNNING" && frame <= 100) frame++;
-    // else frame = 0;
-    frame++;
+    if ((state == "RUNNING" || state == "LOSE") && frame <= 100) frame++;
+    else frame = 0;
+    // if (state == "RUNNING" )
+    // frame++;
 
     // currentRound changes only after the "next round incoming" text
     // if (shooter.projectiles) console.log(shooter.projectiles[0]);
 
-    // console.log(shooter2.weapon);
+    console.log(frame);
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
