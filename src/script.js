@@ -263,8 +263,8 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // --could be b/c the frames stop running? Frame is running throughout ALL the states.
 // Enemies and snacks drawn on "cxt". Shooter drawn on "cxt2".
 // TODO: audio fucking crashes in last round. You can't even hear the music. 
-// TODO: second player stopped moving with first player.
-// TODO: ufo sometimes does not stop above player.
+// TODO: second player stopped moving with first player.    --DONE
+// TODO: ufo sometimes does not stop above player.          --DONE
 
 let roundCounts = [6, 10]; 
 
@@ -427,7 +427,7 @@ let enemyQueue = [];
 let tutorial = true;
 
 // ENEMY SHOOTING STUFF:
-// possible glitch fix: add "id" property
+// possible glitch fix: add "id" property. "distance" is distance AWAY from shooter.
 // NO MORE THAN 4 ENEMIES SHOULD BE SHOOTING.
 let baddiePositions = {
     "1": {"inPos": false, "distance": 50, "type": "ground"}, 
@@ -436,6 +436,7 @@ let baddiePositions = {
     "4": {"inPos": false, "distance": 129, "type": "air"},
     "5": {"inPos": false, "distance": -5, "type": "crawl"},
     //  THESE POS ONLY AVAILABLE IN BOSS ROUND:
+    // shooter.width = 44, -shooter.width = -44
     "6": {"inPos": false, "distance": -shooter.width, "type": "bomber"},
     // SHEEP:
     "7": {"inPos": false, "distance": 100, "type": "sheep"},
@@ -1185,14 +1186,11 @@ function handleProjectile(arr) {
                     scoreText.text = score;
 
                     if (currentEnemy.pickup && currentRound >= 3) {
-                        // snackQueue.push(new Pickup(currentEnemy.x, currentEnemy.y + currentEnemy.height, currentRound));
-                        // snackQueue.push(new Pickup(currentEnemy.x, currentEnemy.pickupY - 100, currentRound));
                         snackQueue.push(new Pickup(currentEnemy.x, flora.y - 150, currentRound));
-
-                        // snackQueue.push(new Pickup(currentEnemy.x, (Math.ceil(currentEnemy.y / 10) * 10) - 100, currentRound));
-                        // Math.ceil(11 / 10) * 10
                     }
 
+                    // what is position again? initially 0. Changes to respective number once in position (1-6)
+                    // the keys of baddiePositions are those position numbers.
                     if (Object.keys(baddiePositions).includes(currentEnemy.position)) {
                         baddiePositions[currentEnemy.position]["inPos"] = false;
                     }
@@ -1351,8 +1349,9 @@ function handleEnemy() {
             let trueDistance = shooter.x + shooter.width + baddiePositions[i.toString()]["distance"];
             if (!baddiePositions[i.toString()]["inPos"] &&
                 // what was my thought process behind this? If orc is within "true" distance, set "inPos" to true
-                current.x < trueDistance &&
-                current.x > trueDistance - current.width  &&
+                (current.x <= trueDistance && current.x >= trueDistance - 10) && 
+                // (current.x <= trueDistance &&
+                // current.x > trueDistance - shooter.width)  &&
                 current.type == baddiePositions[i.toString()]["type"] && 
                 !specialRound &&
                 current.speed > 0) {
@@ -1501,7 +1500,7 @@ function animate() {
     if ((state == "RUNNING" || state == "LOSE") && frame <= 100) frame++;
     else frame = 0;
 
-    console.log(shooter.disabled, shooter2.disabled);
+    // console.log(shooter.disabled, shooter2.disabled);
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);

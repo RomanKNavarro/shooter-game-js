@@ -276,7 +276,7 @@ export default class Enemy {
       // in last round, crawlies and bombers have equal chance of spawning:
       // else if (this.typeNum <= this.crawlOdds && this.round >= 9) this.type = ["crawl", "bomber"][ Math.floor(Math.random() * 2)];
 
-      // context.fillText(`${this.animation}`, this.x + (this.width / 2), this.y - 100);
+      context.fillText(`${this.position}`, this.x + (this.width / 2), this.y - 100);
     } // projectiles
 
     renderBeam(context) {
