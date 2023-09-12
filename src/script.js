@@ -34,7 +34,7 @@ var cxt2 = canvas2.getContext("2d");
 // TEXTWALL FONT DEFINED IN TEXTWALL.JS
 /* TIPS FOR OPTIMIZATION:
     1. use integers instead of floating-points
-    2. use MULTIPLE canvases
+    2. use MULTIPLE canvases3
     3. recycle objects instead of deleting them
     4. no TEXT
 */
@@ -263,6 +263,8 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // --could be b/c the frames stop running? Frame is running throughout ALL the states.
 // Enemies and snacks drawn on "cxt". Shooter drawn on "cxt2".
 // TODO: audio fucking crashes in last round. You can't even hear the music. 
+// TODO: second player stopped moving with first player.
+// TODO: ufo sometimes does not stop above player.
 
 let roundCounts = [6, 10]; 
 
@@ -777,6 +779,7 @@ function handleState() {
             musicToggler();
             // state = "RUNNING";
             shooter.disabled = false;
+            shooter2.disabled = false;
 
             if (finalRound == true) {
                 if (enemiesLeft <= 150) currentSpeed = 6;
@@ -840,7 +843,7 @@ function handleState() {
             // enemy speed on final round is 5.1.
 
             let specRounds = {4: "SPECIAL", 6: "NATURAL", 7: "RELIEF", 9: "BOSS", 10: "END"};
-            // let specRounds = {2: "NATURAL", 3: "RELIEF", 8: "BOSS", 10: "END"};
+            // let specRounds = {1: "NATURAL", 2: "RELIEF", 8: "BOSS", 10: "END"};
 
 
             if (Object.keys(specRounds).includes(currentRound.toString())) {
@@ -852,6 +855,7 @@ function handleState() {
         case "LOSE":
             musicToggler();
             shooter.disabled = true;
+            shooter2.disabled = true;
             shooter.secondStream = false;
             failText.draw(cxt);
             if (playerHealth.number <= 0) {
@@ -917,7 +921,6 @@ function handleState() {
             musicToggler();
             secondShooter = true;
             shooter2.duckable = false;
-            // shooter.disabled = false;
             shooter2.initSecond = true;
             if (!showAidText) {
                 aidText.draw(cxt);
@@ -964,6 +967,7 @@ function handleState() {
         case "GIVEUP":
             musicToggler();
             shooter.disabled = true;
+            shooter2.disabled = true;
             giveupText.draw(cxt);
             playAgainButton.draw(cxt);
             mouseCollision(shooter.mouse, playAgainButton, () => state = "MENU");
@@ -972,6 +976,7 @@ function handleState() {
         case "CREDITS":
             musicToggler();
             shooter.disabled = true;
+            shooter2.disabled = true;
             credText.draw(cxt);
             playAgainButton.draw(cxt);
             mouseCollision(shooter.mouse, playAgainButton, () => state = "MENU");
@@ -1001,7 +1006,7 @@ function cremate() {
 // TODO: GET THIS FUCKING SHIT RUNNING LIKE HOW IT DID EARLIER  --DONE
 function handleShooter() {
     shooter.draw(cxt2);
-    shooter2.image = shooter.image;
+    // shooter2.image = shooter.image;
     shooter2.weapon = shooter.weapon;
     if (secondShooter) shooter2.draw(cxt2);
 
@@ -1496,7 +1501,7 @@ function animate() {
     if ((state == "RUNNING" || state == "LOSE") && frame <= 100) frame++;
     else frame = 0;
 
-    // console.log(shooter.dead);
+    console.log(shooter.disabled, shooter2.disabled);
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
