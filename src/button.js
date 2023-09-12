@@ -7,7 +7,6 @@ export default class Button {
         this.text = text;
         this.stroke = "black";
         this.clicked = false; 
-
         this.clickable = clickable;
         this.show = true;
         this.alpha = 1;
@@ -25,13 +24,11 @@ export default class Button {
                 context.lineWidth = 2;
                 context.strokeStyle = this.stroke;
                 context.stroke();
-                //context.closePath();
         
                 // button text:
                 context.font = "12.5px serif";
         
                 context.fillStyle = "black";
-                //context.fillStyle = "rgba(255, 255, 255, " + this.alpha + ")";
         
                 // HOW TO CENTER TEXT IN BUTTON:
                 context.textAlign = "center";
@@ -45,7 +42,6 @@ export default class Button {
         
                 context.textAlign = "center";
                 context.textBaseline = "middle";
-                // context.fillText(this.text, this.x + (this.width / 2), this.y + (this.height / 2));
                 context.fillText(this.text, Math.floor(this.x + (this.width / 2)), Math.floor(this.y + (this.height / 2)));
             }
         }

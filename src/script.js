@@ -259,9 +259,10 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // TODO: grenade keeps connecting to "initiate bloodbath" button. Maybe try drawing nade image instead? --DONE (resolved)
 // TODO: create civy images/sprites (majority female)
 // TODO: sheep image & spritesheet.
-// TODO: draw/update enemies on LOSE. So far, player and pickups remain drawn. --YES THIS ABSOLUTELY NEEDS TO BE DONE.
+// TODO: draw/update enemies on LOSE. So far, player and pickups remain drawn. --YES THIS ABSOLUTELY NEEDS TO BE DONE.  --DONE
 // --could be b/c the frames stop running? Frame is running throughout ALL the states.
 // Enemies and snacks drawn on "cxt". Shooter drawn on "cxt2".
+// TODO: audio fucking crashes in last round. You can't even hear the music. 
 
 let roundCounts = [6, 10]; 
 
@@ -669,9 +670,7 @@ function endRound() {
 
 function musicToggler() {
     // 10
-    // if (state != "BOSS" && state != "QUIET" && currentRound < 2) {
-    // if ((state != "BOSS" && state != "QUIET") || finalRound == true) {
-        if (!finalRound) {
+    if (!finalRound) {
         if (!shooter.toggleMusic) {
             playSound(music.dramatic);
         } else music.dramatic.pause();
@@ -711,11 +710,6 @@ function handleState() {
 
         // GLITCH SOMEWHERE IN INTRO:
         case "INTRO":
-
-            // THIS ONLY WORKS IN INTRO STAGE:
-            // if (!shooter.toggleMusic) {
-            //     playSound(music.dramatic);
-            // } else music.dramatic.pause();
             musicToggler();
         
             startText.draw(cxt);
@@ -763,7 +757,6 @@ function handleState() {
                 cremate();
             }
 
-            // mouseCollision(shooter.mouse, yesButton, "RUNNING");
             mouseCollision(shooter.mouse, yesButton, () => state = "QUIET");
             mouseCollision(shooter.mouse, noButton, () => state = "GIVEUP");
             break;
@@ -1012,13 +1005,6 @@ function handleShooter() {
     shooter2.weapon = shooter.weapon;
     if (secondShooter) shooter2.draw(cxt2);
 
-    // what states require shooter to be disabled?
-    // if (state == "RUNNING" || state == "WIN" || state == "QUIET" 
-    // || state == "RELIEF" || state == "TUTORIAL" || state == "MENU") {
-    //     shooter.update();
-    //     if (secondShooter) shooter2.update();
-    // }
-
     if ((state != "MENU" || state != "LOSE")) {
         shooter.update(cxt2);
         if (secondShooter) {
@@ -1133,7 +1119,7 @@ function handleEnemyProjectiles(orc) {
             i--;
 
             // UNCOMMENT THIS:
-            if ((!shooter.duck) || (["air", "bomber", "crawl"].includes(orc.type))) playerHealth.number--;
+            // if ((!shooter.duck) || (["air", "bomber", "crawl"].includes(orc.type))) playerHealth.number--;
         }
     }
 }
@@ -1255,7 +1241,6 @@ function handleProjectile(arr) {
                 l--;
             }
         }
-
         // projectiles despawn logic. Takes into account all types:
         if (projectiles[i]) {
             // delete when leaving canvas (for small arms)
@@ -1324,19 +1309,13 @@ function handleEnemy() {
         // delete enemies if they are off-canvas:
         if ((current.x + current.width >= 0) && (current.x <= canvas.width + 50)) {
         // REVISION: don't force player to kill civilians
-        // if ((current.x + current.width >= -50) && (current.x < canvas.width + 50)) {   
-
-            // if (state == "RUNNING" || state == "LOSE") {
-            //     current.draw(cxt);
-            //     current.update(); 
-            // }
             current.draw(cxt);
             current.update(); 
 
         } else {
             current.dead = true;
             // UNCOMMENT:
-            if (!current.isCivie) wallHealth.number--;
+            // if (!current.isCivie) wallHealth.number--;
         }
 
         if (current.dead) {
@@ -1516,11 +1495,6 @@ function animate() {
 
     if ((state == "RUNNING" || state == "LOSE") && frame <= 100) frame++;
     else frame = 0;
-    // if (state == "RUNNING" )
-    // frame++;
-
-    // currentRound changes only after the "next round incoming" text
-    // if (shooter.projectiles) console.log(shooter.projectiles[0]);
 
     // console.log(shooter.dead);
 

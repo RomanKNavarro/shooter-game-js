@@ -9,13 +9,6 @@ export default class Shooter {
     constructor(x, y) { 
         this.width = 44;
         this.height = 34;
-        // this.width = 50;
-        // this.height = 50;
-
-        // this.width;
-        // this.height;
-
-        // this.y;
         this.y = y;
 
         this.bulletY;   // this to be added to the y. Standing: 5, Duck: 10
@@ -396,12 +389,6 @@ export default class Shooter {
             }
         };
 
-        // UNCOMMENT FOR PREVIOUS 
-        // this.images = {"pistol": this.pistol_images, "rifle": this.rifle_images};
-
-        // this.pistol_frames = new Image();
-        // this.pistol_frames.src = "src/assets/images/sprites/stand-pistol.png";
-
         this.frameX = 0;
         this.frameY = 0;
 
@@ -419,19 +406,9 @@ export default class Shooter {
     draw(context) {
         // SHOOTER HEIGHT CHANGED HERE:
 
-        // this.width = this.images[this.weapon][this.angle]["width"];
-        // this.height = this.images[this.weapon][this.angle]["height"];
-
         // WEAPON is undefined. 
         this.width = this.images[this.angle][this.weapon]["width"];
         this.height = this.images[this.angle][this.weapon]["height"];
-
-        // if (!this.duck) {
-        //     context.fillRect(this.x, this.y, this.width, this.height);
-        // } else {
-        //     context.fillRect(this.x, this.y + this.height / 2, this.width, this.height / 2);
-        // }
-
         this.image = this.images[this.angle][this.weapon]["idle"];
 
         // REVELATION: no need to call "this.images" over and over again. I can just do it once.

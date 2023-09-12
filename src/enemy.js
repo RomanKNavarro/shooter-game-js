@@ -56,10 +56,6 @@ export default class Enemy {
       // base enemies:
       // 6/10 chance to spawn ground, 4/10 ch. to spawn air, 2/10 to spawn spec (dog, bomber, sheep)
 
-      // initially, bombers don't spawn until round
-
-      // this.typeNum = Math.floor(Math.random() * 10);
-
       this.typeNum = Math.floor(Math.random() * 20);
       this.groundOdds = 20; // 8
       this.airOdds = 12;    // 6
@@ -69,11 +65,7 @@ export default class Enemy {
 
       // sheep pushed on round 10:
       this.bossType = ["bomber", "sheep"][Math.floor(Math.random() * 2)];
-      // this.specOrc = this.specOrcs[Math.floor(Math.random() * this.specOrcs.length)];
-      // this.type = this.orcTypes[Math.floor(Math.random() * this.orcTypes.length)];
       this.otherOdds = 5;
-      // this.type;
-      // this.type = "ground";
       this.type;
 
       /* EVENTS:
@@ -131,7 +123,6 @@ export default class Enemy {
       }
 
       // HEIRARCHY CRAP:
-      // if (this.typeNum <= this.bossOdds && this.round == 9) {
       // 0-2
       if (this.typeNum <= this.bossOdds) {
         if (this.round < 6) this.type = "ground";
@@ -164,10 +155,6 @@ export default class Enemy {
           // else this.speed = 4;
 
           this.framework.src = "src/assets/images/maggot/spritesheet/maggotsheet.png";
-
-          // this.statica = true;
-          // if (!this.inPosition) this.static.src = "src/assets/images/maggot/maggot-default.png";
-          // else this.static.src = "src/assets/images/maggot/maggot-default.png";
           break;
 
         case "ground":
@@ -215,8 +202,11 @@ export default class Enemy {
           this.sound = "laser-gun";
           this.openFire = 150;
           this.fireRate = 15;
-          this.width = 60;
-          this.height = 60;
+          this.width = 70;
+          this.height = 58;
+          this.statica = true;
+          if (!this.inPosition) this.static.src = "src/assets/images/enemy-sheep/girl-sheep-clear.png";
+          else this.static.src = "src/assets/images/enemy-sheep/girl-sheep-clear.png";
           break;  
       }
 

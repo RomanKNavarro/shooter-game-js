@@ -31,17 +31,12 @@ export default class Grenade {
         this.boomMaxFrame = 3;
         this.boomSpriteHeight = 64;
         this.boomSpriteWidth = 64;
-        // this.boomHeight = this.boomSpriteHeight * 4;
-        // this.boomWidth = this.boomSpriteWidth * 2;
         this.boomHeight = this.boomSpriteHeight * 4;
         this.boomWidth = this.boomSpriteWidth * 4;
     }
 
     // draws the explosion
     draw(context) {
-        // context.arc(this.x, this.y, this.size, 0, Math.PI * 2, true);
-        // context.stroke();
-
         context.drawImage(
             this.image,
             this.boomFrameX * this.boomSpriteWidth,

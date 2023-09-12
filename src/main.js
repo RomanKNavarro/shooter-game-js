@@ -3,8 +3,6 @@ var cxt = canvas.getContext('2d');
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
-// canvas.style.width=canvas.getBoundingClientRect().width; //actual width of canvas
-// canvas.style.height=canvas.getBoundingClientRect().height; //actual height of canvas
 
 var canvas_stack = new CanvasStack('canvas1');
 
@@ -18,5 +16,3 @@ main_layer_cxt.fillRect(0, 0, 100, 100);
 
 layer2_cxt.fillStyle = "red";
 layer2_cxt.fillRect(100, 100, 100, 100);
-
-// main_layer_cxt.clearRect(0, 0, window.innerWidth, window.innerHeight);

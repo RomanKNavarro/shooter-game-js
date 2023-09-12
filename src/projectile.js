@@ -40,9 +40,6 @@ export default class Projectile {
           // the "loop" flag is false by default!
           loop: false,
           volume: 0.6,
-          // function to execute as soon as the sound effect ends:
-          // good use case: when there is an intro to a song. Play the intro first, then use "onend" 
-          // to play the song without having to worry about the intro repeating. 
           onend: function() {}
         }), 
         growl: new Howl({
@@ -51,9 +48,6 @@ export default class Projectile {
           ],
           // the "loop" flag is false by default!
           loop: false,
-          // function to execute as soon as the sound effect ends:
-          // good use case: when there is an intro to a song. Play the intro first, then use "onend" 
-          // to play the song without having to worry about the intro repeating. 
           onend: function() {}
         }), 
         bomber: new Howl({
@@ -70,11 +64,8 @@ export default class Projectile {
           // the "loop" flag is false by default!
           loop: false,
         }), 
-
-
       }
 
-      // constructor(x, y) { lol test
       this.x = x;
       this.y = y;
       this.direction = direction;
@@ -84,20 +75,12 @@ export default class Projectile {
       this.size = 2;
 
       this.speed = 10;
-      // this.speed = 1;
-      // this.speed =5;
       this.delete = false;
       this.randomY = [1.7, 2, 2.2, 2.4, 2.6, 2.8, 3];
       // needs to shoot in the same directon (110 y) as randomY values:
       this.randomY_duck = [1.1, 1.2, 1.3, 1.4];
 
       this.bulletLimit;
-
-      // HERE IS WHERE PROJECTILE'S Y GETS CHANGED:
-      // place bullet's y low when shooting down:
-      // if (this.direction == "down" || this.direction == "down-back" || this.direction == "diagnal-duck") {
-      //   this.y = this.y + 25;
-      // }
     }
 
     playSound(sound) {
@@ -114,7 +97,6 @@ export default class Projectile {
         case "shotty":
           this.size = 3;
           if (!this.dead) {
-            // this.shotty.play();
             this.playSound(this.sfx.shotty);
           } else {
             this.sfx.shotty.stop();
@@ -123,13 +105,11 @@ export default class Projectile {
         case "ar":
           this.size = 2;
           this.speed = 12;
-          // this.ar.play();
           this.playSound(this.sfx.ar);
           break;
 
         case "flammen":
           this.playSound(this.sfx.flammen);
-          // this.speed = 12;
           this.speed = 11;
           break;
 
@@ -165,7 +145,6 @@ export default class Projectile {
         case "down":
           this.x += this.speed;
           break;
-        //   this.y = this.y + 30;
 
         case "back":
         case "down-back":
@@ -179,8 +158,6 @@ export default class Projectile {
 
         // THIS IS FOR AIR ENEMIES:
         case "down-diagnal":
-          // this.x -= this.speed / 1.3;
-          // this.y += this.speed / 2;
           this.x -= this.speed / 1.3;
           this.y += this.speed / 3;
           break;
@@ -203,7 +180,6 @@ export default class Projectile {
         context.save(); 
         context.fillStyle = "black";
         context.beginPath();
-        // ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle)
         context.ellipse(this.x, this.y, this.size + 1, this.size + 1, 0, Math.PI / 4, Math.PI * 2);
         // context.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         context.fill();

@@ -9,13 +9,11 @@ export default class Health {
         this.image = new Image();
         this.image.src = "src/assets/images/pickups/clears/grenade copy.png";;
     }
-    
     update() {
         if (this.hurt) {
             this.number--;
         }
     }
-
     draw(context) {
         for (let i = 0; i < this.number; i++) {
             switch (this.type) {
@@ -32,14 +30,5 @@ export default class Health {
             context.drawImage(this.image, i * 30, this.y);
         }     
     }
-
-    // draw(context) {
-    //     context.beginPath();
-    //     context.fillStyle = "green";
-
-    //     for (let i = 0; i < this.number; i++) {
-    //         context.fillRect(i * 30, this.y, 20, 20);
-    //     }     
-    // }
 }
 

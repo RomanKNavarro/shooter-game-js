@@ -1,8 +1,3 @@
-/* @font-face{
-    font-family: myFont;
-    src:url(fonts/blockschrift.ttf);
-} */
-
 body {
     margin-top: 0;
     margin-left: 0;
@@ -11,25 +6,3 @@ body {
     /* font-family: 'Permanent Marker'; */
     /* font-family: 'blockschrift-f-regular', sans-serif; */ 
 };
-
-/* #canvas1 {
-    background: transparent;
-} */
-
-/* #stage {
-    width: 800px;
-    height: 300px;
-    position: relative;
-    border: 2px solid black;
-}
-
-canvas {
-    position: absolute;
-}
-
-#ui-layer {
-    z-index: 2;
-}
-#canvas1 {
-    z-index: 1;
-} */
