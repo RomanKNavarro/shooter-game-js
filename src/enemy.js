@@ -204,9 +204,13 @@ export default class Enemy {
           this.fireRate = 15;
           this.width = 70;
           this.height = 58;
-          this.statica = true;
-          if (!this.inPosition) this.static.src = "src/assets/images/enemy-sheep/girl-sheep-clear.png";
-          else this.static.src = "src/assets/images/enemy-sheep/girl-sheep-clear.png";
+          this.framework.src = "src/assets/images/enemy-sheep/girl-frames/clears/spritesheet.png";
+
+          if (!this.animation) this.static.src = "src/assets/images/assault-pig/pig-stand-clear.png";
+          else this.static.src = "src/assets/images/assault-pig/pig-stand-fire.png";
+
+          // if (!this.inPosition) this.static.src = "src/assets/images/enemy-sheep/girl-sheep-clear.png";
+          // else this.static.src = "src/assets/images/enemy-sheep/girl-sheep-clear.png";
           break;  
       }
 
