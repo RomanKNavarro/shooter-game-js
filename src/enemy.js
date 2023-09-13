@@ -204,10 +204,16 @@ export default class Enemy {
           this.fireRate = 15;
           this.width = 70;
           this.height = 58;
-          this.framework.src = "src/assets/images/enemy-sheep/girl-frames/clears/spritesheet.png";
+          this.spriteWidth = 70;
+          this.spriteHeight = 58;
 
-          if (!this.animation) this.static.src = "src/assets/images/assault-pig/pig-stand-clear.png";
-          else this.static.src = "src/assets/images/assault-pig/pig-stand-fire.png";
+
+          this.maxFrame = 5;
+          this.framework.src = "src/assets/images/enemy-sheep/girl-frames/clears/spritesheet.png";
+          this.static.src = "src/assets/images/enemy-sheep/girl-sheep-clear.png";
+
+          // if (!this.animation) this.static.src = "src/assets/images/assault-pig/pig-stand-clear.png";
+          // else this.static.src = "src/assets/images/assault-pig/pig-stand-fire.png";
 
           // if (!this.inPosition) this.static.src = "src/assets/images/enemy-sheep/girl-sheep-clear.png";
           // else this.static.src = "src/assets/images/enemy-sheep/girl-sheep-clear.png";
