@@ -265,6 +265,7 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // TODO: audio fucking crashes in last round. You can't even hear the music. 
 // TODO: second player stopped moving with first player.    --DONE
 // TODO: ufo sometimes does not stop above player.          --DONE
+// TODO: frames of female walking in loading state goodie.
 
 let roundCounts = [6, 10]; 
 
@@ -299,8 +300,6 @@ shooter2.isSecond = true;
 // BRILLIANT IDEA: inputHandler doesn't need to take in these args. Use the ones from shooter.
 new InputHandler(shooter, canvas);
 new InputHandler(shooter2, canvas);
-
-
 
 // BUTTONS AND TEXT. (x, y, width, text, clickable)
 // skip tut. button necessary -don't want to force players to kill POWS. 
@@ -451,10 +450,10 @@ let currentSpeed = 1.5;
 let snackQueue = [];
 let nadeQueue = [];
 
-let state = "MENU";
-// let state = "LOADING";
+// let state = "MENU";
+let state = "LOADING";
 
-let loadingTime = [2000, 3000][Math.floor(Math.random() * 2)];
+let loadingTime = [3000, 4000][Math.floor(Math.random() * 2)];
 
 // FUNCTIONS:
 var sfx = {
@@ -697,9 +696,15 @@ function handleState() {
 
         case "LOADING":
             loadingText.draw(cxt);
-            // if (showLoading) {
-            //     loadingText.draw(cxt);
-            // }
+            
+            let girly = new Enemy(canvas.width, currentSpeed, currentRound, enemySpeed, "loading");
+            girly.type = "sheep";
+            // girly.state = "loading";
+            if (enemyQueue.length < 1) enemyQueue.push(girly);
+            handleEnemy();
+            // if (enemyQueue.length < 1) pushEnemy();
+
+
             setTimeout(() => {
                 // showLoading = false;
                 showPlay = true;
@@ -1377,6 +1382,8 @@ function pushEnemy() {
 
     // RANDOMFRAMES determines distances between enemies
     if (frame % randomFrames[Math.floor(Math.random() * randomFrames.length)] === 0) {
+
+        if (state = "LOADING") enemyQueue.push(new Enemy(-50, -currentSpeed, currentRound, enemySpeed, "loading"));
 
         if (specialRound == true && enemiesLeft <= 0) {
             specialRound = false;

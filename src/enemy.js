@@ -4,10 +4,11 @@ import Projectile from "./projectile.js";
 export default class Enemy {
     // what's the speed parameter for again? to increase speed globally as rounds progress :)
     // TO PASS IN NEW FRAMA ARGUMENT GLOBALLY: -CANT DO THAT, IT DOESN'T UPDATE.
-    constructor(x, speed, round, frameSpeed) {
+    constructor(x, speed, round, frameSpeed, state) {
       // cxt
       this.frama = 0;
       this.speed = speed;
+      this.state = "lol";
 
       this.x = x;
       this.y;
@@ -124,10 +125,13 @@ export default class Enemy {
 
       // HEIRARCHY CRAP:
       // 0-2
+      
+      if (this.state == "loading") this.type = "sheep";
       if (this.typeNum <= this.bossOdds) {
         if (this.round < 6) this.type = "ground";
         else if (this.round >= 6 && this.round < 10) this.type = "bomber";
         else this.type = this.bossType;   // <- if round 10
+        // else if (this.round == 10 || )
       }
       // 3-6
       else if (this.typeNum <= this.crawlOdds && (this.round >= 3)) {
@@ -206,17 +210,11 @@ export default class Enemy {
           this.height = 58;
           this.spriteWidth = 70;
           this.spriteHeight = 58;
-
+          this.frameSpeed = 15;
 
           this.maxFrame = 5;
           this.framework.src = "src/assets/images/enemy-sheep/girl-frames/clears/spritesheet.png";
           this.static.src = "src/assets/images/enemy-sheep/girl-sheep-clear.png";
-
-          // if (!this.animation) this.static.src = "src/assets/images/assault-pig/pig-stand-clear.png";
-          // else this.static.src = "src/assets/images/assault-pig/pig-stand-fire.png";
-
-          // if (!this.inPosition) this.static.src = "src/assets/images/enemy-sheep/girl-sheep-clear.png";
-          // else this.static.src = "src/assets/images/enemy-sheep/girl-sheep-clear.png";
           break;  
       }
 
@@ -277,7 +275,7 @@ export default class Enemy {
       } else context.drawImage(this.static, this.x, this.y);
 
       context.font = "20px serif";
-      context.fillStyle = "black";
+      context.fillStyle = "white";
 
       context.textAlign = "center";
       context.textBaseline = "middle";
@@ -286,7 +284,7 @@ export default class Enemy {
       // in last round, crawlies and bombers have equal chance of spawning:
       // else if (this.typeNum <= this.crawlOdds && this.round >= 9) this.type = ["crawl", "bomber"][ Math.floor(Math.random() * 2)];
 
-      context.fillText(`${this.position}`, this.x + (this.width / 2), this.y - 100);
+      context.fillText(`${this.state}`, this.x + (this.width / 2), this.y - 100);
     } // projectiles
 
     renderBeam(context) {
