@@ -266,6 +266,7 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // TODO: second player stopped moving with first player.    --DONE
 // TODO: ufo sometimes does not stop above player.          --DONE
 // TODO: frames of female walking in loading state goodie.
+// CURRENTROUND IS INITIALLY 1. Should change to 0.
 
 let roundCounts = [6, 10]; 
 
@@ -699,10 +700,9 @@ function handleState() {
             
             let girly = new Enemy(canvas.width, currentSpeed, currentRound, enemySpeed, "loading");
             girly.type = "sheep";
-            // girly.state = "loading";
             if (enemyQueue.length < 1) enemyQueue.push(girly);
             handleEnemy();
-            // if (enemyQueue.length < 1) pushEnemy();
+            if (enemyQueue.length < 1) pushEnemy();
 
 
             setTimeout(() => {
@@ -1383,7 +1383,7 @@ function pushEnemy() {
     // RANDOMFRAMES determines distances between enemies
     if (frame % randomFrames[Math.floor(Math.random() * randomFrames.length)] === 0) {
 
-        if (state = "LOADING") enemyQueue.push(new Enemy(-50, -currentSpeed, currentRound, enemySpeed, "loading"));
+        // if (state = "LOADING") enemyQueue.push(new Enemy(-50, -currentSpeed, currentRound, enemySpeed, "loading"));
 
         if (specialRound == true && enemiesLeft <= 0) {
             specialRound = false;
@@ -1507,7 +1507,7 @@ function animate() {
     if ((state == "RUNNING" || state == "LOSE") && frame <= 100) frame++;
     else frame = 0;
 
-    // console.log(shooter.disabled, shooter2.disabled);
+    // console.log(currentRound);
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);

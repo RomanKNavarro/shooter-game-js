@@ -8,7 +8,8 @@ export default class Enemy {
       // cxt
       this.frama = 0;
       this.speed = speed;
-      this.state = "lol";
+
+      this.state = state;
 
       this.x = x;
       this.y;
@@ -67,7 +68,7 @@ export default class Enemy {
       // sheep pushed on round 10:
       this.bossType = ["bomber", "sheep"][Math.floor(Math.random() * 2)];
       this.otherOdds = 5;
-      this.type;
+      this.type = "ground";
 
       /* EVENTS:
         round 1: only ground enemies
@@ -125,8 +126,6 @@ export default class Enemy {
 
       // HEIRARCHY CRAP:
       // 0-2
-      
-      if (this.state == "loading") this.type = "sheep";
       if (this.typeNum <= this.bossOdds) {
         if (this.round < 6) this.type = "ground";
         else if (this.round >= 6 && this.round < 10) this.type = "bomber";
@@ -141,7 +140,7 @@ export default class Enemy {
       else if (this.typeNum <= this.airOdds && (this.round >= 2 && this.round != 3)) {
         this.type = "air";
       }
-      else this.type = "ground";
+      // else if (this.round)
 
       switch(this.type) {
         case "crawl":
@@ -162,7 +161,6 @@ export default class Enemy {
           break;
 
         case "ground":
-
           // this.x + this.width - 20, this.y + 5
           this.bulletX = this.width - 20;
           this.bulletY = 5; 
@@ -210,8 +208,7 @@ export default class Enemy {
           this.height = 58;
           this.spriteWidth = 70;
           this.spriteHeight = 58;
-          this.frameSpeed = 15;
-
+          this.frameSpeed = 5; 
           this.maxFrame = 5;
           this.framework.src = "src/assets/images/enemy-sheep/girl-frames/clears/spritesheet.png";
           this.static.src = "src/assets/images/enemy-sheep/girl-sheep-clear.png";
@@ -275,7 +272,7 @@ export default class Enemy {
       } else context.drawImage(this.static, this.x, this.y);
 
       context.font = "20px serif";
-      context.fillStyle = "white";
+      context.fillStyle = "gray";
 
       context.textAlign = "center";
       context.textBaseline = "middle";
@@ -284,7 +281,7 @@ export default class Enemy {
       // in last round, crawlies and bombers have equal chance of spawning:
       // else if (this.typeNum <= this.crawlOdds && this.round >= 9) this.type = ["crawl", "bomber"][ Math.floor(Math.random() * 2)];
 
-      context.fillText(`${this.state}`, this.x + (this.width / 2), this.y - 100);
+      // context.fillText(`${this.type}`, this.x + (this.width / 2), this.y - 10);
     } // projectiles
 
     renderBeam(context) {
