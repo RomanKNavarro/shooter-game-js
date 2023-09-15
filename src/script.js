@@ -265,8 +265,10 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // TODO: audio fucking crashes in last round. You can't even hear the music. 
 // TODO: second player stopped moving with first player.    --DONE
 // TODO: ufo sometimes does not stop above player.          --DONE
-// TODO: frames of female walking in loading state goodie.
-// CURRENTROUND IS INITIALLY 1. Should change to 0.
+// TODO: frames of female walking in loading state goodie.  --DONE
+// CURRENTROUND IS INITIALLY 1. Should change to 0.         --DONE (resolved)
+// at game 0ver (wall), stop pushing further enemies. Also, warren should die.
+
 
 let roundCounts = [6, 10]; 
 
@@ -1130,7 +1132,7 @@ function handleEnemyProjectiles(orc) {
             i--;
 
             // UNCOMMENT THIS:
-            // if ((!shooter.duck) || (["air", "bomber", "crawl"].includes(orc.type))) playerHealth.number--;
+            if ((!shooter.duck) || (["air", "bomber", "crawl"].includes(orc.type))) playerHealth.number--;
         }
     }
 }
@@ -1323,7 +1325,7 @@ function handleEnemy() {
         } else {
             current.dead = true;
             // UNCOMMENT:
-            // if (!current.isCivie) wallHealth.number--;
+            if (!current.isCivie) wallHealth.number--;
         }
 
         if (current.dead) {
