@@ -267,8 +267,7 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // TODO: ufo sometimes does not stop above player.          --DONE
 // TODO: frames of female walking in loading state goodie.  --DONE
 // CURRENTROUND IS INITIALLY 1. Should change to 0.         --DONE (resolved)
-// at game 0ver (wall), stop pushing further enemies. Also, warren should die.
-
+// at game Over (wall), stop pushing further enemies. Also, warren should die.
 
 let roundCounts = [6, 10]; 
 
@@ -277,7 +276,8 @@ let roundCounts = [6, 10];
 // NEW SCORE STUFF:
 let score = 0;
 let winningScore = 30;
-let currentRound = 1;
+// let currentRound = 1;
+let currentRound = 0;
 
 // enemyCount determines num of enemies to add to array. It decrements as they spawn
 let enemyCount = roundCounts[0];
@@ -456,7 +456,7 @@ let nadeQueue = [];
 // let state = "MENU";
 let state = "LOADING";
 
-let loadingTime = [3000, 4000][Math.floor(Math.random() * 2)];
+let loadingTime = [4000, 5000][Math.floor(Math.random() * 2)];
 
 // FUNCTIONS:
 var sfx = {
@@ -600,6 +600,7 @@ function greatReset() {
     shooter.dead = false;
     endSpecRound = false;
     currentSpeed = 1.5;
+    enemySpeed = 15;
     score = 0;
     scoreText.text = score;
     enemyCount = enemiesLeft = roundCounts[0];
@@ -700,7 +701,7 @@ function handleState() {
         case "LOADING":
             loadingText.draw(cxt);
             
-            let girly = new Enemy(canvas.width, currentSpeed, currentRound, enemySpeed, "loading");
+            let girly = new Enemy(canvas.width, currentSpeed, currentRound, 15);
             girly.type = "sheep";
             if (enemyQueue.length < 1) enemyQueue.push(girly);
             handleEnemy();
@@ -740,6 +741,7 @@ function handleState() {
             
         // glitch: MENU -> RUNNING -> MENU
         case "MENU": 
+            currentRound = 0;
             shooter.init = true;
             shooter.disabled = false;
             // bossText.draw(cxt);
@@ -851,7 +853,7 @@ function handleState() {
             // enemy speed on final round is 5.1.
 
             let specRounds = {4: "SPECIAL", 6: "NATURAL", 7: "RELIEF", 9: "BOSS", 10: "END"};
-            // let specRounds = {6: "NATURAL", 7: "RELIEF", 1: "BOSS", 2: "END"};
+            // let specRounds = {1: "SPECIAL", 6: "NATURAL", 7: "RELIEF", 9: "BOSS", 10: "END"};
 
 
             if (Object.keys(specRounds).includes(currentRound.toString())) {
@@ -874,7 +876,7 @@ function handleState() {
             }
 
             handleEnemy();
-            pushEnemy();
+            // pushEnemy();
 
             playAgainButton2.draw(cxt);
             mouseCollision(shooter.mouse, playAgainButton2, () => state = "MENU");  
@@ -1509,7 +1511,7 @@ function animate() {
     if ((state == "RUNNING" || state == "LOSE") && frame <= 100) frame++;
     else frame = 0;
 
-    // console.log(currentRound);
+   console.log(currentRound);
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);

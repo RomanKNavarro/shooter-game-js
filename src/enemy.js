@@ -4,12 +4,10 @@ import Projectile from "./projectile.js";
 export default class Enemy {
     // what's the speed parameter for again? to increase speed globally as rounds progress :)
     // TO PASS IN NEW FRAMA ARGUMENT GLOBALLY: -CANT DO THAT, IT DOESN'T UPDATE.
-    constructor(x, speed, round, frameSpeed, state) {
+    constructor(x, speed, round, frameSpeed) {
       // cxt
       this.frama = 0;
       this.speed = speed;
-
-      this.state = state;
 
       this.x = x;
       this.y;
@@ -127,7 +125,7 @@ export default class Enemy {
       // HEIRARCHY CRAP:
       // 0-2
       if (this.typeNum <= this.bossOdds) {
-        if (this.round < 6) this.type = "ground";
+        if (this.round < 6 && this.round > 0) this.type = "ground";
         else if (this.round >= 6 && this.round < 10) this.type = "bomber";
         else this.type = this.bossType;   // <- if round 10
         // else if (this.round == 10 || )
@@ -154,8 +152,8 @@ export default class Enemy {
           this.maxFrame = 3;
 
           // wtf is this???
-          // if (this.isCivie) this.speed = -4;
-          // else this.speed = 4;
+          if (this.isCivie) this.speed = -4;
+          else this.speed = 4;
 
           this.framework.src = "src/assets/images/maggot/spritesheet/maggotsheet.png";
           break;
@@ -185,8 +183,8 @@ export default class Enemy {
           this.height = 70;
 
           // THIS IS IN REVERSE LOOOL BUT THAT'S THE WAY IT WORKS (HTMS)
-          // if (this.isCivie) this.speed = -3;
-          // else this.speed = 3;
+          if (this.isCivie) this.speed = -3.5;
+          else this.speed = 3.5;
           break;
         
         // OPENFIRE BY DEFAULT IS 
@@ -243,33 +241,43 @@ export default class Enemy {
       }
     }
     draw(context) {
-      context.imageSmoothingEnabled = false;
+      // context.imageSmoothingEnabled = false;
+
+      // if (this.statica == false) {
+      //   if (this.inPosition == true && this.type != "crawl") {
+      //     context.drawImage(this.static, this.x, this.y);
+      //   }
+      //   else if (!this.statica) {
+      //     context.drawImage(
+      //       this.framework,
+      //       this.frameX * this.spriteWidth,
+      //       0,
+      //       this.spriteWidth,
+      //       this.spriteHeight,
+      //       this.x,
+      //       this.y,
+      //       this.width,
+      //       this.height
+      //     );
+      //   }
+      // } else context.drawImage(this.static, this.x, this.y);
+
+      context.beginPath();
+      context.fillStyle = this.color;
 
       // DO NOT FUCKING REMOVE. FOR DUCKING ENEMY PURPOSES:
-      // if (this.duck) {
-      //   context.fillRect(this.x, this.y + this.height / 2, this.width, this.height / 2);
-      // } else {
-      //   context.fillRect(this.x, this.y, this.width, this.height);
-      // }
+      if (this.duck) {
+        context.fillRect(this.x, this.y + this.height / 2, this.width, this.height / 2);
+      } else {
+        context.fillRect(this.x, this.y, this.width, this.height);
+      }
 
-      if (this.statica == false) {
-        if (this.inPosition == true && this.type != "crawl") {
-          context.drawImage(this.static, this.x, this.y);
-        }
-        else if (!this.statica) {
-          context.drawImage(
-            this.framework,
-            this.frameX * this.spriteWidth,
-            0,
-            this.spriteWidth,
-            this.spriteHeight,
-            this.x,
-            this.y,
-            this.width,
-            this.height
-          );
-        }
-      } else context.drawImage(this.static, this.x, this.y);
+      // if (this.duck && this.type == "sheep") {
+      if (this.duck) {
+        context.fillRect(this.x, this.y + this.height / 2, this.width, this.height / 2);
+      } else {
+        context.fillRect(this.x, this.y, this.width, this.height);
+      }
 
       context.font = "20px serif";
       context.fillStyle = "gray";
@@ -277,11 +285,10 @@ export default class Enemy {
       context.textAlign = "center";
       context.textBaseline = "middle";
 
+      // if (this.isCivie) this.speed = -3;
       if (this.isCivie) this.color = "gray";
-      // in last round, crawlies and bombers have equal chance of spawning:
-      // else if (this.typeNum <= this.crawlOdds && this.round >= 9) this.type = ["crawl", "bomber"][ Math.floor(Math.random() * 2)];
 
-      // context.fillText(`${this.type}`, this.x + (this.width / 2), this.y - 10);
+      context.fillText(`${this.type}`, this.x + (this.width / 2), this.y - 10);
     } // projectiles
 
     renderBeam(context) {
