@@ -1403,7 +1403,7 @@ function pushEnemy() {
 
                 // SPAWN CIVIES IN LATTER PART OF FINAL ROUND:
                 if (finalRound && enemyCount % 3 == 0 && (enemyCount < 20 && enemyCount > 10)) {
-                    enemyQueue.push(new Enemy(-50, -currentSpeed, currentRound, enemySpeed));
+                    enemyQueue.push(new Enemy(-42, -currentSpeed, currentRound, enemySpeed));
                     enemyCount--; 
                 }
             }  
@@ -1413,7 +1413,7 @@ function pushEnemy() {
                 // REMEMBER: enemyCount only refers to num. of enemies to push to array :)
                 // if (enemyCount > 0) {
                 if (!endSpecRound) {
-                    enemyQueue.push(new Enemy(-50, -currentSpeed, currentRound, enemySpeed));
+                    enemyQueue.push(new Enemy(-42, -currentSpeed, currentRound, enemySpeed));
                     enemyCount--; 
                 }
             }
