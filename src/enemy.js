@@ -4,183 +4,371 @@ import Projectile from "./projectile.js";
 export default class Enemy {
     // what's the speed parameter for again? to increase speed globally as rounds progress :)
     // TO PASS IN NEW FRAMA ARGUMENT GLOBALLY: -CANT DO THAT, IT DOESN'T UPDATE.
-    constructor(x, speed, round, frameSpeed) {
+    // constructor(x, speed, round, frameSpeed) {
+      // NEW SHIT:
       // cxt
-      this.frama = 0;
-      this.speed = speed;
+      // this.frama = 0;
+      // this.speed = speed;
 
-      this.x = x;
-      this.y;
+      // this.x = x;
+      // this.y;
 
-      this.bulletX;
-      this.bulletY;
+      // this.bulletX;
+      // this.bulletY;
 
-      this.round = round;
+      // this.round = round;
 
-      this.color = "pink"
-      this.dead = false;
+      // this.color = "pink"
+      // this.dead = false;
 
-      this.pickupNum = Math.floor(Math.random() * 15);
-      this.pickupOdds = 0;
-      this.pickup = false;
+      // this.pickupNum = Math.floor(Math.random() * 15);
+      // this.pickupOdds = 0;
+      // this.pickup = false;
 
-      this.isCivie = false;
-      this.inNadeRange = false;
+      // this.isCivie = false;
+      // this.inNadeRange = false;
 
-      this.duck = false;
-      this.duckable = false;
+      // this.duck = false;
+      // this.duckable = false;
 
-      // ground, crawl, air, civie
-      this.health = 2;
+      // // ground, crawl, air, civie
+      // this.health = 2;
 
-      // ENEMY GUN:
-      this.projectiles = [];
-      // this.fireRate = 200;
-      // this.fireRate = 150;
-      this.fireRate = 100;
-      this.shooting = false;
-      this.timer = 0;
-      this.angle = "back";
+      // // ENEMY GUN:
+      // this.projectiles = [];
+      // // this.fireRate = 200;
+      // // this.fireRate = 150;
+      // this.fireRate = 100;
+      // this.shooting = false;
+      // this.timer = 0;
+      // this.angle = "back";
 
-      // POSITION CRAP:
-      this.inPosition = false;
-      this.position = 0;
-      this.dead = false;
+      // // POSITION CRAP:
+      // this.inPosition = false;
+      // this.position = 0;
+      // this.dead = false;
 
-      this.beaming = false;
-      this.beamHeight = 150;
-      this.openFire = 100;
-      this.beamActive = false;
+      // this.beaming = false;
+      // this.beamHeight = 150;
+      // this.openFire = 100;
+      // this.beamActive = false;
 
-      // ODDS CRAP:
-      // base enemies:
-      // 6/10 chance to spawn ground, 4/10 ch. to spawn air, 2/10 to spawn spec (dog, bomber, sheep)
+      // // ODDS CRAP:
+      // // base enemies:
+      // // 6/10 chance to spawn ground, 4/10 ch. to spawn air, 2/10 to spawn spec (dog, bomber, sheep)
 
-      this.typeNum = Math.floor(Math.random() * 20);
-      this.groundOdds = 20; // 8
-      this.airOdds = 12;    // 6
-      this.crawlOdds = 6;   // 4
-      this.bossOdds = 2;    // 3  
-      // ^ if on rounds 7-9, spawn only bomber. If on boss round, spawn bomber and sheep
+      // this.typeNum = Math.floor(Math.random() * 20);
+      // this.groundOdds = 20; // 8
+      // this.airOdds = 12;    // 6
+      // this.crawlOdds = 6;   // 4
+      // this.bossOdds = 2;    // 3  
+      // // ^ if on rounds 7-9, spawn only bomber. If on boss round, spawn bomber and sheep
 
-      // sheep pushed on round 10:
-      this.bossType = ["bomber", "sheep"][Math.floor(Math.random() * 2)];
-      this.otherOdds = 5;
-      this.type = "ground";
+      // // sheep pushed on round 10:
+      // this.bossType = ["bomber", "sheep"][Math.floor(Math.random() * 2)];
+      // this.otherOdds = 5;
+      // this.type = "ground";
 
-      /* EVENTS:
-        round 1: only ground enemies
-        round 2: only ground and air enemies
-        round 3: pickups and dogs introduced (health, ar, grenade), plus ducking
-        round 4: grenades introduced
-        round 5: Massacre. Natural text at end
-        round 6: good and soon text at beginning. Bombers introduced. pickupOdds increased.
-        round 7: flammen introduced. Should have same equality as grenade. AR becomes minority
-        round 8: second shooter introduced
-        round 9: crazy round
-        round 10: boss fight. Sheep introduced. More civies.
+      // /* EVENTS:
+      //   round 1: only ground enemies
+      //   round 2: only ground and air enemies
+      //   round 3: pickups and dogs introduced (health, ar, grenade), plus ducking
+      //   round 4: grenades introduced
+      //   round 5: Massacre. Natural text at end
+      //   round 6: good and soon text at beginning. Bombers introduced. pickupOdds increased.
+      //   round 7: flammen introduced. Should have same equality as grenade. AR becomes minority
+      //   round 8: second shooter introduced
+      //   round 9: crazy round
+      //   round 10: boss fight. Sheep introduced. More civies.
 
-        ENEMY COUNTS:
-        6
-        10
-        13
-        16
-        20    (CIVIES)
-        26
-        33
-        42
-        54
-        70
-      */
+      //   ENEMY COUNTS:
+      //   6
+      //   10
+      //   13
+      //   16
+      //   20    (CIVIES)
+      //   26
+      //   33
+      //   42
+      //   54
+      //   70
+      // */
 
-      this.static = new Image;
-      this.framework = new Image;
+      // this.static = new Image;
+      // this.framework = new Image;
 
-      // first 3 images in sprite are 42x35, second 3 are 42x36
-      this.width = 42;
-      this.height = 35;
-      this.pickupY= 50;
+      // // first 3 images in sprite are 42x35, second 3 are 42x36
+      // this.width = 42;
+      // this.height = 35;
+      // this.pickupY= 50;
 
-      this.frameX = 0;
-      this.frameY = 0;
-      this.spriteWidth = 42;
-      this.spriteHeight = 35;
-      this.minFrame = 0;
-      this.maxFrame = 5;
-      this.pigFrame = frameSpeed;   // to increase as rounds progress.
-      this.statica = false          // determine if enemy is static throughout (like plane)
-      this.animation = false;
-    }
+      // this.frameX = 0;
+      // this.frameY = 0;
+      // this.spriteWidth = 42;
+      // this.spriteHeight = 35;
+      // this.minFrame = 0;
+      // this.maxFrame = 5;
+      // this.pigFrame = frameSpeed;   // to increase as rounds progress.
+      // this.statica = false          // determine if enemy is static throughout (like plane)
+      // this.animation = false;
+    // }
+
+      // OLD SHIT:
+      // what's the speed parameter for again? to increase speed globally as rounds progress :)
+      constructor(x, speed, round) {
+        // cxt
+        // FASTER SPEED ON CRAWLIES
+        this.width = 50;
+        this.height = 50;
+  
+        this.speed = speed;
+  
+        this.x = x;
+        this.y;
+  
+        this.round = round;
+  
+        this.color = "pink"
+        this.dead = false;
+  
+        this.pickupNum = Math.floor(Math.random() * 15);
+        this.pickupOdds = 0;
+        this.pickup = false;
+  
+        this.isCivie = false;
+        this.inNadeRange = false;
+  
+        this.duck = false;
+        this.duckable = false;
+  
+        // ground, crawl, air, civie
+        // this.type = "ground";
+        this.health = 2;
+  
+        // ENEMY GUN:
+        this.projectiles = [];
+        // this.fireRate = 200;
+        // this.fireRate = 150;
+        this.fireRate = 100;
+        this.shooting = false;
+        this.timer = 0;
+        this.angle = "back";
+  
+        // POSITION CRAP:
+        this.inPosition = false;
+        this.position = 0;
+  
+        this.dead = false;
+  
+        this.beaming = false;
+        this.beamHeight = 180;
+        this.openFire = 100;
+        this.beamActive = false;
+  
+        // ODDS CRAP:
+        // base enemies:
+        // 6/10 chance to spawn ground, 4/10 ch. to spawn air, 2/10 to spawn spec (dog, bomber, sheep)
+        
+  
+        // initially, bombers don't spawn until round
+  
+        // this.typeNum = Math.floor(Math.random() * 10);
+  
+        // this.groundOdds = 10; // 6  
+        // this.airOdds = 4;     // 3
+        // this.crawlOdds = 1;   // 2
+        // this.bomberOdds = 1;  // 2
+        // this.sheepOdds = 2;
+  
+        this.typeNum = Math.floor(Math.random() * 20);
+        this.groundOdds = 20; // 8
+        this.airOdds = 12;    // 6
+        this.crawlOdds = 6;   // 4
+        this.bossOdds = 2;    // 3  
+        // ^ if on rounds 7-9, spawn only bomber. If on boss round, spawn bomber and sheep
+  
+        // sheep pushed on round 10:
+        this.bossType = ["bomber", "sheep"][Math.floor(Math.random() * 2)];
+        // this.specOrc = this.specOrcs[Math.floor(Math.random() * this.specOrcs.length)];
+        // this.type = this.orcTypes[Math.floor(Math.random() * this.orcTypes.length)];
+        this.otherOdds = 5;
+        // this.type;
+        // this.type = "ground";
+        this.type;
+  
+        // this.weapon = ["flammen", "grenade"][Math.floor(Math.random() * 2)];
+  
+        /* EVENTS:
+          round 1: only ground enemies
+          round 2: only ground and air enemies
+          round 3: pickups and dogs introduced (health, ar, grenade), plus ducking
+          round 4: grenades introduced
+          round 5: Massacre. Natural text at end
+          round 6: good and soon text at beginning. Bombers introduced. pickupOdds increased.
+          round 7: flammen introduced. Should have same equality as grenade. AR becomes minority
+          round 8: second shooter introduced
+          round 9: crazy round
+          round 10: boss fight. Sheep introduced. More civies.
+  
+          ENEMY COUNTS:
+          6
+          10
+          13
+          16
+          20    (CIVIES)
+          26
+          33
+          42
+          54
+          70
+        */
+      }
 
     update() {
-      if (this.frama <= 100) this.frama++;
-      else this.frama = 0;
+      // FRAME SHIT
+      // if (this.frama <= 100) this.frama++;
+      // else this.frama = 0;
 
-      if (this.frama % this.pigFrame === 0 && this.pigFrame > 0) {
-        if (this.frameX < this.maxFrame)
-          this.frameX++;
-        else this.frameX = this.minFrame;
-      }
+      // if (this.frama % this.pigFrame === 0 && this.pigFrame > 0) {
+      //   if (this.frameX < this.maxFrame)
+      //     this.frameX++;
+      //   else this.frameX = this.minFrame;
+      // }
 
       // HEIRARCHY CRAP:
       // 0-2
+      // if (this.typeNum <= this.bossOdds) {
+      //   if (this.round < 6 && this.round > 0) this.type = "ground";
+      //   else if (this.round >= 6 && this.round < 10) this.type = "bomber";
+      //   else this.type = this.bossType;   // <- if round 10
+      //   // else if (this.round == 10 || )
+      // }
+      // // 3-6
+      // else if (this.typeNum <= this.crawlOdds && (this.round >= 3)) {
+      //   this.type = "crawl";
+      // }
+      // // 6-12
+      // else if (this.typeNum <= this.airOdds && (this.round >= 2 && this.round != 3)) {
+      //   this.type = "air";
+      // }
+
+      //  OLD SHIT:
       if (this.typeNum <= this.bossOdds) {
-        if (this.round < 6 && this.round > 0) this.type = "ground";
+        if (this.round < 6) this.type = "ground";
         else if (this.round >= 6 && this.round < 10) this.type = "bomber";
         else this.type = this.bossType;   // <- if round 10
-        // else if (this.round == 10 || )
+
+        // this.type = "bomber";
+        // this.type = "sheep";
       }
+      // else if (this.typeNum <= this.crawlOdds) {
       // 3-6
       else if (this.typeNum <= this.crawlOdds && (this.round >= 3)) {
         this.type = "crawl";
       }
+      // if (this.typeNum <= this.airOdds && (this.round >= 2 && this.round != 3)) {
+      // if (this.typeNum <= this.airOdds) {
       // 6-12
       else if (this.typeNum <= this.airOdds && (this.round >= 2 && this.round != 3)) {
         this.type = "air";
       }
-      // else if (this.round)
+      else this.type = "ground";
 
+      // NEW:
+      // switch(this.type) {
+      //   case "crawl":
+      //     this.sound = "growl";
+      //     this.width = 60;
+      //     this.height = 30;
+      //     this.health = 1;
+
+      //     this.spriteWidth = 60;
+      //     this.spriteHeight = 30;
+      //     this.maxFrame = 3;
+
+      //     // wtf is this???
+      //     if (this.isCivie) this.speed = -4;
+      //     else this.speed = 4;
+
+      //     this.framework.src = "src/assets/images/maggot/spritesheet/maggotsheet.png";
+      //     break;
+
+      //   case "ground":
+      //     // this.x + this.width - 20, this.y + 5
+      //     this.bulletX = this.width - 20;
+      //     this.bulletY = 5; 
+      //     this.sound = "shotty";
+      //     this.framework.src = "src/assets/images/assault-pig/pig-walk-clear/pigFrames.png";
+
+      //     if (!this.animation) this.static.src = "src/assets/images/assault-pig/pig-stand-clear.png";
+      //     else this.static.src = "src/assets/images/assault-pig/pig-stand-fire.png";
+      //     break;
+
+      //   case "air":
+      //     this.bulletX = 26;
+      //     this.bulletY = this.height - 23; 
+      //     this.statica = true;
+      //     this.sound = "shotty";
+      //     this.static.src = "src/assets/images/pig-plane-clear.png";
+      //     // framework.src not given shit here.
+
+      //     this.fireRate = 150;
+      //     this.health = 1;
+      //     this.width = 70;
+      //     this.height = 70;
+
+      //     // THIS IS IN REVERSE LOOOL BUT THAT'S THE WAY IT WORKS (HTMS)
+      //     if (this.isCivie) this.speed = -3.5;
+      //     else this.speed = 3.5;
+      //     break;
+        
+      //   // OPENFIRE BY DEFAULT IS 
+      //   case "bomber":
+      //     this.openFire = 150;
+      //     this.fireRate = 15;
+      //     this.width = 90;
+      //     this.height = 90;
+      //     this.statica = true;
+      //     if (!this.inPosition) this.static.src = "src/assets/images/bomber/bomber-clear.png";
+      //     else this.static.src = "src/assets/images/bomber/bomber-fire.png";
+      //     break;
+
+      //   case "sheep":
+      //     this.sound = "laser-gun";
+      //     this.openFire = 150;
+      //     this.fireRate = 15;
+      //     this.width = 70;
+      //     this.height = 58;
+      //     this.spriteWidth = 70;
+      //     this.spriteHeight = 58;
+      //     this.frameSpeed = 5; 
+      //     this.maxFrame = 5;
+      //     this.framework.src = "src/assets/images/enemy-sheep/girl-frames/clears/spritesheet.png";
+      //     this.static.src = "src/assets/images/enemy-sheep/girl-sheep-clear.png";
+      //     break;  
+      // }
+
+      // OLD SHIT:
       switch(this.type) {
         case "crawl":
           this.sound = "growl";
-          this.width = 60;
+          this.width = 30;
           this.height = 30;
           this.health = 1;
 
-          this.spriteWidth = 60;
-          this.spriteHeight = 30;
-          this.maxFrame = 3;
-
-          // wtf is this???
           if (this.isCivie) this.speed = -4;
           else this.speed = 4;
-
-          this.framework.src = "src/assets/images/maggot/spritesheet/maggotsheet.png";
           break;
 
         case "ground":
-          // this.x + this.width - 20, this.y + 5
-          this.bulletX = this.width - 20;
-          this.bulletY = 5; 
           this.sound = "shotty";
-          this.framework.src = "src/assets/images/assault-pig/pig-walk-clear/pigFrames.png";
-
-          if (!this.animation) this.static.src = "src/assets/images/assault-pig/pig-stand-clear.png";
-          else this.static.src = "src/assets/images/assault-pig/pig-stand-fire.png";
           break;
 
         case "air":
-          this.bulletX = 26;
-          this.bulletY = this.height - 23; 
-          this.statica = true;
           this.sound = "shotty";
-          this.static.src = "src/assets/images/pig-plane-clear.png";
-          // framework.src not given shit here.
-
+          // this.openFire = 150;
           this.fireRate = 150;
           this.health = 1;
-          this.width = 70;
-          this.height = 70;
 
           // THIS IS IN REVERSE LOOOL BUT THAT'S THE WAY IT WORKS (HTMS)
           if (this.isCivie) this.speed = -3.5;
@@ -191,26 +379,17 @@ export default class Enemy {
         case "bomber":
           this.openFire = 150;
           this.fireRate = 15;
-          this.width = 90;
-          this.height = 90;
-          this.statica = true;
-          if (!this.inPosition) this.static.src = "src/assets/images/bomber/bomber-clear.png";
-          else this.static.src = "src/assets/images/bomber/bomber-fire.png";
+          this.width = 70;
+          this.height = 70;
           break;
 
         case "sheep":
           this.sound = "laser-gun";
           this.openFire = 150;
           this.fireRate = 15;
-          this.width = 70;
-          this.height = 58;
-          this.spriteWidth = 70;
-          this.spriteHeight = 58;
-          this.frameSpeed = 5; 
-          this.maxFrame = 5;
-          this.framework.src = "src/assets/images/enemy-sheep/girl-frames/clears/spritesheet.png";
-          this.static.src = "src/assets/images/enemy-sheep/girl-sheep-clear.png";
-          break;  
+          this.width = 60;
+          this.height = 60;
+          break;
       }
 
       // THIS WORKS
@@ -221,12 +400,19 @@ export default class Enemy {
         this.speed = 0;
         this.timer++;
 
-        if (this.timer >= this.openFire && this.timer % this.fireRate === 0) { 
-          // this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 5, this.angle, this.sound, this.dead, "shotty"));
-          this.projectiles.push(new Projectile(this.x + this.bulletX, this.y + this.bulletY, this.angle, this.sound, this.dead, "shotty"));
-          if (this.type == "bomber") {
-            this.beamActive = true;
-          }
+        // NEW
+        // if (this.timer >= this.openFire && this.timer % this.fireRate === 0) { 
+        //   // this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 5, this.angle, this.sound, this.dead, "shotty"));
+        //   this.projectiles.push(new Projectile(this.x + this.bulletX, this.y + this.bulletY, this.angle, this.sound, this.dead, "shotty"));
+        //   if (this.type == "bomber") {
+        //     this.beamActive = true;
+        //   }
+        // } 
+
+        // OLD
+        if (this.timer >= this.openFire && this.timer % this.fireRate === 0) {
+          this.projectiles.push(new Projectile(this.x + this.width - 20, this.y + 10, this.angle, this.sound, this.dead)); 
+          if (this.type == "bomber") this.beamActive = true;
         } 
       }
 
@@ -235,14 +421,19 @@ export default class Enemy {
 
       // misc. events:
       // introduce bomber:
-      // if (this.round >= 6) this.pickupOdds = 1;
+      // OLD:
+      if (this.round >= 6) this.pickupOdds = 1;
+
       if (this.pickupNum <= this.pickupOdds && this.round >= 3) {
         this.pickup = true   
       }
     }
+
+    // ************************************************** GOOOD **************************************************
     draw(context) {
       // context.imageSmoothingEnabled = false;
 
+      // NEW SHIT:  
       // if (this.statica == false) {
       //   if (this.inPosition == true && this.type != "crawl") {
       //     context.drawImage(this.static, this.x, this.y);
@@ -273,11 +464,11 @@ export default class Enemy {
       }
 
       // if (this.duck && this.type == "sheep") {
-      if (this.duck) {
-        context.fillRect(this.x, this.y + this.height / 2, this.width, this.height / 2);
-      } else {
-        context.fillRect(this.x, this.y, this.width, this.height);
-      }
+      // if (this.duck) {
+      //   context.fillRect(this.x, this.y + this.height / 2, this.width, this.height / 2);
+      // } else {
+      //   context.fillRect(this.x, this.y, this.width, this.height);
+      // }
 
       context.font = "20px serif";
       context.fillStyle = "gray";
@@ -291,6 +482,7 @@ export default class Enemy {
       context.fillText(`${this.type}`, this.x + (this.width / 2), this.y - 10);
     } // projectiles
 
+    // GOOD
     renderBeam(context) {
       if (this.timer >= this.openFire) {
         context.beginPath();
