@@ -143,8 +143,8 @@ export default class Enemy {
           this.maxFrame = 3;
 
           // wtf is this???
-          if (this.isCivie) this.speed = -4;
-          else this.speed = 4;
+          // if (this.isCivie) this.speed = -4;
+          // else this.speed = 4;
 
           this.framework.src = "src/assets/images/maggot/spritesheet/maggotsheet.png";
           break;
@@ -154,10 +154,12 @@ export default class Enemy {
           this.bulletX = this.width - 20;
           this.bulletY = 5; 
           this.sound = "shotty";
-          this.framework.src = "src/assets/images/assault-pig/pig-walk-clear/pigFrames.png";
+          if (!this.isCivie) this.framework.src = "src/assets/images/assault-pig/pig-walk-clear/pigFrames.png";
+          else this.framework.src = "src/assets/images/civy/new-frames/spritesheet.png";
 
           if (!this.animation) this.static.src = "src/assets/images/assault-pig/pig-stand-clear.png";
           else this.static.src = "src/assets/images/assault-pig/pig-stand-fire.png";
+
           break;
 
         case "air":
@@ -233,7 +235,8 @@ export default class Enemy {
 
       // NEW SHIT:  
       if (this.statica == false) {
-        if (this.inPosition == true && this.type != "crawl") {
+        if (this.inPosition == true && (this.type != "crawl" || this.type != "air")) {
+          context.imageSmoothingEnabled = false;
           context.drawImage(this.static, this.x, this.y);
         }
         else if (!this.statica) {
@@ -270,7 +273,7 @@ export default class Enemy {
       // if (this.isCivie) this.speed = -3;
       if (this.isCivie) this.color = "gray";
 
-      context.fillText(`${this.type}`, this.x + (this.width / 2), this.y - 10);
+      // context.fillText(`${this.type}`, this.x + (this.width / 2), this.y - 10);
     } // projectiles
 
     // GOOD

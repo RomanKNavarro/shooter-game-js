@@ -853,8 +853,7 @@ function handleState() {
             // enemy speed on final round is 5.1.
 
             // let specRounds = {4: "SPECIAL", 6: "NATURAL", 7: "RELIEF", 9: "BOSS", 10: "END"};
-            let specRounds = {1: "SPECIAL", 6: "NATURAL", 7: "RELIEF", 9: "BOSS", 10: "END"};
-
+            let specRounds = {1: "SPECIAL", 6: "NATURAL", 7: "RELIEF", 8: "BOSS", 10: "END"};
 
             if (Object.keys(specRounds).includes(currentRound.toString())) {
                 state = specRounds[currentRound];
@@ -874,9 +873,7 @@ function handleState() {
             } else {
                 wallText.draw(cxt);
             }
-
             handleEnemy();
-            // pushEnemy();
 
             playAgainButton2.draw(cxt);
             mouseCollision(shooter.mouse, playAgainButton2, () => state = "MENU");  
@@ -1372,9 +1369,6 @@ function handleEnemy() {
             }
 
             if (current.type == "crawl" && current.shooting && frame % 50) {
-                // UNCOMMENT THIS:
-                // sfx.growl.play();
-                // playSound(sfx.bloop);
                 playSound(sfx.growl);
             }
         }
