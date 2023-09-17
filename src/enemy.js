@@ -100,6 +100,10 @@ export default class Enemy {
       this.pigFrame = frameSpeed;   // to increase as rounds progress.
       this.statica = false          // determine if enemy is static throughout (like plane)
       this.animation = false;
+
+      this.civy_frameworks = ["src/assets/images/civy/new-frames/spritesheet.png", 
+                              "src/assets/images/civy/new-frames/spritesheet2.png"];
+      this.civy_frames = this.civy_frameworks[Math.floor(Math.random() * 2)];
     }
 
     update() {
@@ -154,8 +158,17 @@ export default class Enemy {
           this.bulletX = this.width - 20;
           this.bulletY = 5; 
           this.sound = "shotty";
-          if (!this.isCivie) this.framework.src = "src/assets/images/assault-pig/pig-walk-clear/pigFrames.png";
-          else this.framework.src = "src/assets/images/civy/new-frames/spritesheet.png";
+          if (this.isCivie == true) {
+            this.width = 63;
+            this.height = 41;
+            this.maxFrame = 4;
+            this.spriteWidth = 63;
+            this.spriteHeight = 41;
+            // this.framework.src = "src/assets/images/civy/new-frames/spritesheet2.png";
+            // this.framework.src = this.civy_frameworks[Math.floor(Math.random() * 2)];
+            this.framework.src = this.civy_frames;
+          }
+          else this.framework.src = "src/assets/images/assault-pig/pig-walk-clear/pigFrames.png";
 
           if (!this.animation) this.static.src = "src/assets/images/assault-pig/pig-stand-clear.png";
           else this.static.src = "src/assets/images/assault-pig/pig-stand-fire.png";
