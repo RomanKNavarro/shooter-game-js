@@ -147,7 +147,7 @@ export default class Enemy {
           this.maxFrame = 3;
 
           // wtf is this???
-          // if (this.isCivie) this.speed = -4;
+          // if (this.isCivie) this.speed = 4;
           // else this.speed = 4;
 
           this.framework.src = "src/assets/images/maggot/spritesheet/maggotsheet.png";
@@ -189,8 +189,8 @@ export default class Enemy {
           this.height = 70;
 
           // THIS IS IN REVERSE LOOOL BUT THAT'S THE WAY IT WORKS (HTMS)
-          if (this.isCivie) this.speed = -3.5;
-          else this.speed = 3.5;
+          if (this.isCivie) this.speed = -4;
+          else this.speed = 4;
           break;
         
         // OPENFIRE BY DEFAULT IS 
@@ -282,9 +282,6 @@ export default class Enemy {
 
       context.textAlign = "center";
       context.textBaseline = "middle";
-
-      // if (this.isCivie) this.speed = -3;
-      if (this.isCivie) this.color = "gray";
 
       // context.fillText(`${this.type}`, this.x + (this.width / 2), this.y - 10);
     } // projectiles
