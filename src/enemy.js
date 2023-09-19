@@ -103,7 +103,10 @@ export default class Enemy {
 
       this.civy_frameworks = ["src/assets/images/civy/new-frames/spritesheet.png", 
                               "src/assets/images/civy/new-frames/spritesheet2.png"];
+
       this.civy_frames = this.civy_frameworks[Math.floor(Math.random() * 2)];
+
+      this.dog_frames = "src/assets/images/dog/dog-frames/spritesheet.png";
     }
 
     update() {
@@ -134,6 +137,8 @@ export default class Enemy {
         this.type = "air";
       }
 
+      if (this.isCivie == true) this.type = "ground";
+
       // NEW:
       switch(this.type) {
         case "crawl":
@@ -141,6 +146,19 @@ export default class Enemy {
           this.width = 60;
           this.height = 30;
           this.health = 1;
+
+          if (this.isCivie == true) {
+            this.width = 52;
+            this.height = 30;
+            this.maxFrame = 4;
+            this.spriteWidth = 52;
+            this.spriteHeight = 30;
+
+            // this.framework.src = this.dog_frames;
+            this.framework.src = "src/assets/images/dog/dog-frames/spritesheet.png";
+
+          }
+          else this.framework.src = "src/assets/images/assault-pig/pig-walk-clear/pigFrames.png";
 
           this.spriteWidth = 60;
           this.spriteHeight = 30;
@@ -158,6 +176,7 @@ export default class Enemy {
           this.bulletX = this.width - 20;
           this.bulletY = 5; 
           this.sound = "shotty";
+
           if (this.isCivie == true) {
             this.width = 63;
             this.height = 41;
@@ -189,7 +208,9 @@ export default class Enemy {
           this.height = 70;
 
           // THIS IS IN REVERSE LOOOL BUT THAT'S THE WAY IT WORKS (HTMS)
-          if (this.isCivie) this.speed = -4;
+          if (this.isCivie) {
+            this.speed = -4;
+          }
           else this.speed = 4;
           break;
         

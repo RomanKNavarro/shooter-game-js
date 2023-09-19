@@ -268,6 +268,7 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // TODO: frames of female walking in loading state goodie.  --DONE
 // CURRENTROUND IS INITIALLY 1. Should change to 0.         --DONE (resolved)
 // at game Over (wall), stop pushing further enemies. Also, warren should die.
+// there should be NO crawlies on special   --DONE
 
 let roundCounts = [6, 10]; 
 
@@ -597,6 +598,7 @@ function resetBaddies() {
 }
 
 function greatReset() {
+    shooter.angle = "straight";
     shooter.dead = false;
     endSpecRound = false;
     currentSpeed = 1.5;
@@ -1017,7 +1019,8 @@ function handleShooter() {
     shooter2.weapon = shooter.weapon;
     if (secondShooter) shooter2.draw(cxt2);
 
-    if ((state != "MENU" || state != "LOSE")) {
+    // if ((state != "MENU" || state != "LOSE")) {
+        if (state != "LOSE" ) {
         shooter.update(cxt2);
         if (secondShooter) {
             shooter2.update(cxt2);
@@ -1505,7 +1508,7 @@ function animate() {
     if ((state == "RUNNING" || state == "LOSE") && frame <= 100) frame++;
     else frame = 0;
 
-   // console.log(currentRound);
+   // console.log(frame);
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
