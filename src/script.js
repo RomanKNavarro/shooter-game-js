@@ -269,6 +269,7 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // CURRENTROUND IS INITIALLY 1. Should change to 0.         --DONE (resolved)
 // at game Over (wall), stop pushing further enemies. Also, warren should die.
 // there should be NO crawlies on special   --DONE
+// WAY to many dogs on special
 
 let roundCounts = [6, 10]; 
 
@@ -461,6 +462,13 @@ let loadingTime = [4000, 5000][Math.floor(Math.random() * 2)];
 
 // FUNCTIONS:
 var sfx = {
+    yelp: new Howl({
+        src: [
+            "src/assets/sounds/animals_dog_yelp_med_large.mp3",
+        ],
+        loop: false,
+        volume: 6,
+    }),
     growl: new Howl({
       /* accepts multiple versions of the same audio! (automatically selects the best one for the 
       current web browser */
@@ -854,8 +862,8 @@ function handleState() {
             // SPEC ROUND SHOULD BE 5. 
             // enemy speed on final round is 5.1.
 
-            let specRounds = {4: "SPECIAL", 6: "NATURAL", 7: "RELIEF", 9: "BOSS", 10: "END"};
-            // let specRounds = {1: "SPECIAL", 6: "NATURAL", 7: "RELIEF", 8: "BOSS", 10: "END"};
+            // let specRounds = {4: "SPECIAL", 6: "NATURAL", 7: "RELIEF", 9: "BOSS", 10: "END"};
+            let specRounds = {1: "SPECIAL", 6: "NATURAL", 7: "RELIEF", 8: "BOSS", 10: "END"};
 
             if (Object.keys(specRounds).includes(currentRound.toString())) {
                 state = specRounds[currentRound];
@@ -1019,8 +1027,8 @@ function handleShooter() {
     shooter2.weapon = shooter.weapon;
     if (secondShooter) shooter2.draw(cxt2);
 
-    // if ((state != "MENU" || state != "LOSE")) {
-        if (state != "LOSE" ) {
+    if ((state != "MENU" || state != "LOSE")) {
+        // if (state != "LOSE" ) {
         shooter.update(cxt2);
         if (secondShooter) {
             shooter2.update(cxt2);
@@ -1179,6 +1187,11 @@ function handleProjectile(arr) {
             let currentEnemy = arr[j];
             /* remove bullet and enemy if they contact eachother. Also make enemy 
             drop pickup if applicable: */ 
+
+            if (currentEnemy.isCivie && currentEnemy.type == "crawl" 
+            && (currentEnemy.x > current.x - 30 && currentEnemy.x < current.x + 30 && 
+                current.y >= currentEnemy.y)) playSound(sfx.yelp);
+
             if (arr[j] && projectiles[i] && collision(projectiles[i], arr[j])) {
 
                 projectiles.splice(i, 1);
@@ -1292,8 +1305,6 @@ function handleEnemy() {
             if (current.type == "ground" || current.type == "crawl") current.bulletLimit = 0
             else if (current.type == "air") current.bulletLimit = shooter.x + shooter.width / 2;
         }
-
-        // if (current.type != "ground") current.health = 1;
 
         // HERE'S HOW WE DISCRIMINATE CIVIES:
         if (current.speed < 0) current.isCivie = true;
@@ -1508,7 +1519,7 @@ function animate() {
     if ((state == "RUNNING" || state == "LOSE") && frame <= 100) frame++;
     else frame = 0;
 
-   // console.log(frame);
+    // console.log(shooter.dead);
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);

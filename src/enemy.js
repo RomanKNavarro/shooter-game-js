@@ -101,12 +101,16 @@ export default class Enemy {
       this.statica = false          // determine if enemy is static throughout (like plane)
       this.animation = false;
 
+      this.dogOdds = 3;
       this.civy_frameworks = ["src/assets/images/civy/new-frames/spritesheet.png", 
                               "src/assets/images/civy/new-frames/spritesheet2.png"];
 
       this.civy_frames = this.civy_frameworks[Math.floor(Math.random() * 2)];
-
       this.dog_frames = "src/assets/images/dog/dog-frames/spritesheet.png";
+      // this.civy_type = ["ground", "crawl"][Math.floor(Math.random() * 2)];
+      this.civy_type;
+      
+      // this.civy_type = "crawl";
     }
 
     update() {
@@ -120,31 +124,33 @@ export default class Enemy {
         else this.frameX = this.minFrame;
       }
 
-      // HEIRARCHY CRAP:
-      // 0-2
-      if (this.typeNum <= this.bossOdds) {
-        if (this.round < 6 && this.round > 0) this.type = "ground";
-        else if (this.round >= 6 && this.round < 10) this.type = "bomber";
-        else this.type = this.bossType;   // <- if round 10
-        // else if (this.round == 10 || )
+      if (this.isCivie == true) {
+        if (this.typeNum <= this.dogOdds) this.type = "crawl"
+        else this.type = "ground";
       }
-      // 3-6
-      else if (this.typeNum <= this.crawlOdds && (this.round >= 3)) {
-        this.type = "crawl";
+      else {
+        // HEIRARCHY CRAP:
+        // 0-2
+        if (this.typeNum <= this.bossOdds) {
+          if (this.round < 6 && this.round > 0) this.type = "ground";
+          else if (this.round >= 6 && this.round < 10) this.type = "bomber";
+          else this.type = this.bossType;   // <- if round 10
+          // else if (this.round == 10 || )
+        }
+        // 3-6
+        else if (this.typeNum <= this.crawlOdds && (this.round >= 3)) {
+          this.type = "crawl";
+        }
+        // 6-12
+        else if (this.typeNum <= this.airOdds && (this.round >= 2 && this.round != 3)) {
+          this.type = "air";
+        }
       }
-      // 6-12
-      else if (this.typeNum <= this.airOdds && (this.round >= 2 && this.round != 3)) {
-        this.type = "air";
-      }
-
-      if (this.isCivie == true) this.type = "ground";
-
+      
       // NEW:
       switch(this.type) {
         case "crawl":
           this.sound = "growl";
-          this.width = 60;
-          this.height = 30;
           this.health = 1;
 
           if (this.isCivie == true) {
@@ -156,19 +162,15 @@ export default class Enemy {
 
             // this.framework.src = this.dog_frames;
             this.framework.src = "src/assets/images/dog/dog-frames/spritesheet.png";
-
           }
-          else this.framework.src = "src/assets/images/assault-pig/pig-walk-clear/pigFrames.png";
-
-          this.spriteWidth = 60;
-          this.spriteHeight = 30;
-          this.maxFrame = 3;
-
-          // wtf is this???
-          // if (this.isCivie) this.speed = 4;
-          // else this.speed = 4;
-
-          this.framework.src = "src/assets/images/maggot/spritesheet/maggotsheet.png";
+          else {
+            this.width = 60;
+            this.height = 30;
+            this.spriteWidth = 60;
+            this.spriteHeight = 30;
+            this.maxFrame = 3;
+            this.framework.src = "src/assets/images/maggot/spritesheet/maggotsheet.png";
+          }
           break;
 
         case "ground":
