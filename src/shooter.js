@@ -480,6 +480,7 @@ s
         
         // FEEL LIKE I CAN SOLVE SECOND SHOOTER IMAGE CRAP HERE:
         if (this.dead) {
+            this.angle = "straight";
             context.drawImage(this.dead_warren, this.x, this.y + 1);
         } else {
             if (["straight", "down", "diagnal-duck", "down-up", "diagnal", "up"].includes(this.angle)) {
@@ -541,9 +542,9 @@ s
             // 232 down
             
             if (this.timer % this.fireRate === 0  || this.timer == 1) {
-                this.projectiles.push(new Projectile(this.x + this.bulletX, this.y + this.bulletY, this.angle, this.weapon, this.delete, this.weapon));
+                this.projectiles.push(new Projectile(this.x + this.bulletX, this.y + this.bulletY, this.angle, this.weapon, this.delete, false));
                 if (this.secondStream == true) {
-                    this.projectiles.push(new Projectile(this.secondX, this.y + this.bulletY, this.angle, this.weapon, this.delete, this.weapon));
+                    this.projectiles.push(new Projectile(this.secondX, this.y + this.bulletY, this.angle, this.weapon, this.delete, true));
                 }   
                 
                 if (this.specialAmmo > 0) {

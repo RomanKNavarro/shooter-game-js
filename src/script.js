@@ -269,7 +269,8 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // CURRENTROUND IS INITIALLY 1. Should change to 0.         --DONE (resolved)
 // at game Over (wall), stop pushing further enemies. Also, warren should die.
 // there should be NO crawlies on special   --DONE
-// WAY to many dogs on special
+// WAY to many dogs on special  --DONE
+// TODO: figured out why audio crashes. Two flammen is overwhelming. 
 
 let roundCounts = [6, 10]; 
 
@@ -862,8 +863,8 @@ function handleState() {
             // SPEC ROUND SHOULD BE 5. 
             // enemy speed on final round is 5.1.
 
-            // let specRounds = {4: "SPECIAL", 6: "NATURAL", 7: "RELIEF", 9: "BOSS", 10: "END"};
-            let specRounds = {1: "SPECIAL", 6: "NATURAL", 7: "RELIEF", 8: "BOSS", 10: "END"};
+            let specRounds = {4: "SPECIAL", 6: "NATURAL", 7: "RELIEF", 9: "BOSS", 10: "END"};
+            // let specRounds = {1: "SPECIAL", 6: "NATURAL", 7: "RELIEF", 8: "BOSS", 10: "END"};
 
             if (Object.keys(specRounds).includes(currentRound.toString())) {
                 state = specRounds[currentRound];

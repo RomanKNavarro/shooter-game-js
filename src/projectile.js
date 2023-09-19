@@ -1,7 +1,8 @@
 // BULLETS
 export default class Projectile {
     // "dead" used as determinant for playing sounds
-    constructor(x, y, direction, weapon, dead) {
+    constructor(x, y, direction, weapon, dead, isSecond) {
+      this.isSecond = isSecond;
 
       // NEW HOWLER CRAP (sound fx "bucket"):
       this.sfx = {
@@ -109,7 +110,7 @@ export default class Projectile {
           break;
 
         case "flammen":
-          this.playSound(this.sfx.flammen);
+          if (!this.isSecond) this.playSound(this.sfx.flammen);
           this.speed = 11;
           break;
 
