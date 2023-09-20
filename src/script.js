@@ -17,6 +17,9 @@ var canvas = document.getElementById("canvas1");
 var cxt = canvas.getContext("2d");
 canvas.style.width=canvas.getBoundingClientRect().width;//actual width of canvas
 canvas.style.height=canvas.getBoundingClientRect().height;//actual height of canvas
+// canvas.style.background_image = url("src/assets/images/background/background-concept.png");
+
+document.getElementById('canvas2').style.backgroundImage="url(src/assets/images/background/background-concept.png)"; // specify the image path here
 
 // STRICTLY FOR BULLETS:
 var bullet_canvas = document.getElementById("bullet-canvas");
@@ -270,7 +273,7 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // at game Over (wall), stop pushing further enemies. Also, warren should die.
 // there should be NO crawlies on special   --DONE
 // WAY to many dogs on special  --DONE
-// TODO: figured out why audio crashes. Two flammen is overwhelming. 
+// TODO: figured out why audio crashes. Two flammen is overwhelming. --DONE
 
 let roundCounts = [6, 10]; 
 
@@ -293,7 +296,7 @@ let secondShooter = false;
 // objects
 const flora = new Floor(canvas);
 // const shooter = new Shooter(100, flora.y - 34);
-const shooter = new Shooter(100, flora.y - 50);
+const shooter = new Shooter(100);
 
 
 //  NEEDS TO START OFF SCREEN, then walk over to position 200:
@@ -456,8 +459,8 @@ let currentSpeed = 1.5;
 let snackQueue = [];
 let nadeQueue = [];
 
-// let state = "MENU";
-let state = "LOADING";
+let state = "MENU";
+// let state = "LOADING";
 
 let loadingTime = [4000, 5000][Math.floor(Math.random() * 2)];
 
