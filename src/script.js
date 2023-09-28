@@ -270,11 +270,11 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // TODO: ufo sometimes does not stop above player.          --DONE
 // TODO: frames of female walking in loading state goodie.  --DONE
 // CURRENTROUND IS INITIALLY 1. Should change to 0.         --DONE (resolved)
-// at game Over (wall), stop pushing further enemies. Also, warren should die.
+// at game Over (wall), stop pushing further enemies. Also, warren should die.  --DONE (former part)
 // there should be NO crawlies on special   --DONE
 // WAY to many dogs on special  --DONE
 // TODO: figured out why audio crashes. Two flammen is overwhelming. --DONE
-// TODO: colors in gimp are faded across ALL drawings. Find out why.
+// TODO: colors in gimp are faded across ALL drawings. Find out why.    --DONE  
 
 let roundCounts = [6, 10]; 
 
