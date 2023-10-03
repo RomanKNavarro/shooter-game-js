@@ -19,7 +19,7 @@ canvas.style.width=canvas.getBoundingClientRect().width;//actual width of canvas
 canvas.style.height=canvas.getBoundingClientRect().height;//actual height of canvas
 // canvas.style.background_image = url("src/assets/images/background/background-concept.png");
 
-document.getElementById('canvas2').style.backgroundImage="url(src/assets/images/background/background-working.png)"; // specify the image path here
+document.getElementById('canvas2').style.backgroundImage="url(src/assets/images/background/background-working2.png)"; // specify the image path here
 
 // STRICTLY FOR BULLETS:
 var bullet_canvas = document.getElementById("bullet-canvas");
@@ -460,8 +460,8 @@ let currentSpeed = 1.5;
 let snackQueue = [];
 let nadeQueue = [];
 
-// let state = "MENU";
-let state = "LOADING";
+let state = "MENU";
+// let state = "LOADING";
 
 let loadingTime = [4000, 5000][Math.floor(Math.random() * 2)];
 
