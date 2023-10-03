@@ -275,6 +275,7 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // WAY to many dogs on special  --DONE
 // TODO: figured out why audio crashes. Two flammen is overwhelming. --DONE
 // TODO: colors in gimp are faded across ALL drawings. Find out why.    --DONE  
+// TODO: if killed with rifle, dead warren floats one pixel.
 
 let roundCounts = [6, 10]; 
 
@@ -460,8 +461,8 @@ let currentSpeed = 1.5;
 let snackQueue = [];
 let nadeQueue = [];
 
-let state = "MENU";
-// let state = "LOADING";
+// let state = "MENU";
+let state = "LOADING";
 
 let loadingTime = [4000, 5000][Math.floor(Math.random() * 2)];
 

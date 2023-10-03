@@ -26,19 +26,19 @@ export default class Button {
                 context.stroke();
         
                 // button text:
+                context.font = "12.5px serif";
                 context.fillStyle = "black";
         
                 // HOW TO CENTER TEXT IN BUTTON:
                 context.textAlign = "center";
-
                 context.textBaseline = "middle";
                 context.fillText(this.text, Math.floor(this.x + (this.width / 2)), Math.floor(this.y + (this.height / 2)));
             }
             else {
-                // context.beginPath();
-                context.font = "30px Tourney";
+                context.beginPath();
+                context.font = "25px Tourney";
                 context.strokeStyle = 'white';
-                context.lineWidth = 3;
+                context.lineWidth = 5;
                 context.strokeText(this.text, Math.floor(this.x + (this.width / 2)), Math.floor(this.y + (this.height / 2)));
 
                 context.fillStyle = "black";
