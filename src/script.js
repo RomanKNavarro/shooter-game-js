@@ -281,6 +281,7 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // TODO: if killed with rifle, dead warren floats one pixel.    --DONE
 // TODO: Once at final round, change to alternative background. --DONE
 // TODO: sometimes this fucking crawlie won't even show. seems to happen when they go on static. --YES      --DONE
+// audio crashes on second play
 
 let roundCounts = [6, 10]; 
 
@@ -617,6 +618,7 @@ function resetBaddies() {
 }
 
 function greatReset() {
+    startEnd = false;
     shooter.angle = "straight";
     shooter.dead = false;
     endSpecRound = false;
