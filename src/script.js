@@ -19,6 +19,9 @@ canvas.style.width=canvas.getBoundingClientRect().width;//actual width of canvas
 canvas.style.height=canvas.getBoundingClientRect().height;//actual height of canvas
 // canvas.style.background_image = url("src/assets/images/background/background-concept.png");
 
+// let currentBackground = "url(src/assets/images/background/background-working2.png)";
+// document.getElementById('canvas2').style.backgroundImage=currentBackground;
+
 document.getElementById('canvas2').style.backgroundImage="url(src/assets/images/background/background-working2.png)"; // specify the image path here
 
 // STRICTLY FOR BULLETS:
@@ -275,7 +278,8 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // WAY to many dogs on special  --DONE
 // TODO: figured out why audio crashes. Two flammen is overwhelming. --DONE
 // TODO: colors in gimp are faded across ALL drawings. Find out why.    --DONE  
-// TODO: if killed with rifle, dead warren floats one pixel.
+// TODO: if killed with rifle, dead warren floats one pixel.    --DONE
+// TODO: Once at final round, change to alternative background. --DONE
 
 let roundCounts = [6, 10]; 
 
@@ -775,6 +779,7 @@ function handleState() {
 
         // this state is only for the boss text:
         case "BOSS":
+            document.getElementById('canvas2').style.backgroundImage="url(src/assets/images/background/background-working3.png)";
             musicToggler();
             finalRound = true;
             bossText.draw(cxt);
@@ -795,7 +800,7 @@ function handleState() {
 
             setTimeout(() => {
                 startEnd = true
-            }, 3000);
+            }, 4000);
 
             resetBaddies();
             if (startEnd) state = "RUNNING";
@@ -808,6 +813,7 @@ function handleState() {
             shooter2.disabled = false;
 
             if (finalRound == true) {
+
                 if (enemiesLeft <= 150) currentSpeed = 6;
                 if (enemiesLeft <= 100) currentSpeed = 7;
                 if (enemiesLeft <= 50) currentSpeed = 8;
@@ -896,6 +902,7 @@ function handleState() {
             break;
 
         case "SPECIAL":
+            // currentBackground = "url(src/assets/images/background/background-working3.png)";
             musicToggler();
             specialRound = true;
             if (!showSpecialText) {
@@ -1148,7 +1155,7 @@ function handleEnemyProjectiles(orc) {
             i--;
 
             // UNCOMMENT THIS:
-            if ((!shooter.duck) || (["air", "bomber", "crawl"].includes(orc.type))) playerHealth.number--;
+            // if ((!shooter.duck) || (["air", "bomber", "crawl"].includes(orc.type))) playerHealth.number--;
         }
     }
 }
@@ -1344,7 +1351,7 @@ function handleEnemy() {
         } else {
             current.dead = true;
             // UNCOMMENT:
-            if (!current.isCivie) wallHealth.number--;
+            // if (!current.isCivie) wallHealth.number--;
         }
 
         if (current.dead) {
@@ -1525,7 +1532,7 @@ function animate() {
     if ((state == "RUNNING" || state == "LOSE") && frame <= 100) frame++;
     else frame = 0;
 
-    // console.log(shooter.dead);
+    // console.log(shooter.y);
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);

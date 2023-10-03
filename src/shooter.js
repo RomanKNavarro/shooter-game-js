@@ -480,8 +480,9 @@ s
         
         // FEEL LIKE I CAN SOLVE SECOND SHOOTER IMAGE CRAP HERE:
         if (this.dead) {
+            this.y = 191;
             this.angle = "straight";
-            context.drawImage(this.dead_warren, this.x, this.y + 1);
+            context.drawImage(this.dead_warren, this.x, this.y + 2);
         } else {
             if (["straight", "down", "diagnal-duck", "down-up", "diagnal", "up"].includes(this.angle)) {
                 if (this.shooting && this.animation) {
