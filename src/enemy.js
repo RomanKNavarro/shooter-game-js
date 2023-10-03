@@ -266,13 +266,10 @@ export default class Enemy {
       // context.imageSmoothingEnabled = false;
 
       // NEW SHIT:  
+      // this.statica is air and bomber (don't have animation)
       if (this.statica == false) {
-        if (this.inPosition && (this.type != "crawl" || this.type != "air")) {
-          context.imageSmoothingEnabled = false;
-          // what does this apply to? ground, sheep, bomber
-          context.drawImage(this.static, this.x, this.y);   // was getting error from this line
-        }
-        else if (this.statica == false) {
+
+        if (!this.inPosition || (this.type == "crawl" && this.inPosition)) {
           context.drawImage(
             this.framework,
             this.frameX * this.spriteWidth,
@@ -284,6 +281,11 @@ export default class Enemy {
             this.width,
             this.height
           );
+        }
+        else if (this.inPosition && (this.type != "crawl" || this.type != "air")) {
+          context.imageSmoothingEnabled = false;
+          // what does this apply to? ground, sheep, bomber. Draw their statics when in position:
+          context.drawImage(this.static, this.x, this.y);   
         }
       } else context.drawImage(this.static, this.x, this.y);
 
