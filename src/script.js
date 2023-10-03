@@ -280,6 +280,7 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // TODO: colors in gimp are faded across ALL drawings. Find out why.    --DONE  
 // TODO: if killed with rifle, dead warren floats one pixel.    --DONE
 // TODO: Once at final round, change to alternative background. --DONE
+// TODO: sometimes this fucking crawlie won't even show. seems to happen when they go on static.    --YES
 
 let roundCounts = [6, 10]; 
 
@@ -1155,7 +1156,7 @@ function handleEnemyProjectiles(orc) {
             i--;
 
             // UNCOMMENT THIS:
-            // if ((!shooter.duck) || (["air", "bomber", "crawl"].includes(orc.type))) playerHealth.number--;
+            if ((!shooter.duck) || (["air", "bomber", "crawl"].includes(orc.type))) playerHealth.number--;
         }
     }
 }
@@ -1351,7 +1352,7 @@ function handleEnemy() {
         } else {
             current.dead = true;
             // UNCOMMENT:
-            // if (!current.isCivie) wallHealth.number--;
+            if (!current.isCivie) wallHealth.number--;
         }
 
         if (current.dead) {

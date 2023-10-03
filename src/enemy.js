@@ -62,6 +62,7 @@ export default class Enemy {
       this.airOdds = 12;    // 6
       this.crawlOdds = 6;   // 4
       this.bossOdds = 2;    // 3  
+      this.dogOdds = 3;     // ONLY APPLIES for civies
       // ^ if on rounds 7-9, spawn only bomber. If on boss round, spawn bomber and sheep
 
       // sheep pushed on round 10:
@@ -87,8 +88,6 @@ export default class Enemy {
       // first 3 images in sprite are 42x35, second 3 are 42x36
       this.width = 42;
       this.height = 35;
-      // this.width = 50;
-      // this.height = 50;
       this.pickupY= 50;
 
       this.frameX = 0;
@@ -98,16 +97,14 @@ export default class Enemy {
       this.minFrame = 0;
       this.maxFrame = 5;
       this.pigFrame = frameSpeed;   // to increase as rounds progress.
-      this.statica = false          // determine if enemy is static throughout (like plane)
+      this.statica = false          // determine if enemy is static throughout (plane, bomber)
       this.animation = false;
 
-      this.dogOdds = 3;
       this.civy_frameworks = ["src/assets/images/civy/new-frames/spritesheet.png", 
                               "src/assets/images/civy/new-frames/spritesheet2.png"];
 
       this.civy_frames = this.civy_frameworks[Math.floor(Math.random() * 2)];
       this.dog_frames = "src/assets/images/dog/dog-frames/spritesheet.png";
-      // this.civy_type = ["ground", "crawl"][Math.floor(Math.random() * 2)];
       this.civy_type;
       
       // this.civy_type = "crawl";
@@ -270,11 +267,12 @@ export default class Enemy {
 
       // NEW SHIT:  
       if (this.statica == false) {
-        if (this.inPosition == true && (this.type != "crawl" || this.type != "air")) {
+        if (this.inPosition && (this.type != "crawl" || this.type != "air")) {
           context.imageSmoothingEnabled = false;
-          context.drawImage(this.static, this.x, this.y);
+          // what does this apply to? ground, sheep, bomber
+          context.drawImage(this.static, this.x, this.y);   // was getting error from this line
         }
-        else if (!this.statica) {
+        else if (this.statica == false) {
           context.drawImage(
             this.framework,
             this.frameX * this.spriteWidth,
