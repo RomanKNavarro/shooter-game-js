@@ -641,11 +641,6 @@ function greatReset() {
     shooter.fireRate = 0;
     shooter.specialAmmo = 0;
     
-    // shooter.weapon = "flammen";
-    // // shooter.weapon = "ar";
-    //  shooter.fireRate = 5;
-    // shooter.specialAmmo = 100;
-    
     shooter.secondStream = false;
     secondShooter = false;
     // shooter2.weapon = shooter.weapon;
@@ -1521,7 +1516,6 @@ function animate() {
     cxt2.clearRect(0, 0, canvas2.width, canvas2.height);
     cxt2.fillStyle = "transparent";
     cxt2.fillRect(0, 0, canvas2.width, canvas2.height);
-
     // dont want it redrawing the floor over and over again
     flora.draw(cxt2);
     handleShooter();
@@ -1535,7 +1529,7 @@ function animate() {
     if ((state == "RUNNING" || state == "LOSE") && frame <= 100) frame++;
     else frame = 0;
 
-    // console.log(shooter.y);
+    console.log(shooter.timer);
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
