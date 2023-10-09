@@ -201,7 +201,7 @@ export default class Enemy {
           this.static.src = "src/assets/images/pig-plane-clear.png";
           // framework.src not given shit here.
 
-          this.fireRate = 150;
+          this.fireRate = 100;
           this.health = 1;
           this.width = 70;
           this.height = 70;

@@ -282,6 +282,7 @@ THEORY: it must be natural state causing this, as it does not run when offending
 // TODO: Once at final round, change to alternative background. --DONE
 // TODO: sometimes this fucking crawlie won't even show. seems to happen when they go on static. --YES      --DONE
 // audio crashes on second play
+// TODO: fix give up text formatting
 
 let roundCounts = [6, 10]; 
 
@@ -399,9 +400,11 @@ const startText = new TextWall(
 const giveupText = new TextWall(
     `You spare your fellow countrysheep and turn yourself in.\n
     \n
-    The war crimes tribunal accuses you of innumerable atrocities, the charges of which are beyond the scope of this game.\n 
+    The war crimes tribunal accuses you of innumerable atrocities, the charges of\n
+    which are beyond the scope of this game.\n 
     \n
-    You are put to the firing squad, necrophiled by 20 men, and your semen-glutted corpse thrown into the dirty Googa River.`, Math.floor(canvas.height / 5), canvas);
+    You are put to the firing squad, necrophiled by 20 men, and your semen-glutted\n 
+    corpse thrown into the dirty Googa River.`, Math.floor(canvas.height / 10), canvas);
 
 const credText = new TextWall(
     `**********Programming and Art**********
