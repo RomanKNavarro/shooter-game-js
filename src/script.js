@@ -1,23 +1,8 @@
-// 'use strict';
-
-// MODULES:
-import Floor from "./floor.js";  
-import Shooter from "./shooter.js";
-import InputHandler from "./inputHandler.js";
-import Enemy from "./enemy.js";
-import Button from "./button.js";
-import Pickup from "./pickup.js";
-import TextWall from "./textWall.js";
-import Health from "./health.js";
-import Grenade from "./grenade.js";
-
-// canvas stuff (OLD):
 var canvas = document.getElementById("canvas1");
 // var cxt = canvas.getContext("2d", { alpha: false });
 var cxt = canvas.getContext("2d");
 canvas.style.width=canvas.getBoundingClientRect().width;//actual width of canvas
 canvas.style.height=canvas.getBoundingClientRect().height;//actual height of canvas
-// canvas.style.background_image = url("src/assets/images/background/background-concept.png");
 
 // let currentBackground = "url(src/assets/images/background/background-working2.png)";
 // document.getElementById('canvas2').style.backgroundImage=currentBackground;
@@ -33,256 +18,1361 @@ bullet_canvas.style.height=bullet_canvas.getBoundingClientRect().height;//actual
 // FOR STATICS:
 var canvas2 = document.getElementById("canvas2");
 var cxt2 = canvas2.getContext("2d");
-// canvas2.style.width=canvas2.getBoundingClientRect().width;//actual width of canvas
-// canvas2.style.height=canvas2.getBoundingClientRect().height;//actual height of canvas
 
-// PORT: http://127.0.0.1:5500/
-// TEXTWALL FONT DEFINED IN TEXTWALL.JS
-/* TIPS FOR OPTIMIZATION:
-    1. use integers instead of floating-points
-    2. use MULTIPLE canvases3
-    3. recycle objects instead of deleting them
-    4. no TEXT
-*/
+// drawn on canvas (first)
+class Floor {
+    constructor() {
+        this.canvas = canvas;
+        this.y = this.canvas.height - (this.canvas.height * (1/4)); // y of floor is 225. So, floor is 75px tall.
+        this.x = 0;
+        this.width = this.canvas.width;
+        this.height = this.canvas.height / 2;
+    }
+    draw(context) {
+        context.beginPath();
+        // context.fillStyle = "green";
+        context.fillRect(this.x, this.y, this.width, this.height);
+    }
+}
 
-// TODO: DELETE bullets once they reach end of screen. Log array of bullets. --DONE
-// TODO: reset bullet.x after hitting enemy.    --DONE
-// TODO: GET bullets to travel up when "w" is pressed.  --DONE
-// TODO: get game running fast again. Problem not in inputHandler. --DONE  
-// TODO: all enemy classes in the same file.    --DONE (resolved)
-// TODO: add mouse hover stuff in game.js. Mouse input goes in inputHandler. MouseCollision needs to be global --DONE
-// TODO: figure out why color picker won't show up when hovering over.
-// TODO: add game states.   --DONE
-// TODO: get button clicking to work & mouse position read. --DONE
-// TODO: limit enemies, implement win screen.   --DONE
-// TODO: make win text fade in and out.
-// TODO: stop last enemies from disapearing. --DONE
-// TODO: initiate next round on win.    --DONE
-// TODO: get enemyCount to increase every round. STOP IT FROM GOING BRRRRR  --DONE
-// TODO: when using pistol, keep "shooting" at true. Simply add another bullet when space is released. --DONE (resolved)
-// TODO: make enemies drop pickups.     --DONE
-// TODO: draw assigned enemy number on their body. --DONE
-// TODO: fix this stupid shooting glitch    --DONE    
-// TODO: increase enemy speed per round     --DONE
-// TODO: make character not able to shoot during menu state     --DONE
-// TODO: get more enemies on-screen in later rounds (most of the time it's only 2-4)    --DONE 
-// TODO: backwards shooting capability  --DONE
-// TODO: crawling enemies   --DONE
-// TODO: add ALL enemy types in one class.  --DONE
-// TOO: fix diagnal-back shooting glitch    --DONE  
-// TODO: victory state --DONE
-// TODO: shooting pickups from behind   --DONE  
-// TODO: make ground enemies die after two shots if shot at bottom  --DONE
-// TODO: FLAMETHROWER   --DONE
-// TODO: pick up weapon only if "specialAmmo" is 0  --DONE (resolved)
-// TODO: special atrocity round     --DONE
-// TODO: get lodash working again.  --DONE
-// TODO: fix flammen top hit collision. --DONE  
-// TODO: drop current weapon with q     --DONE
-// TODO: add second "special" round
-// TODO: make flammen hurt crawlies too --DONE
-// TODO: FIX THIS STUPID MENU GLITCH    --DONE
-// TODO: get stats and player weapon to reset on game over  --DONE
-// TODO: get sick font
-// TODO: brief delay before spawning round 1 enemies.   --DONE
-// TODO: frontal player/enemy collision game over.      --DONE
-/* TODO: Make enemies shoot at player once they reach a certain distance. 3 enemies can shoot at you   --DONE
-         at any given time. The rest pass by.       
-*/
-// TODO: empty pickup array on restart  --DONE
-// TODO: get enemies to shoot. Keep their "projectiles" array from growing too much --DONE
-// TODO: fix civie crap     --DONE
-// TODO: stop airs from stopping after killing air shooter  --DONE
-/* TODO: get civies to spawn in boss round (GET BOTH TROOPS AND CIVIES TO SPAWN SIMULTANEOUSLY)     --DONE
-    will need to create seperate "civieQueue" it seems...*/    
-// TODO: ADD PLAYER HEALTH      --DONE
-// TODO: fix gun shot audio     --DONE
-// TODO: stupid glitch: multiple enemies stopping at the same position.                             --DONE
-/* figured it out: every time I kill an enemy in the kill zone, enemies immediately preceding it stop*/ 
-// TODO: keep specialAmmo from depleting inbetween rounds   --DONE
-// TODO: get player health to deplete on getting hurt   --DONE
-// TODO: flamethrower sound     --DONE
-// TODO: make dogs hurt player  --DONE
-// TODO: fix play again button on failure       --DONE
-// TODO: implement health pickup functionality  --DONE
-// TODO: reset baddiePositions on new game      --DONE
-// TODO: shooting during round break possible   --DONE
-// TODO: make flammen one shot one kill         --DONE
-// TODO: as levels progress, pickups become more common
-// TODO: add instructions at the beginning
-// TODO: make flammen destroy bullets       --DONE
-// TODO: grenade pickup                     --DONE
-// TODO: FIX THIS STUPID GLITCH. health/wall pickup gives player flamethrower.  --DONE
-// TODO: get grenades to kill enemies   --DONE
-// TODO: add delay to grenade, include throw "animation" and bloop  --DONE
-// TODO: further fix grenade collision. fix delay bug   --DONE
-// TODO: fix bullet collision --DONE
-// TODO: add pre-intro "loading" state  --DONE
-// TODO: on round 9 (YES), baddiePositions stop functioning. Specifically, air and last ground
-// TODO: learn about and implement better audio practices (too many audio files sound like crap)    --DONE
-// TODO: get more civvies to spawn in boss round
-// TODO: higher enemy density in boss round
-// TODO: more random loading screen times   --DONE
-// TODO: add play button as soon as "loading" ends. Initiate music. --DONE
-// TODO: more nade explosion sounds    
-// TODO: fix nade sounds (I need them to overlap)   --DONE
-/* TODO: FIX THIS STUPID ERROR (ONLY GET IT ON LAST ROUND):
-Uncaught TypeError: Cannot read properties of undefined (reading 'x')
-    at collision (script.js:916:17)
-    at handleProjectile (script.js:695:76)
-    at animate (script.js:960:5)
-    ONLY GET ERROR WHEN USING FLAMMEN
-*/
-// TODO: nadesNumber default should be 0. Nades av. on round 3. flammen only available after round 5. --DONE (resolved)
-// TODO: add sound fx on pickups    --DONE
-// TODO: make music louder  --DONE
-// TODO: add brief pause before boss round.     --DONE
-// TODO: add end-music and credits screen (make it cheeky)
-// TODO: add bomber and sheep soldier enemy types
-// TODO: add SECOND shooter             --DONE
-// TODO: ducking down functionality     --DONE
-// TODO: make special enemy types appear only after specific rounds         --DONE
-// TODO: get civy dogs/airplanes to spawn.      --DONE
-// TODO: ui showing special weapon and ammo (no ui for pistol)              --DONE
-// TODO: no ducking during relief phase     --DONE
-// TODO: baddiePositions last 2 positions stop working on round 10. Fix.    
-// TODO: add delay before enemies start shooting.       --DONE
-// TODO: add delay after last round before "coalition defeated" message. Add victory music.
-// TODO: option to turn off music in menu (plus ui icon!)   --DONE (resolved)
-// TODO: tutorial state w/ multiple sections    --DONE (resolved)
-// TODO: try drawing projectiles on a seperate canvas (for optimization)    --DONE
-// TODO: use a multi-layered canvas (one for UI, another for static objects, other for enemies/bullets)    --DONE
-// TODO: WAY too many ar pickups. Minimize them     --DONE
-// TODO: HUGE ASS OVERHAUL: have all the classes accept "cxt" arguments to determine canv. to draw on   --DONE
-// TODO: get mouse position read    --DONE
-// TODO: change air enemy shooting angle    --DONE
-// TODO: get 2nd shooter to duck    --DONE
-// TODO: MORE nade pickups      --DONE
-// TODO: successfully implement bomber  --DONE
-// TODO: remove secondStream of bullets on gameOver.        --DONE
-// TODO: get "help will arrive soon" text to show after natural text.   --DONE
-// TODO: ray beam should hurt when ducking too. --DONE
-// TODO: add flammen pickup again   --DONE
-// NO PICKUPS until round 3     --DONE
-// increase bomber altitude     --DONE
-// TODO: add stupid sheep troop type            --DONE
-// TODO: give bomber and sheep 2x health        --DONE
-// TODO: IF PLAYER DUCKS, SHEEP DUCKS TOO!      --DONE  
-// TODO: crawlies stop spawning after round three. Enemies stop dropping pickups after special.     --DONE
-// TODO: get civy dogs to spawn.        --DONE
-// TODO: TOO MANY AR PICKUPS.           --DONE
-// TODO: GET FLAMMEN PICKUP TO SPAWN.   --DONE
-// TODO: get bombers to spawn.          --DONE
-// TODO: fix damage to bombers          --DONE
-// TODO: amp up difficulty              --DONE
-// TODO: get fucking ar and health pickups to spawn                 --DONE
-// TODO: second shooter stops working on second try. FIX.           --DONE
-/* TODO: way too many civies spawning on second try.                --DONE         
-Diagnosis: when it hits 0, enemyCount resets to 26 (??) */
-// TODO: there should be a little more enemies on final round.                       --DONE (resolved)
-/* CIVIES SPAWNING STARTING ON ROUND 3. They dont stop coming after that.   --DONE
-Diagnosis: only happens after losing boss round.
-*/
-// TODO: what's up w/ neg. number on special?                       --DONE
-// TODO: re-incorporate second-shooter animation on later plays     --DONE  
-// TODO: STOP orcs from spawning in specialRound                    --DONE
-// TODO: wth is up with inter-round text not showing at times????       --DONE
-// TODO: specialRound is acting stupid again.                           --DONE  
-/* Diagnosis: only occurs if not all civies killed */
-// TODO: THERE ARE 10 rounds (not 9!). Add 200 ORCS in last round.  --DONE
-// TODO: add play again button in creditText    --DONE
-// make "Hit Back!" boss fight music.           --DONE  
-// get music button working again!              --DONE
-// FIX THIS STUPID ROUND CRAP                   --DONE
-// CIVIES ACTING UP AGAIN!!!!                   --DONE (I hope)
-// NATURAL TEXT SHOULD SHOW IMMMMMEEEDIATELY AFTER SPECIAL ROUND!!!!!!      --DONE
-// stop musics from overlapping eachother                                   --DONE
-// get quiet text showing again.                --DONE
-// get old music playing on reset               --DONE
-// gradually increase speed on round 10.        --DONE
-// FUCKING CIVIES                              
-/* Diagnosis: gets incremented to 23 ONLY if the last civy isn't killed.
-What is causing enemiesLeft to decrement for no reason? 
-THEORY: it must be natural state causing this, as it does not run when offending bug occurs. 
-*/
-// FUCKING AUDIO crashed in last round.
-// TODO: let player know he can drop his weapon with Q! --DONE (resolved)
-// TODO: download the fonts I need for offline use. 
+class Shooter {
+    // constructor(x) { 
+    constructor(x, y) { 
+        this.canvas = canvas;
+        this.width = 44;
+        this.height = 34;
+        this.y = y;
 
-// IMAGE STUFF:
-// TODO: FIND OUT WHY CROUCH IS 50PX TALL!  --DONE. Not tall. It's LONG.
-// TODO: get bullet placement right.        --DONE
-// TODO: find out how to zoom in on canvas
+        this.bulletY;   // this to be added to the y. Standing: 5, Duck: 10
+        this.bulletX = 19;
 
-// TODO: the images used in the  sprites are not uniform in height, which'll cause problems.    --DONE
-// TODO: for optimization, draw a single sheep image for idle/fire.     --DONE
-// TODO: fix this stupid bullet from stopping on duck.                  --DONE
-// TODO: figured out how to solve fire image problem. Fix it tomorrow.  --DONE
-// TODO: FIX THIS FUCKING BULLET GLITCH ASAP   --DONE
-// projectile.js good.
-// shooter.js good.
-// inputHandler good.
-// bug found in script line 1059
-// TODO: add grenade images         --DONE
-// TODO: fix down-back fire image   --DONE
-// TODO: player shouldn't move on game over two-player (EXCEPT ON VICTORY)
-// TODO: fix flammen image height crap.     --DONE
-// TODO: bullet should be drawn in front of player, not back.   --DONE
-// TODO: FUCKING CIVIES STOP SPAWNING AFTER GAME OVER. Both with 1- and 2-player    --DONE
-// TODO: determine how civies get their X axis.     --DONE
-// TODO: if waited full 40 secs, round interventions fucking suck, and massacre round is skipped.   --DONE
-// TODO: lower gun on crouch. --DONE
-// TODO: adjust shooter projectile y    --DONE 
-// TODO: If rifle, have shooting image always while firing.     --DONE 
-// TODO: fix rifle bullet y.    --DONE
-// TODO: back-down firing not showing on rifle.     --DONE
-// TODO: change bullet X on crouch for all weapons  --DONE
-// TODO: ASSHOLE WONT SHOOT UNLESS HE CROUCHES FIRST.   --DONE
-// no fire on back-shots    --DONE
-// TODO: fix these blury ass images.    --DONE
-// TODO: civies aint spawning again.
-// change plane x (little farther from player)  --DONE
-// TODO: fix enemy bullet size and y.       --DONE
-// TODO: enemy fire image.                  --DONE
-// TODO: only GROUND enemies should have image  --DONE 
-// TODO: cooler grenade animation   --DONE
-// TODO: pickup icons               --DONE
-// TODO: fix player 2 bullet y.     --DONE
+        this.init = false;
 
-// TODO: make nades not connect to other shit.
-// TODO: get rid of this wierd ass grenade glitch.
-// TODO: player 2 should have same gun as player 1.             --DONE
-// UNDERSTOOD: can have the same "this.weapon", but ALSO needs to have the same sprite.   
-// TODO: fix random ass flammen glitch. Appears on 2-player. Occurs when flammen is picked up.      --DONE
-// diagnosis: snack.sound.play(); won't work for flammen. 1211. Sound plays ok.     --DONE               
-// TODO: MORE AR PICKUPS.           --DONE
-// TODO: fix pickup y on floor      --DONE (resolved)
-// diagnosis: this is dependent on enemy's height, which is uneven.
-// TODO: add pickup icons on top-left       --DONE
-// TODO: move maggot closer to player. Fix it's disapear coords.    --DONE
-// TODO: WAY too many flammens in latter rounds.        --DONE
-// TODO: increase fly speed over time.      --DONE
-// TODO: grenade keeps connecting to "initiate bloodbath" button. Maybe try drawing nade image instead? --DONE (resolved)
-// TODO: create civy images/sprites (majority female)
-// TODO: sheep image & spritesheet.
-// TODO: draw/update enemies on LOSE. So far, player and pickups remain drawn. --YES THIS ABSOLUTELY NEEDS TO BE DONE.  --DONE
-// --could be b/c the frames stop running? Frame is running throughout ALL the states.
-// Enemies and snacks drawn on "cxt". Shooter drawn on "cxt2".
-// TODO: audio fucking crashes in last round. You can't even hear the music. 
-// TODO: second player stopped moving with first player.    --DONE
-// TODO: ufo sometimes does not stop above player.          --DONE
-// TODO: frames of female walking in loading state goodie.  --DONE
-// CURRENTROUND IS INITIALLY 1. Should change to 0.         --DONE (resolved)
-// at game Over (wall), stop pushing further enemies. Also, warren should die.  --DONE (former part)
-// there should be NO crawlies on special   --DONE
-// WAY to many dogs on special  --DONE
-// TODO: figured out why audio crashes. Two flammen is overwhelming. --DONE
-// TODO: colors in gimp are faded across ALL drawings. Find out why.    --DONE  
-// TODO: if killed with rifle, dead warren floats one pixel.    --DONE
-// TODO: Once at final round, change to alternative background. --DONE
-// TODO: sometimes this fucking crawlie won't even show. seems to happen when they go on static. --YES      --DONE
-// audio crashes on second play
-// TODO: fix give up text formatting
+        this.x = x;
+        this.secondX = 200;
+
+        this.isSecond = false;
+        this.initSecond = false;
+        this.secondReady = false;
+
+        this.secondStream = false;
+
+        this.name = "Warren";
+        this.disabled = true;
+        this.health = 3;
+        this.delete = false;
+        this.dead = false;
+
+        /* HOW PROJECTILES WORK: whenever user shoots, new projectile added to array. As he not-shoots,
+        it automatically decrements until it is empty :) */
+        this.projectiles = [];
+        this.shooting = false;
+        this.timer = 0;
+
+        // used in input handler:
+        this.duckable = true;
+        this.duck = false;
+
+        this.angle = "straight";
+
+        // pistol, ar, and flamethrower
+        this.weapon = "pistol";
+        this.fireRate = 0;
+        this.specialAmmo = 0;
+        
+        // this.weapon = "flammen";
+        // // this.weapon = "ar";
+        // this.fireRate = 10;
+        // this.specialAmmo = 100;
+
+        this.throwBoom = false; 
+        this.secondNade = false;
+
+      // mouse stuff in here lol, used in script.js
+        this.mouse = {
+            x: 10,
+            y: 10,
+            width: 0.1,
+            height: 0.1,
+            clicked: false
+        };
+
+        this.flammen = new Audio();
+        this.flammen.src = "src/assets/sounds/flammen2.mp3";
+
+        this.bloop = new Audio();
+        this.bloop.src = "src/assets/sounds/q009/glauncher.ogg";
+
+        this.toggleMusic = false;
+
+        // IMAGES:
+        // 44×40
+        this.grenade_stand = new Image();
+        this.grenade_stand.src = "src/assets/images/CLEARS/nade/nade_stand.png";
+
+        this.grenade_crouch = new Image();
+        this.grenade_crouch.src = "src/assets/images/CLEARS/nade/sheep-nade-crouch.png";
+
+        this.dead_warren = new Image();
+        this.dead_warren.src = "src/assets/images/CLEARS/dead-warren/dead-warren-clear.png";
+
+        // FIX THIS CRAP:
+        this.pistol_stand = new Image();
+        this.pistol_stand.src = "src/assets/images/CLEARS/pistol/sheep-pistol-clear-elevate.png";
+        
+        // 43x36, diagnal
+        // FIRE: 43×40
+        this.pistol_stand_up = new Image();
+        this.pistol_stand_up.src = "src/assets/images/CLEARS/pistol/sheep-pistol-lookup-clear.png";
+
+        // 44x36
+        // FIRE: 44x36
+        this.pistol_stand_top = new Image();
+        this.pistol_stand_top.src = "src/assets/images/CLEARS/pistol/sheep-pistol-top-clear.png";
+
+        // 50x28
+        // FIRE: 50×28
+        this.pistol_crouch = new Image();
+        this.pistol_crouch.src = "src/assets/images/CLEARS/pistol/sheep-pistol-crouch-clear-new.png";
+
+        // 49x30
+        // FIRE: 49x34
+        this.pistol_crouch_up = new Image();
+        this.pistol_crouch_up.src = "src/assets/images/CLEARS/pistol/sheep-pistol-lookup-crouch-clear.png";
+
+        // 50x30
+        // FIRE: 50×33
+        this.pistol_crouch_top = new Image();
+        this.pistol_crouch_top.src = "src/assets/images/CLEARS/pistol/sheep-pistol-crouch-top-clear.png";
+
+        //rifle:
+        // 44x40
+        this.rifle_stand = new Image();
+        this.rifle_stand.src = "src/assets/images/CLEARS/rifle/sheep-rifle-clear-elevate.png";
+
+        // 43x38
+        this.rifle_stand_up = new Image();
+        this.rifle_stand_up.src = "src/assets/images/CLEARS/rifle/sheep-rifle-up-clear.png";
+
+        // 44x37
+        this.rifle_stand_top = new Image();
+        this.rifle_stand_top.src = "src/assets/images/CLEARS/rifle/sheep-rifle-top-clear.png";
+
+        // 50x34
+        this.rifle_crouch = new Image();
+        this.rifle_crouch.src = "src/assets/images/CLEARS/rifle/sheep-rifle-crouch-clear.png";
+
+        // 49x32
+        this.rifle_crouch_up = new Image();
+        this.rifle_crouch_up.src = "src/assets/images/CLEARS/rifle/sheep-rifle-up-crouch-clear.png";
+
+        // 50x31
+        this.rifle_crouch_top = new Image();
+        this.rifle_crouch_top.src = "src/assets/images/CLEARS/rifle/sheep-rifle-top-crouch-clear.png";
+
+        //flammen
+        // 44x39
+        this.flammen_stand = new Image();
+        this.flammen_stand.src = "src/assets/images/CLEARS/flammen/flammen-stand.png";
+
+        // 43x40
+        this.flammen_stand_up = new Image();
+        this.flammen_stand_up.src = "src/assets/images/CLEARS/flammen/flammen-stand-up.png";
+
+        // 50x33
+        this.flammen_crouch = new Image();
+        this.flammen_crouch.src = "src/assets/images/CLEARS/flammen/flammen-crouch.png";
+
+        // 49x34
+        this.flammen_crouch_up = new Image();
+        this.flammen_crouch_up.src = "src/assets/images/CLEARS/flammen/flammen-crouch-up.png";
+
+        // 44x39
+        this.flammen_top = new Image();
+        this.flammen_top.src = "src/assets/images/CLEARS/flammen/flammen-top.png";
+
+        // 50x33
+        this.flammen_crouch_top = new Image();
+        this.flammen_crouch_top.src = "src/assets/images/CLEARS/flammen/flammen-crouch-top.png";
+
+        // PISTOL FIRE IMAGES:  
+        this.pistol_fire = new Image();
+        this.pistol_fire.src = "src/assets/images/fires/pistol/sheep-pistol-clear-elevate-fire.png";
+
+        this.pistol_up_fire = new Image();
+        this.pistol_up_fire.src = "src/assets/images/fires/pistol/sheep-pistol-lookup3.png";
+
+        this.pistol_top_fire = new Image();
+        this.pistol_top_fire.src = "src/assets/images/fires/pistol/sheep-pistol-top3.png";
+
+        this.pistol_crouch_fire = new Image();
+        this.pistol_crouch_fire.src = "src/assets/images/fires/pistol/sheep-pistol-crouch-new.png";
+
+        this.pistol_crouch_up_fire = new Image();
+        this.pistol_crouch_up_fire.src = "src/assets/images/fires/pistol/sheep-pistol-lookup-crouch3.png";
+
+        this.pistol_crouch_top_fire = new Image();
+        this.pistol_crouch_top_fire.src = "src/assets/images/fires/pistol/pistol-crouch-top3.png";
+
+        // RIFLE FIRE IMAGES:
+        this.rifle_fire = new Image();
+        this.rifle_fire.src = "src/assets/images/fires/rifle/rifle-stand3-elevate.png";
+
+        this.rifle_up_fire = new Image();
+        this.rifle_up_fire.src = "src/assets/images/fires/rifle/rifle-stand-up.png";
+
+        // done
+        this.rifle_top_fire = new Image();
+        this.rifle_top_fire.src = "src/assets/images/fires/rifle/rifle-stand-top.png";
+
+        // done
+        this.rifle_crouch_fire = new Image();
+        this.rifle_crouch_fire.src = "src/assets/images/fires/rifle/rifle-crouch-new.png";
+
+        // done
+        this.rifle_crouch_up_fire = new Image();
+        this.rifle_crouch_up_fire.src = "src/assets/images/fires/rifle/rifle-crouch-lookup3.png";
+
+        // done
+        this.rifle_crouch_top_fire = new Image();
+        this.rifle_crouch_top_fire.src = "src/assets/images/fires/rifle/rifle-crouch-top2.png";
+        
+        this.images = {
+            "straight": {
+                "pistol": {
+                    "idle": this.pistol_stand, 
+                    "fire": this.pistol_fire, 
+                    "width": 44,
+                    "height": 34
+                },
+                "ar": {
+                    "idle": this.rifle_stand, 
+                    "fire": this.rifle_fire,
+                    "width": 44,
+                    "height": 40
+                },
+                "flammen": {
+                    "idle": this.flammen_stand, 
+                    "fire": this.flammen_stand, 
+                    "width": 44,
+                    "height": 39
+                },
+            }, 
+            "diagnal": {
+                "pistol": {
+                    "idle": this.pistol_stand_up, 
+                    "fire": this.pistol_up_fire, 
+                    "width": 43,
+                    "height": 36,
+                }, 
+                "ar": {
+                    "idle": this.rifle_stand_up, 
+                    "fire": this.rifle_up_fire,
+                    "width": 43,
+                    "height": 38
+                },
+                "flammen": {
+                    "idle": this.flammen_stand_up, 
+                    "fire": this.flammen_stand_up, 
+                    "width": 43,
+                    "height": 40
+                },
+            }, 
+            "up": {
+                "pistol": {
+                    "idle": this.pistol_stand_top, 
+                   "fire": this.pistol_top_fire, 
+                   "width": 44,
+                   "height": 36,
+                }, 
+                "ar": {
+                    "idle": this.rifle_stand_top, 
+                    "fire": this.rifle_top_fire,
+                    "width": 44,
+                    "height": 37
+                },
+                "flammen": {
+                    "idle": this.flammen_top, 
+                    "fire": this.flammen_top, 
+                    "width": 44,
+                    "height": 39
+                },
+            },
+            "down": {
+                "pistol": {
+                    "idle": this.pistol_crouch, 
+                    "fire": this.pistol_crouch_fire, 
+                    "width": 50,
+                    "height": 28,
+                },
+                "ar": {
+                    "idle": this.rifle_crouch,          // 50x29
+                    "fire": this.rifle_crouch_fire,
+                    "width": 50,
+                    "height": 29
+                },
+                "flammen": {
+                    "idle": this.flammen_crouch, 
+                    "fire": this.flammen_crouch, 
+                    "width": 50,
+                    "height": 33
+                },
+            },  
+            "diagnal-duck": {
+                "pistol": { 
+                    "idle": this.pistol_crouch_up, 
+                    "fire": this.pistol_crouch_up_fire, 
+                    "width": 49,
+                    "height": 30  
+                }, "ar": {
+                    "idle": this.rifle_crouch_up, 
+                    "fire": this.rifle_crouch_up_fire,
+                    "width": 49,
+                    "height": 32
+                },
+                "flammen": {
+                    "idle": this.flammen_crouch_up, 
+                    "fire": this.flammen_crouch_up, 
+                    "width": 44,
+                    "height": 34
+                },
+            },
+            // 50x31
+            "down-up": {
+                "pistol": {
+                    "idle": this.pistol_crouch_top, 
+                    "fire": this.pistol_crouch_top_fire, 
+                    "width": 50,
+                    "height": 30 
+                }, "ar": {
+                    "idle": this.rifle_crouch_top, 
+                    "fire": this.rifle_crouch_top_fire,
+                    "width": 44,
+                    "height": 31
+                },
+                "flammen": {
+                    "idle": this.flammen_crouch_top, 
+                    "fire": this.flammen_crouch_top, 
+                    "width": 50,
+                    "height": 33
+                },
+            },
+            "down-back": {
+                "pistol": {
+                    "idle": this.pistol_crouch, 
+                    "fire": this.pistol_crouch_fire, 
+                    "width": 50,
+                    "height": 28,
+                },
+                "ar": {
+                    "idle": this.rifle_crouch, 
+                    "fire": this.rifle_crouch_fire,
+                    // "width": 50,
+                    // "height": 31
+                    "width": 50,
+                    "height": 29
+                },
+                "flammen": {
+                    "idle": this.flammen_crouch, 
+                    "fire": this.flammen_crouch, 
+                    "width": 44,
+                    "height": 33
+                },
+            },
+            "back": {
+                "pistol": {
+                    "idle": this.pistol_stand, 
+                     "fire": this.pistol_fire, 
+                     "width": 44,
+                     "height": 34 
+                }, 
+                "ar": {
+                    "idle": this.rifle_stand, 
+                    "fire": this.rifle_fire,
+                    "width": 44,
+                    "height": 40
+                },
+                "flammen": {
+                    "idle": this.flammen_stand, 
+                    "fire": this.flammen_stand, 
+                    "width": 44,
+                    "height": 39
+                },
+            },
+            "diagnal-back": {
+                "pistol": {
+                    "idle": this.pistol_stand_up, 
+                    "fire": this.pistol_up_fire, 
+                    "width": 43,
+                    "height": 36,
+                },
+                "ar": {
+                    "idle": this.rifle_stand_up, 
+                    "fire": this.rifle_up_fire,
+                    "width": 43,
+                    "height": 38
+                },
+                "flammen": {
+                    "idle": this.flammen_stand_up, 
+                    "fire": this.flammen_stand_up, 
+                    "width": 44,
+                    "height": 40
+                },
+            }
+        };
+
+        this.frameX = 0;
+        this.frameY = 0;
+
+        this.spriteWidth = 50;
+        this.spriteHeight = 28;
+        this.minFrame = 0;
+        this.maxFrame = 2;
+
+        this.animation = true;
+        this.animationTime = 0.5
+
+        this.distFromFloor;
+    }
+    
+    draw(context) {
+        // SHOOTER HEIGHT CHANGED HERE:
+
+        // WEAPON is undefined. 
+        this.width = this.images[this.angle][this.weapon]["width"];
+        this.height = this.images[this.angle][this.weapon]["height"];
+        this.image = this.images[this.angle][this.weapon]["idle"];
+
+        // REVELATION: no need to call "this.images" over and over again. I can just do it once.
+        context.font = "20px serif";
+        context.fillStyle = "black";
+        context.textAlign = "center";
+        context.textBaseline = "middle";
+
+        // TEXT:
+        // context.fillText(`${this.weapon}`, this.x + (this.width / 2), this.y - 100);
+    }
+
+    update(context) { 
+        this.y = canvas.height - (canvas.height * (1/4)) - this.height;
+
+        switch (this.angle) {
+            // 44x34
+            // FIRE: 44×34
+            case "straight":
+            case "back":
+                if (this.weapon == "flammen") this.bulletY = 12;
+                else if (this.weapon == "ar") {
+                    this.bulletX = this.width - 15;
+                    this.bulletY = 7;
+                }
+                else this.bulletY = 1;
+                break; 
+
+            // 43x36
+            case "diagnal":
+            case "diagnal-back":
+                if (this.weapon == "flammen") this.bulletY = 5;
+                else if (this.weapon == "ar") {
+                    this.bulletY = 10;
+                    this.bulletX = 19;
+                }
+                else this.bulletY = 5;
+                break;
+
+            // 44×36
+            // FIRE: 44x39
+            case "up":
+                // this.y = canvas.height - (canvas.height * (1/4)) - this.height;
+                this.bulletX = 19;
+                break;
+
+            // 50x30
+            // FIRE: 50×33
+            case "down-up":
+                this.bulletX = 23;
+                // this.y = canvas.height - (canvas.height * (1/4)) - this.height;
+                break;
+s
+            // 50x28
+            // FIRE: 50×28
+            case "down":
+            case "down-back":
+                // 50x28
+                this.bulletY = 11;
+                this.bulletX = 23;
+                break;
+
+            // 49x30
+            // FIRE: 49×34
+            case "diagnal-duck":
+                // 49x30
+                break;
+        }
+        
+        // FEEL LIKE I CAN SOLVE SECOND SHOOTER IMAGE CRAP HERE:
+        if (this.dead) {
+            this.y = 191;
+            this.angle = "straight";
+            context.drawImage(this.dead_warren, this.x, this.y + 2);
+        } else {
+            if (["straight", "down", "diagnal-duck", "down-up", "diagnal", "up"].includes(this.angle)) {
+                if (this.shooting && this.animation) {
+                    context.drawImage(this.images[this.angle][this.weapon]["fire"], this.x, this.y);
+                } 
+                else if (this.throwBoom) {
+                    if (!this.duck) {
+                        this.y = canvas.height - (canvas.height * (1/4)) - 40;
+                        context.drawImage(this.grenade_stand, this.x, this.y);
+                    } else {
+                        this.y = canvas.height - (canvas.height * (1/4)) - 34;
+                        context.drawImage(this.grenade_crouch, this.x, this.y);
+                    }
+                }
+                else context.drawImage(this.image, this.x, this.y);
+            } else {
+                context.save();
+                context.translate(this.x + this.width, this.y);
+                context.scale(-1,1);
+                context.drawImage(this.image, 0, 0);
+    
+                // this.animation is necessary for pistol, not ar:
+                if (this.shooting) {
+                    context.drawImage(this.images[this.angle][this.weapon]["fire"], 0, 0);
+                }
+                else context.drawImage(this.image, 0, 0);
+                
+                context.restore();
+            }
+        }
+
+        // if (this.shooting) {
+
+        // }
+
+        // UNCOMMENT AND REPLACE: 
+        if (this.shooting && this.weapon == "pistol") {
+            setTimeout(() => {
+                this.animation = false;
+            }, 50);
+        } 
+        else this.animation = true;
+
+        if (this.isSecond == true && this.initSecond == true) {
+            // this.weapon = weapon;
+            // this.image = image;
+            if (this.x <= 200) this.x += 5;
+            else this.secondReady = true;
+        }  
+
+        // else this.secondReady = true;
+
+        // code doesn't work. fireRate not set.    
+        if (this.shooting && !this.disabled) {
+            this.timer++;
+
+            // 201 standing 
+            // 232 down
+            
+            if (this.timer % this.fireRate === 0  || this.timer == 1) {
+                this.projectiles.push(new Projectile(this.x + this.bulletX, this.y + this.bulletY, this.angle, this.weapon, this.delete, false));
+                if (this.secondStream == true) {
+                    this.projectiles.push(new Projectile(this.secondX, this.y + this.bulletY, this.angle, this.weapon, this.delete, true));
+                }   
+                
+                if (this.specialAmmo > 0) {
+                    this.specialAmmo--;
+                }
+                else {
+                    this.weapon = "pistol";
+                    this.fireRate = 0;
+                    this.specialAmmo = 0;
+                }
+            }
+        }
+        else {
+            this.timer = 0;
+        }
+    }
+}
+
+let flammen = new Audio();
+flammen.src = "src/assets/sounds/flammen2.mp3";
+
+class InputHandler {
+  constructor(entity) {
+    // constructor(entity) {
+    // why doesn't this work as "this.keys"?
+    this.canvas = canvas;
+
+    let keys = {"space": false, "d": false, "w": false, "s": false, "a": false};
+    
+    document.addEventListener("keydown", (event) => {
+      // TODO: try using if statements instead.
+      if (!entity.disabled) {
+      // what this do? sets respective keys value to true. "key" is a built-in property of "event" lol
+      keys[event.key] = true;
+      
+      switch (event.key) {
+        // this is just for SHOOTING, not look direction
+        case ' ':
+            entity.shooting = true;
+            break;
+
+        case 'd':
+          // entity.angle = "down";
+          if (entity.duck) entity.angle = "down";
+          else entity.angle = "straight";
+          break;
+
+        case 'w':
+          if (entity.duck) entity.angle = "down-up";
+          else entity.angle = "up"; 
+          // entity.angle = "up";         
+          break;
+
+        case 's':
+          // what's duckable?
+          if (entity.duckable) {
+            entity.angle = "down";
+            entity.duck = true;
+          }
+          break;
+        
+        case 'a':
+          entity.angle = "back";
+          break;
+
+        case 'q':
+          entity.weapon = "pistol";
+          entity.fireRate = 0;
+          entity.specialAmmo = 0;
+          break;
+
+        case 'e':
+          entity.throwBoom = true;
+          // entity.throwBoom = true;
+          break;
+      }
+
+      // diagnal stand
+      if (keys["d"] && keys["w"]) {
+        if (entity.duck) entity.angle = "diagnal-duck";
+        else entity.angle = "diagnal";
+      }
+
+      else if (keys["a"] && keys["s"]) entity.angle = "down-back";   
+      else if (keys["a"] && keys["w"]) entity.angle = "diagnal-back";
+      else if (keys["w"] && keys["s"]) entity.angle = "down-up";
+    }
+    });
+
+    document.addEventListener("keyup", (event) => {
+
+      if (!entity.dead) {
+      keys[event.key] = false;
+
+      switch (event.key) {
+        // SPACE BAR:
+        case ' ':
+          entity.shooting = false;
+          if (entity.weapon == "flammen") {
+            flammen.pause();
+          }
+          // flammen.pause();
+          break;
+
+        case 's':
+          entity.duck = false;
+          if (entity.angle == "down-back") entity.angle = "back";
+          else if (entity.angle == "down-up") entity.angle = "up";
+          else entity.angle = "straight";
+          break;
+
+          // NEEDS WORK HERE:
+        case 'a':
+          if (entity.angle == "diagnal-back") entity.angle = "up";
+          else if (entity.angle == "down-back" || entity.angle == "down") entity.angle = "down";
+          break
+
+        case 'd':    
+          if (entity.angle == "diagnal") entity.angle = "up";
+          else if (entity.angle == "diagnal-duck") entity.angle = "down-up";
+          else if (!entity.duck) entity.angle = "straight";
+          break;
+
+        case 'e':
+          entity.throwBoom = false;
+          break;
+
+        case 'w':
+          if (entity.angle == "diagnal-back") entity.angle = "back";
+          else if (entity.angle == "down-up") entity.angle = "down";
+          else if (entity.angle == "diagnal" || entity.angle == "up" || entity.angle == "diagnal-duck") {
+            if (entity.duck) entity.angle = "down";
+            else entity.angle = "straight";
+          }
+          break;
+
+        // TOGGLE MUSIC ON OR OFF (should only be possible during/after):
+        case 'm':
+          // AYO: NEW DISCOVERY: here is how to perfectly toggle between true/false:
+          entity.toggleMusic = !(entity.toggleMusic);
+          break;
+      }
+    }
+    });
+
+    // MOUSE INPUT: 
+    document.addEventListener("mousedown", function () {
+      entity.mouse.clicked = true;
+    });
+    document.addEventListener("mouseup", function () {
+      entity.mouse.clicked = false;
+    });
+    
+    // here is what actually reads the mouse's location:
+    let canvasPosition = this.canvas.getBoundingClientRect();
+    this.canvas.addEventListener("mousemove", function (e) {
+      entity.mouse.x = e.x - canvasPosition.left;
+      entity.mouse.y = e.y - canvasPosition.top;
+    });
+    this.canvas.addEventListener("mouseleave", function () {
+      entity.mouse.x = undefined;
+      entity.mouse.y = undefined;
+    });
+  }
+}
+
+// OVERHAUL SPEED FUNCTIONALITY:
+class Enemy {
+    // what's the speed parameter for again? to increase speed globally as rounds progress :)
+    // TO PASS IN NEW FRAMA ARGUMENT GLOBALLY: -CANT DO THAT, IT DOESN'T UPDATE.
+    constructor(x, speed, round, frameSpeed) {
+      // NEW SHIT:
+      // cxt
+      this.frama = 0;
+      this.speed = speed;
+
+      this.x = x;
+      this.y;
+
+      this.bulletX;
+      this.bulletY;
+
+      this.round = round;
+
+      this.color = "pink"
+      this.dead = false;
+
+      this.pickupNum = Math.floor(Math.random() * 15);
+      this.pickupOdds = 0;
+      this.pickup = false;
+
+      this.isCivie = false;
+      this.inNadeRange = false;
+
+      this.duck = false;
+      this.duckable = false;
+
+      // ground, crawl, air, civie
+      this.health = 2;
+
+      // ENEMY GUN:
+      this.projectiles = [];
+      // this.fireRate = 200;
+      // this.fireRate = 150;
+      this.fireRate = 100;
+      this.shooting = false;
+      this.timer = 0;
+      this.angle = "back";
+
+      // POSITION CRAP:
+      this.inPosition = false;
+      this.position = 0;
+      this.dead = false;
+
+      this.beaming = false;
+      this.beamHeight = 150;
+      this.openFire = 100;
+      this.beamActive = false;
+
+      // ODDS CRAP:
+      // base enemies:
+      // 6/10 chance to spawn ground, 4/10 ch. to spawn air, 2/10 to spawn spec (dog, bomber, sheep)
+
+      this.typeNum = Math.floor(Math.random() * 20);
+      this.groundOdds = 20; // 8
+      this.airOdds = 12;    // 6
+      this.crawlOdds = 6;   // 4
+      this.bossOdds = 2;    // 3  
+      this.dogOdds = 3;     // ONLY APPLIES for civies
+      // ^ if on rounds 7-9, spawn only bomber. If on boss round, spawn bomber and sheep
+
+      // sheep pushed on round 10:
+      this.bossType = ["bomber", "sheep"][Math.floor(Math.random() * 2)];
+      this.otherOdds = 5;
+      this.type = "ground";
+
+      /* EVENTS:
+        round 1: only ground enemies
+        round 2: only ground and air enemies
+        round 3: pickups and dogs introduced (health, ar, grenade), plus ducking
+        round 4: grenades introduced
+        round 5: Massacre. Natural text at end
+        round 6: good and soon text at beginning. Bombers introduced. pickupOdds increased.
+        round 7: flammen introduced. Should have same equality as grenade. AR becomes minority
+        round 8: second shooter introduced
+        round 9: crazy round
+        round 10: boss fight. Sheep introduced. More civies. */
+
+      this.static = new Image;
+      this.framework = new Image;
+
+      // first 3 images in sprite are 42x35, second 3 are 42x36
+      this.width = 42;
+      this.height = 35;
+      this.pickupY= 50;
+
+      this.frameX = 0;
+      this.frameY = 0;
+      this.spriteWidth = 42;
+      this.spriteHeight = 35;
+      this.minFrame = 0;
+      this.maxFrame = 5;
+      this.pigFrame = frameSpeed;   // to increase as rounds progress.
+      this.statica = false          // determine if enemy is static throughout (plane, bomber)
+      this.animation = false;
+
+      this.civy_frameworks = ["src/assets/images/civy/new-frames/spritesheet.png", 
+                              "src/assets/images/civy/new-frames/spritesheet2.png"];
+
+      this.civy_frames = this.civy_frameworks[Math.floor(Math.random() * 2)];
+      this.dog_frames = "src/assets/images/dog/dog-frames/spritesheet.png";
+      this.civy_type;
+      
+      // this.civy_type = "crawl";
+    }
+
+    update() {
+      // FRAME SHIT
+      if (this.frama <= 100) this.frama++;
+      else this.frama = 0;
+
+      if (this.frama % this.pigFrame === 0 && this.pigFrame > 0) {
+        if (this.frameX < this.maxFrame)
+          this.frameX++;
+        else this.frameX = this.minFrame;
+      }
+
+      if (this.isCivie == true) {
+        if (this.typeNum <= this.dogOdds) this.type = "crawl"
+        else this.type = "ground";
+      }
+      else {
+        // HEIRARCHY CRAP:
+        // 0-2
+        if (this.typeNum <= this.bossOdds) {
+          if (this.round < 6 && this.round > 0) this.type = "ground";
+          else if (this.round >= 6 && this.round < 10) this.type = "bomber";
+          else this.type = this.bossType;   // <- if round 10
+          // else if (this.round == 10 || )
+        }
+        // 3-6
+        else if (this.typeNum <= this.crawlOdds && (this.round >= 3)) {
+          this.type = "crawl";
+        }
+        // 6-12
+        else if (this.typeNum <= this.airOdds && (this.round >= 2 && this.round != 3)) {
+          this.type = "air";
+        }
+      }
+      
+      // NEW:
+      switch(this.type) {
+        case "crawl":
+          this.sound = "growl";
+          this.health = 1;
+
+          if (this.isCivie == true) {
+            this.width = 52;
+            this.height = 30;
+            this.maxFrame = 4;
+            this.spriteWidth = 52;
+            this.spriteHeight = 30;
+
+            // this.framework.src = this.dog_frames;
+            this.framework.src = "src/assets/images/dog/dog-frames/spritesheet.png";
+          }
+          else {
+            this.width = 60;
+            this.height = 30;
+            this.spriteWidth = 60;
+            this.spriteHeight = 30;
+            this.maxFrame = 3;
+            this.framework.src = "src/assets/images/maggot/spritesheet/maggotsheet.png";
+          }
+          break;
+
+        case "ground":
+          // this.x + this.width - 20, this.y + 5
+          this.bulletX = this.width - 20;
+          this.bulletY = 5; 
+          this.sound = "shotty";
+
+          if (this.isCivie == true) {
+            this.width = 63;
+            this.height = 41;
+            this.maxFrame = 4;
+            this.spriteWidth = 63;
+            this.spriteHeight = 41;
+            // this.framework.src = "src/assets/images/civy/new-frames/spritesheet2.png";
+            // this.framework.src = this.civy_frameworks[Math.floor(Math.random() * 2)];
+            this.framework.src = this.civy_frames;
+          }
+          else this.framework.src = "src/assets/images/assault-pig/pig-walk-clear/pigFrames.png";
+
+          if (!this.animation) this.static.src = "src/assets/images/assault-pig/pig-stand-clear.png";
+          else this.static.src = "src/assets/images/assault-pig/pig-stand-fire.png";
+
+          break;
+
+        case "air":
+          this.bulletX = 26;
+          this.bulletY = this.height - 23; 
+          this.statica = true;
+          this.sound = "shotty";
+          this.static.src = "src/assets/images/pig-plane-clear.png";
+          // framework.src not given shit here.
+
+          this.fireRate = 100;
+          this.health = 1;
+          this.width = 70;
+          this.height = 70;
+
+          // THIS IS IN REVERSE LOOOL BUT THAT'S THE WAY IT WORKS (HTMS)
+          if (this.isCivie) {
+            this.speed = -4;
+          }
+          else this.speed = 4;
+          break;
+        
+        // OPENFIRE BY DEFAULT IS 
+        case "bomber":
+          this.openFire = 150;
+          this.fireRate = 15;
+          this.width = 90;
+          this.height = 90;
+          this.statica = true;
+          if (!this.inPosition) this.static.src = "src/assets/images/bomber/bomber-clear.png";
+          else this.static.src = "src/assets/images/bomber/bomber-fire.png";
+          break;
+
+        case "sheep":
+          this.sound = "laser-gun";
+          this.openFire = 150;
+          this.fireRate = 15;
+          this.width = 70;
+          this.height = 58;
+          this.spriteWidth = 70;
+          this.spriteHeight = 58;
+          this.frameSpeed = 5; 
+          this.maxFrame = 5;
+          this.framework.src = "src/assets/images/enemy-sheep/girl-frames/clears/spritesheet.png";
+          this.static.src = "src/assets/images/enemy-sheep/girl-sheep-clear.png";
+          break;  
+      }
+
+      // THIS WORKS
+      // THIS CRAP IS SOLEY FOR AUDIO LOOOL:
+      if (!this.shooting) {
+        this.x -= this.speed;
+      } else {
+        this.speed = 0;
+        this.timer++;
+
+        // NEW
+        if (this.timer >= this.openFire && this.timer % this.fireRate === 0) { 
+          this.projectiles.push(new Projectile(this.x + this.bulletX, this.y + this.bulletY, this.angle, this.sound, this.dead, "shotty"));
+          if (this.type == "bomber") {
+            this.beamActive = true;
+          }
+        } 
+
+      }
+
+      if (this.pickupNum <= this.pickupOdds && this.round >= 3) {
+        this.pickup = true   
+      }
+    }
+
+    draw(context) {
+      // context.imageSmoothingEnabled = false;
+
+      // NEW SHIT:  
+      // this.statica is air and bomber (don't have animation)
+      if (this.statica == false) {
+
+        if (!this.inPosition || (this.type == "crawl" && this.inPosition)) {
+          context.drawImage(
+            this.framework,
+            this.frameX * this.spriteWidth,
+            0,
+            this.spriteWidth,
+            this.spriteHeight,
+            this.x,
+            this.y,
+            this.width,
+            this.height
+          );
+        }
+        else if (this.inPosition && (this.type != "crawl" || this.type != "air")) {
+          context.imageSmoothingEnabled = false;
+          // what does this apply to? ground, sheep, bomber. Draw their statics when in position:
+          context.drawImage(this.static, this.x, this.y);   
+        }
+      } else context.drawImage(this.static, this.x, this.y);
+
+      context.beginPath();
+      context.fillStyle = this.color;
+
+      // DO NOT FUCKING REMOVE. FOR DUCKING ENEMY PURPOSES:
+      // if (this.duck) {
+      //   context.fillRect(this.x, this.y + this.height / 2, this.width, this.height / 2);
+      // } else {
+      //   context.fillRect(this.x, this.y, this.width, this.height);
+      // }
+
+      context.font = "20px serif";
+      context.fillStyle = "gray";
+
+      context.textAlign = "center";
+      context.textBaseline = "middle";
+
+      // context.fillText(`${this.type}`, this.x + (this.width / 2), this.y - 10);
+    } // projectiles
+
+    // GOOD
+    renderBeam(context) {
+      if (this.timer >= this.openFire) {
+        context.beginPath();
+        // context.fillStyle = "red";
+        context.fillStyle = "rgba(255, 0, 0, 0.5)";
+        context.fillRect(this.x + 28, this.y + 45, 15, this.beamHeight);
+      }
+    }
+}
+
+class Button {
+    constructor(x, y, width, text, clickable) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = 30;
+        this.text = text;
+        this.stroke = "black";
+        this.clicked = false; 
+        this.clickable = clickable;
+        this.show = true;
+        this.alpha = 1;
+    }
+
+    draw(context) {
+        if (this.show) {
+            if (this.clickable) {
+                context.beginPath();
+                context.rect(this.x, this.y, this.width, this.height); 
+                context.fillStyle = 'gray'; 
+                context.fill();
+                
+                // button outline:
+                context.lineWidth = 2;
+                context.strokeStyle = this.stroke;
+                context.stroke();
+        
+                // button text:
+                context.font = "12.5px serif";
+                context.fillStyle = "black";
+        
+                // HOW TO CENTER TEXT IN BUTTON:
+                context.textAlign = "center";
+                context.textBaseline = "middle";
+                context.fillText(this.text, Math.floor(this.x + (this.width / 2)), Math.floor(this.y + (this.height / 2)));
+            }
+            else {
+                context.beginPath();
+                context.font = "25px Tourney";
+                context.strokeStyle = 'white';
+                context.lineWidth = 5;
+                context.strokeText(this.text, Math.floor(this.x + (this.width / 2)), Math.floor(this.y + (this.height / 2)));
+
+                context.fillStyle = "black";
+                context.lineWidth = 1;
+                context.fillText(this.text, Math.floor(this.x + (this.width / 2)), Math.floor(this.y + (this.height / 2)));
+            }
+        }
+    }
+}
+
+class Pickup {
+    constructor(x, y, round) {
+
+        // this.width = this.height = 25;
+        this.width = this.height = 20;
+
+        this.x = x;
+        this.y = y;
+        this.delete = false;
+
+        // this.sound;
+        this.sound;
+        this.round = round;
+
+        this.sfx = {
+            // PICKUP SFX:
+            arReload: new Howl({
+                src: [
+                    "src/assets/sounds/rifleReload.mp3",    // good
+                ],
+                volume: 5,
+            }),
+            nadePin: new Howl({
+                src: [
+                    "src/assets/sounds/grenadePin.mp3",     // good
+                ],
+                volume: 5,
+            }),
+            flammenReload: new Howl({
+                src: [
+                    "src/assets/sounds/futureReload.mp3",   // good
+                ],
+                volume: 5,
+            }),
+            health: new Howl({
+                src: [
+                    "src/assets/sounds/3 heal spells/healspell1.mp3",
+                ],
+                loop: false,
+            }),
+            wall: new Howl({
+                src: [
+                    "src/assets/sounds/3 heal spells/healspell2.mp3",
+                ], 
+                loop: false,
+            }),
+        }
+
+        // ONLY A 0/10 CHANCE TO SPAWN PICKUP IN GENERAL (see enemy.js):
+        // equal chance to spawn aid and weapons?
+        this.typeNum = Math.floor(Math.random() * 10);
+
+        // how many pickup types? IIIII ->  5
+
+        this.nadeOdds = 10;  // 5
+        this.aidOdds = 5;    // 4
+        // this.weaponOdds = 1; // 2
+        this.weaponOdds = 4;
+        
+        //  FIX THIS CRAP
+        // this introduced at round
+        this.weapon = ["flammen", "ar"][Math.floor(Math.random() * 2)];
+        this.aid = ["health", "wall"][Math.floor(Math.random() * 2)];
+
+        // type by default is ar
+        this.type;
+
+        this.image = new Image();
+    }
+
+    // if not current respective weapon round, should default to aid pickup
+    update() {
+       //this.y += 5;
+       this.y += 10;
+
+        // NEEDS LOADS OF WORK DONE:
+        // weaponOdds encompasses flammen, ar, and grenade
+        // REMEMBER: typeNum is num 0-10
+        if (this.typeNum <= this.weaponOdds) {
+            if (this.round <= 6) this.type = "ar";
+            // if (this.round <= 1) this.type = "ar";
+            else this.type = this.weapon;
+        }
+        else if (this.typeNum <= this.aidOdds) this.type = this.aid;
+        else if (this.typeNum <= this.nadeOdds) this.type = "grenade";
+
+        //  SOUND TO PLAY WHEN PICKED UP:
+        switch (this.type) {
+            case "flammen":
+                // this.sound = this.flammenReload;
+                this.sound = this.sfx.flammenReload;
+                this.image.src = "src/assets/images/pickups/clears/flammen copy.png";
+                break;
+            case "ar":
+                this.sound = this.sfx.arReload;
+                this.image.src = "src/assets/images/pickups/clears/rifle copy.png";
+                break;
+            case "grenade":
+                this.sound = this.sfx.nadePin;
+                this.image.src = "src/assets/images/pickups/clears/grenade copy.png";
+                break;
+            case "health":
+                this.sound = this.sfx.health;
+                this.image.src = "src/assets/images/pickups/clears/aidConcept copy.png";
+                break;
+            case "wall":
+                this.sound = this.sfx.wall;
+                this.image.src = "src/assets/images/pickups/clears/wall copy.png";
+                break;
+        }
+    }
+
+    draw(context) {
+        if (!this.delete) {
+            context.drawImage(this.image, this.x, this.y);
+        };        
+    }
+}
+
+class TextWall {
+    constructor(text, y) {
+        this.canvas = canvas;
+
+        this.text = text;
+        this.lineheight = 15;
+        this.lines = this.text.split('\n');
+        this.y = Math.floor(y);
+        this.vanish = false;
+    }
+
+    draw(context) {
+        if (!this.vanish) {
+            context.beginPath();
+            context.fillStyle = "black";
+            context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    
+            context.fillStyle = "white";
+            context.font = "17px Times New Roman";
+            for (let i = 0; i < this.lines.length; i++) {
+                context.fillText(this.lines[i], this.canvas.width / 2, this.y + (i * this.lineheight));
+            }
+        }
+    }
+}
+
+class Health {
+    constructor(y, type) {
+        this.x = 0;
+        this.y = y;
+        this.hurt = false;
+        this.number = 3;
+        this.type = type;
+        this.image = new Image();
+        this.image.src = "src/assets/images/pickups/clears/grenade copy.png";;
+    }
+    update() {
+        if (this.hurt) {
+            this.number--;
+        }
+    }
+    draw(context) {
+        for (let i = 0; i < this.number; i++) {
+            switch (this.type) {
+                case "health":
+                    this.image.src = "src/assets/images/pickups/clears/aidConcept copy.png";
+                    break;
+                case "wall":
+                    this.image.src = "src/assets/images/pickups/clears/wall copy.png";
+                    break;
+                case "nade":
+                    this.image.src = "src/assets/images/pickups/clears/grenade copy.png";
+                    break;
+            }
+            context.drawImage(this.image, i * 30, this.y);
+        }     
+    }
+}
+
+// want to make two spots where grenade can land. 
+// cannot change x here for second grenade. Must do that in script.
+class Grenade {
+    constructor(x, entity) {
+        this.canvas = canvas;
+        this.x = x;
+
+        this.ready = false;
+        this.y = this.canvas.height / 2; 
+
+        this.entity = entity;
+        this.dudY = this.entity.y;
+        this.dudX = this.entity.x;
+        this.dudSize = 5;
+
+        this.size = 10;
+
+        this.sound = new Audio();
+        this.sound.src = "src/assets/sounds/explosionLoud.mp3";
+
+        this.bloopPlayed = false;
+        this.bloop = new Audio();
+        this.bloop.src = "src/assets/sounds/q009/glauncher.ogg";
+
+        this.image = new Image();
+        this.image.src = "src/assets/images/sprites/exp2FirstFramesPixel.png";
+
+        // EXPLOSION ANIMATION CRAP:
+        this.frama = 0;
+        this.boomFrameX = 0;
+        this.boomMaxFrame = 3;
+        this.boomSpriteHeight = 64;
+        this.boomSpriteWidth = 64;
+        this.boomHeight = this.boomSpriteHeight * 4;
+        this.boomWidth = this.boomSpriteWidth * 4;
+    }
+
+    // draws the explosion
+    draw(context) {
+        context.drawImage(
+            this.image,
+            this.boomFrameX * this.boomSpriteWidth,
+            0,
+            this.boomSpriteWidth,
+            this.boomSpriteHeight,
+            this.x - (this.y / 2) - 20,
+            this.y - (this.y / 2) - 20,
+            this.boomWidth ,
+            this.boomHeight
+        );  
+    }
+
+    update() {
+        if (this.frama <= 100) this.frama++;
+        else this.frama = 0;
+
+        if (this.frama % 15 === 0) {
+            if (this.boomFrameX < this.boomMaxFrame) {
+            this.boomFrameX++;
+            this.boomAnimation += 1;
+            } else this.boomFrameX = this.minFrame;
+        }
+        // only updates the frames you shithead 
+    }
+
+    // draws the nade itself
+    drawDud(context) {
+        context.beginPath();
+        context.arc(this.entity.x + this.entity.width / 2, this.dudY, this.dudSize, 0, Math.PI * 2, true);
+        context.fill();
+        context.closePath();
+    }
+    updateDud() {
+        if (this.dudY > 0) {
+            this.dudY -= 10;
+            this.dudX -= 10;
+        }
+    }
+}
+
+
 
 let roundCounts = [6, 10]; 
 
@@ -303,7 +1393,7 @@ let enemiesLeft = roundCounts[0];
 let secondShooter = false;
 
 // objects
-const flora = new Floor(canvas);
+const flora = new Floor();
 // const shooter = new Shooter(100, flora.y - 34);
 const shooter = new Shooter(100);
 
@@ -316,8 +1406,8 @@ shooter2.isSecond = true;
 
 // const shooter = new Shooter(100, flora.y - 50);
 // BRILLIANT IDEA: inputHandler doesn't need to take in these args. Use the ones from shooter.
-new InputHandler(shooter, canvas);
-new InputHandler(shooter2, canvas);
+new InputHandler(shooter);
+new InputHandler(shooter2);
 
 // BUTTONS AND TEXT. (x, y, width, text, clickable)
 // skip tut. button necessary -don't want to force players to kill POWS. 
@@ -603,10 +1693,11 @@ function handleStatus() {
         roundText.draw(cxt2);
         scoreText.draw(cxt2);
        
-        if (shooter.weapon != "pistol") {
-            ammoText.draw(cxt2);
-            ammoText.text = shooter.specialAmmo;
-        }
+        // commented out b/c text is cpu heavy:
+        // if (shooter.weapon != "pistol") {
+        //     ammoText.draw(cxt2);
+        //     ammoText.text = shooter.specialAmmo;
+        // }
 
         playerHealth.draw(cxt2);
         wallHealth.draw(cxt2);
@@ -1013,6 +2104,208 @@ function handleState() {
             mouseCollision(shooter.mouse, playAgainButton, () => state = "MENU");
             break;
     }
+}
+
+// BULLETS
+class Projectile {
+    // "dead" used as determinant for playing sounds
+    constructor(x, y, direction, weapon, dead, isSecond) {
+      this.isSecond = isSecond;
+
+      // NEW HOWLER CRAP (sound fx "bucket"):
+      this.sfx = {
+        pistol: new Howl({
+          /* accepts multiple versions of the same audio! (automatically selects the best one for the 
+          current web browser */
+          src: [
+            "src/assets/sounds/shots/pistol.wav",
+          ],
+          loop: false,
+          volume: 0.6
+        }),
+        ar: new Howl({
+          src: [
+            "src/assets/sounds/shots/cg1.wav",
+          ],
+          // the "loop" flag is false by default!
+          loop: false,
+          volume: 0.6
+        }), 
+        flammen: new Howl({
+          src: [
+            "src/assets/sounds/laser.mp3",
+          ],
+          // the "loop" flag is false by default!
+          loop: false,
+          // function to execute as soon as the sound effect ends:
+          // good use case: when there is an intro to a song. Play the intro first, then use "onend" 
+          // to play the song without having to worry about the intro repeating. 
+          onend: function() {}
+        }), 
+        shotty: new Howl({
+          src: [
+            "src/assets/sounds/shots/rifle.wav",
+          ],
+          // the "loop" flag is false by default!
+          loop: false,
+          volume: 0.6,
+          onend: function() {}
+        }), 
+        growl: new Howl({
+          src: [
+            "/src/assets/sounds/paco.flac",
+          ],
+          // the "loop" flag is false by default!
+          loop: false,
+          onend: function() {}
+        }), 
+        bomber: new Howl({
+          src: [
+            "src/assets/sounds/ray-beam.mp3",
+          ],
+          // the "loop" flag is false by default!
+          loop: false,
+        }), 
+        laser: new Howl({
+          src: [
+            "src/assets/sounds/laser-buzz.mp3",
+          ],
+          // the "loop" flag is false by default!
+          loop: false,
+        }), 
+      }
+
+      this.x = x;
+      this.y = y;
+      this.direction = direction;
+      this.weapon = weapon;
+      this.dead = dead;
+
+      this.size = 2;
+
+      this.speed = 10;
+      this.delete = false;
+      this.randomY = [1.7, 2, 2.2, 2.4, 2.6, 2.8, 3];
+      // needs to shoot in the same directon (110 y) as randomY values:
+      this.randomY_duck = [1.1, 1.2, 1.3, 1.4];
+
+      this.bulletLimit;
+    }
+
+    playSound(sound) {
+      if (!sound.playing()) {
+        sound.play();
+      }
+    }
+    
+    update() {
+      switch (this.weapon) {
+        case "pistol":
+          this.playSound(this.sfx.pistol);
+          break;
+        case "shotty":
+          this.size = 3;
+          if (!this.dead) {
+            this.playSound(this.sfx.shotty);
+          } else {
+            this.sfx.shotty.stop();
+          } 
+          break;
+        case "ar":
+          this.size = 2;
+          this.speed = 12;
+          this.playSound(this.sfx.ar);
+          break;
+
+        case "flammen":
+          if (!this.isSecond) this.playSound(this.sfx.flammen);
+          this.speed = 11;
+          break;
+
+        case "laser-gun":
+          this.playSound(this.sfx.laser);
+          this.speed = 7;
+          break;
+      }
+
+      // DIRECTION TO SHOOT IN:
+      switch (this.direction) {
+        case "straight":
+          this.x += this.speed;
+          // this.y += this.speed; <- yup, this works
+          break
+
+        case "up":
+        case "down-up":   
+          this.x += 0;
+          this.y -= this.speed;
+          break;
+        
+        case "diagnal":
+          this.x += this.speed;
+          this.y -= this.speed / this.randomY[Math.floor(Math.random() * this.randomY.length)];
+          break;
+        
+        case "diagnal-duck":
+          this.x += this.speed;
+          this.y -= this.speed / this.randomY_duck[Math.floor(Math.random() * this.randomY_duck.length)];
+          break;
+
+        case "down":
+          this.x += this.speed;
+          break;
+
+        case "back":
+        case "down-back":
+          this.x -= this.speed;
+          break;
+        
+        case "diagnal-back":
+          this.x -= this.speed + 1;
+          this.y -= this.speed * 2  
+          break;
+
+        // THIS IS FOR AIR ENEMIES:
+        case "down-diagnal":
+          this.x -= this.speed / 1.3;
+          this.y += this.speed / 3;
+          break;
+
+        // FOR BOMBERS:
+        case "straight-down":
+          this.y += this.speed;
+          break;  
+      }
+    }
+    draw(context) {
+      if (this.weapon == "flammen") {
+        context.strokeStyle = "green";
+        context.beginPath();
+        context.lineWidth = 3;
+        context.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        context.stroke();
+      } 
+      else if (this.weapon == "ar") {
+        context.save(); 
+        context.fillStyle = "black";
+        context.beginPath();
+        context.ellipse(this.x, this.y, this.size + 1, this.size + 1, 0, Math.PI / 4, Math.PI * 2);
+        // context.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        context.fill();
+        context.restore();
+      } 
+      else if (this.direction == "down-diagnal") {
+        context.beginPath();
+        context.ellipse(this.x, this.y, 5, 15, Math.PI / 3, 0, 2 * Math.PI);
+        context.stroke();
+      }
+      else {
+        context.fillStyle = "black";
+        context.beginPath();
+        context.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        context.fill();
+      }
+    } 
 }
 
 // increment stuff to make next round slightly harder:
