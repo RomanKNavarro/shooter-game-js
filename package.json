@@ -1,20 +1,19 @@
 {
-    "name": "sheephunt",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.html",
-    "scripts": {
-      "start": "parcel index.html --open",
-      "build": "parcel build index.html"
-    },
-    "dependencies": {
-      "parcel-bundler": "^1.6.1"
-    },
-    "devDependencies": {
-      "@babel/core": "7.2.0"
-    },
-    "resolutions": {
-      "@babel/preset-env": "7.13.8"
-    },
-    "keywords": []
-  }
+  "name": "shooter-game",
+  "version": "1.0.0",
+  "description": "code for Sheephunt: War Crimes",
+  "main": "index.html",
+  "scripts": {
+    "test": "src/script.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KavemanKorps/shooter-game-js.git"
+  },
+  "author": "Roman Navarro",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KavemanKorps/shooter-game-js/issues"
+  },
+  "homepage": "https://github.com/KavemanKorps/shooter-game-js#readme"
+}
