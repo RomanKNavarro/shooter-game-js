@@ -7,7 +7,6 @@ canvas.style.height=canvas.getBoundingClientRect().height;//actual height of can
 // let currentBackground = "url(src/assets/images/background/background-working2.png)";
 // document.getElementById('canvas2').style.backgroundImage=currentBackground;
 
-document.getElementById('canvas2').style.backgroundImage="url(src/assets/images/background/background-working2.png)"; // specify the image path here
 
 // STRICTLY FOR BULLETS:
 var bullet_canvas = document.getElementById("bullet-canvas");
@@ -1563,6 +1562,15 @@ let nadeQueue = [];
 // let state = "MENU";
 let state = "LOADING";
 
+if (state != "INTRO" || state != "BOSS") {
+    if (state == "RUNNING" || state == "LOSE" || state == "MENU" || state == "SPECIAL" || state == "RELIEF") {
+        document.getElementById('canvas2').style.backgroundImage="url(src/assets/images/background/background-working2.png)"; // specify the image path here
+    } else {
+        document.getElementById('canvas2').style.backgroundImage="url(src/assets/images/background/background-working3.png)"; // specify the image path here
+    }
+}
+
+
 let loadingTime = [4000, 5000][Math.floor(Math.random() * 2)];
 
 // FUNCTIONS:
@@ -1871,7 +1879,6 @@ function handleState() {
 
         // this state is only for the boss text:
         case "BOSS":
-            document.getElementById('canvas2').style.backgroundImage="url(src/assets/images/background/background-working3.png)";
             musicToggler();
             finalRound = true;
             bossText.draw(cxt);
