@@ -1324,12 +1324,13 @@ class Grenade {
         //         volume: 0.1,
         //     }),
         // };
+        // WHY'S BLOOP PLAYING SO LOUD? CAUSE MULTIPLE ISNTANCES OF THE SOUND
 
         this.bloopPlayed = false;
 
         this.sound = new Audio();
         this.sound.src = "src/assets/sounds/explosionLoud.mp3";
-        // this.sound.volume = 0.1;
+        this.sound.volume = 0.1;
 
         this.bloop = new Audio();
         this.bloop.src = "src/assets/sounds/q009/glauncher.ogg";
@@ -1579,8 +1580,8 @@ let currentSpeed = 1.5;
 let snackQueue = [];
 let nadeQueue = [];
 
-// let state = "MENU";
-let state = "LOADING";
+let state = "MENU";
+// let state = "LOADING";
 
 let loadingTime = [4000, 5000][Math.floor(Math.random() * 2)];
 
@@ -1889,6 +1890,7 @@ function handleState() {
 
         // this state is only for the boss text:
         case "BOSS":
+            // THIS SHIT DOES NOT WORK ON NEWGROUNDS.
             document.getElementById('canvas2').style.backgroundImage="url(src/assets/images/background/background-working3.png)";
             musicToggler();
             finalRound = true;
@@ -2405,7 +2407,7 @@ function handleNade(arr) {
         if (!current.bloopPlayed) {
             current.bloop.play();
             // playSound(current.sfx.bloop);
-            current.bloopPlayed = false;
+            // current.bloopPlayed = false;
         }
 
         setTimeout(() => {
@@ -2469,7 +2471,7 @@ function handleEnemyProjectiles(orc) {
             i--;
 
             // UNCOMMENT THIS:
-            if ((!shooter.duck) || (["air", "bomber", "crawl"].includes(orc.type))) playerHealth.number--;
+            // if ((!shooter.duck) || (["air", "bomber", "crawl"].includes(orc.type))) playerHealth.number--;
         }
     }
 }
@@ -2665,7 +2667,7 @@ function handleEnemy() {
         } else {
             current.dead = true;
             // UNCOMMENT:
-            if (!current.isCivie) wallHealth.number--;
+            // if (!current.isCivie) wallHealth.number--;
         }
 
         if (current.dead) {
