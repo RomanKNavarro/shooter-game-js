@@ -1159,7 +1159,7 @@ class Pickup {
                     "src/assets/sounds/3 heal spells/healspell2.mp3",
                 ], 
                 loop: false,
-            }),
+            })
         }
 
         // ONLY A 0/10 CHANCE TO SPAWN PICKUP IN GENERAL (see enemy.js):
@@ -1309,12 +1309,31 @@ class Grenade {
 
         this.size = 10;
 
-        this.sound = new Audio();
-        this.sound.src = "src/assets/sounds/explosionLoud.mp3";
+        // this.sfx = {
+        //     // PICKUP SFX:
+        //     bloop: new Howl({
+        //         src: [
+        //             "src/assets/sounds/q009/glauncher.ogg"
+        //         ],
+        //         volume: 0.1,
+        //     }),
+        //     boom: new Howl({
+        //         src: [
+        //             "src/assets/sounds/explosionLoud.mp3"
+        //         ],
+        //         volume: 0.1,
+        //     }),
+        // };
 
         this.bloopPlayed = false;
+
+        this.sound = new Audio();
+        this.sound.src = "src/assets/sounds/explosionLoud.mp3";
+        // this.sound.volume = 0.1;
+
         this.bloop = new Audio();
         this.bloop.src = "src/assets/sounds/q009/glauncher.ogg";
+        // this.bloop.volume = 0.1;
 
         this.image = new Image();
         this.image.src = "src/assets/images/sprites/exp2FirstFramesPixel.png";
@@ -2385,6 +2404,7 @@ function handleNade(arr) {
 
         if (!current.bloopPlayed) {
             current.bloop.play();
+            // playSound(current.sfx.bloop);
             current.bloopPlayed = false;
         }
 
@@ -2398,7 +2418,7 @@ function handleNade(arr) {
             current.update();
 
             current.sound.play();
-            // playSound(sfx.boom);
+            // playSound(current.sfx.boom);
 
             // THIS IS 299:
             // console.log(current.x - current.size);
