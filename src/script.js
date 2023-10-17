@@ -7,6 +7,7 @@ canvas.style.height=canvas.getBoundingClientRect().height;//actual height of can
 // let currentBackground = "url(src/assets/images/background/background-working2.png)";
 // document.getElementById('canvas2').style.backgroundImage=currentBackground;
 
+document.getElementById('canvas2').style.backgroundImage="url(src/assets/images/background/background-working2.png)"; // specify the image path here
 
 // STRICTLY FOR BULLETS:
 var bullet_canvas = document.getElementById("bullet-canvas");
@@ -1133,19 +1134,19 @@ class Pickup {
                 src: [
                     "src/assets/sounds/rifleReload.mp3",    // good
                 ],
-                volume: 5,
+                volume: 1,
             }),
             nadePin: new Howl({
                 src: [
                     "src/assets/sounds/grenadePin.mp3",     // good
                 ],
-                volume: 5,
+                volume: 1,
             }),
             flammenReload: new Howl({
                 src: [
                     "src/assets/sounds/futureReload.mp3",   // good
                 ],
-                volume: 5,
+                volume: 1,
             }),
             health: new Howl({
                 src: [
@@ -1562,15 +1563,6 @@ let nadeQueue = [];
 // let state = "MENU";
 let state = "LOADING";
 
-if (state != "INTRO" || state != "BOSS") {
-    if (state == "RUNNING" || state == "LOSE" || state == "MENU" || state == "SPECIAL" || state == "RELIEF") {
-        document.getElementById('canvas2').style.backgroundImage="url(src/assets/images/background/background-working2.png)"; // specify the image path here
-    } else {
-        document.getElementById('canvas2').style.backgroundImage="url(src/assets/images/background/background-working3.png)"; // specify the image path here
-    }
-}
-
-
 let loadingTime = [4000, 5000][Math.floor(Math.random() * 2)];
 
 // FUNCTIONS:
@@ -1580,7 +1572,7 @@ var sfx = {
             "src/assets/sounds/animals_dog_yelp_med_large.mp3",
         ],
         loop: false,
-        volume: 6,
+        volume: 1,
     }),
     growl: new Howl({
       /* accepts multiple versions of the same audio! (automatically selects the best one for the 
@@ -1640,7 +1632,7 @@ var sfx = {
             "src/assets/sounds/crowd2.mp3",
         ], 
         loop: false,
-        volume: 3,
+        volume: 0.5,
     }),
     // shit squish:
     asshole: new Howl({
@@ -1648,7 +1640,7 @@ var sfx = {
             "src/assets/sounds/squelch.mp3",
         ], 
         loop: false,
-        volume: 3,
+        volume: 1,
     }),
 };
 
@@ -1660,14 +1652,14 @@ var music = {
         "src/assets/music/prey's stand.mp3"
         ], 
         loop: true,
-        volume: 5.5,
+        volume: 1,
     }),
     hit_back: new Howl({
         src: [
         "src/assets/music/hit-back.mp3"
         ], 
         loop: false,
-        volume: 5.5,
+        volume: 1,
     }),
 };
 
@@ -1827,7 +1819,6 @@ function handleState() {
             handleEnemy();
             if (enemyQueue.length < 1) pushEnemy();
 
-
             setTimeout(() => {
                 // showLoading = false;
                 showPlay = true;
@@ -1879,6 +1870,7 @@ function handleState() {
 
         // this state is only for the boss text:
         case "BOSS":
+            document.getElementById('canvas2').style.backgroundImage="url(src/assets/images/background/background-working3.png)";
             musicToggler();
             finalRound = true;
             bossText.draw(cxt);
@@ -2128,7 +2120,7 @@ class Projectile {
             "src/assets/sounds/shots/pistol.wav",
           ],
           loop: false,
-          volume: 0.6
+          volume: 0.1
         }),
         ar: new Howl({
           src: [
@@ -2136,7 +2128,7 @@ class Projectile {
           ],
           // the "loop" flag is false by default!
           loop: false,
-          volume: 0.6
+          volume: 0.2
         }), 
         flammen: new Howl({
           src: [
@@ -2155,7 +2147,7 @@ class Projectile {
           ],
           // the "loop" flag is false by default!
           loop: false,
-          volume: 0.6,
+          volume: 0.1,
           onend: function() {}
         }), 
         growl: new Howl({
@@ -2164,6 +2156,7 @@ class Projectile {
           ],
           // the "loop" flag is false by default!
           loop: false,
+          volume: 0.5,
           onend: function() {}
         }), 
         bomber: new Howl({
@@ -2823,7 +2816,7 @@ function animate() {
     flora.draw(cxt2);
     handleShooter();
     handleSnack();
-    handleState();
+    handleState();  
     handleStatus();
     handleProjectile(enemyQueue);
     // if (!shooter.dead) handleNade(enemyQueue);
@@ -2832,7 +2825,7 @@ function animate() {
     if ((state == "RUNNING" || state == "LOSE") && frame <= 100) frame++;
     else frame = 0;
 
-    console.log(shooter.timer);
+    // console.log(shooter.timer);
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
