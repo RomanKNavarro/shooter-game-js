@@ -97,11 +97,8 @@ class Shooter {
             clicked: false
         };
 
-        this.flammen = new Audio();
-        this.flammen.src = "src/assets/sounds/flammen2.mp3";
-
-        this.bloop = new Audio();
-        this.bloop.src = "src/assets/sounds/q009/glauncher.ogg";
+        // this.flammen = new Audio();
+        // this.flammen.src = "src/assets/sounds/flammen2.mp3";
 
         this.toggleMusic = false;
 
@@ -1309,32 +1306,24 @@ class Grenade {
 
         this.size = 10;
 
-        // this.sfx = {
-        //     // PICKUP SFX:
-        //     bloop: new Howl({
-        //         src: [
-        //             "src/assets/sounds/q009/glauncher.ogg"
-        //         ],
-        //         volume: 0.1,
-        //     }),
-        //     boom: new Howl({
-        //         src: [
-        //             "src/assets/sounds/explosionLoud.mp3"
-        //         ],
-        //         volume: 0.1,
-        //     }),
-        // };
+        this.sfx = {
+            // PICKUP SFX:
+            bloop: new Howl({
+                src: [
+                    "src/assets/sounds/q009/glauncher.ogg"
+                ],
+                volume: 0.1,
+            }),
+            boom: new Howl({
+                src: [
+                    "src/assets/sounds/explosionLoud.mp3"
+                ],
+                volume: 0.1,
+            }),
+        };
         // WHY'S BLOOP PLAYING SO LOUD? CAUSE MULTIPLE ISNTANCES OF THE SOUND
 
         this.bloopPlayed = false;
-
-        this.sound = new Audio();
-        this.sound.src = "src/assets/sounds/explosionLoud.mp3";
-        this.sound.volume = 0.1;
-
-        this.bloop = new Audio();
-        this.bloop.src = "src/assets/sounds/q009/glauncher.ogg";
-        // this.bloop.volume = 0.1;
 
         this.image = new Image();
         this.image.src = "src/assets/images/sprites/exp2FirstFramesPixel.png";
@@ -1608,7 +1597,9 @@ var sfx = {
         src: [
           "src/assets/sounds/explosionLoud.mp3",
         ],
+        volume: 0.1,
         loop: true,
+
     }),
     bloop: new Howl({
         /* accepts multiple versions of the same audio! (automatically selects the best one for the 
@@ -1616,7 +1607,8 @@ var sfx = {
         src: [
           "src/assets/sounds/q009/glauncher.ogg",
         ],
-        //loop: false,
+        volume: 0.1,
+        loop: false,
     }),
 
     // PICKUP SFX:
@@ -2374,11 +2366,9 @@ function handleShooter() {
         // THIS IS NECESSARY:
         if (shooter.secondNade == false) {
             nadeQueue.push(new Grenade(canvas.width / 2, shooter, canvas));
-            // shooter.bloop.play();
             playSound(sfx.bloop);
         } else {
             nadeQueue.push(new Grenade(canvas.width / 1.2, shooter, canvas));
-            //shooter.bloop.play();
             playSound(sfx.bloop);
         }
     
