@@ -9,10 +9,10 @@ canvas.style.height=canvas.getBoundingClientRect().height;//actual height of can
 document.getElementById('canvas2').style.backgroundImage="url(src/assets/images/background/background-working3.png)"; // specify the image path here
 
 // STRICTLY FOR BULLETS:
-var bullet_canvas = document.getElementById("bullet-canvas");
-var bullet_cxt = bullet_canvas.getContext("2d");
-bullet_canvas.style.width=bullet_canvas.getBoundingClientRect().width;//actual width of canvas
-bullet_canvas.style.height=bullet_canvas.getBoundingClientRect().height;//actual height of canvas
+var bullet_canvas = document.getElementById("bullet-canvas");       
+var bullet_cxt = bullet_canvas.getContext("2d");        
+bullet_canvas.style.width=bullet_canvas.getBoundingClientRect().width;//actual width of canvas      
+bullet_canvas.style.height=bullet_canvas.getBoundingClientRect().height;//actual height of canvas   
 
 // FOR STATICS:
 var canvas2 = document.getElementById("canvas2");
@@ -1133,19 +1133,19 @@ class Pickup {
                 src: [
                     "src/assets/sounds/rifleReload.mp3",    // good
                 ],
-                volume: 5,
+                volume: 2,
             }),
             nadePin: new Howl({
                 src: [
                     "src/assets/sounds/grenadePin.mp3",     // good
                 ],
-                volume: 3,
+                volume: 2,
             }),
             flammenReload: new Howl({
                 src: [
                     "src/assets/sounds/futureReload.mp3",   // good
                 ],
-                volume: 5,
+                volume: 1,
             }),
             health: new Howl({
                 src: [
@@ -1158,6 +1158,7 @@ class Pickup {
                     "src/assets/sounds/3 heal spells/healspell2.mp3",
                 ], 
                 loop: false,
+                volume: 1,
             }),
         }
 
@@ -1564,8 +1565,8 @@ let currentSpeed = 1.5;
 let snackQueue = [];
 let nadeQueue = [];
 
-let state = "MENU";
-// let state = "LOADING";
+// let state = "MENU";
+let state = "LOADING";
 
 let loadingTime = [4000, 5000][Math.floor(Math.random() * 2)];
 
@@ -1878,7 +1879,6 @@ function handleState() {
 
         // this state is only for the boss text:
         case "BOSS":
-            document.getElementById('canvas2').style.backgroundImage="url(src/assets/images/background/background-working3.png)";
             musicToggler();
             finalRound = true;
             bossText.draw(cxt);
@@ -2128,7 +2128,7 @@ class Projectile {
             "src/assets/sounds/shots/pistol.wav",
           ],
           loop: false,
-          volume: 0.4,
+          volume: 0.2,
         }),
         ar: new Howl({
           src: [
@@ -2136,7 +2136,7 @@ class Projectile {
           ],
           // the "loop" flag is false by default!
           loop: false,
-          volume: 0.5
+          volume: 0.3
         }), 
         flammen: new Howl({
           src: [
@@ -2144,6 +2144,7 @@ class Projectile {
           ],
           // the "loop" flag is false by default!
           loop: false,
+          volume: 0.5,
           // function to execute as soon as the sound effect ends:
           // good use case: when there is an intro to a song. Play the intro first, then use "onend" 
           // to play the song without having to worry about the intro repeating. 
@@ -2155,7 +2156,7 @@ class Projectile {
           ],
           // the "loop" flag is false by default!
           loop: false,
-          volume: 0.6,
+          volume: 0.3,
           onend: function() {}
         }), 
         bomber: new Howl({
@@ -2165,6 +2166,7 @@ class Projectile {
           // the "loop" flag is false by default!
           loop: false,
         }), 
+        // meant for cancelled laser gun:
         laser: new Howl({
           src: [
             "src/assets/sounds/laser-buzz.mp3",
