@@ -1139,7 +1139,7 @@ class Pickup {
                 src: [
                     "src/assets/sounds/grenadePin.mp3",     // good
                 ],
-                volume: 2,
+                volume: 1,
             }),
             flammenReload: new Howl({
                 src: [
@@ -1612,11 +1612,6 @@ var sfx = {
             "src/assets/sounds/explosionLoud.mp3",
         ]
     }),
-    nadePin: new Howl({
-        src: [
-            "src/assets/sounds/grenadePin.mp3",
-        ]
-    }),
     flammenReload: new Howl({
         src: [
             "src/assets/sounds/futureReload.mp3",
@@ -1639,7 +1634,7 @@ var sfx = {
             "src/assets/sounds/crowd2.mp3",
         ], 
         loop: false,
-        volume: 2,
+        volume: 1,
     }),
     // shit squish:
     asshole: new Howl({
@@ -2136,7 +2131,7 @@ class Projectile {
           ],
           // the "loop" flag is false by default!
           loop: false,
-          volume: 0.3
+          volume: 0.2
         }), 
         flammen: new Howl({
           src: [
@@ -2144,7 +2139,7 @@ class Projectile {
           ],
           // the "loop" flag is false by default!
           loop: false,
-          volume: 0.5,
+          volume: 0.2,
           // function to execute as soon as the sound effect ends:
           // good use case: when there is an intro to a song. Play the intro first, then use "onend" 
           // to play the song without having to worry about the intro repeating. 
@@ -2422,14 +2417,12 @@ function handleNade(arr) {
         // REMEMBER TO UNCOMMENT:
         for (let y = 0; y <= arr.length; y++) { 
             let currOrc = arr[y];
-            // console.log(collision(current, currOrc));
             if (arr.length > 0 && currOrc) {
                 if (nadeCollision(current, currOrc) && current.ready == true) {    
                     currOrc.dead = true;
                 } 
                 // else currOrc.inNadeRange = false;
             }
-            // console.log(currOrc.inNodeRange);
         }
     }
 };
