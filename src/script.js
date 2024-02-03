@@ -1133,31 +1133,19 @@ class Pickup {
                 src: [
                     "src/assets/sounds/rifleReload.mp3",    // good
                 ],
-<<<<<<< HEAD
-                volume: 5,
-=======
-                volume: 2,
->>>>>>> 3de2e76520b34cd39c3dc2c9a0b97a131321046c
+                volume: 1,
             }),
             nadePin: new Howl({
                 src: [
                     "src/assets/sounds/grenadePin.mp3",     // good
                 ],
-<<<<<<< HEAD
-                volume: 5,
-=======
                 volume: 1,
->>>>>>> 3de2e76520b34cd39c3dc2c9a0b97a131321046c
             }),
             flammenReload: new Howl({
                 src: [
                     "src/assets/sounds/futureReload.mp3",   // good
                 ],
-<<<<<<< HEAD
-                volume: 5,
-=======
                 volume: 1,
->>>>>>> 3de2e76520b34cd39c3dc2c9a0b97a131321046c
             }),
             health: new Howl({
                 src: [
@@ -1170,10 +1158,7 @@ class Pickup {
                     "src/assets/sounds/3 heal spells/healspell2.mp3",
                 ], 
                 loop: false,
-<<<<<<< HEAD
-=======
                 volume: 1,
->>>>>>> 3de2e76520b34cd39c3dc2c9a0b97a131321046c
             }),
         }
 
@@ -1324,23 +1309,15 @@ class Grenade {
 
         this.size = 10;
 
-<<<<<<< HEAD
-        this.sound = new Audio();
-        this.sound.src = "src/assets/sounds/explosionLoud.mp3";
-=======
         // THIS IS WHAT ACTUALLY FUCKING PLAYS
         this.sound = new Audio();
         this.sound.src = "src/assets/sounds/explosionLoud.mp3";
         this.sound.volume = 0.5;
->>>>>>> 3de2e76520b34cd39c3dc2c9a0b97a131321046c
 
         this.bloopPlayed = false;
         this.bloop = new Audio();
         this.bloop.src = "src/assets/sounds/q009/glauncher.ogg";
-<<<<<<< HEAD
-=======
         this.bloop.volume = 0.5;
->>>>>>> 3de2e76520b34cd39c3dc2c9a0b97a131321046c
 
         this.image = new Image();
         this.image.src = "src/assets/images/sprites/exp2FirstFramesPixel.png";
@@ -1600,7 +1577,7 @@ var sfx = {
             "src/assets/sounds/animals_dog_yelp_med_large.mp3",
         ],
         loop: false,
-        volume: 2,
+        volume: 1,
     }),
     growl: new Howl({
       /* accepts multiple versions of the same audio! (automatically selects the best one for the 
@@ -1618,7 +1595,7 @@ var sfx = {
           "src/assets/sounds/explosionLoud.mp3",
         ],
         loop: true,
-        volume: 0.5,
+        volume: 0.2,
     }),
     bloop: new Howl({
         /* accepts multiple versions of the same audio! (automatically selects the best one for the 
@@ -1626,7 +1603,7 @@ var sfx = {
         src: [
           "src/assets/sounds/q009/glauncher.ogg",
         ],
-        volume: 0.5,
+        volume: 0.2,
         //loop: false,
     }),
     // PICKUP SFX:
@@ -1665,7 +1642,7 @@ var sfx = {
             "src/assets/sounds/squelch.mp3",
         ], 
         loop: false,
-        volume: 3,
+        volume: 1,
     }),
 };
 
@@ -2146,11 +2123,7 @@ class Projectile {
             "src/assets/sounds/shots/pistol.wav",
           ],
           loop: false,
-<<<<<<< HEAD
-          volume: 0.6
-=======
           volume: 0.2,
->>>>>>> 3de2e76520b34cd39c3dc2c9a0b97a131321046c
         }),
         ar: new Howl({
           src: [
@@ -2158,11 +2131,7 @@ class Projectile {
           ],
           // the "loop" flag is false by default!
           loop: false,
-<<<<<<< HEAD
-          volume: 0.6
-=======
           volume: 0.2
->>>>>>> 3de2e76520b34cd39c3dc2c9a0b97a131321046c
         }), 
         flammen: new Howl({
           src: [
@@ -2170,10 +2139,7 @@ class Projectile {
           ],
           // the "loop" flag is false by default!
           loop: false,
-<<<<<<< HEAD
-=======
           volume: 0.2,
->>>>>>> 3de2e76520b34cd39c3dc2c9a0b97a131321046c
           // function to execute as soon as the sound effect ends:
           // good use case: when there is an intro to a song. Play the intro first, then use "onend" 
           // to play the song without having to worry about the intro repeating. 
@@ -2185,19 +2151,7 @@ class Projectile {
           ],
           // the "loop" flag is false by default!
           loop: false,
-<<<<<<< HEAD
-          volume: 0.6,
-          onend: function() {}
-        }), 
-        growl: new Howl({
-          src: [
-            "/src/assets/sounds/paco.flac",
-          ],
-          // the "loop" flag is false by default!
-          loop: false,
-=======
           volume: 0.3,
->>>>>>> 3de2e76520b34cd39c3dc2c9a0b97a131321046c
           onend: function() {}
         }), 
         bomber: new Howl({
@@ -2207,10 +2161,7 @@ class Projectile {
           // the "loop" flag is false by default!
           loop: false,
         }), 
-<<<<<<< HEAD
-=======
         // meant for cancelled laser gun:
->>>>>>> 3de2e76520b34cd39c3dc2c9a0b97a131321046c
         laser: new Howl({
           src: [
             "src/assets/sounds/laser-buzz.mp3",
@@ -2267,10 +2218,7 @@ class Projectile {
           this.speed = 11;
           break;
 
-<<<<<<< HEAD
-=======
         // was meant for sheep enemy, but not added after all lol
->>>>>>> 3de2e76520b34cd39c3dc2c9a0b97a131321046c
         case "laser-gun":
           this.playSound(this.sfx.laser);
           this.speed = 7;
