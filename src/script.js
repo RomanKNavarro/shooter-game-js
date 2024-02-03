@@ -4,16 +4,15 @@ var cxt = canvas.getContext("2d");
 canvas.style.width=canvas.getBoundingClientRect().width;//actual width of canvas
 canvas.style.height=canvas.getBoundingClientRect().height;//actual height of canvas
 
-// let currentBackground = "url(src/assets/images/background/background-working2.png)";
-// document.getElementById('canvas2').style.backgroundImage=currentBackground;
+// TODO: fix music  
 
-document.getElementById('canvas2').style.backgroundImage="url(src/assets/images/background/background-working2.png)"; // specify the image path here
+document.getElementById('canvas2').style.backgroundImage="url(src/assets/images/background/background-working3.png)"; // specify the image path here
 
 // STRICTLY FOR BULLETS:
-var bullet_canvas = document.getElementById("bullet-canvas");
-var bullet_cxt = bullet_canvas.getContext("2d");
-bullet_canvas.style.width=bullet_canvas.getBoundingClientRect().width;//actual width of canvas
-bullet_canvas.style.height=bullet_canvas.getBoundingClientRect().height;//actual height of canvas
+var bullet_canvas = document.getElementById("bullet-canvas");       
+var bullet_cxt = bullet_canvas.getContext("2d");        
+bullet_canvas.style.width=bullet_canvas.getBoundingClientRect().width;//actual width of canvas      
+bullet_canvas.style.height=bullet_canvas.getBoundingClientRect().height;//actual height of canvas   
 
 // FOR STATICS:
 var canvas2 = document.getElementById("canvas2");
@@ -1134,19 +1133,31 @@ class Pickup {
                 src: [
                     "src/assets/sounds/rifleReload.mp3",    // good
                 ],
+<<<<<<< HEAD
                 volume: 5,
+=======
+                volume: 2,
+>>>>>>> 3de2e76520b34cd39c3dc2c9a0b97a131321046c
             }),
             nadePin: new Howl({
                 src: [
                     "src/assets/sounds/grenadePin.mp3",     // good
                 ],
+<<<<<<< HEAD
                 volume: 5,
+=======
+                volume: 1,
+>>>>>>> 3de2e76520b34cd39c3dc2c9a0b97a131321046c
             }),
             flammenReload: new Howl({
                 src: [
                     "src/assets/sounds/futureReload.mp3",   // good
                 ],
+<<<<<<< HEAD
                 volume: 5,
+=======
+                volume: 1,
+>>>>>>> 3de2e76520b34cd39c3dc2c9a0b97a131321046c
             }),
             health: new Howl({
                 src: [
@@ -1159,6 +1170,10 @@ class Pickup {
                     "src/assets/sounds/3 heal spells/healspell2.mp3",
                 ], 
                 loop: false,
+<<<<<<< HEAD
+=======
+                volume: 1,
+>>>>>>> 3de2e76520b34cd39c3dc2c9a0b97a131321046c
             }),
         }
 
@@ -1309,12 +1324,23 @@ class Grenade {
 
         this.size = 10;
 
+<<<<<<< HEAD
         this.sound = new Audio();
         this.sound.src = "src/assets/sounds/explosionLoud.mp3";
+=======
+        // THIS IS WHAT ACTUALLY FUCKING PLAYS
+        this.sound = new Audio();
+        this.sound.src = "src/assets/sounds/explosionLoud.mp3";
+        this.sound.volume = 0.5;
+>>>>>>> 3de2e76520b34cd39c3dc2c9a0b97a131321046c
 
         this.bloopPlayed = false;
         this.bloop = new Audio();
         this.bloop.src = "src/assets/sounds/q009/glauncher.ogg";
+<<<<<<< HEAD
+=======
+        this.bloop.volume = 0.5;
+>>>>>>> 3de2e76520b34cd39c3dc2c9a0b97a131321046c
 
         this.image = new Image();
         this.image.src = "src/assets/images/sprites/exp2FirstFramesPixel.png";
@@ -1432,8 +1458,10 @@ const healthText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "You
 const wallText = new Button(canvas.width / 2.5, canvas.height / 2.7, 100, "Too many enemies have broken through.", false);
 
 // UI
-const enemyText = new Button(canvas.width / 2.45, 0, 100, enemiesLeft, false);
+const enemyText = new Button(canvas.width / 2, 0, 100, enemiesLeft, false);
 const roundText = new Button(canvas.width / 3, 0, 100, `${currentRound}/10`, false);
+
+// taken out:
 const scoreText = new Button(canvas.width / 2, 0, 100, score, false);
 const ammoText = new Button(canvas.width - 100, 0, 100, shooter.specialAmmo, false);
 
@@ -1572,7 +1600,7 @@ var sfx = {
             "src/assets/sounds/animals_dog_yelp_med_large.mp3",
         ],
         loop: false,
-        volume: 6,
+        volume: 2,
     }),
     growl: new Howl({
       /* accepts multiple versions of the same audio! (automatically selects the best one for the 
@@ -1581,6 +1609,7 @@ var sfx = {
         "src/assets/sounds/paco.flac",
       ],
       loop: false,
+      volume: 0.5,
     }),
     boom: new Howl({
         /* accepts multiple versions of the same audio! (automatically selects the best one for the 
@@ -1589,6 +1618,7 @@ var sfx = {
           "src/assets/sounds/explosionLoud.mp3",
         ],
         loop: true,
+        volume: 0.5,
     }),
     bloop: new Howl({
         /* accepts multiple versions of the same audio! (automatically selects the best one for the 
@@ -1596,18 +1626,13 @@ var sfx = {
         src: [
           "src/assets/sounds/q009/glauncher.ogg",
         ],
+        volume: 0.5,
         //loop: false,
     }),
-
     // PICKUP SFX:
     arReload: new Howl({
         src: [
             "src/assets/sounds/explosionLoud.mp3",
-        ]
-    }),
-    nadePin: new Howl({
-        src: [
-            "src/assets/sounds/grenadePin.mp3",
         ]
     }),
     flammenReload: new Howl({
@@ -1632,7 +1657,7 @@ var sfx = {
             "src/assets/sounds/crowd2.mp3",
         ], 
         loop: false,
-        volume: 3,
+        volume: 1,
     }),
     // shit squish:
     asshole: new Howl({
@@ -1652,14 +1677,15 @@ var music = {
         "src/assets/music/prey's stand.mp3"
         ], 
         loop: true,
-        volume: 5.5,
+        // prev. 5.5:
+        volume: 1,
     }),
     hit_back: new Howl({
         src: [
         "src/assets/music/hit-back.mp3"
         ], 
         loop: false,
-        volume: 5.5,
+        volume: 1,
     }),
 };
 
@@ -1691,7 +1717,7 @@ function handleStatus() {
         enemyText.text = enemiesLeft;
         enemyText.draw(cxt2);
         roundText.draw(cxt2);
-        scoreText.draw(cxt2);
+        // scoreText.draw(cxt2);
        
         // commented out b/c text is cpu heavy:
         // if (shooter.weapon != "pistol") {
@@ -1871,7 +1897,6 @@ function handleState() {
 
         // this state is only for the boss text:
         case "BOSS":
-            document.getElementById('canvas2').style.backgroundImage="url(src/assets/images/background/background-working3.png)";
             musicToggler();
             finalRound = true;
             bossText.draw(cxt);
@@ -2121,7 +2146,11 @@ class Projectile {
             "src/assets/sounds/shots/pistol.wav",
           ],
           loop: false,
+<<<<<<< HEAD
           volume: 0.6
+=======
+          volume: 0.2,
+>>>>>>> 3de2e76520b34cd39c3dc2c9a0b97a131321046c
         }),
         ar: new Howl({
           src: [
@@ -2129,7 +2158,11 @@ class Projectile {
           ],
           // the "loop" flag is false by default!
           loop: false,
+<<<<<<< HEAD
           volume: 0.6
+=======
+          volume: 0.2
+>>>>>>> 3de2e76520b34cd39c3dc2c9a0b97a131321046c
         }), 
         flammen: new Howl({
           src: [
@@ -2137,6 +2170,10 @@ class Projectile {
           ],
           // the "loop" flag is false by default!
           loop: false,
+<<<<<<< HEAD
+=======
+          volume: 0.2,
+>>>>>>> 3de2e76520b34cd39c3dc2c9a0b97a131321046c
           // function to execute as soon as the sound effect ends:
           // good use case: when there is an intro to a song. Play the intro first, then use "onend" 
           // to play the song without having to worry about the intro repeating. 
@@ -2148,6 +2185,7 @@ class Projectile {
           ],
           // the "loop" flag is false by default!
           loop: false,
+<<<<<<< HEAD
           volume: 0.6,
           onend: function() {}
         }), 
@@ -2157,6 +2195,9 @@ class Projectile {
           ],
           // the "loop" flag is false by default!
           loop: false,
+=======
+          volume: 0.3,
+>>>>>>> 3de2e76520b34cd39c3dc2c9a0b97a131321046c
           onend: function() {}
         }), 
         bomber: new Howl({
@@ -2166,6 +2207,10 @@ class Projectile {
           // the "loop" flag is false by default!
           loop: false,
         }), 
+<<<<<<< HEAD
+=======
+        // meant for cancelled laser gun:
+>>>>>>> 3de2e76520b34cd39c3dc2c9a0b97a131321046c
         laser: new Howl({
           src: [
             "src/assets/sounds/laser-buzz.mp3",
@@ -2222,6 +2267,10 @@ class Projectile {
           this.speed = 11;
           break;
 
+<<<<<<< HEAD
+=======
+        // was meant for sheep enemy, but not added after all lol
+>>>>>>> 3de2e76520b34cd39c3dc2c9a0b97a131321046c
         case "laser-gun":
           this.playSound(this.sfx.laser);
           this.speed = 7;
@@ -2397,7 +2446,11 @@ function handleNade(arr) {
             current.draw(cxt);
             current.update();
 
+            // playSound(current.sound);
+
+            // ORIGINAL. WORKS BUT IS LOUD: 
             current.sound.play();
+
             // playSound(sfx.boom);
 
             // THIS IS 299:
@@ -2416,14 +2469,12 @@ function handleNade(arr) {
         // REMEMBER TO UNCOMMENT:
         for (let y = 0; y <= arr.length; y++) { 
             let currOrc = arr[y];
-            // console.log(collision(current, currOrc));
             if (arr.length > 0 && currOrc) {
                 if (nadeCollision(current, currOrc) && current.ready == true) {    
                     currOrc.dead = true;
                 } 
                 // else currOrc.inNadeRange = false;
             }
-            // console.log(currOrc.inNodeRange);
         }
     }
 };
@@ -2825,7 +2876,7 @@ function animate() {
     if ((state == "RUNNING" || state == "LOSE") && frame <= 100) frame++;
     else frame = 0;
 
-    console.log(shooter.timer);
+    // console.log(shooter.timer);
 
     //setTimeout(animate, 5); // <<< Game runs much slower with this in conjunction with animate() VVV
     window.requestAnimationFrame(animate);
