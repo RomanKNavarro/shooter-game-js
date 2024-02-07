@@ -1133,7 +1133,7 @@ class Pickup {
                 src: [
                     "src/assets/sounds/rifleReload.mp3",    // good
                 ],
-                volume: 2,
+                volume: 1,
             }),
             nadePin: new Howl({
                 src: [
@@ -1577,7 +1577,7 @@ var sfx = {
             "src/assets/sounds/animals_dog_yelp_med_large.mp3",
         ],
         loop: false,
-        volume: 2,
+        volume: 1,
     }),
     growl: new Howl({
       /* accepts multiple versions of the same audio! (automatically selects the best one for the 
@@ -1595,7 +1595,7 @@ var sfx = {
           "src/assets/sounds/explosionLoud.mp3",
         ],
         loop: true,
-        volume: 0.5,
+        volume: 0.2,
     }),
     bloop: new Howl({
         /* accepts multiple versions of the same audio! (automatically selects the best one for the 
@@ -1603,7 +1603,7 @@ var sfx = {
         src: [
           "src/assets/sounds/q009/glauncher.ogg",
         ],
-        volume: 0.5,
+        volume: 0.2,
         //loop: false,
     }),
     // PICKUP SFX:
@@ -1642,7 +1642,7 @@ var sfx = {
             "src/assets/sounds/squelch.mp3",
         ], 
         loop: false,
-        volume: 3,
+        volume: 1,
     }),
 };
 
