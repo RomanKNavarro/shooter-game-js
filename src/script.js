@@ -1040,7 +1040,7 @@ class Enemy {
       //   context.fillRect(this.x, this.y + this.height / 2, this.width, this.height / 2);
       // } else {
       //   context.fillRect(this.x, this.y, this.width, this.height);
-      // }
+      // } lol
 
       context.font = "20px serif";
       context.fillStyle = "gray";
